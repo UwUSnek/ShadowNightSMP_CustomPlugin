@@ -1,6 +1,5 @@
 package org.shadownightsmp.plugin.shadownightsmp.QOL;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;

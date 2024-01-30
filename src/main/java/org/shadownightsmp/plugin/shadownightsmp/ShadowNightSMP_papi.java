@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.shadownightsmp.plugin.shadownightsmp.ChatManager.CMD_msg;
 import org.shadownightsmp.plugin.shadownightsmp.Economy.Economy;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
@@ -16,17 +17,17 @@ import java.lang.Math;
 
 public class ShadowNightSMP_papi extends PlaceholderExpansion {
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return "UwU_Snek";
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "shadownightsmp";
     }
 
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return "1.0.0";
     }
 

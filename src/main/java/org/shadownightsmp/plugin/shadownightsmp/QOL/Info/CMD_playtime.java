@@ -8,12 +8,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
 
 
 public class CMD_playtime implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player player = (Player)sender;
         if(args.length == 0) {
             utils.sendMessage(player, "Your playtime is §a" + utils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true) + "§r.");

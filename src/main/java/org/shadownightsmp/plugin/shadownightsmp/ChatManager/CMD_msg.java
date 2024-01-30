@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
 
 import java.util.Arrays;
@@ -18,7 +19,7 @@ public class CMD_msg implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         processCommand((Player) sender, new Vector<>(Arrays.asList(args)));
         return true;
     }
@@ -31,7 +32,7 @@ public class CMD_msg implements CommandExecutor {
         }
         else {
             Player target = org.bukkit.Bukkit.getPlayer(args.get(0));
-            if (!utils.playerOnlineCheck(player, target, args.get(0))) return;
+            if (utils.playerOfflineCheck(player, target, args.get(0))) return;
             if (player.equals(target)) {
                 utils.sendMessage(player, "§cYou cannot message yourself!");
                 return;

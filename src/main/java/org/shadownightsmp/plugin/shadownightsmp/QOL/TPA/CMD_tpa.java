@@ -1,6 +1,7 @@
 package org.shadownightsmp.plugin.shadownightsmp.QOL.TPA;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.Command;
@@ -27,7 +28,7 @@ public class CMD_tpa implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if(args.length == 0) {
             return false;
         }
@@ -35,7 +36,7 @@ public class CMD_tpa implements CommandExecutor {
         Player player = (Player)sender;
         Player target = org.bukkit.Bukkit.getPlayer(args[0]);
 
-        if(!utils.playerOnlineCheck(player, target, args[0])) return true;
+        if(utils.playerOfflineCheck(player, target, args[0])) return true;
         if(player.equals(target)) {
             utils.sendMessage(player, "§cYou cannot teleport to yourself!");
             return true;

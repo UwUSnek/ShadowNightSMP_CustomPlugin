@@ -1,6 +1,5 @@
 package org.shadownightsmp.plugin.shadownightsmp.utils;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
 import org.bukkit.OfflinePlayer;
@@ -45,14 +44,14 @@ public class utils {
 
 
 
-    // Returns true if the player called <target> exists is online.
-    // If not, false is return and an error message is sent to the player
-    public static boolean playerOnlineCheck(Player player, Player target, String targetName) {
+    // Returns true and sends an error message to the player if target is offline.
+    // Returns false otherwise
+    public static boolean playerOfflineCheck(Player player, Player target, String targetName) {
         if (target == null) {
             utils.sendMessage(player, "§cThe player \"" + targetName + "\" is offline or doesn't exist. Did you spell their name correctly?");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
 

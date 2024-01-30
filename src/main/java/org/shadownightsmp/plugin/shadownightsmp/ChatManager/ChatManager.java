@@ -1,7 +1,6 @@
 package org.shadownightsmp.plugin.shadownightsmp.ChatManager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
@@ -41,8 +40,8 @@ public class ChatManager {
                 int repeatedFirst = 0;      // Account for the last ++ done when detecting the 2nd letter of the blocked word
                 int repeatedLast = 0;       // This one already starts 1 after
                 int spaces = 0;
-                boolean spaceBefore = false;
-                boolean spaceAfter = false;
+                boolean spaceBefore;        // defaults to = false
+                boolean spaceAfter;         // defaults to = false
 
                 int j = 0;
                 int local_i = 0;
@@ -87,7 +86,6 @@ public class ChatManager {
                 //  text wwwww w orddddd text       word
                 //                 ^^^^^-              ^
                 // Find repeated last characters, if any
-                boolean lastIsCounted = false;
                 while (i < msg_clean.length() && toLowerCase(msg_clean.charAt(i)) == toLowerCase(word.charAt(j))) {
                     ++i;
                     ++repeatedLast;

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 import org.shadownightsmp.plugin.shadownightsmp.ShadowNightSMP;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
 
@@ -32,12 +33,12 @@ public class CMD_trade implements CommandExecutor {
     private static final HashMap<String, TradeRequest> tradeRequests = new HashMap<>();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player player = (Player) sender;
         if (args.length == 0) return false;
         else {
             Player target = org.bukkit.Bukkit.getPlayer(args[0]);
-            if (!utils.playerOnlineCheck(player, target, args[0])) return true;
+            if (utils.playerOfflineCheck(player, target, args[0])) return true;
             if (player.equals(target)) {
                 utils.sendMessage(player, "§cYou cannot trade yourself!");
                 return true;

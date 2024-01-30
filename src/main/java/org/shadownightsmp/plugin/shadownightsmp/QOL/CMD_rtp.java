@@ -1,6 +1,7 @@
 package org.shadownightsmp.plugin.shadownightsmp.QOL;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.shadownightsmp.plugin.shadownightsmp.ShadowNightSMP;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
 import org.bukkit.Bukkit;
@@ -23,7 +24,7 @@ public class CMD_rtp implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player player = (Player)sender;
         int max = 10000;
         Long cooldown = 10L * 60 * 1000;

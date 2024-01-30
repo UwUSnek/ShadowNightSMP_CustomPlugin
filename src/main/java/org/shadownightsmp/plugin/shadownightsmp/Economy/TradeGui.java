@@ -14,12 +14,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.shadownightsmp.plugin.shadownightsmp.QOL.StarterKit;
-import org.shadownightsmp.plugin.shadownightsmp.ShadowNightSMP;
 import org.shadownightsmp.plugin.shadownightsmp.utils.SignInput;
 import org.shadownightsmp.plugin.shadownightsmp.utils.Timer;
 import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -230,27 +228,7 @@ public class TradeGui implements Listener {
 
 
     private void readCoinInput(){
-        //SignInput sign = new SignInput();
         input = true;
-
-        //sign.open(player);
-
-
-        //SignInput.Menu menu = ShadowNightSMP.signInput.newMenu()
-        //.reopenIfFail(true)
-        //.response((player, lines) -> {
-        //    long inputValue;
-        //    try {
-        //        inputValue = Long.parseLong(lines[0]);
-        //        player.sendMessage("Detected \"" + inputValue + "\"");
-        //        return true;
-        //    }
-        //    catch(NumberFormatException e) {
-        //        player.sendMessage(lines[0] + " is not a number!");
-        //        return false;
-        //    }
-        //});
-
 
         SignInput menu = new SignInput(
             true,

@@ -1,15 +1,8 @@
 package org.shadownightsmp.plugin.shadownightsmp;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.block.Biome;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -24,10 +17,6 @@ import org.shadownightsmp.plugin.shadownightsmp.QOL.SpawnInvincibility;
 import org.shadownightsmp.plugin.shadownightsmp.QOL.StarterKit;
 import org.shadownightsmp.plugin.shadownightsmp.QOL.SurvivalFly;
 import org.shadownightsmp.plugin.shadownightsmp.QOL.TPA.CMD_tpa;
-import org.bukkit.entity.Entity;
-
-
-
 
 
 public class ShadowNightSMP_listener implements Listener {

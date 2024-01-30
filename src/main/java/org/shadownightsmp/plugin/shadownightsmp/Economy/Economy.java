@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 
@@ -19,7 +18,7 @@ public class Economy {
     public static FileConfiguration database;
 
 
-    public static HashMap<UUID, Long> coins = new HashMap<>();
+    public static final HashMap<UUID, Long> coins = new HashMap<>();
 
 
     public static void loadDatabase() {
