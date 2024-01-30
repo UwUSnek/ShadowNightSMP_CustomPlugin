@@ -70,7 +70,7 @@ public class utils {
     // Returns the formatted player name with the Server rank as prefix
     public static String getFancyName(Player player) {
         User user = ShadowNightSMP.lpApi.getPlayerAdapter(Player.class).getUser(player);
-        return user.getCachedData().getMetaData().getPrefix() + player.getName();
+        return user.getCachedData().getMetaData().getPrefix() + " " + player.getName();
     }
 
     // Returns the formatted player name with the Server rank as prefix.
@@ -78,7 +78,7 @@ public class utils {
     // Only use it if you cannot be sure the players is online
     public static String getFancyNameOffline(OfflinePlayer offlinePlayer) {
         User user = getOfflineLpUser(offlinePlayer.getUniqueId());
-        return user.getCachedData().getMetaData().getPrefix() + offlinePlayer.getName();
+        return user.getCachedData().getMetaData().getPrefix() + " " + offlinePlayer.getName();
     }
 
 

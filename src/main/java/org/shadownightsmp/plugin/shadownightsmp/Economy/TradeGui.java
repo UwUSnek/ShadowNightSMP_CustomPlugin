@@ -236,20 +236,37 @@ public class TradeGui implements Listener {
         //sign.open(player);
 
 
-        SignInput.Menu menu = ShadowNightSMP.signInput.newMenu(Arrays.asList("This", "is", "a"))
-        .reopenIfFail(true)
-        .response((player, lines) -> {
-            Long inputValue;
-            try {
-                inputValue = Long.parseLong(lines[0]);
-                player.sendMessage("Detected \"" + inputValue + "\"");
-                return true;
+        //SignInput.Menu menu = ShadowNightSMP.signInput.newMenu()
+        //.reopenIfFail(true)
+        //.response((player, lines) -> {
+        //    long inputValue;
+        //    try {
+        //        inputValue = Long.parseLong(lines[0]);
+        //        player.sendMessage("Detected \"" + inputValue + "\"");
+        //        return true;
+        //    }
+        //    catch(NumberFormatException e) {
+        //        player.sendMessage(lines[0] + " is not a number!");
+        //        return false;
+        //    }
+        //});
+
+
+        SignInput menu = new SignInput(
+            true,
+            (player, lines) -> {
+                long inputValue;
+                try {
+                    inputValue = Long.parseLong(lines[0]);
+                    player.sendMessage("Detected \"" + inputValue + "\"");
+                    return true;
+                }
+                catch(NumberFormatException e) {
+                    player.sendMessage(lines[0] + " is not a number!");
+                    return false;
+                }
             }
-            catch(NumberFormatException e) {
-                player.sendMessage(lines[0] + " is not a number!");
-                return false;
-            }
-        });
+        );
 
         menu.open(player);
     }

@@ -22,7 +22,7 @@ public final class ShadowNightSMP extends JavaPlugin {
     public static JavaPlugin plugin;
     public static LuckPerms lpApi;
     public static ProtocolManager protocolManager;
-    public static SignInput signInput;
+    //public static SignInput signInput;
 
 
     @Override
@@ -37,7 +37,8 @@ public final class ShadowNightSMP extends JavaPlugin {
 
         // Initialize protocol manager
         protocolManager = ProtocolLibrary.getProtocolManager();
-        signInput = new SignInput();
+        //signInput = new SignInput();
+        ShadowNightSMP.protocolManager.addPacketListener(SignInput.packetListener);
 
 
         // Initialize event listener

@@ -30,7 +30,7 @@ public class ChatManager {
     // Returns the message with the offending part highlighted in red if it contains the word <word>
     // Returns null if it doesn't
     static private String checkWord(String msg, String word) {
-        String msg_clean = msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a");
+        String msg_clean = ChatColor.stripColor(msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a"));
 
 
         try {
@@ -128,8 +128,8 @@ public class ChatManager {
         if (target == null) player.sendMessage("§cThe player you are trying to message is offline!");
         else if (ChatManager.checkBlockedWords(player, msg)) {
             CMD_r.lastDmFrom.put(target.getName(), player.getName());
-            player.sendMessage("⬅ §dTo " + ChatColor.stripColor(utils.getFancyName(target)) + ": " + msg);
-            target.sendMessage("➡ §dFrom " + ChatColor.stripColor(utils.getFancyName(player)) + ": " + msg);
+            player.sendMessage("⬅ §dTo " + ChatColor.stripColor(utils.getFancyName(target)) + ": " + ChatColor.stripColor(msg));
+            target.sendMessage("➡ §dFrom " + ChatColor.stripColor(utils.getFancyName(player)) + ": " + ChatColor.stripColor(msg));
         }
     }
 
