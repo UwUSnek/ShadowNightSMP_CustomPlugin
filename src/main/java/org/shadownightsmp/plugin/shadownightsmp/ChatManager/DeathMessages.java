@@ -154,7 +154,7 @@ public class DeathMessages {
             // If killer was a player
             if(cause != DamageCause.PROJECTILE && killer != null) {
                 causeMessage = rnd.nextBoolean() ? data.variants[rnd.nextInt(data.variants.length)] : playerSpecificVariants[rnd.nextInt(playerSpecificVariants.length)];
-                killerName = ChatColor.stripColor(utils.getFancyName(killer));
+                killerName = utils.stripColor(utils.getFancyName(killer));
             }
             // If killer was not a player
             else {
@@ -174,7 +174,7 @@ public class DeathMessages {
                 }
             }
 
-            msg = (data.icon + b + ChatColor.stripColor(utils.getFancyName(player)) + "§r§7 " + causeMessage).replace("%killer%", killerName);
+            msg = (data.icon + b + utils.stripColor(utils.getFancyName(player)) + "§r§7 " + causeMessage).replace("%killer%", killerName);
         }
 
 
@@ -186,7 +186,7 @@ public class DeathMessages {
                 event.setDeathMessage(null);
                 return;
             }
-            msg = data.icon + b + ChatColor.stripColor(utils.getFancyName(player)) + "§r§7 ";
+            msg = data.icon + b + utils.stripColor(utils.getFancyName(player)) + "§r§7 ";
 
 
             // If a player helped with the kill
@@ -199,7 +199,7 @@ public class DeathMessages {
                             ? data.variants[rnd.nextInt(data.variants.length)] + " " + defaultAssistModifiers[rnd.nextInt(defaultAssistModifiers.length)]
                             : customMessages.variants[rnd.nextInt(customMessages.variants.length)]
                     )
-                ).replace("%killer%", ChatColor.stripColor(utils.getFancyName(killer)));
+                ).replace("%killer%", utils.stripColor(utils.getFancyName(killer)));
             }
             // If not
             else {

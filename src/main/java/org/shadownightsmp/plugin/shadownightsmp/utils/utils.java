@@ -103,4 +103,17 @@ public class utils {
             s                        % 60 + "s"
         ;
     }
+
+
+
+
+
+
+    public static String stripColor(String s) {
+        return s.replaceAll("[&§]([0-9a-fk-or])", "");
+    }
+
+    public static String translateColor(String s) {
+        return s.replaceAll("&([0-9a-fk-or])", "§$1");
+    }
 }

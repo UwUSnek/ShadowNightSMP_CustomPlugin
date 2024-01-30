@@ -30,7 +30,8 @@ public class ChatManager {
     // Returns the message with the offending part highlighted in red if it contains the word <word>
     // Returns null if it doesn't
     static private String checkWord(String msg, String word) {
-        String msg_clean = ChatColor.stripColor(msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a"));
+        msg = utils.stripColor(msg);
+        String msg_clean = msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a");
 
 
         try {
@@ -99,7 +100,7 @@ public class ChatManager {
                 if(repeatedFirst == 0 || repeatedLast == 0 || (!spaceAfter && !spaceBefore) || (!spaceAfter && spaces > 0 && repeatedFirst <= 1) || (!spaceBefore && spaces > 0 && repeatedLast <= 1)){
                     return null;
                 }
-                else return new StringBuilder(ChatColor.stripColor(msg)).insert(end, "§f").insert(start, "§c").insert(0, "\"§f").append("\"").toString();
+                else return new StringBuilder(msg).insert(end, "§f").insert(start, "§c").insert(0, "\"§f").append("\"").toString();
             }
         } catch (IndexOutOfBoundsException e) {
             return null;
@@ -128,8 +129,9 @@ public class ChatManager {
         if (target == null) player.sendMessage("§cThe player you are trying to message is offline!");
         else if (ChatManager.checkBlockedWords(player, msg)) {
             CMD_r.lastDmFrom.put(target.getName(), player.getName());
-            player.sendMessage("⬅ §dTo " + ChatColor.stripColor(utils.getFancyName(target)) + ": " + ChatColor.stripColor(msg));
-            target.sendMessage("➡ §dFrom " + ChatColor.stripColor(utils.getFancyName(player)) + ": " + ChatColor.stripColor(msg));
+            String strippedMsg = utils.stripColor(msg);
+            player.sendMessage("⬅ §dTo " + utils.stripColor(utils.getFancyName(target)) + ": " + strippedMsg);
+            target.sendMessage("➡ §dFrom " + utils.stripColor(utils.getFancyName(player)) + ": " + strippedMsg);
         }
     }
 
@@ -137,16 +139,14 @@ public class ChatManager {
     static public void processPlayerMessage(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
         String msg = event.getMessage();
-        if (event.getPlayer().hasPermission("group.vip")) {
-            msg = msg.replaceAll("&([0-9a-fk-or])", "§$1");
-        }
 
         Player player = event.getPlayer();
         String targetName = CMD_msg.openDms.get(player.getName());
         if (targetName == null) {
+            msg = event.getPlayer().hasPermission("group.vip") ? utils.translateColor(msg) : utils.stripColor(msg);
             if (checkBlockedWords(player, msg)) Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + " §8➟ §r" + msg);
         }
         // Blocked words and null target are checked by sendDm
-        else sendDm(player, Bukkit.getPlayer(targetName), msg);
+        else sendDm(player, Bukkit.getPlayer(targetName), utils.stripColor(msg));
     }
 }

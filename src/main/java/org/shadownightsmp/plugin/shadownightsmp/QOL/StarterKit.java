@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.shadownightsmp.plugin.shadownightsmp.utils.utils;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ public class StarterKit {
     public static boolean isBLacklisted(ItemStack item) {
         if (item != null) {
             ItemMeta meta = item.getItemMeta();
-            return (meta != null && ChatColor.stripColor(meta.getDisplayName()).startsWith(ChatColor.stripColor(kit_prefix)));
+            return (meta != null && utils.stripColor(meta.getDisplayName()).startsWith(utils.stripColor(kit_prefix)));
         }
         return false;
     }
