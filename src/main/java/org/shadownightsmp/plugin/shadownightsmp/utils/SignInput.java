@@ -68,17 +68,17 @@ public final class SignInput {
         Location location = player.getLocation();
         posWrapper = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-        player.sendBlockChange(posWrapper.toLocation(location.getWorld()), Material.OAK_SIGN.createBlockData());
-        //player.sendSignChange(location, text.stream().map(this::color).toList().toArray(new String[]{ "a", "b", "c", "d" }));
-        player.sendSignChange(location, new String[]{"a", "b", "c", "d"});
+        player.sendBlockChange(location, Material.OAK_SIGN.createBlockData());
+        player.sendSignChange(location, new String[]{"a", "b", "c", "d"});  //NOTICE: This only sets the front side of the sign
 
         PacketContainer openSign = ShadowNightSMP.protocolManager.createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
-        openSign.getBlockPositionModifier().write(0, posWrapper);
-        try {
-            ShadowNightSMP.protocolManager.sendServerPacket(player, openSign);
-        } catch (InvocationTargetException exception) {
-            exception.printStackTrace();
-        }
+        openSign.getBlockPositionModifier().write(0, posWrapper);           // Set block position
+        openSign.getBooleans().write(0, true);                              // Set side to open (true = front side)
+       try {
+           ShadowNightSMP.protocolManager.sendServerPacket(player, openSign);
+       } catch (InvocationTargetException exception) {
+           exception.printStackTrace();
+       }
         openSigns.put(player, this);
     }
 
