@@ -258,11 +258,18 @@ public class TradeGui implements Listener {
 
         SignInput menu = new SignInput(
             true,
-            new String[]{ "", "^", "Insert the number of coins" },
+            new String[]{ "", "§6§l^", "§6Insert the number", "§6of coins" },
             (player, lines) -> {
                 try {
-                    inputTmp = (long) Double.parseDouble(lines[0]);
-                    return true;
+                    long value = (long) Double.parseDouble(lines[0]);
+                    if(value <= 0) {
+                        player.sendMessage("§cYou cannot trade less than 1 coin!");
+                        return false;
+                    }
+                    else {
+                        inputTmp = value;
+                        return true;
+                    }
                 }
                 catch(NumberFormatException e) {
                     player.sendMessage("\"§c" + utils.stripColor(lines[0]) + "\" is not a number!");
@@ -270,20 +277,28 @@ public class TradeGui implements Listener {
                 }
             },
             () -> {
-                // Add item
-                ItemStack coinItem = new ItemStack(Material.GOLD_NUGGET, 1);
-                ItemMeta meta = coinItem.getItemMeta();
-                meta.setDisplayName("§6" + inputTmp + "Coins");
-                meta.getPersistentDataContainer().set(coin_key, PersistentDataType.LONG, inputTmp);
-                coinItem.setItemMeta(meta);
+                if(Economy.getBalance(player) >= inputTmp) {
+                    // Add item
+                    ItemStack coinItem = new ItemStack(Material.GOLD_NUGGET, 1);
+                    ItemMeta meta = coinItem.getItemMeta();
+                    meta.setDisplayName("§6" + inputTmp + " Coins");
+                    meta.getPersistentDataContainer().set(coin_key, PersistentDataType.LONG, inputTmp);
+                    coinItem.setItemMeta(meta);
 
-                // Remove coins from player
-                Economy.removeFromBalance(player, inputTmp);
+                    // Remove coins from player
+                    Economy.removeFromBalance(player, inputTmp);
 
-                // Re-open the trade GUI and add the new item
-                readingInput = false;
-                openInventory();
-                selectItem(coinItem);
+                    // Re-open the trade GUI and add the new item
+                    openInventory();
+                    readingInput = false;
+                    selectItem(coinItem);
+                }
+                else {
+                    utils.sendMessage(player, "§cYou don't have that many coins!");
+                    // Re-open the trade GUI and add the new item
+                    openInventory();
+                    readingInput = false;
+                }
             }
         );
 

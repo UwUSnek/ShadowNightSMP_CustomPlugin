@@ -1,5 +1,6 @@
 package org.shadownight.plugin.shadownight.Economy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,10 +16,10 @@ import java.util.UUID;
 
 public class Economy {
     private static File databaseFile;
-    public static FileConfiguration database;
+    public static FileConfiguration databaseObject;
 
 
-    public static final HashMap<UUID, Long> coins = new HashMap<>();
+    public static final HashMap<UUID, Long> database = new HashMap<>();
 
 
     public static void loadDatabase() {
@@ -28,16 +29,16 @@ public class Economy {
             ShadowNight.plugin.saveResource("economy.yml", false);
         }
 
-        database = new YamlConfiguration();
+        databaseObject = new YamlConfiguration();
         try {
-            database.load(databaseFile);
+            databaseObject.load(databaseFile);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
 
 
-        for(String key : database.getKeys(false)){
-            coins.put(UUID.fromString(key), database.getLong(key));
+        for(String key : databaseObject.getKeys(false)){
+            database.put(UUID.fromString(key), databaseObject.getLong(key));
         }
     }
 
@@ -45,18 +46,18 @@ public class Economy {
 
     public static void addPlayer(Player player){
         UUID uuid = player.getUniqueId();
-        if(!database.contains(uuid.toString())){
-            database.set(uuid.toString(), 1000);
+        if(!databaseObject.contains(uuid.toString())){
+            database.put(uuid, 1000L);
         }
     }
 
     public static void saveDatabase(){
-        for(Map.Entry<UUID, Long> entry : coins.entrySet()){
-            database.set(entry.getKey().toString(), entry.getValue());
+        for(Map.Entry<UUID, Long> entry : database.entrySet()){
+            databaseObject.set(entry.getKey().toString(), entry.getValue());
         }
 
         try {
-            database.save(databaseFile);
+            databaseObject.save(databaseFile);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -65,12 +66,12 @@ public class Economy {
 
 
     public static long getBalance(Player player) {
-        return database.getLong(player.getUniqueId().toString());
+        return database.get(player.getUniqueId());
     }
     public static void addToBalance(Player player, long n) {
-        coins.computeIfPresent(player.getUniqueId(), (key, value) -> value + n);
+        database.computeIfPresent(player.getUniqueId(), (key, value) -> value + n);
     }
     public static void removeFromBalance(Player player, long n) {
-        coins.computeIfPresent(player.getUniqueId(), (key, value) -> value - n);
+        database.computeIfPresent(player.getUniqueId(), (key, value) -> value - n);
     }
 }

@@ -62,7 +62,7 @@ public final class SignInput {
     /**
      * A sign GUI that allows the player to input a value
      * @param reopenIfFail True if the GUI has to be re-opened if the player has entered an invalid input
-     * @param lines The placeholder lines to display in the sign when it is opened by the player. Max 4 lines
+     * @param lines The placeholder lines to display in the sign when it is opened by the player. Must contain exactly 4 strings
      * @param inputCallback Called after the player clicks done or closes the GUI. Has to return true if the input is valid
      * @param afterCloseCallback Called after the GUI is closed (or after a valid input if _reopenIfFail is set to true)
      */
@@ -82,7 +82,7 @@ public final class SignInput {
             Location location = player.getLocation();
             posWrapper = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-            player.sendBlockChange(location, Material.OAK_SIGN.createBlockData());
+            player.sendBlockChange(location, Material.BIRCH_SIGN.createBlockData());
             player.sendSignChange(location, lines);                     //NOTICE: This only sets the front side of the sign
 
             PacketContainer openSign = ShadowNight.protocolManager.createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
