@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'com.ShadowNightSMP.plugin'
@@ -16,7 +17,8 @@ repositories {
         url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
-    maven { url "https://repo.dmulloy2.net/repository/public/" }
+    maven { url = "https://repo.dmulloy2.net/repository/public/" }
+    maven { url = "https//hub.spigotmc.org/nexus/content/repositories/snapshots/" }
 }
 
 dependencies {
@@ -24,7 +26,29 @@ dependencies {
     compileOnly "me.clip:placeholderapi:2.11.5"
     compileOnly "net.luckperms:api:5.4"
     compileOnly "com.comphenix.protocol:ProtocolLib:4.5.0"
+    implementation "org.javacord:javacord:3.8.0"
 }
+
+
+
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude("META-INF/*.RSA", "META-INF/*.DSA", "META-INF/*.SF")
+
+    manifest {
+        attributes "Main-Class": "org.shadownight.plugin.shadownight.ShadowNight"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+
+//shadowJar {
+//    configurations = [project.configurations.compileClasspath]
+//}
 
 
 
@@ -52,3 +76,5 @@ processResources {
         expand props
     }
 }
+
+

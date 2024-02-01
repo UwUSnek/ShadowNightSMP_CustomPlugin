@@ -208,7 +208,9 @@ public class DeathMessages {
 
 
         event.setDeathMessage(null);
-        Bukkit.broadcastMessage(a + msg + ".");
+        String output = a + msg + ".";
+        Bukkit.broadcastMessage(output);
+        DiscordBotManager.sendBridgeMessage(output);
     }
 }
 

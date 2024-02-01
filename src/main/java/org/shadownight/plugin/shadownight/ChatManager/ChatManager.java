@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.ChatManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import static java.lang.Character.toLowerCase;
@@ -142,7 +143,10 @@ public class ChatManager {
         String targetName = CMD_msg.openDms.get(player.getName());
         if (targetName == null) {
             msg = event.getPlayer().hasPermission("group.vip") ? utils.translateColor(msg) : utils.stripColor(msg);
-            if (checkBlockedWords(player, msg)) Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + " §8➟ §r" + msg);
+            if (checkBlockedWords(player, msg)) {
+                Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + " §8➟ §r" + msg);
+                DiscordBotManager.sendBridgeMessage(event.getPlayer(), msg);
+            }
         }
         // Blocked words and null target are checked by sendDm
         else sendDm(player, Bukkit.getPlayer(targetName), utils.stripColor(msg));

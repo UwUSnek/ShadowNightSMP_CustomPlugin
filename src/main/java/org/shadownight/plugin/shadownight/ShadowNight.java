@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.shadownight.plugin.shadownight.ChatManager.DiscordBotManager;
 import org.shadownight.plugin.shadownight.Economy.CMD_trade;
 import org.shadownight.plugin.shadownight.Economy.Economy;
 import org.shadownight.plugin.shadownight.QOL.CMD_flyspeed;
@@ -22,7 +23,6 @@ public final class ShadowNight extends JavaPlugin {
     public static JavaPlugin plugin;
     public static LuckPerms lpApi;
     public static ProtocolManager protocolManager;
-    //public static SignInput signInput;
 
 
     @Override
@@ -74,6 +74,13 @@ public final class ShadowNight extends JavaPlugin {
         this.getCommand("playtime").setExecutor(new CMD_playtime());
         this.getCommand("colors").setExecutor(new CMD_colors());
         this.getCommand("discord").setExecutor(new CMD_discord());
+
+
+
+
+        // Initialize Discord Bot Manager
+        DiscordBotManager.init();
+        DiscordBotManager.sendBridgeMessage("🟢 Server is online");
     }
 
 
@@ -83,5 +90,6 @@ public final class ShadowNight extends JavaPlugin {
     @Override
     public void onDisable() {
         Economy.saveDatabase();
+        DiscordBotManager.sendBridgeMessage("🔴 Server is offline");
     }
 }
