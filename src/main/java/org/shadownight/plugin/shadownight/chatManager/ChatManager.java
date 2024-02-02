@@ -8,6 +8,7 @@ import org.shadownight.plugin.shadownight.utils.utils;
 import static java.lang.Character.toLowerCase;
 
 public class ChatManager {
+    public static final String playerMessageConnector = " §8➟§f ";
     /* add this to hover event
     - '%player_name%'
     - '&7World: &b%world%'
@@ -148,7 +149,7 @@ public class ChatManager {
         if (targetName == null) {
             String strippedMsg = utils.stripPrivateCharacters(event.getPlayer().hasPermission("group.vip") ? utils.translateColor(msg) : utils.stripColor(msg));
             if (checkBlockedWords(player, strippedMsg)) {
-                Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + " §8➟ §r" + strippedMsg);
+                Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + playerMessageConnector + strippedMsg);
                 DiscordBotManager.sendBridgeMessage(event.getPlayer(), strippedMsg);
             }
         }
