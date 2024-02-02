@@ -13,10 +13,11 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class utils {
-    public static final String server_prefix = "§d§l[§5§lSN§d§l] §r";
+    public static final String serverPrefix = "§d§l[§5§lSN§d§l] §r";
+    public static final String serverIp = "shadownight.g-portal.game";
 
     public static void sendMessage(Player player, String message) {
-        player.sendMessage(server_prefix + message);
+        player.sendMessage(serverPrefix + message);
     }
 
     public static void newline(Player player) {

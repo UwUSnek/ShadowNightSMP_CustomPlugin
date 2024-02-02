@@ -21,6 +21,8 @@ import java.util.Scanner;
 public class DiscordBotManager {
     private static DiscordApi api;
     private static TextableRegularServerChannel channel;
+    private static final String bridgeId = "1202610915694870558";
+    private static final String testBridgeId = "1202960128421138494";
 
 
 
@@ -45,7 +47,7 @@ public class DiscordBotManager {
 
 
         // Get output channel
-        Optional<TextChannel> _channel = api.getTextChannelById("1202610915694870558");
+        Optional<TextChannel> _channel = api.getTextChannelById(ShadowNight.plugin.getServer().getIp().equals(utils.serverIp) ? bridgeId : testBridgeId);
         if(_channel.isEmpty()) throw new RuntimeException("An error occurred while trying to initialize the Discord Bot Manager: Channel not found");
         else {
             channel = (TextableRegularServerChannel) _channel.get();

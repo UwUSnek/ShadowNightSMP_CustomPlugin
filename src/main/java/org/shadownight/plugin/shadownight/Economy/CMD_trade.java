@@ -90,7 +90,7 @@ public class CMD_trade implements CommandExecutor {
                     c.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
                     TextComponent c2 = new TextComponent("§a(or click here)");
                     c2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
-                    target.spigot().sendMessage(new TextComponent(utils.server_prefix + utils.getFancyName(player) + "§f sent you a trade request! Use "), c, new TextComponent("§r to accept "), c2);
+                    target.spigot().sendMessage(new TextComponent(utils.serverPrefix + utils.getFancyName(player) + "§f sent you a trade request! Use "), c, new TextComponent("§r to accept "), c2);
 
                 }
             }

@@ -56,7 +56,7 @@ public class CMD_tpa implements CommandExecutor {
         TextComponent c2 = new TextComponent("§a(or click here)");
         c2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
 
-        target.spigot().sendMessage(new TextComponent(utils.server_prefix + utils.getFancyName(player) + "§f is asking you to teleport to your location! Use "), c, new TextComponent("§r to accept "), c2);
+        target.spigot().sendMessage(new TextComponent(utils.serverPrefix + utils.getFancyName(player) + "§f is asking you to teleport to your location! Use "), c, new TextComponent("§r to accept "), c2);
         if(requests_from_player == null) tpa_requests.put(player.getName(), new Vector<>());
         tpa_requests.get(player.getName()).add(target.getName());
         return true;
