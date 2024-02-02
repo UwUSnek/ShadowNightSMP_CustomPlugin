@@ -1,23 +1,17 @@
 package org.shadownight.plugin.shadownight.ChatManager;
 
 
-import net.luckperms.api.LuckPerms;
 import org.bukkit.entity.Player;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.channel.TextableRegularServerChannel;
-import org.javacord.api.entity.intent.Intent;
 import org.javacord.api.entity.webhook.IncomingWebhook;
-import org.javacord.api.entity.webhook.Webhook;
 import org.javacord.api.entity.webhook.WebhookBuilder;
-import org.javacord.api.event.channel.server.text.WebhooksUpdateEvent;
-import org.javacord.api.listener.channel.server.text.WebhooksUpdateListener;
-import org.javacord.api.listener.message.MessageCreateListener;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.io.Console;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Optional;
@@ -45,7 +39,6 @@ public class DiscordBotManager {
         // Initialize API
         api = new DiscordApiBuilder()
             .setToken(token)
-            //.addIntents(Intent.MESSAGE_CONTENT)
             .setAllIntents()
             .login().join()
         ;
@@ -69,6 +62,7 @@ public class DiscordBotManager {
         String groupDisplayName = ShadowNight.lpApi.getGroupManager().getGroup(ShadowNight.lpApi.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrimaryGroup()).getDisplayName();
         IncomingWebhook webhook = new WebhookBuilder(channel)
             .setName("[" + groupDisplayName + "] " + player.getName())
+            .setAvatar(SkinRenderer.getRenderPropic(player))
             .create().join()
         ;
         webhook.sendMessage(utils.stripColor(msg));

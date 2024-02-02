@@ -17,6 +17,7 @@ import org.shadownight.plugin.shadownight.QOL.TPA.CMD_tpa;
 import org.shadownight.plugin.shadownight.QOL.TPA.CMD_tpaccept;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.shadownight.plugin.shadownight.utils.SignInput;
+import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 
 
 public final class ShadowNight extends JavaPlugin {
@@ -76,6 +77,10 @@ public final class ShadowNight extends JavaPlugin {
         this.getCommand("discord").setExecutor(new CMD_discord());
 
 
+
+
+        // Initialize skin renderer
+        SkinRenderer.init();
 
 
         // Initialize Discord Bot Manager
