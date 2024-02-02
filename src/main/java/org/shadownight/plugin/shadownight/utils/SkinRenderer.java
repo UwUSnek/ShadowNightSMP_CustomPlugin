@@ -3,6 +3,8 @@ package org.shadownight.plugin.shadownight.utils;
 import org.bukkit.entity.Player;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
@@ -12,15 +14,22 @@ import java.util.UUID;
 
 
 public class SkinRenderer {
+    public enum RenderType {
+        PROPIC,
+        FULL
+    }
     private static String cachePath;
-    private static HashMap<UUID, Byte[]> runtimeCachePropic;    //TODO cache and make getRender functions return a byte array
-    private static HashMap<UUID, Byte[]> runtimeCacheFull;      //TODO cache and make getRender functions return a byte array
+    private static HashMap<RenderType, HashMap<UUID, BufferedImage>> runtimeCache = new HashMap<>();
+
+
 
     public static void init(){
         cachePath = ShadowNight.plugin.getDataFolder() + "/skinRenders/";
         try {
-            Files.createDirectories(Paths.get(cachePath + "propic"));
-            Files.createDirectories(Paths.get(cachePath + "full"));
+            for(RenderType renderType : RenderType.values()) {
+                runtimeCache.put(renderType, new HashMap<>());
+                Files.createDirectories(Paths.get(cachePath + renderType.name()));
+            }
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -30,48 +39,77 @@ public class SkinRenderer {
 
 
 
-    private static File getRender(Player player, String type, String typeName){
+    private static BufferedImage getRender(Player player, String type, RenderType renderType){
         UUID uuid = player.getUniqueId();
-        String filePath = cachePath + typeName + "/" + uuid + ".png";
+        HashMap<UUID, BufferedImage> typeRuntimeCache = runtimeCache.get(renderType);
+        BufferedImage playerRuntimeCache = typeRuntimeCache.get(uuid);
 
-        File output = new File(filePath);
-        if(output.exists()) return output;
+
+        // Load from runtime cache if it exists
+        if(playerRuntimeCache != null) {
+            return playerRuntimeCache;
+        }
+
+
+        // If not, [try to load from file cache]
         else {
-            saveImage("https://starlightskins.lunareclipse.studio/skin-render/ultimate/" + uuid + "/" + type, filePath);
-            return new File(filePath);
+            String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
+            File file = new File(filePath);
+
+            // If file cache doesn't exist, create a new render, save it and load the data
+            if (!file.exists()) {
+                playerRuntimeCache = saveImage("https://starlightskins.lunareclipse.studio/skin-render/ultimate/" + uuid + "/" + type, filePath);
+            }
+            // If it does, load the data from the file
+            else {
+                try {
+                    playerRuntimeCache = ImageIO.read(file);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Return the data
+            return playerRuntimeCache;
         }
     }
 
 
-    public static File getRenderPropic(Player player) {
-        return getRender(player, "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}", "propic");
+    public static BufferedImage getRenderPropic(Player player) {
+        return getRender(player, "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}", RenderType.PROPIC);
     }
-    public static File getRenderFull(Player player) {
-        return getRender(player, "full", "full");
+    public static BufferedImage getRenderFull(Player player) {
+        return getRender(player, "full", RenderType.FULL);
     }
 
 
 
 
 
-    public static void saveImage(String imageUrl, String destinationFile) {
+    private static BufferedImage saveImage(String imageUrl, String destinationFile) {
         try {
             URL url = new URL(imageUrl);
-            InputStream is = url.openStream();
-            OutputStream os = new FileOutputStream(destinationFile);
+            InputStream inputStream = url.openStream();
+            OutputStream outputFile = new FileOutputStream(destinationFile);
 
-            byte[] b = new byte[2048];
+            byte[] buffer = new byte[2048];
             int length;
 
-            while ((length = is.read(b)) != -1) {
-                os.write(b, 0, length);
-            }
 
-            is.close();
-            os.close();
+            // Save image to file
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputFile.write(buffer, 0, length);
+            }
+            inputStream.close();
+            outputFile.close();
+
+            // Save file to memory
+            return ImageIO.read(new File(destinationFile));
         }
         catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 }
