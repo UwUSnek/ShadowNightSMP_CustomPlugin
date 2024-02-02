@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.QOL.TPA;
+package org.shadownight.plugin.shadownight.qol.tpa;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +43,7 @@ public class CMD_tpa implements CommandExecutor {
         }
 
         Vector<String> requests_from_player = tpa_requests.get(player.getName());
+        //noinspection DataFlowIssue (checked in playerOfflineCheck)
         if(requests_from_player != null && requests_from_player.contains(target.getName())){
             utils.sendMessage(player, "§cYou already sent a request to " + utils.getFancyName(target) + "§c! Please wait for them to accept");
             return true;
@@ -56,6 +57,7 @@ public class CMD_tpa implements CommandExecutor {
         TextComponent c2 = new TextComponent("§a(or click here)");
         c2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
 
+        //noinspection DataFlowIssue (checked in playerOfflineCheck)
         target.spigot().sendMessage(new TextComponent(utils.serverPrefix + utils.getFancyName(player) + "§f is asking you to teleport to your location! Use "), c, new TextComponent("§r to accept "), c2);
         if(requests_from_player == null) tpa_requests.put(player.getName(), new Vector<>());
         tpa_requests.get(player.getName()).add(target.getName());

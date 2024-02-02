@@ -46,10 +46,6 @@ jar {
 }
 
 
-//shadowJar {
-//    configurations = [project.configurations.compileClasspath]
-//}
-
 
 
 def targetJavaVersion = 17

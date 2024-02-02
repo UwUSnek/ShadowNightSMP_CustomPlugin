@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.ChatManager;
+package org.shadownight.plugin.shadownight.chatManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -11,6 +11,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -60,7 +61,7 @@ public class DeathMessages {
         //new AbstractMap.SimpleEntry<>(DamageCause.CONTACT,                new DeathData("§l💥", new String[]{ "was poked to death", "was pricked to death" })),
         //new AbstractMap.SimpleEntry<>(DamageCause.CRAMMING,               new DeathData("☠",   new String[]{ "was squished too much" })),
         //new AbstractMap.SimpleEntry<>(DamageCause.DROWNING,               new DeathData("☠",   new String[]{ "drowned", "forgot to breathe" })),
-        new AbstractMap.SimpleEntry<>(DamageCause.FALL,                   new DeathData("§l💥", new String[]{ "was doomed to fall by %killer%", "was knockbacked off a cliff by %killer%",  "fell to their death trying to escape %killer%" })),
+        new AbstractMap.SimpleEntry<>(DamageCause.FALL,                   new DeathData("§l💥", new String[]{ "was doomed to fall by %killer%", "was knock backed off a cliff by %killer%",  "fell to their death trying to escape %killer%" })),
         //new AbstractMap.SimpleEntry<>(DamageCause.FALLING_BLOCK,          new DeathData("§l💥", new String[]{ "was squashed", "was crushed" })),
         //new AbstractMap.SimpleEntry<>(DamageCause.FIRE,                   new DeathData("🔥",   new String[]{ "went up in flames", "stared at the sun for too long" })),
         //new AbstractMap.SimpleEntry<>(DamageCause.FIRE_TICK,              new DeathData("🔥",   new String[]{ "burned to death", "couldn't find water on time", "burned to a crisp" })),
@@ -116,7 +117,7 @@ public class DeathMessages {
     //new AbstractMap.SimpleEntry<>(DamageCause.CUSTOM,                 new DeathData("", new String[]{ "" })),     // Custom damage
     //new AbstractMap.SimpleEntry<>(DamageCause.DRAGON_BREATH,          new DeathData("", new String[]{ "" })),     // This cannot happen naturally
     //new AbstractMap.SimpleEntry<>(DamageCause.KILL,                   new DeathData("", new String[]{ "" })),     // Kill command
-    //new AbstractMap.SimpleEntry<>(DamageCause.DRYOUT,                 ＿＿＿＿＿＿＿⯅⯅＿＿⧋＿＿＿⯅⯅▅﹏﹏█﹏﹏▅＿＿＿＿⯅＿◀▀＿＿⯅＿＿＿＿⧋＿＿⧋﹏▅﹏﹏█
+    //new AbstractMap.SimpleEntry<>(DamageCause.DRY OUT,                 ＿＿＿＿＿＿＿⯅⯅＿＿⧋＿＿＿⯅⯅▅﹏﹏█﹏﹏▅＿＿＿＿⯅＿◀▀＿＿⯅＿＿＿＿⧋＿＿⧋﹏▅﹏﹏█
     //new AbstractMap.SimpleEntry<>(DamageCause.MELTING,                new DeathData("", new String[]{ "" })),     // Reserved for snowmen dying from high temperature
     //new AbstractMap.SimpleEntry<>(DamageCause.SUICIDE,                new DeathData("", new String[]{ "" })),     // Idk what this is
     //new AbstractMap.SimpleEntry<>(DamageCause.POISON,                 new DeathData("", new String[]{ "" })),     // Cant die from this
@@ -127,10 +128,15 @@ public class DeathMessages {
 
 
 
-    static public void formatDeathMessage(PlayerDeathEvent event){
+    static public void formatDeathMessage(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Player killer = event.getEntity().getKiller();
-        EntityDamageEvent.DamageCause cause = player.getLastDamageCause().getCause();
+        EntityDamageEvent.DamageCause cause;
+        try {
+            cause = Objects.requireNonNull(player.getLastDamageCause(), "Damage cause is null").getCause();
+        } catch (NullPointerException e) {
+            return;
+        }
 
         String a = "§8[§4";
         String b = "§8] §r§7";
@@ -139,9 +145,9 @@ public class DeathMessages {
 
 
         // If death was an active action
-        if(cause == DamageCause.ENTITY_SWEEP_ATTACK || cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE || cause == DamageCause.THORNS || cause == DamageCause.ENTITY_EXPLOSION){
+        if (cause == DamageCause.ENTITY_SWEEP_ATTACK || cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE || cause == DamageCause.THORNS || cause == DamageCause.ENTITY_EXPLOSION) {
             DeathData data = activeData.get(cause);
-            if(data == null) {
+            if (data == null) {
                 event.setDeathMessage(null);
                 return;
             }
@@ -150,7 +156,7 @@ public class DeathMessages {
 
 
             // If killer was a player
-            if(cause != DamageCause.PROJECTILE && killer != null) {
+            if (cause != DamageCause.PROJECTILE && killer != null) {
                 causeMessage = rnd.nextBoolean() ? data.variants[rnd.nextInt(data.variants.length)] : playerSpecificVariants[rnd.nextInt(playerSpecificVariants.length)];
                 killerName = killer.getName();
             }
@@ -160,15 +166,15 @@ public class DeathMessages {
                 Entity damager = entityEvent.getDamager();
 
                 // If player was shot by a projectile, use custom message
-                if(cause == DamageCause.PROJECTILE ){
+                if (cause == DamageCause.PROJECTILE) {
                     String[] projectileVariants = projectileData.get(damager.getType());
                     causeMessage = projectileVariants[rnd.nextInt(projectileVariants.length)];
-                    killerName = ((Entity) ((Projectile) damager).getShooter()).getName();
+                    killerName = ((Entity) Objects.requireNonNull(((Projectile) damager).getShooter(), "Shooter is null")).getName();
                 }
                 // If not, use normal specific message
                 else {
                     causeMessage = data.variants[rnd.nextInt(data.variants.length)];
-                    killerName = damager.getType() == EntityType.AREA_EFFECT_CLOUD ? "magic" : damager.getName() ;
+                    killerName = damager.getType() == EntityType.AREA_EFFECT_CLOUD ? "magic" : damager.getName();
                 }
             }
 
@@ -176,11 +182,10 @@ public class DeathMessages {
         }
 
 
-
         // If death was from the environment
         else {
             DeathData data = environmentData.get(cause);
-            if(data == null) {
+            if (data == null) {
                 event.setDeathMessage(null);
                 return;
             }
@@ -188,7 +193,7 @@ public class DeathMessages {
 
 
             // If a player helped with the kill
-            if(killer != null) {
+            if (killer != null) {
                 DeathData customMessages = environmentAssistData.get(cause);
                 msg = (
                     m + msg +
@@ -204,7 +209,6 @@ public class DeathMessages {
                 msg += data.variants[rnd.nextInt(data.variants.length)];
             }
         }
-
 
 
         event.setDeathMessage(null);

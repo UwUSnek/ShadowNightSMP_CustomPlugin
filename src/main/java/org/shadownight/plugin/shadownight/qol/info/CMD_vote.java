@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.QOL.Info;
+package org.shadownight.plugin.shadownight.qol.info;
 
 
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -21,6 +21,7 @@ public class CMD_vote implements CommandExecutor {
 
 
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player player = (Player)sender;

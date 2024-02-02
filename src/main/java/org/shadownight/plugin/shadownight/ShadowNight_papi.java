@@ -8,8 +8,8 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.ChatManager.CMD_msg;
-import org.shadownight.plugin.shadownight.Economy.Economy;
+import org.shadownight.plugin.shadownight.chatManager.CMD_msg;
+import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.lang.Math;
@@ -43,8 +43,8 @@ public class ShadowNight_papi extends PlaceholderExpansion {
 
     @Override
     @SuppressWarnings("deprecation") // This is for getOfflinePlayer bc GriefPrevention doesn't have a placeholder to get the UUID
-    public String onRequest(OfflinePlayer offline_player, String placeholder) {
-        Player player = offline_player.getPlayer();
+    public String onRequest(OfflinePlayer offlinePlayer, String placeholder) {
+        Player player = offlinePlayer.getPlayer();
         switch (placeholder.toLowerCase()) {
             case "location": {
                 if (player == null) return null;
@@ -77,12 +77,13 @@ public class ShadowNight_papi extends PlaceholderExpansion {
                 else return "§dMessaging " + targetName;
             }
             case "playtime": {
-                return "Your playtime: " + utils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true);
+                return "Your playtime: " + utils.sToDuration(offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true);
             }
             case "player_balance": {
-                return String.valueOf(Economy.getBalance(player));
+                return String.valueOf(Economy.getBalance(offlinePlayer));
             }
             case "high_level_warning": {
+                if (player == null) return null;
                 Location coords = player.getLocation();
                 if (Math.sqrt(Math.pow(coords.getX(), 2) + Math.pow(coords.getZ(), 2)) > 10000) {
                     return "§4§lDANGER: You are past the 10k blocks safe zone. Mobs will get stronger as you travel further from spawn.";

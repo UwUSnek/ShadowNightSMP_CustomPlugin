@@ -1,9 +1,8 @@
-package org.shadownight.plugin.shadownight.ChatManager;
+package org.shadownight.plugin.shadownight.chatManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import static java.lang.Character.toLowerCase;
@@ -14,6 +13,7 @@ public class ChatManager {
     - '&7World: &b%world%'
     - '&7Rank: %luckperms_prefix%'
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static final String[] blockedWords = new String[]{
         "nigger", "niggers", "niger", "nigers", "nigga", "niggas",
         "cunt", "cunts",
@@ -29,6 +29,7 @@ public class ChatManager {
 
     // Returns the message with the offending part highlighted in red if it contains the word <word>
     // Returns null if it doesn't
+    @SuppressWarnings("SpellCheckingInspection")
     static private String checkWord(String msg, String word) {
         msg = utils.stripColor(msg);
         String msg_clean = msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a");
@@ -108,6 +109,9 @@ public class ChatManager {
     }
 
 
+
+
+
     // Returns true if the message doesn't contain any of the blocked words.
     // If it does, a warning is sent to the player and false is returned
     static public boolean checkBlockedWords(Player player, String msg) {
@@ -128,7 +132,7 @@ public class ChatManager {
         if (target == null) player.sendMessage("§cThe player you are trying to message is offline!");
         else if (ChatManager.checkBlockedWords(player, msg)) {
             CMD_r.lastDmFrom.put(target.getName(), player.getName());
-            String strippedMsg = utils.stripColor(msg);
+            String strippedMsg = utils.stripPrivateCharacters(utils.stripColor(msg));
             player.sendMessage("⬅ §dTo " + target.getName() + ": " + strippedMsg);
             target.sendMessage("➡ §dFrom " + player.getName() + ": " + strippedMsg);
         }
@@ -142,10 +146,10 @@ public class ChatManager {
         Player player = event.getPlayer();
         String targetName = CMD_msg.openDms.get(player.getName());
         if (targetName == null) {
-            msg = event.getPlayer().hasPermission("group.vip") ? utils.translateColor(msg) : utils.stripColor(msg);
-            if (checkBlockedWords(player, msg)) {
-                Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + " §8➟ §r" + msg);
-                DiscordBotManager.sendBridgeMessage(event.getPlayer(), msg);
+            String strippedMsg = utils.stripPrivateCharacters(event.getPlayer().hasPermission("group.vip") ? utils.translateColor(msg) : utils.stripColor(msg));
+            if (checkBlockedWords(player, strippedMsg)) {
+                Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + " §8➟ §r" + strippedMsg);
+                DiscordBotManager.sendBridgeMessage(event.getPlayer(), strippedMsg);
             }
         }
         // Blocked words and null target are checked by sendDm

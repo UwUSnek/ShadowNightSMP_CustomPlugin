@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.QOL.Info;
+package org.shadownight.plugin.shadownight.qol.info;
 
 
 import org.bukkit.Bukkit;

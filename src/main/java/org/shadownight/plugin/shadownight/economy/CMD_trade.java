@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.Economy;
+package org.shadownight.plugin.shadownight.economy;
 
 
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -49,6 +49,7 @@ public class CMD_trade implements CommandExecutor {
                 utils.sendMessage(player, "§cYou already have a pending trade request! Please wait for it to expire before opening a new one.");
             }
             else {
+                @SuppressWarnings("DataFlowIssue")  //checked in playerOfflineCheck
                 TradeRequest requestFromTarget = tradeRequests.get(target.getName());
                 if (requestFromTarget != null && requestFromTarget.target.equals(player.getName())) {
                     requestFromTarget.task.cancel();

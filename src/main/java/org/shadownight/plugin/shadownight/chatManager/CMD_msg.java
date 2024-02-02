@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.ChatManager;
+package org.shadownight.plugin.shadownight.chatManager;
 
 
 import org.bukkit.command.Command;
@@ -25,7 +25,7 @@ public class CMD_msg implements CommandExecutor {
     }
 
 
-    public static void processCommand(Player player, Vector<String> args) {
+    public static void processCommand(@NotNull Player player, Vector<String> args) {
         if (args.isEmpty()) {
             openDms.remove(player.getName());
             utils.sendMessage(player, "§aYou returned to the Public chat channel.");
@@ -39,6 +39,7 @@ public class CMD_msg implements CommandExecutor {
             }
 
             if (args.size() == 1) {
+                //noinspection DataFlowIssue (checked in playerOfflineCheck)
                 openDms.put(player.getName(), target.getName());
                 utils.sendMessage(player, "§aYou opened a conversation with " + utils.getFancyName(target) + ". §rUse §a/msg§r to return to the Public chat channel.");
             }

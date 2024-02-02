@@ -2,12 +2,17 @@ package org.shadownight.plugin.shadownight.utils;
 
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -16,24 +21,24 @@ public class utils {
     public static final String serverPrefix = "§d§l[§5§lSN§d§l] §r";
     public static final String serverIp = "shadownight.g-portal.game";
 
-    public static void sendMessage(Player player, String message) {
+    public static void sendMessage(@NotNull Player player, String message) {
         player.sendMessage(serverPrefix + message);
     }
 
-    public static void newline(Player player) {
+    public static void newline(@NotNull Player player) {
         player.sendMessage("");
     }
 
-    public static void separator(Player player) {
+    public static void separator(@NotNull Player player) {
         player.sendMessage("§d§m                                                                               ");
     }
 
 
     // Returns the display name if the item has one.
     // If not, a name is created based on its material and potion effects. this might not match vanilla's name
-    public static String getItemName(ItemStack item){
+    public static String getItemName(@NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
-        if(meta.hasDisplayName()) return meta.getDisplayName();
+        if(meta != null && meta.hasDisplayName()) return meta.getDisplayName();
         else {
             String[] words = item.getType().name().split("_");
             StringBuilder r = new StringBuilder();
@@ -44,10 +49,14 @@ public class utils {
     }
 
 
-
-    // Returns true and sends an error message to the player if target is offline.
-    // Returns false otherwise
-    public static boolean playerOfflineCheck(Player player, Player target, String targetName) {
+    /**
+     * Checks if the target player is offline and sends an error message to the player <player> if that's the case
+     * @param player The player to send error messages to
+     * @param target The player to check
+     * @param targetName The name of the player to check
+     * @return true if target is offline, false otherwise
+     */
+    public static boolean playerOfflineCheck(@NotNull Player player, @Nullable Player target, String targetName) {
         if (target == null) {
             utils.sendMessage(player, "§cThe player \"" + targetName + "\" is offline or doesn't exist. Did you spell their name correctly?");
             return true;
@@ -108,6 +117,9 @@ public class utils {
 
 
 
+    public static String stripPrivateCharacters(String s) {
+        return s.replaceAll("[\uF000\uF8FF]", "");
+    }
 
     public static String stripColor(String s) {
         return s.replaceAll("[&§]([0-9a-fk-or])", "");
@@ -115,5 +127,21 @@ public class utils {
 
     public static String translateColor(String s) {
         return s.replaceAll("&([0-9a-fk-or])", "§$1");
+    }
+
+
+
+
+
+    // Creates an item with a custom name and lore
+    public static ItemStack createItemStack(final Material material, final int number, final String name, final String... lore) {
+        final ItemStack item = new ItemStack(material, number);
+        final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
+
+        meta.setDisplayName(name);
+        meta.setLore(Arrays.asList(lore));
+        item.setItemMeta(meta);
+
+        return item;
     }
 }

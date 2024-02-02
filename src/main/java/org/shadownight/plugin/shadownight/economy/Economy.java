@@ -1,6 +1,6 @@
-package org.shadownight.plugin.shadownight.Economy;
+package org.shadownight.plugin.shadownight.economy;
 
-import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,6 +25,7 @@ public class Economy {
     public static void loadDatabase() {
         databaseFile = new File(ShadowNight.plugin.getDataFolder(), "economy.yml");
         if (!databaseFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             databaseFile.getParentFile().mkdirs();
             ShadowNight.plugin.saveResource("economy.yml", false);
         }
@@ -68,6 +69,11 @@ public class Economy {
     public static long getBalance(Player player) {
         return database.get(player.getUniqueId());
     }
+    public static long getBalance(OfflinePlayer offlinePlayer) {
+        return database.get(offlinePlayer.getUniqueId());
+    }
+
+
     public static void addToBalance(Player player, long n) {
         database.computeIfPresent(player.getUniqueId(), (key, value) -> value + n);
     }

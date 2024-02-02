@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.Economy;
+package org.shadownight.plugin.shadownight.economy;
 
 
 import org.bukkit.Bukkit;
@@ -16,14 +16,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.shadownight.plugin.shadownight.QOL.StarterKit;
+import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SignInput;
 import org.shadownight.plugin.shadownight.utils.Timer;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.Vector;
 
 
@@ -53,10 +53,10 @@ public class TradeGui implements Listener {
     public TradeGui(Player _player, Player target){
         player = _player;
         inv = Bukkit.createInventory(null, 54, "§rYou §l⮀§r " + target.getName());
-        inv.setItem(buttonAddCoins,       createGuiItem(Material.YELLOW_STAINED_GLASS_PANE, "§eClick to add coins", ""));
-        inv.setItem(buttonAddClaimBlocks, createGuiItem(Material.GREEN_STAINED_GLASS_PANE,  "§2Click to add claim blocks", ""));
-        inv.setItem(22,                   createGuiItem(Material.BLACK_STAINED_GLASS_PANE,  "§r", ""));
-        inv.setItem(31,                   createGuiItem(Material.BLACK_STAINED_GLASS_PANE,  "§r", ""));
+        inv.setItem(buttonAddCoins,       utils.createItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1, "§eClick to add coins",        ""));
+        inv.setItem(buttonAddClaimBlocks, utils.createItemStack(Material.GREEN_STAINED_GLASS_PANE,  1, "§2Click to add claim blocks", ""));
+        inv.setItem(22,                   utils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r",                          ""));
+        inv.setItem(31,                   utils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r",                          ""));
     }
     public void TradeGuiInit(TradeGui _linkedGui) {
         linkedGui = _linkedGui;
@@ -92,25 +92,28 @@ public class TradeGui implements Listener {
 
 
     public void updateConfirmationNameTimer() {
-        ItemMeta meta = inv.getItem(buttonPlayerAccept).getItemMeta();
-        meta.setDisplayName("§7Click to accept the trade! (" + timer.getTimeLeft() + "s)");
-        inv.getItem(buttonPlayerAccept).setItemMeta(meta);
+        ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
+        if(meta != null) meta.setDisplayName("§7Click to accept the trade! (" + timer.getTimeLeft() + "s)");
+        Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
     }
     public void updateConfirmationName() {
-        ItemMeta meta = inv.getItem(buttonPlayerAccept).getItemMeta();
-        meta.setDisplayName(playerHasAccepted ? "§aYou accepted the trade. Click to cancel." : "§dClick to accept the trade!");
-        inv.getItem(buttonPlayerAccept).setItemMeta(meta);
+        ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
+        if(meta != null) meta.setDisplayName(playerHasAccepted ? "§aYou accepted the trade. Click to cancel." : "§dClick to accept the trade!");
+        Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
     }
 
     public void updateConfirmationLore() {
-        ItemMeta meta = inv.getItem(buttonPlayerAccept).getItemMeta();
-        ArrayList<String> lore = new ArrayList<>();
+        ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
+        if(meta != null) {
+            ArrayList<String> lore = new ArrayList<>();
 
-        for (ItemStack item : items)           lore.add("§c-" + item.getAmount() + "x§f " + utils.getItemName(item)); lore.add("");
-        for (ItemStack item : linkedGui.items) lore.add("§a+" + item.getAmount() + "x§f " + utils.getItemName(item));
+            for (ItemStack item : items) lore.add("§c-" + item.getAmount() + "x§f " + utils.getItemName(item));
+            lore.add("");
+            for (ItemStack item : linkedGui.items) lore.add("§a+" + item.getAmount() + "x§f " + utils.getItemName(item));
 
-        meta.setLore(lore);
-        inv.getItem(buttonPlayerAccept).setItemMeta(meta);
+            meta.setLore(lore);
+            Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
+        }
     }
 
 
@@ -159,7 +162,7 @@ public class TradeGui implements Listener {
         ItemStack item = items.get(i);
 
         // Give item back to the player
-        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
         if(container.has(coin_key, PersistentDataType.LONG)) {
             Economy.addToBalance(player, container.get(coin_key, PersistentDataType.LONG));
         }
@@ -182,7 +185,7 @@ public class TradeGui implements Listener {
         Inventory playerInv = _player.getInventory();
         World world = _player.getWorld();
         for(ItemStack item : _items){
-            PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+            PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
             if(container.has(coin_key, PersistentDataType.LONG)) {
                 Economy.addToBalance(_player, container.get(coin_key, PersistentDataType.LONG));
             }
@@ -218,31 +221,20 @@ public class TradeGui implements Listener {
             completeTrade();
         }
         else {
-            if (playerHasAccepted) inv.setItem(buttonPlayerAccept, createGuiItem(Material.LIME_STAINED_GLASS_PANE, "", ""));
-            else                   inv.setItem(buttonPlayerAccept, createGuiItem(Material.RED_STAINED_GLASS_PANE, "", ""));
+            if (playerHasAccepted) inv.setItem(buttonPlayerAccept, utils.createItemStack(Material.LIME_STAINED_GLASS_PANE, 1, "", ""));
+            else                   inv.setItem(buttonPlayerAccept, utils.createItemStack(Material.RED_STAINED_GLASS_PANE,  1, "", ""));
 
             if(timer != null && timer.getTimeLeft() > 0) updateConfirmationNameTimer();
             else updateConfirmationName();
             updateConfirmationLore();
 
-            if (targetHasAccepted) inv.setItem(buttonTargetAccept, createGuiItem(Material.LIME_STAINED_GLASS_PANE, "§r" + utils.getFancyName(linkedGui.player) + "§a accepted the trade.", ""));
-            else                   inv.setItem(buttonTargetAccept, createGuiItem(Material.RED_STAINED_GLASS_PANE, "§rWaiting for " + utils.getFancyName(linkedGui.player) + "§r to accept...", ""));
+            if (targetHasAccepted) inv.setItem(buttonTargetAccept, utils.createItemStack(Material.LIME_STAINED_GLASS_PANE, 1, "§r" +             linkedGui.player.getName() + "§a accepted the trade.", ""));
+            else                   inv.setItem(buttonTargetAccept, utils.createItemStack(Material.RED_STAINED_GLASS_PANE,  1, "§rWaiting for " + linkedGui.player.getName() + "§r to accept...",        ""));
         }
     }
 
 
 
-    // Creates an item with a custom name and lore
-    protected ItemStack createGuiItem(final Material material, final String name, final String... lore) {
-        final ItemStack item = new ItemStack(material, 1);
-        final ItemMeta meta = item.getItemMeta();
-
-        meta.setDisplayName(name);
-        meta.setLore(Arrays.asList(lore));
-        item.setItemMeta(meta);
-
-        return item;
-    }
 
 
 
@@ -279,10 +271,9 @@ public class TradeGui implements Listener {
             () -> {
                 if(Economy.getBalance(player) >= inputTmp) {
                     // Add item
-                    ItemStack coinItem = new ItemStack(Material.GOLD_NUGGET, 1);
+                    ItemStack coinItem = utils.createItemStack(Material.GOLD_NUGGET, 1, "§6" + inputTmp + " Coins", "");
                     ItemMeta meta = coinItem.getItemMeta();
-                    meta.setDisplayName("§6" + inputTmp + " Coins");
-                    meta.getPersistentDataContainer().set(coin_key, PersistentDataType.LONG, inputTmp);
+                    Objects.requireNonNull(meta, "Item meta is null").getPersistentDataContainer().set(coin_key, PersistentDataType.LONG, inputTmp);
                     coinItem.setItemMeta(meta);
 
                     // Remove coins from player
@@ -336,7 +327,7 @@ public class TradeGui implements Listener {
         if(clickedItem != null && !clickedItem.getType().isAir()) {
             // Manage item selection
             if (clickedSlot >= inv.getSize()) {
-                if(StarterKit.isBLacklisted(clickedItem)) clickedItem.setAmount(0);
+                if(StarterKit.isBlacklisted(clickedItem)) clickedItem.setAmount(0);
                 else selectItem(clickedItem);
             }
 

@@ -8,15 +8,15 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
-import org.shadownight.plugin.shadownight.ChatManager.ChatManager;
-import org.shadownight.plugin.shadownight.ChatManager.DeathMessages;
-import org.shadownight.plugin.shadownight.ChatManager.DiscordBanner;
-import org.shadownight.plugin.shadownight.ChatManager.JoinLeaveMessages;
-import org.shadownight.plugin.shadownight.Economy.Economy;
-import org.shadownight.plugin.shadownight.QOL.SpawnInvincibility;
-import org.shadownight.plugin.shadownight.QOL.StarterKit;
-import org.shadownight.plugin.shadownight.QOL.SurvivalFly;
-import org.shadownight.plugin.shadownight.QOL.TPA.CMD_tpa;
+import org.shadownight.plugin.shadownight.chatManager.ChatManager;
+import org.shadownight.plugin.shadownight.chatManager.DeathMessages;
+import org.shadownight.plugin.shadownight.chatManager.DiscordBanner;
+import org.shadownight.plugin.shadownight.chatManager.JoinLeaveMessages;
+import org.shadownight.plugin.shadownight.economy.Economy;
+import org.shadownight.plugin.shadownight.qol.SpawnInvincibility;
+import org.shadownight.plugin.shadownight.qol.StarterKit;
+import org.shadownight.plugin.shadownight.qol.SurvivalFly;
+import org.shadownight.plugin.shadownight.qol.tpa.CMD_tpa;
 
 
 public class ShadowNight_listener implements Listener {

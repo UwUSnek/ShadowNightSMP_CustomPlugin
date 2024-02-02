@@ -5,19 +5,21 @@ import com.comphenix.protocol.ProtocolManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.shadownight.plugin.shadownight.ChatManager.DiscordBotManager;
-import org.shadownight.plugin.shadownight.Economy.CMD_trade;
-import org.shadownight.plugin.shadownight.Economy.Economy;
-import org.shadownight.plugin.shadownight.QOL.CMD_flyspeed;
-import org.shadownight.plugin.shadownight.QOL.CMD_rtp;
-import org.shadownight.plugin.shadownight.QOL.Info.*;
-import org.shadownight.plugin.shadownight.ChatManager.CMD_msg;
-import org.shadownight.plugin.shadownight.ChatManager.CMD_r;
-import org.shadownight.plugin.shadownight.QOL.TPA.CMD_tpa;
-import org.shadownight.plugin.shadownight.QOL.TPA.CMD_tpaccept;
+import org.shadownight.plugin.shadownight.chatManager.DiscordBotManager;
+import org.shadownight.plugin.shadownight.economy.CMD_trade;
+import org.shadownight.plugin.shadownight.economy.Economy;
+import org.shadownight.plugin.shadownight.qol.CMD_flyspeed;
+import org.shadownight.plugin.shadownight.qol.CMD_rtp;
+import org.shadownight.plugin.shadownight.qol.info.*;
+import org.shadownight.plugin.shadownight.chatManager.CMD_msg;
+import org.shadownight.plugin.shadownight.chatManager.CMD_r;
+import org.shadownight.plugin.shadownight.qol.tpa.CMD_tpa;
+import org.shadownight.plugin.shadownight.qol.tpa.CMD_tpaccept;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.shadownight.plugin.shadownight.utils.SignInput;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
+
+import java.util.Objects;
 
 
 public final class ShadowNight extends JavaPlugin {
@@ -51,30 +53,30 @@ public final class ShadowNight extends JavaPlugin {
 
 
         // Load Economy database
-        this.getCommand("trade").setExecutor(new CMD_trade());
+        Objects.requireNonNull(this.getCommand("trade"),    "getCommand returned null").setExecutor(new CMD_trade());
         Economy.loadDatabase();
 
 
 
 
         // Teleports
-        this.getCommand("rtp").setExecutor(new CMD_rtp());
-        this.getCommand("tpa").setExecutor(new CMD_tpa());
-        this.getCommand("tpaccept").setExecutor(new CMD_tpaccept());
+        Objects.requireNonNull(this.getCommand("rtp"),      "getCommand returned null").setExecutor(new CMD_rtp());
+        Objects.requireNonNull(this.getCommand("tpa"),      "getCommand returned null").setExecutor(new CMD_tpa());
+        Objects.requireNonNull(this.getCommand("tpaccept"), "getCommand returned null").setExecutor(new CMD_tpaccept());
 
         // Misc
-        this.getCommand("flyspeed").setExecutor(new CMD_flyspeed());
-        this.getCommand("msg").setExecutor(new CMD_msg());
-        this.getCommand("tell").setExecutor(new CMD_msg());
-        this.getCommand("r").setExecutor(new CMD_r());
+        Objects.requireNonNull(this.getCommand("flyspeed"), "getCommand returned null").setExecutor(new CMD_flyspeed());
+        Objects.requireNonNull(this.getCommand("msg"),      "getCommand returned null").setExecutor(new CMD_msg());
+        Objects.requireNonNull(this.getCommand("tell"),     "getCommand returned null").setExecutor(new CMD_msg());
+        Objects.requireNonNull(this.getCommand("r"),        "getCommand returned null").setExecutor(new CMD_r());
 
         //Info
-        this.getCommand("help").setExecutor(new CMD_help());
-        this.getCommand("vote").setExecutor(new CMD_vote());
-        this.getCommand("ping").setExecutor(new CMD_ping());
-        this.getCommand("playtime").setExecutor(new CMD_playtime());
-        this.getCommand("colors").setExecutor(new CMD_colors());
-        this.getCommand("discord").setExecutor(new CMD_discord());
+        Objects.requireNonNull(this.getCommand("help"),     "getCommand returned null").setExecutor(new CMD_help());
+        Objects.requireNonNull(this.getCommand("vote"),     "getCommand returned null").setExecutor(new CMD_vote());
+        Objects.requireNonNull(this.getCommand("ping"),     "getCommand returned null").setExecutor(new CMD_ping());
+        Objects.requireNonNull(this.getCommand("playtime"), "getCommand returned null").setExecutor(new CMD_playtime());
+        Objects.requireNonNull(this.getCommand("colors"),   "getCommand returned null").setExecutor(new CMD_colors());
+        Objects.requireNonNull(this.getCommand("discord"),  "getCommand returned null").setExecutor(new CMD_discord());
 
 
 

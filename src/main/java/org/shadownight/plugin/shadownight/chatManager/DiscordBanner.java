@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.ChatManager;
+package org.shadownight.plugin.shadownight.chatManager;
 
 
 import org.bukkit.Bukkit;

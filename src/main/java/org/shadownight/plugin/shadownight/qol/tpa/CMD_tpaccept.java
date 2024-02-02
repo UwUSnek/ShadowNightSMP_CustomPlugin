@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.QOL.TPA;
+package org.shadownight.plugin.shadownight.qol.tpa;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +23,7 @@ public class CMD_tpaccept implements CommandExecutor {
         Player player = org.bukkit.Bukkit.getPlayer(args[0]);
         if (utils.playerOfflineCheck(target, player, args[0])) return true;
 
+        @SuppressWarnings("DataFlowIssue") // checked in playerOfflineCheck
         Vector<String> requests_from_player = CMD_tpa.tpa_requests.get(player.getName());
         if (requests_from_player != null && requests_from_player.removeIf(n -> (n.equals(target.getName())))) {
             if (requests_from_player.isEmpty()) CMD_tpa.tpa_requests.remove(player.getName());

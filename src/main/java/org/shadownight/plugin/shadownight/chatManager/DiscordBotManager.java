@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.ChatManager;
+package org.shadownight.plugin.shadownight.chatManager;
 
 
 import org.bukkit.entity.Player;
@@ -14,6 +14,7 @@ import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -61,7 +62,20 @@ public class DiscordBotManager {
         channel.sendMessage(utils.stripColor(msg));
     }
     public static void sendBridgeMessage(Player player, String msg) {
-        String groupDisplayName = ShadowNight.lpApi.getGroupManager().getGroup(ShadowNight.lpApi.getPlayerAdapter(Player.class).getUser(player).getCachedData().getMetaData().getPrimaryGroup()).getDisplayName();
+        // Get group display name (why is this so complex omg)
+        String groupDisplayName =
+            Objects.requireNonNull(ShadowNight.lpApi.getGroupManager().getGroup(
+                Objects.requireNonNull(ShadowNight.lpApi.getPlayerAdapter(Player.class)
+                    .getUser(player)
+                    .getCachedData()
+                    .getMetaData()
+                    .getPrimaryGroup()
+                    , "Luckperms primary group id is null")
+            ), "Luckperms group object is null").getDisplayName()
+        ;
+
+
+        // Create webhook and send message, then delete it
         IncomingWebhook webhook = new WebhookBuilder(channel)
             .setName("[" + groupDisplayName + "] " + player.getName())
             .setAvatar(SkinRenderer.getRenderPropic(player))

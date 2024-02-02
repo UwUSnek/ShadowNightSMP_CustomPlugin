@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.QOL;
+package org.shadownight.plugin.shadownight.qol;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -42,7 +42,7 @@ public final class SignInput {
                 if (player.isOnline()) {
                     Location location = menu.posWrapper.toLocation(player.getWorld());
                     player.sendBlockChange(location, location.getBlock().getBlockData());
-                    menu.afterCloseCallback.run();
+                    if(menu.afterCloseCallback != null) menu.afterCloseCallback.run();
                 }
             }, 2L);
         }

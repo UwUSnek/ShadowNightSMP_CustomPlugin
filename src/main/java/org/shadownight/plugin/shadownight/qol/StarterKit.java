@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.QOL;
+package org.shadownight.plugin.shadownight.qol;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -11,8 +11,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.util.ArrayList;
-
 
 public class StarterKit {
     private static final String kit_prefix = "§c[Starter Kit] §r";
@@ -20,18 +18,13 @@ public class StarterKit {
 
     public static void give(Player player){
         PlayerInventory inv = player.getInventory();
-        ItemStack c = new ItemStack(Material.IRON_CHESTPLATE);
-        ItemStack a = new ItemStack(Material.STONE_AXE);
-        ItemStack p = new ItemStack(Material.STONE_PICKAXE);
-        ItemStack b = new ItemStack(Material.BREAD, 32);
+        String lore0 = "§cNotice: this item is part of the starter kit.";
+        String lore1 = "§cIt will be deleted if you remove it from your inventory or die";
 
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("§cNotice: this item is part of the starter kit.");
-        lore.add("§cIt will be deleted if you remove it from your inventory or die");
-        ItemMeta meta_c = c.getItemMeta(); meta_c.setLore(lore); meta_c.setDisplayName(kit_prefix + "Iron Chestplate"); c.setItemMeta(meta_c);
-        ItemMeta meta_a = a.getItemMeta(); meta_a.setLore(lore); meta_a.setDisplayName(kit_prefix + "Stone Axe");       a.setItemMeta(meta_a);
-        ItemMeta meta_p = p.getItemMeta(); meta_p.setLore(lore); meta_p.setDisplayName(kit_prefix + "Stone Pickaxe");   p.setItemMeta(meta_p);
-        ItemMeta meta_b = p.getItemMeta(); meta_b.setLore(lore); meta_b.setDisplayName(kit_prefix + "Bread");           b.setItemMeta(meta_b);
+        ItemStack c = utils.createItemStack(Material.IRON_CHESTPLATE, 1,  kit_prefix + "Iron Chestplate", lore0, lore1);
+        ItemStack a = utils.createItemStack(Material.STONE_AXE,       1,  kit_prefix + "Stone Axe",       lore0, lore1);
+        ItemStack p = utils.createItemStack(Material.STONE_PICKAXE,   1,  kit_prefix + "Stone Pickaxe",   lore0, lore1);
+        ItemStack b = utils.createItemStack(Material.BREAD,           32, kit_prefix + "Bread",           lore0, lore1);
 
         inv.setChestplate(c);
         inv.addItem(a);
@@ -48,7 +41,7 @@ public class StarterKit {
 
 
 
-    public static boolean isBLacklisted(ItemStack item) {
+    public static boolean isBlacklisted(ItemStack item) {
         if (item != null) {
             ItemMeta meta = item.getItemMeta();
             return (meta != null && utils.stripColor(meta.getDisplayName()).startsWith(utils.stripColor(kit_prefix)));
@@ -60,14 +53,14 @@ public class StarterKit {
 
 
     public static void onItemDrop(Item item) {
-        if (isBLacklisted(item.getItemStack())) item.remove();
+        if (isBlacklisted(item.getItemStack())) item.remove();
     }
 
 
     public static void onDragEvent(InventoryDragEvent event) {
         Inventory inventory = event.getInventory();
         if (inventory.getType() != InventoryType.PLAYER) {
-            if (isBLacklisted(event.getOldCursor())) event.setCancelled(true);
+            if (isBlacklisted(event.getOldCursor())) event.setCancelled(true);
         }
     }
 
@@ -84,7 +77,7 @@ public class StarterKit {
                     a == InventoryAction.PLACE_ALL ||
                     a == InventoryAction.SWAP_WITH_CURSOR
                 ) {
-                    if (isBLacklisted(event.getCursor())) {
+                    if (isBlacklisted(event.getCursor())) {
                         event.setCancelled(true);
                         event.getWhoClicked().setItemOnCursor(null);
                     }
@@ -92,7 +85,7 @@ public class StarterKit {
                 // Hotbar swap
                 else if (event.getClick() == ClickType.NUMBER_KEY) {
                     PlayerInventory playerInventory = event.getWhoClicked().getInventory();
-                    if (isBLacklisted(playerInventory.getItem(event.getHotbarButton()))) {
+                    if (isBlacklisted(playerInventory.getItem(event.getHotbarButton()))) {
                         event.setCancelled(true);
                         playerInventory.setItem(event.getHotbarButton(), null);
                     }
@@ -100,7 +93,7 @@ public class StarterKit {
                 // Offhand swap
                 else if (event.getClick() == ClickType.SWAP_OFFHAND) {
                     PlayerInventory playerInventory = event.getWhoClicked().getInventory();
-                    if (isBLacklisted(playerInventory.getItemInOffHand())) {
+                    if (isBlacklisted(playerInventory.getItemInOffHand())) {
                         event.setCancelled(true);
                         playerInventory.setItemInOffHand(null);
                     }
@@ -108,7 +101,7 @@ public class StarterKit {
             }
             // Shift clicks
             else if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) {
-                if (isBLacklisted(event.getCurrentItem())) {
+                if (isBlacklisted(event.getCurrentItem())) {
                     event.setCancelled(true);
                     event.getWhoClicked().getInventory().setItem(event.getSlot(), null);
                 }
