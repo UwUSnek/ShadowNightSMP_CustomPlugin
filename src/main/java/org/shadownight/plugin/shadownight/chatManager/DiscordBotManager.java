@@ -48,7 +48,7 @@ public class DiscordBotManager {
 
 
         // Get output channel
-        Optional<TextChannel> _channel = api.getTextChannelById(ShadowNight.plugin.getServer().getIp().equals(utils.serverIp) ? bridgeId : testBridgeId);
+        Optional<TextChannel> _channel = api.getTextChannelById(new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists() ? bridgeId : testBridgeId);
         if(_channel.isEmpty()) throw new RuntimeException("An error occurred while trying to initialize the Discord Bot Manager: Channel not found");
         else {
             channel = (TextableRegularServerChannel) _channel.get();
