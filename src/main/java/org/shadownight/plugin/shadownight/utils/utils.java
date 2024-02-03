@@ -118,7 +118,7 @@ public class utils {
 
 
     public static String stripPrivateCharacters(String s) {
-        return s.replaceAll("[\uF000\uF8FF]", "");
+        return s.replaceAll("[\uE000-\uF8FF]", "");
     }
 
     public static String stripColor(String s) {
@@ -143,5 +143,34 @@ public class utils {
         item.setItemMeta(meta);
 
         return item;
+    }
+
+
+
+
+
+    public static String getGroupDisplayName(Player player) {
+        return Objects.requireNonNull(ShadowNight.lpApi.getGroupManager().getGroup(
+            Objects.requireNonNull(ShadowNight.lpApi.getPlayerAdapter(Player.class)
+               .getUser(player)
+               .getCachedData()
+               .getMetaData()
+               .getPrimaryGroup()
+            , "Luckperms primary group id is null")
+        ), "Luckperms group object is null").getDisplayName();
+    }
+
+    // way slower //TODO documentation
+    public static String getGroupDisplayNameOffline(OfflinePlayer player) {
+        UserManager userManager = ShadowNight.lpApi.getUserManager();
+        CompletableFuture<User> userFuture = userManager.loadUser(player.getUniqueId());
+
+        return Objects.requireNonNull(ShadowNight.lpApi.getGroupManager().getGroup(
+            Objects.requireNonNull(userFuture.join()
+                .getCachedData()
+                .getMetaData()
+                .getPrimaryGroup()
+            , "Luckperms primary group id is null")
+        ), "Luckperms group object is null").getDisplayName();
     }
 }

@@ -1,5 +1,6 @@
 package org.shadownight.plugin.shadownight.utils;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
@@ -39,7 +40,7 @@ public class SkinRenderer {
 
 
 
-    private static BufferedImage getRender(Player player, String type, RenderType renderType){
+    private static BufferedImage getRender(OfflinePlayer player, String type, RenderType renderType){
         UUID uuid = player.getUniqueId();
         HashMap<UUID, BufferedImage> typeRuntimeCache = runtimeCache.get(renderType);
         BufferedImage playerRuntimeCache = typeRuntimeCache.get(uuid);
@@ -76,10 +77,10 @@ public class SkinRenderer {
     }
 
 
-    public static BufferedImage getRenderPropic(Player player) {
+    public static BufferedImage getRenderPropic(OfflinePlayer player) {
         return getRender(player, "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}", RenderType.PROPIC);
     }
-    public static BufferedImage getRenderFull(Player player) {
+    public static BufferedImage getRenderFull(OfflinePlayer player) {
         return getRender(player, "full", RenderType.FULL);
     }
 
