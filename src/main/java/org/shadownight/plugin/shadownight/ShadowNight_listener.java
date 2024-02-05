@@ -74,7 +74,7 @@ public class ShadowNight_listener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onAttack(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         ItemManager.onInteract(event);
     }
 }

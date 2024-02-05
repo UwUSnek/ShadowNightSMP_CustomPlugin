@@ -4,6 +4,7 @@ package org.shadownight.plugin.shadownight.items;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -24,9 +25,10 @@ public class ItemManager {
 
     static public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if(item != null) {
+        if(item != null && event.getHand() == EquipmentSlot.HAND) { // Check if item in being used in the main hand
             PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
             if(container.has(itemIdKey)) {
+                event.setCancelled(true);
                 int customItemId = container.get(itemIdKey, PersistentDataType.INTEGER);
 
                 switch (customItemId) {
