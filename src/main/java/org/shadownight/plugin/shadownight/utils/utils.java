@@ -7,14 +7,19 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.items.ItemManager;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+
+import static org.shadownight.plugin.shadownight.items.ItemManager.itemIdKey;
 
 
 public class utils {
@@ -138,10 +143,33 @@ public class utils {
         final ItemStack item = new ItemStack(material, number);
         final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
 
-        meta.setDisplayName(name);
-        meta.setLore(Arrays.asList(lore));
-        item.setItemMeta(meta);
+        meta.setDisplayName("§f" + name);
+        if(lore.length > 0) meta.setLore(Arrays.asList(lore));
 
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    // Creates an item with a custom name, model, id and lore
+    public static ItemStack createItemStackCustom(
+        final Material material,
+        final int number,
+        final String name,
+        final int customModelData,
+        final int customItemId,
+        final String... lore
+    ) {
+        final ItemStack item = new ItemStack(material, number);
+        final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
+
+        meta.setDisplayName("§f" + name);
+        if(lore.length > 0) meta.setLore(Arrays.asList(lore));
+        meta.setCustomModelData(customModelData);
+
+        final PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(itemIdKey, PersistentDataType.INTEGER, customItemId);
+
+        item.setItemMeta(meta);
         return item;
     }
 

@@ -8,6 +8,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.shadownight.plugin.shadownight.chatManager.DiscordBotManager;
 import org.shadownight.plugin.shadownight.economy.CMD_trade;
 import org.shadownight.plugin.shadownight.economy.Economy;
+import org.shadownight.plugin.shadownight.items.Scythe;
 import org.shadownight.plugin.shadownight.qol.CMD_flyspeed;
 import org.shadownight.plugin.shadownight.qol.CMD_rtp;
 import org.shadownight.plugin.shadownight.qol.info.*;
@@ -88,6 +89,13 @@ public final class ShadowNight extends JavaPlugin {
         // Initialize Discord Bot Manager
         DiscordBotManager.init();
         DiscordBotManager.sendBridgeMessage("🟢 Server is online");
+
+
+
+
+
+        // Initialize custom items
+        Scythe.createRecipes();
     }
 
 

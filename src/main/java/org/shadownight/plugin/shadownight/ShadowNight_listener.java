@@ -13,6 +13,7 @@ import org.shadownight.plugin.shadownight.chatManager.DeathMessages;
 import org.shadownight.plugin.shadownight.chatManager.DiscordBanner;
 import org.shadownight.plugin.shadownight.chatManager.JoinLeaveMessages;
 import org.shadownight.plugin.shadownight.economy.Economy;
+import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.qol.SpawnInvincibility;
 import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.qol.SurvivalFly;
@@ -70,5 +71,10 @@ public class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryDrag(InventoryDragEvent event) {
         StarterKit.onDragEvent(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onAttack(PlayerInteractEvent event) {
+        ItemManager.onInteract(event);
     }
 }
