@@ -11,16 +11,17 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
-import org.joml.Vector3d;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 
 public class ScytheThrowDisplay {
     private ItemDisplay display;
     private static final float throwDistance = 40;
-    private static final int stepDuration = 5;
+    private static final int stepDuration = 2;
 
 
     BukkitTask rotationTask;
@@ -42,26 +43,23 @@ public class ScytheThrowDisplay {
         display.setItemStack(Scythe.klaueItem);
         display.setTeleportDuration(stepDuration);
 
-        rotationLoop(2);
 
 
+        //player.swingMainHand(); // For some reason, right-clicking air triggers left clicks as well
+        animateRotation(2);
 
-        Vector direction = playerPos.getDirection();
+        Vector startPos = player.getLocation().toVector().add(new Vector(0, 1, 0));
         animateTranslation(
-            new Vector3d(
-                playerPos.getX() +     direction.getX() * throwDistance,
-                playerPos.getY() + 1 + direction.getY() * throwDistance,
-                playerPos.getZ() +     direction.getZ() * throwDistance
-            ),
-            COMP_easeSineOut,
-            () -> animateTranslation(
-                new Vector3d(
-                    playerPos.getX(),
-                    playerPos.getY() + 1,
-                    playerPos.getZ()
-                ),
-                COMP_easeSineIn,
-                null
+            startPos.clone().add(playerPos.getDirection().multiply(throwDistance)),
+            COMP_sineOut,
+            () -> animateTranslationDynamic(
+                startPos,
+                COMP_sineIn,
+                () -> player.getLocation().toVector().add(new Vector(0, 1, 0)),
+                () -> {
+                    rotationTask.cancel();
+                    display.remove();
+                }
             )
         );
     }
@@ -69,7 +67,11 @@ public class ScytheThrowDisplay {
 
 
 
-    public void rotationLoop(double rotations_s) {
+    /**
+     * Animates a rotation loop on the entity
+     * @param rotations_s The number of rotations per second
+     */
+    public void animateRotation(double rotations_s) {
         int third_duration = (int) Math.max(1, 20 / (rotations_s * 3));      // This is 1 / (rotations_s / 20) / 3
         display.setInterpolationDuration(third_duration);
         display.setInterpolationDelay(0);
@@ -90,25 +92,97 @@ public class ScytheThrowDisplay {
 
 
 
-    public void animateTranslation(@NotNull Vector3d target, @NotNull Function<Double, Double> f, @Nullable Runnable onComplete) {
-        player.sendMessage("ENTERED MAIN FUNCTION");
-        loop_easeSineIn(0, display.getLocation().toVector().toVector3d(), target, f, onComplete);
+
+
+    /**
+     * Animates the translation of the entity to a static target location <target>
+     * @param target The target location where the animation ends
+     * @param f The easing function to use
+     * @param onComplete A function to run when the animation ends
+     */
+    public void animateTranslation(@NotNull Vector target, @NotNull Function<Double, Double> f, @Nullable Runnable onComplete) {
+        animateTranslationLoop(0, display.getLocation().toVector(), target, f, null, onComplete);
     }
 
-    private void loop_easeSineIn(double progress, Vector3d start, Vector3d end, Function<Double, Double> f, Runnable onComplete){
-        Vector3d pos = progressToCoords(f.apply(progress), start, end);
-        display.teleport(new Location(player.getLocation().getWorld(), pos.x, pos.y, pos.z, 0, 90));
-        if(progress < 1) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> loop_easeSineIn(progress + 0.1, start, end, f, onComplete), stepDuration);
+    /**
+     * Animates the translation of the entity to a target location which can be changed freely. The animation will adapt accordingly
+     * @param target The initial target location
+     * @param f The easing function to use
+     * @param onTargetUpdate The function to run before each step. Used to update the dynamic target location
+     * @param onComplete A function to run when the animation ends
+     */
+    public void animateTranslationDynamic(@NotNull Vector target, @NotNull Function<Double, Double> f, @NotNull Callable<Vector> onTargetUpdate, @Nullable Runnable onComplete) {
+        animateTranslationLoop(0, display.getLocation().toVector(), target, f, onTargetUpdate, onComplete);
+    }
+
+
+    private void animateTranslationLoop(double progress, Vector start, Vector end, Function<Double, Double> f, @Nullable Callable<Vector> onTargetUpdate, Runnable onComplete){
+        double stepSize = 0.1; //TODO replace this and stepDuration with a configurable steps/s
+
+        if(onTargetUpdate != null) try { end = onTargetUpdate.call(); }
+        catch (Exception e) { e.printStackTrace(); }
+        final Vector _final_end = end;
+
+        Vector pos = progressToCoords(f.apply(progress), start, _final_end);
+        display.teleport(new Location(player.getLocation().getWorld(), pos.getX(), pos.getY(), pos.getZ(), 0, 90));
+        if(progress + stepSize < 1) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> animateTranslationLoop(progress + stepSize, start, _final_end, f, onTargetUpdate, onComplete), stepDuration);
         else if(onComplete != null) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, onComplete, stepDuration);
     }
 
-    private Vector3d progressToCoords(double progress, Vector3d start, Vector3d end){
-        return new Vector3d(start).add((new Vector3d(end).sub(start)).mul(progress));
+
+    private Vector progressToCoords(double progress, Vector start, Vector end){
+        return start.clone().add((end.clone().subtract(start)).multiply(progress));
     }
 
 
 
 
-    private final Function<Double, Double> COMP_easeSineIn  = progress -> 1 - Math.cos((progress * Math.PI) / 2);
-    private final Function<Double, Double> COMP_easeSineOut = progress ->     Math.sin((progress * Math.PI) / 2);
+
+
+
+    private final Function<Double, Double> COMP_linear = x -> x;
+
+
+
+    private final Function<Double, Double> COMP_sineIn    = x -> 1 - Math.cos((x * Math.PI) / 2);
+    private final Function<Double, Double> COMP_sineOut   = x ->     Math.sin((x * Math.PI) / 2);
+    private final Function<Double, Double> COMP_sineInOut = x ->   -(Math.cos( x * Math.PI) - 1) / 2;
+
+
+
+    private final Function<Double, Double> COMP_cubicIn    = x ->     Math.pow(    x, 3);
+    private final Function<Double, Double> COMP_cubicOut   = x -> 1 - Math.pow(1 - x, 3);
+    private final Function<Double, Double> COMP_cubicInOut = x -> x < 0.5 ? 4 * Math.pow(x, 3) : 1 - Math.pow(-2 * x + 2, 3) / 2;
+
+
+
+    private final Function<Double, Double> COMP_bounceIn    = x -> 1 - this.COMP_bounceOut.apply(1 - x);
+    private final Function<Double, Double> COMP_bounceOut   = new Function<Double, Double>() {
+        @Override
+        public Double apply(Double x) {
+            final double n = 7.5625;
+            final double d = 2.75;
+            if      (x < 1   / d)                   return n * x * x;
+            else if (x < 2   / d) { x -=   1.5 / d; return n * x * x + 0.75;     }
+            else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
+            else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
+        }
+    };
+    private final Function<Double, Double> COMP_bounceInOut = x -> x < 0.5 ? (1 - this.COMP_bounceOut.apply(1 - 2 * x)) / 2 : (1 + this.COMP_bounceOut.apply(2 * x - 1)) / 2;
+
+
+
+    private final Function<Double, Double> COMP_elasticIn    = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
+    private final Function<Double, Double> COMP_elasticOut   = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
+    private final Function<Double, Double> COMP_elasticInOut = new Function<Double, Double>() {
+        @Override
+        public Double apply(Double x) {
+            final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
+            return utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : (
+                x < 0.5 ?
+                -(Math.pow(2,  20 * x - 10) * c) / 2 :
+                 (Math.pow(2, -20 * x + 10) * c) / 2 + 1
+            ));
+        }
+    };
 }

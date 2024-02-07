@@ -201,4 +201,9 @@ public class utils {
             , "Luckperms primary group id is null")
         ), "Luckperms group object is null").getDisplayName();
     }
+
+
+    public static boolean doubleEquals(double n, double target, double threshold) {
+        return !(n < target - threshold || n > target + threshold);
+    }
 }

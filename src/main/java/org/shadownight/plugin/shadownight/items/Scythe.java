@@ -1,18 +1,28 @@
 package org.shadownight.plugin.shadownight.items;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 
 public class Scythe {
@@ -25,7 +35,25 @@ public class Scythe {
 
 
 
+
+
+    private static void setAttributes(ItemStack item, double speed, double damage) {
+        ItemMeta meta = item.getItemMeta();
+        Objects.requireNonNull(meta, "Object meta is null");
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,  new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed",  speed,  AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", damage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        item.setItemMeta(meta);
+    }
+
+
     public static void createRecipes(){
+        setAttributes(ironItem,      -3.4, 10); // 0.6
+        setAttributes(diamondItem,   -3.2, 12); // 0.8
+        setAttributes(netheriteItem, -3.0, 14); // 1.0
+        setAttributes(klaueItem,     -3.0, 14); // 1.0
+
+
+
         NamespacedKey ironKey = new NamespacedKey(ShadowNight.plugin, "ironScythe");
         ShapedRecipe ironRecipe = new ShapedRecipe(ironKey, ironItem);
 
@@ -76,8 +104,61 @@ public class Scythe {
 
 
 
-    static public void onInteractNormal(PlayerInteractEvent event) {
+    private static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
+    private static final HashMultimap<UUID, UUID> ongoingAttacks = HashMultimap.create();
 
+    static private void customAttack(Player player) {
+        int attackRange = 6;
+        Location playerPos = player.getLocation();
+        Vector playerDirection = playerPos.getDirection();
+        List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
+
+        for (Entity e : entities) {
+            if (e instanceof LivingEntity && (playerPos.distance(e.getLocation()) < attackRange)) {
+            //if (e instanceof LivingEntity) {
+                attackQueue.put(player.getUniqueId(), e.getUniqueId());
+                double damage = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
+                ((LivingEntity) e).damage(damage, player);
+                e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)))); // Double the normal kb (Damaging e already gives it normal kb)
+            }
+        }
+
+
+        attackQueue.removeAll(player.getUniqueId());
+        ongoingAttacks.removeAll(player.getUniqueId());
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
+        player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, playerPos.clone().add(playerDirection.clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
+    }
+
+
+
+    static public void onInteractNormal(PlayerInteractEvent event) {
+        Bukkit.broadcastMessage(event.getAction().toString());
+        Player player = event.getPlayer();
+        if(!player.isSneaking() && ((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR))) {
+            customAttack(player);
+        }
+    }
+
+    static public void onAttack(EntityDamageByEntityEvent event) {
+        Player player = (Player) event.getDamager();
+        Entity target = event.getEntity();
+
+        UUID playerId = player.getUniqueId();
+        UUID targetId = target.getUniqueId();
+
+
+        if(attackQueue.containsEntry(playerId, targetId)) { //TODO remove if present
+            attackQueue.remove(playerId, targetId);
+            ongoingAttacks.put(playerId, targetId);
+        }
+        else if(ongoingAttacks.containsEntry(playerId, targetId)) {
+            event.setCancelled(true);
+        }
+        else {
+            event.setCancelled(true);
+            customAttack(player);
+        }
     }
 
 
@@ -110,7 +191,7 @@ public class Scythe {
                 }
             }
             else {
-                ScytheThrowDisplay display = new ScytheThrowDisplay(player);
+                new ScytheThrowDisplay(player);
             }
         }
     }
