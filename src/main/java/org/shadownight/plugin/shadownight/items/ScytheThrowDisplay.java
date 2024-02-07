@@ -145,7 +145,7 @@ public class ScytheThrowDisplay {
             Vector boxSize = new Vector(Math.abs(boxSize_.getX()), Math.abs(boxSize_.getY()), Math.abs(boxSize_.getZ())).divide(new Vector(2, 2, 2)).add(new Vector(2, 2, 2));
             Collection<Entity> entities = world.getNearbyEntities(mid.toLocation(world), Math.abs(boxSize.getX()), Math.abs(boxSize.getY()), Math.abs(boxSize.getZ()));
             for (Entity e : entities) {
-                if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && e.getUniqueId().equals(player.getUniqueId())) {
+                if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && !e.getUniqueId().equals(player.getUniqueId())) {
                     Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
                     ((LivingEntity) e).damage(10, player);
                 }
