@@ -1,9 +1,13 @@
 package org.shadownight.plugin.shadownight.items;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
@@ -25,14 +29,16 @@ public class ScytheThrowDisplay {
 
     private BukkitTask rotationTask;
     private final Player player;
+    private final ItemStack item;
 
 
 
 
 
 
-    public ScytheThrowDisplay(Player _player) {
-        this.player = _player;
+    public ScytheThrowDisplay(Player _player, ItemStack _item) {
+        player = _player;
+        item = _item;
         Location playerPos = player.getLocation();
 
 
@@ -106,6 +112,7 @@ public class ScytheThrowDisplay {
      * @param onComplete A function to run when the animation ends
      */
     public void animateTranslation(@NotNull Vector target, @NotNull Function<Double, Double> f, @Nullable Runnable onComplete) {
+        utils.damageItem(player, item);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, null, onComplete);
     }
 
@@ -117,12 +124,14 @@ public class ScytheThrowDisplay {
      * @param onComplete A function to run when the animation ends
      */
     public void animateTranslationDynamic(@NotNull Vector target, @NotNull Function<Double, Double> f, @NotNull Callable<Vector> onTargetUpdate, @Nullable Runnable onComplete) {
+        utils.damageItem(player, item);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, onTargetUpdate, onComplete);
     }
 
 
     private void animateTranslationLoop(double progress, Vector start, Vector end, Function<Double, Double> f, @Nullable Callable<Vector> onTargetUpdate, Runnable onComplete){
         double stepSize = 0.1; //TODO replace this and stepDuration with a configurable steps/s
+
 
 
         // Update target if needed
@@ -148,6 +157,7 @@ public class ScytheThrowDisplay {
                 if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && !e.getUniqueId().equals(player.getUniqueId())) {
                     Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
                     ((LivingEntity) e).damage(10, player);
+                    Scythe.ongoingAttacks.remove(player.getUniqueId(), e.getUniqueId());
                 }
             }
         }
@@ -155,7 +165,7 @@ public class ScytheThrowDisplay {
 
         // Stop the animation if target has been reached
         if(progress + stepSize < 1) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> animateTranslationLoop(progress + stepSize, start, _final_end, f, onTargetUpdate, onComplete), stepDuration);
-        else if(onComplete != null) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, onComplete, stepDuration);
+        else if(onComplete != null) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, onComplete::run, stepDuration);
     }
 
 

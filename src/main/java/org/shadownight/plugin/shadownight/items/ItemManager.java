@@ -36,11 +36,12 @@ public class ItemManager {
                 switch (customItemId) {
                     case CustomItemId.KLAUE_SCYTHE:
                         Scythe.onInteractKlaue(event);
-                        // Intentionally falling through
+                        break;
                     case CustomItemId.IRON_SCYTHE:
                     case CustomItemId.DIAMOND_SCYTHE:
                     case CustomItemId.NETHERITE_SCYTHE:
                         Scythe.onInteractNormal(event);
+                        break;
                 }
             }
         }

@@ -2,10 +2,13 @@ package org.shadownight.plugin.shadownight.utils;
 
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -245,5 +248,22 @@ public class utils {
             return modulus(bv);         // Use distance to end of the segment instead.
 
         return modulus(ab.getCrossProduct(av)) / modulus(ab);
+    }
+
+
+    public static void damageItem(Player player, ItemStack item) {
+        if(player.getGameMode() != GameMode.CREATIVE && item.getAmount() > 0) { // amount <= 0 means that a different thread broke the item. No need to damage it further
+            ItemMeta meta = item.getItemMeta();
+            if (meta instanceof Damageable _meta) {
+                if(_meta.getDamage() >= item.getType().getMaxDurability()) {
+                    item.setAmount(0);
+                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                }
+                else {
+                    _meta.setDamage(_meta.getDamage() + 1);
+                    item.setItemMeta(_meta);
+                }
+            }
+        }
     }
 }

@@ -94,13 +94,15 @@ public class DiscordBotManager {
     }
     public static void sendBridgeMessage(Player player, String msg) {
         // Create webhook and send message, then delete it
-        IncomingWebhook webhook = new WebhookBuilder(bridgeChannel)
-            .setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
-            .setAvatar(SkinRenderer.getRenderPropic(player))
-            .create().join()
-        ;
-        webhook.sendMessage(utils.stripColor(msg));
-        webhook.delete();
+        Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
+            IncomingWebhook webhook = new WebhookBuilder(bridgeChannel)
+                .setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+                .setAvatar(SkinRenderer.getRenderPropic(player))
+                .create().join()
+            ;
+            webhook.sendMessage(utils.stripColor(msg));
+            webhook.delete();
+        });
     }
 
 

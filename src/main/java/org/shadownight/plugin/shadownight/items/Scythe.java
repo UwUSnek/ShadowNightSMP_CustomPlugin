@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.shadownight.plugin.shadownight.ShadowNight;
@@ -27,6 +28,7 @@ public class Scythe {
     public static final ItemStack netheriteItem = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Netherite Scythe", SCYTHE_DATA, ItemManager.CustomItemId.NETHERITE_SCYTHE);
     public static final ItemStack klaueItem     = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Klaue's Edgy Scythe", 14, ItemManager.CustomItemId.KLAUE_SCYTHE);
 
+    private static int attackRange = 6;
 
 
 
@@ -99,11 +101,23 @@ public class Scythe {
 
 
 
-    public static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
-    private static final HashMultimap<UUID, UUID> ongoingAttacks = HashMultimap.create();
 
-    static private void customAttack(Player player) {
-        int attackRange = 6;
+    static private void breakBlocks(Player player) {
+        Location playerPos = player.getLocation();
+        Vector playerDirection = playerPos.getDirection();
+
+        player.sendMessage("debug: used rclick ability");
+        //for()
+    }
+
+
+
+
+
+    public static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
+    public static final HashMultimap<UUID, UUID> ongoingAttacks = HashMultimap.create();
+
+    static private void customAttack(Player player, ItemStack item) {
         Location playerPos = player.getLocation();
         Vector playerDirection = playerPos.getDirection();
         List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
@@ -111,21 +125,24 @@ public class Scythe {
         double cooldown = player.getAttackCooldown();
         double damage = cooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
 
+        int damagedEntities = 0;
         for (Entity e : entities) {
             if (
                 e instanceof LivingEntity &&
                 playerPos.distance(e.getLocation()) < attackRange &&
                 utils.isInCone(playerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
             ) {
+                ++damagedEntities;
                 attackQueue.put(player.getUniqueId(), e.getUniqueId());
                 ((LivingEntity) e).damage(damage, player);
+                ongoingAttacks.remove(player.getUniqueId(), e.getUniqueId());
                 e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(cooldown))); // Double the normal kb (Damaging e already gives it normal kb)
             }
         }
 
 
-        attackQueue.removeAll(player.getUniqueId());
-        ongoingAttacks.removeAll(player.getUniqueId());
+
+        if(damagedEntities > 0) utils.damageItem(player, item);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
         player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, playerPos.clone().add(playerDirection.clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
     }
@@ -133,11 +150,13 @@ public class Scythe {
 
 
     static public void onInteractNormal(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        if(!player.isSneaking() && ((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR))) {
-            customAttack(player);
+        if(event.getAction() == Action.LEFT_CLICK_AIR) customAttack(event.getPlayer(), event.getItem());
+        else if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            breakBlocks(event.getPlayer());
         }
     }
+
+
 
     static public void onAttack(EntityDamageByEntityEvent event) {
         Player player = (Player) event.getDamager();
@@ -156,7 +175,7 @@ public class Scythe {
         }
         else {
             event.setCancelled(true);
-            customAttack(player);
+            customAttack(player, player.getInventory().getItemInMainHand());
         }
     }
 
@@ -167,7 +186,8 @@ public class Scythe {
         Player player = event.getPlayer();
 
         if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
-            if(player.isSneaking()) Bukkit.broadcastMessage("shadow fury knock off");
+            if(player.isSneaking()) player.sendMessage("shadow fury knock off");
+            else if(event.getAction() == Action.LEFT_CLICK_AIR) customAttack(player, event.getItem());
         }
         else if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
             if(player.isSneaking()) {
@@ -190,7 +210,7 @@ public class Scythe {
                 }
             }
             else {
-                new ScytheThrowDisplay(player);
+                new ScytheThrowDisplay(player, event.getItem());
             }
         }
     }
