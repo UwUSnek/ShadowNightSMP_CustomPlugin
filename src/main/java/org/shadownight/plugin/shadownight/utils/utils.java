@@ -13,7 +13,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.items.ItemManager;
 
 import java.util.Arrays;
 import java.util.Objects;

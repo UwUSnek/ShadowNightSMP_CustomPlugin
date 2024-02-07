@@ -1,7 +1,6 @@
 package org.shadownight.plugin.shadownight.utils;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
 import javax.imageio.ImageIO;
@@ -20,7 +19,7 @@ public class SkinRenderer {
         FULL
     }
     private static String cachePath;
-    private static HashMap<RenderType, HashMap<UUID, BufferedImage>> runtimeCache = new HashMap<>();
+    private static final HashMap<RenderType, HashMap<UUID, BufferedImage>> runtimeCache = new HashMap<>();
 
 
 
@@ -47,13 +46,7 @@ public class SkinRenderer {
 
 
         // Load from runtime cache if it exists
-        if(playerRuntimeCache != null) {
-            return playerRuntimeCache;
-        }
-
-
-        // If not, [try to load from file cache]
-        else {
+        if (playerRuntimeCache == null) {
             String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
             File file = new File(filePath);
 
@@ -65,15 +58,14 @@ public class SkinRenderer {
             else {
                 try {
                     playerRuntimeCache = ImageIO.read(file);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
-            // Return the data
-            return playerRuntimeCache;
         }
+
+        // Return the data
+        return playerRuntimeCache;
     }
 
 

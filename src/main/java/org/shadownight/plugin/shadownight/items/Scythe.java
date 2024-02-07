@@ -1,8 +1,6 @@
 package org.shadownight.plugin.shadownight.items;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -10,16 +8,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,10 +22,10 @@ import java.util.UUID;
 
 public class Scythe {
     private static final int SCYTHE_DATA = 1;
-    public static final ItemStack ironItem      = utils.createItemStackCustom(Material.IRON_SWORD,      1, "Iron Scythe",         SCYTHE_DATA, ItemManager.CusotmItemId.IRON_SCYTHE);
-    public static final ItemStack diamondItem   = utils.createItemStackCustom(Material.DIAMOND_SWORD,   1, "Diamond Scythe",      SCYTHE_DATA, ItemManager.CusotmItemId.DIAMOND_SCYTHE);
-    public static final ItemStack netheriteItem = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Netherite Scythe",    SCYTHE_DATA, ItemManager.CusotmItemId.NETHERITE_SCYTHE);
-    public static final ItemStack klaueItem     = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Klaue's Edgy Scythe", 14,          ItemManager.CusotmItemId.KLAUE_SCYTHE);
+    public static final ItemStack ironItem      = utils.createItemStackCustom(Material.IRON_SWORD, 1, "Iron Scythe", SCYTHE_DATA, ItemManager.CustomItemId.IRON_SCYTHE);
+    public static final ItemStack diamondItem   = utils.createItemStackCustom(Material.DIAMOND_SWORD, 1, "Diamond Scythe", SCYTHE_DATA, ItemManager.CustomItemId.DIAMOND_SCYTHE);
+    public static final ItemStack netheriteItem = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Netherite Scythe", SCYTHE_DATA, ItemManager.CustomItemId.NETHERITE_SCYTHE);
+    public static final ItemStack klaueItem     = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Klaue's Edgy Scythe", 14, ItemManager.CustomItemId.KLAUE_SCYTHE);
 
 
 
@@ -115,7 +110,6 @@ public class Scythe {
 
         double cooldown = player.getAttackCooldown();
         double damage = cooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
-        Bukkit.broadcastMessage("" + cooldown);
 
         for (Entity e : entities) {
             if (
@@ -139,7 +133,6 @@ public class Scythe {
 
 
     static public void onInteractNormal(PlayerInteractEvent event) {
-        Bukkit.broadcastMessage(event.getAction().toString());
         Player player = event.getPlayer();
         if(!player.isSneaking() && ((event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR))) {
             customAttack(player);

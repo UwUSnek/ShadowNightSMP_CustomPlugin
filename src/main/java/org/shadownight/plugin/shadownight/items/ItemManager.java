@@ -1,7 +1,6 @@
 package org.shadownight.plugin.shadownight.items;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -16,9 +15,9 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import java.util.Objects;
 
 public class ItemManager {
-    public static NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
+    public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
 
-    public static class CusotmItemId {
+    public static class CustomItemId {
         public static final int IRON_SCYTHE      = 0;
         public static final int DIAMOND_SCYTHE   = 1;
         public static final int NETHERITE_SCYTHE = 2;
@@ -35,12 +34,12 @@ public class ItemManager {
                 int customItemId = container.get(itemIdKey, PersistentDataType.INTEGER);
 
                 switch (customItemId) {
-                    case CusotmItemId.KLAUE_SCYTHE:
+                    case CustomItemId.KLAUE_SCYTHE:
                         Scythe.onInteractKlaue(event);
                         // Intentionally falling through
-                    case CusotmItemId.IRON_SCYTHE:
-                    case CusotmItemId.DIAMOND_SCYTHE:
-                    case CusotmItemId.NETHERITE_SCYTHE:
+                    case CustomItemId.IRON_SCYTHE:
+                    case CustomItemId.DIAMOND_SCYTHE:
+                    case CustomItemId.NETHERITE_SCYTHE:
                         Scythe.onInteractNormal(event);
                 }
             }
@@ -49,8 +48,7 @@ public class ItemManager {
 
 
     static public void onAttack(EntityDamageByEntityEvent event) {
-        if(event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
+        if(event.getDamager() instanceof Player player) {
             ItemStack item = player.getInventory().getItemInMainHand();
 
             if (item.getType() != Material.AIR) {
@@ -59,10 +57,10 @@ public class ItemManager {
                     int customItemId = container.get(itemIdKey, PersistentDataType.INTEGER);
 
                     switch (customItemId) {
-                        case CusotmItemId.KLAUE_SCYTHE:
-                        case CusotmItemId.IRON_SCYTHE:
-                        case CusotmItemId.DIAMOND_SCYTHE:
-                        case CusotmItemId.NETHERITE_SCYTHE:
+                        case CustomItemId.KLAUE_SCYTHE:
+                        case CustomItemId.IRON_SCYTHE:
+                        case CustomItemId.DIAMOND_SCYTHE:
+                        case CustomItemId.NETHERITE_SCYTHE:
                             Scythe.onAttack(event);
                             break;
                     }

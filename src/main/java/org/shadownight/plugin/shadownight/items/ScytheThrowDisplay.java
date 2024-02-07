@@ -4,8 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
@@ -13,25 +11,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.ShadowNight_listener;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Collection;
-import java.util.EventListener;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
-import static org.bukkit.Bukkit.getServer;
-
 
 public class ScytheThrowDisplay {
-    private ItemDisplay display;
+    private final ItemDisplay display;
     private static final float throwDistance = 40;
     private static final int stepDuration = 2;
 
-    BukkitTask rotationTask;
-    Player player;
+    private BukkitTask rotationTask;
+    private final Player player;
 
 
 
@@ -152,10 +145,9 @@ public class ScytheThrowDisplay {
             Vector boxSize = new Vector(Math.abs(boxSize_.getX()), Math.abs(boxSize_.getY()), Math.abs(boxSize_.getZ())).divide(new Vector(2, 2, 2)).add(new Vector(2, 2, 2));
             Collection<Entity> entities = world.getNearbyEntities(mid.toLocation(world), Math.abs(boxSize.getX()), Math.abs(boxSize.getY()), Math.abs(boxSize.getZ()));
             for (Entity e : entities) {
-                if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2) {
+                if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && e.getUniqueId().equals(player.getUniqueId())) {
                     Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
-                    ((LivingEntity) e).damage(10, player); //TODO maybe add player as damage source?
-                    //e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)))); // Double the normal kb (Damaging e already gives it normal kb)
+                    ((LivingEntity) e).damage(10, player);
                 }
             }
         }
@@ -194,16 +186,13 @@ public class ScytheThrowDisplay {
 
 
     private final Function<Double, Double> COMP_bounceIn    = x -> 1 - this.COMP_bounceOut.apply(1 - x);
-    private final Function<Double, Double> COMP_bounceOut   = new Function<Double, Double>() {
-        @Override
-        public Double apply(Double x) {
-            final double n = 7.5625;
-            final double d = 2.75;
-            if      (x < 1   / d)                   return n * x * x;
-            else if (x < 2   / d) { x -=   1.5 / d; return n * x * x + 0.75;     }
-            else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
-            else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
-        }
+    private final Function<Double, Double> COMP_bounceOut   = x -> {
+        final double n = 7.5625;
+        final double d = 2.75;
+        if      (x < 1   / d)                   return n * x * x;
+        else if (x < 2   / d) { x -=   1.5 / d; return n * x * x + 0.75;     }
+        else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
+        else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
     };
     private final Function<Double, Double> COMP_bounceInOut = x -> x < 0.5 ? (1 - this.COMP_bounceOut.apply(1 - 2 * x)) / 2 : (1 + this.COMP_bounceOut.apply(2 * x - 1)) / 2;
 
@@ -211,15 +200,12 @@ public class ScytheThrowDisplay {
 
     private final Function<Double, Double> COMP_elasticIn    = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
     private final Function<Double, Double> COMP_elasticOut   = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
-    private final Function<Double, Double> COMP_elasticInOut = new Function<Double, Double>() {
-        @Override
-        public Double apply(Double x) {
-            final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
-            return utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : (
-                x < 0.5 ?
-                -(Math.pow(2,  20 * x - 10) * c) / 2 :
-                 (Math.pow(2, -20 * x + 10) * c) / 2 + 1
-            ));
-        }
+    private final Function<Double, Double> COMP_elasticInOut = x -> {
+        final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
+        return utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : (
+            x < 0.5 ?
+            -(Math.pow(2,  20 * x - 10) * c) / 2 :
+             (Math.pow(2, -20 * x + 10) * c) / 2 + 1
+        ));
     };
 }

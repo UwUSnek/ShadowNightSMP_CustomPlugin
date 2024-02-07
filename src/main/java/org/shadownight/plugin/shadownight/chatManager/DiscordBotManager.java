@@ -30,7 +30,6 @@ import java.util.*;
 
 
 public class DiscordBotManager {
-    private static DiscordApi api;
     private static TextableRegularServerChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
@@ -55,7 +54,7 @@ public class DiscordBotManager {
         }
 
         // Initialize API
-        api = new DiscordApiBuilder()
+        DiscordApi api = new DiscordApiBuilder()
             .setToken(token)
             .setAllIntents()
             .login().join()
@@ -118,41 +117,46 @@ public class DiscordBotManager {
 
 
     private static void onSlashCommandCreate(SlashCommandCreateEvent event){
+        Optional<TextChannel> channel = event.getInteraction().getChannel();
+        if(channel.isEmpty()) throw new RuntimeException("Interaction channel not found");
         if(event.getSlashCommandInteraction().getCommandName().equals(commandProfile.getName())) {
-            event.getInteraction()
-                .respondLater()
-                .thenAccept(interactionOriginalResponseUpdater -> {
-                    String playerName = event.getSlashCommandInteraction().getOptionByName("IGN").get().getStringValue().get();
-                    @SuppressWarnings("deprecation") // Using getOfflinePlayer the way it's meant to be used, no need to warn
-                    OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+            if(channel.get().equals(commandsChannel)) {
+                event.getInteraction()
+                    .respondLater()
+                    .thenAccept(interactionOriginalResponseUpdater -> {
+                        String playerName = event.getSlashCommandInteraction().getOptionByName("IGN").get().getStringValue().get();
+                        @SuppressWarnings("deprecation") // Using getOfflinePlayer the way it's meant to be used, no need to warn
+                        OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
 
 
-                    if (!player.hasPlayedBefore()) interactionOriginalResponseUpdater.addEmbed(new EmbedBuilder().setColor(embedColor)
-                        .addField(player.getName() + "'s profile", "\"" + playerName + "\" has never played on Shadow Night!")
-                    ).update();
-                    else interactionOriginalResponseUpdater
-                        .addEmbed(new EmbedBuilder()
-                            .setColor(embedColor)
-                            .addField(player.getName() + "'s profile", """
-                                - Rank: `%s`
-                                - Playtime: %s
-                                - Status: %s"""
-                            .formatted(
-                                utils.getGroupDisplayNameOffline(player),
-                                utils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true),
-                                player.isOnline() ? "**Online**" : "_Offline_"
-                            ))
-                            .addField("─────────────────────────────────────────────────────────────", "")
-                            .addInlineField("Player kills", "⚔️ " + String.valueOf(player.getStatistic(Statistic.PLAYER_KILLS)))
-                            .addInlineField("Damage dealt", "💮 " + String.valueOf(player.getStatistic(Statistic.DAMAGE_DEALT)))
-                            .addInlineField("Balance", "🪙 " + Economy.getBalance(player))
-                            .addField("─────────────────────────────────────────────────────────────", "")
-                            .setImage(SkinRenderer.getRenderFull(player))
-                        )
-                        .update()
-                    ;
-                })
-            ;
+                        if (!player.hasPlayedBefore()) interactionOriginalResponseUpdater.addEmbed(new EmbedBuilder().setColor(embedColor)
+                            .addField(player.getName() + "'s profile", "\"" + playerName + "\" has never played on Shadow Night!")
+                        ).update();
+                        else interactionOriginalResponseUpdater
+                            .addEmbed(new EmbedBuilder()
+                                .setColor(embedColor)
+                                .addField(player.getName() + "'s profile", """
+                                    - Rank: `%s`
+                                    - Playtime: %s
+                                    - Status: %s"""
+                                .formatted(
+                                    utils.getGroupDisplayNameOffline(player),
+                                    utils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true),
+                                    player.isOnline() ? "**Online**" : "_Offline_"
+                                ))
+                                .addField("─────────────────────────────────────────────────────────────", "")
+                                .addInlineField("Player kills", "⚔️ " + player.getStatistic(Statistic.PLAYER_KILLS))
+                                .addInlineField("Damage dealt", "💮 " + player.getStatistic(Statistic.DAMAGE_DEALT))
+                                .addInlineField("Balance", "🪙 " + Economy.getBalance(player))
+                                .addField("─────────────────────────────────────────────────────────────", "")
+                                .setImage(SkinRenderer.getRenderFull(player))
+                            )
+                            .update()
+                        ;
+                    })
+                ;
+            }
+            else event.getInteraction().createImmediateResponder().setContent("Please, use the #bot-commands channel").respond();
         }
         else event.getInteraction().createImmediateResponder().setContent("Sorry, this interaction failed.").respond();
     }
