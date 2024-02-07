@@ -2,9 +2,10 @@ package org.shadownight.plugin.shadownight.items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
+import org.bukkit.World;
+import org.bukkit.entity.*;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
@@ -12,10 +13,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.ShadowNight_listener;
 import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.util.Collection;
+import java.util.EventListener;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
+
+import static org.bukkit.Bukkit.getServer;
 
 
 public class ScytheThrowDisplay {
@@ -23,15 +30,20 @@ public class ScytheThrowDisplay {
     private static final float throwDistance = 40;
     private static final int stepDuration = 2;
 
-
     BukkitTask rotationTask;
     Player player;
+
+
+
 
 
 
     public ScytheThrowDisplay(Player _player) {
         this.player = _player;
         Location playerPos = player.getLocation();
+
+
+
         display = (ItemDisplay) player.getWorld().spawnEntity(new Location(
             playerPos.getWorld(),
             playerPos.getX(),
@@ -119,12 +131,33 @@ public class ScytheThrowDisplay {
     private void animateTranslationLoop(double progress, Vector start, Vector end, Function<Double, Double> f, @Nullable Callable<Vector> onTargetUpdate, Runnable onComplete){
         double stepSize = 0.1; //TODO replace this and stepDuration with a configurable steps/s
 
+
+        // Update target if needed
         if(onTargetUpdate != null) try { end = onTargetUpdate.call(); }
         catch (Exception e) { e.printStackTrace(); }
         final Vector _final_end = end;
 
+
+        // Teleport to new location
         Vector pos = progressToCoords(f.apply(progress), start, _final_end);
         display.teleport(new Location(player.getLocation().getWorld(), pos.getX(), pos.getY(), pos.getZ(), 0, 90));
+
+
+        // Damage entities
+        if(progress > 0.0f) {
+            World world = display.getWorld();
+            Vector oldPos = progressToCoords(f.apply(progress - stepSize), start, _final_end);
+            Vector boxSize = pos.clone().subtract(oldPos).divide(new Vector(2, 2, 2)).add(new Vector(1, 0, 1));
+            Collection<Entity> entities = world.getNearbyEntities(pos.getMidpoint(oldPos).toLocation(world), Math.abs(boxSize.getX()), Math.abs(boxSize.getY()), Math.abs(boxSize.getZ()));
+            for (Entity e : entities) {
+                if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2) {
+                    ((LivingEntity) e).damage(10); //TODO maybe add player as damage source?
+                }
+            }
+        }
+
+
+        // Stop the animation if target has been reached
         if(progress + stepSize < 1) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> animateTranslationLoop(progress + stepSize, start, _final_end, f, onTargetUpdate, onComplete), stepDuration);
         else if(onComplete != null) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, onComplete, stepDuration);
     }

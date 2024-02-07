@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
@@ -205,5 +206,45 @@ public class utils {
 
     public static boolean doubleEquals(double n, double target, double threshold) {
         return !(n < target - threshold || n > target + threshold);
+    }
+
+
+    /**
+     *
+     * @param pos
+     * @param direction The direction of the cone. Has to be a normalized Vector
+     * @param targetPos
+     * @return
+     */
+    public static boolean isInCone(final Vector pos, final Vector direction, final Vector targetPos, double viewRadius) {
+        //Vector normDirection = direction.clone().normalize();
+        Vector relativeTargetPos = targetPos.clone().subtract(pos);
+        double viewAxisDis = relativeTargetPos.clone().dot(direction);
+
+        if (viewAxisDis < 0.0f) return false;
+        else return relativeTargetPos.getCrossProduct(direction).length() <= viewRadius;
+    }
+
+
+
+
+    public static double modulus(final Vector v) {
+        return Math.sqrt(v.clone().dot(v));
+    }
+
+
+    public static double distToLine(final Vector l1, final Vector l2, final Vector p) {
+        final Vector ab  = l2.clone().subtract(l1);
+        final Vector av  =  p.clone().subtract(l1);
+
+        if (av.dot(ab) <= 0.0)           // Point is lagging behind start of the segment, so perpendicular distance is not viable.
+            return modulus(av) ;         // Use distance to start of segment instead.
+
+        final Vector bv = p.clone().subtract(l2);
+
+        if (bv.dot(ab) >= 0.0)           // Point is advanced past the end of the segment, so perpendicular distance is not viable.
+            return modulus(bv);         // Use distance to end of the segment instead.
+
+        return modulus(ab.getCrossProduct(av)) / modulus(ab);
     }
 }

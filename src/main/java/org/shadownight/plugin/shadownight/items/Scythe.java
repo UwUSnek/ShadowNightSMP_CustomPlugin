@@ -113,13 +113,19 @@ public class Scythe {
         Vector playerDirection = playerPos.getDirection();
         List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
 
+        double cooldown = player.getAttackCooldown();
+        double damage = cooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
+        Bukkit.broadcastMessage("" + cooldown);
+
         for (Entity e : entities) {
-            if (e instanceof LivingEntity && (playerPos.distance(e.getLocation()) < attackRange)) {
-            //if (e instanceof LivingEntity) {
+            if (
+                e instanceof LivingEntity &&
+                playerPos.distance(e.getLocation()) < attackRange &&
+                utils.isInCone(playerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
+            ) {
                 attackQueue.put(player.getUniqueId(), e.getUniqueId());
-                double damage = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
                 ((LivingEntity) e).damage(damage, player);
-                e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)))); // Double the normal kb (Damaging e already gives it normal kb)
+                e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(cooldown))); // Double the normal kb (Damaging e already gives it normal kb)
             }
         }
 
