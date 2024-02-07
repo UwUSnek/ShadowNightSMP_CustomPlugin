@@ -104,7 +104,7 @@ public class Scythe {
 
 
 
-    private static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
+    public static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
     private static final HashMultimap<UUID, UUID> ongoingAttacks = HashMultimap.create();
 
     static private void customAttack(Player player) {

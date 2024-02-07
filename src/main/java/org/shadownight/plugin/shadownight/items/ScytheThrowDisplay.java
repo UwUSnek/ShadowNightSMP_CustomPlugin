@@ -147,11 +147,15 @@ public class ScytheThrowDisplay {
         if(progress > 0.0f) {
             World world = display.getWorld();
             Vector oldPos = progressToCoords(f.apply(progress - stepSize), start, _final_end);
-            Vector boxSize = pos.clone().subtract(oldPos).divide(new Vector(2, 2, 2)).add(new Vector(1, 0, 1));
-            Collection<Entity> entities = world.getNearbyEntities(pos.getMidpoint(oldPos).toLocation(world), Math.abs(boxSize.getX()), Math.abs(boxSize.getY()), Math.abs(boxSize.getZ()));
+            Vector mid = pos.getMidpoint(oldPos);
+            Vector boxSize_ = oldPos.clone().subtract(mid);
+            Vector boxSize = new Vector(Math.abs(boxSize_.getX()), Math.abs(boxSize_.getY()), Math.abs(boxSize_.getZ())).divide(new Vector(2, 2, 2)).add(new Vector(2, 2, 2));
+            Collection<Entity> entities = world.getNearbyEntities(mid.toLocation(world), Math.abs(boxSize.getX()), Math.abs(boxSize.getY()), Math.abs(boxSize.getZ()));
             for (Entity e : entities) {
                 if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2) {
-                    ((LivingEntity) e).damage(10); //TODO maybe add player as damage source?
+                    Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
+                    ((LivingEntity) e).damage(10, player); //TODO maybe add player as damage source?
+                    //e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)))); // Double the normal kb (Damaging e already gives it normal kb)
                 }
             }
         }
