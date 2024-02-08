@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 import static org.shadownight.plugin.shadownight.items.ItemManager.itemIdKey;
 
@@ -265,5 +266,11 @@ public class utils {
                 }
             }
         }
+    }
+
+
+
+    public static void log(Level level, String message) {
+        ShadowNight.plugin.getLogger().log(level, message);
     }
 }

@@ -59,6 +59,8 @@ public class ItemManager {
 
                     switch (customItemId) {
                         case CustomItemId.KLAUE_SCYTHE:
+                            Scythe.onAttackKlaue(event);
+                            break;
                         case CustomItemId.IRON_SCYTHE:
                         case CustomItemId.DIAMOND_SCYTHE:
                         case CustomItemId.NETHERITE_SCYTHE:

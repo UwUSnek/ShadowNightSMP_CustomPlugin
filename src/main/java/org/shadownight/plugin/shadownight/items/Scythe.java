@@ -150,12 +150,20 @@ public class Scythe {
 
 
     static public void onInteractNormal(PlayerInteractEvent event) {
-        if(event.getAction() == Action.LEFT_CLICK_AIR) customAttack(event.getPlayer(), event.getItem());
+        if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) customAttack(event.getPlayer(), event.getItem());
         else if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             breakBlocks(event.getPlayer());
         }
     }
 
+
+
+    static public void onAttackKlaue(EntityDamageByEntityEvent event) {
+        Player player = (Player) event.getDamager();
+
+        if(player.isSneaking()) player.sendMessage("shadow fury knock off");
+        else onAttack(event);
+    }
 
 
     static public void onAttack(EntityDamageByEntityEvent event) {
@@ -205,7 +213,7 @@ public class Scythe {
                             playerLocation.getYaw(),
                             playerLocation.getPitch()
                         ));
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute at " + player.getName() + " run particle minecraft:witch ~ ~.1 ~ 1 0 1 0 100 force");
+                        player.getWorld().spawnParticle(Particle.SPELL_WITCH, playerLocation, 1, 0.2, 1, 0, 100, true);
                     }, 2L);
                 }
             }

@@ -12,6 +12,7 @@ import org.javacord.api.entity.channel.TextableRegularServerChannel;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.webhook.IncomingWebhook;
+import org.javacord.api.entity.webhook.Webhook;
 import org.javacord.api.entity.webhook.WebhookBuilder;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -27,9 +28,13 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.logging.Level;
 
 
 public class DiscordBotManager {
+    private static DiscordApi api;
     private static TextableRegularServerChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
@@ -38,7 +43,6 @@ public class DiscordBotManager {
     private final static String commandsChannelId = "1203121153124601917";
     private static SlashCommand commandProfile;
     private static final Color embedColor = new Color(206, 41, 216);
-
 
 
     public static void init(){
@@ -53,8 +57,9 @@ public class DiscordBotManager {
             throw new RuntimeException("Bot token file not found: \"" + e.getMessage() + "\"");
         }
 
+
         // Initialize API
-        DiscordApi api = new DiscordApiBuilder()
+        api = new DiscordApiBuilder()
             .setToken(token)
             .setAllIntents()
             .login().join()
@@ -65,6 +70,17 @@ public class DiscordBotManager {
         Optional<TextChannel> _bridgeChannel = api.getTextChannelById(new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists() ? bridgeChannelId : testBridgeChannelId);
         if(_bridgeChannel.isEmpty()) throw new RuntimeException("An error occurred while trying to initialize the Discord Bot Manager: Channel not found");
         else bridgeChannel = (TextableRegularServerChannel) _bridgeChannel.get();
+
+
+        // Delete old webhooks if present
+        List<IncomingWebhook> hooks = bridgeChannel.getIncomingWebhooks().join();
+        if(!hooks.isEmpty()) {
+            utils.log(Level.INFO, "Deleting " + hooks.size() + " old webhooks...");
+            for (IncomingWebhook hook : hooks) {
+                hook.delete().join();
+                utils.log(Level.INFO, "Deleted 1 webhook");
+            }
+        }
 
 
         // Add message listener
@@ -93,15 +109,40 @@ public class DiscordBotManager {
         bridgeChannel.sendMessage(utils.stripColor(msg));
     }
     public static void sendBridgeMessage(Player player, String msg) {
+        long latency;
+        try {
+            latency = api.measureRestLatency().get().toMillis();
+            utils.log(Level.WARNING, "Discord Latency: " + latency + "ms");
+        }
+        catch(ExecutionException|InterruptedException e) {
+            e.printStackTrace();
+        }
         // Create webhook and send message, then delete it
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
-            IncomingWebhook webhook = new WebhookBuilder(bridgeChannel)
-                .setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
-                .setAvatar(SkinRenderer.getRenderPropic(player))
-                .create().join()
-            ;
-            webhook.sendMessage(utils.stripColor(msg));
-            webhook.delete();
+            utils.log(Level.INFO, "starting \"" + msg + "\"...");
+
+            long attempts = 0;
+            long max_attempts = 3;
+            long timeout = 5;
+            do {
+                ++attempts;
+                IncomingWebhook webhook = null;
+                CompletableFuture<IncomingWebhook> webhookFuture = new WebhookBuilder(bridgeChannel)
+                    .setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+                    .setAvatar(SkinRenderer.getRenderPropic(player))
+                    .create().orTimeout(timeout, TimeUnit.SECONDS)
+                ;
+                try {
+                    webhook = webhookFuture.join();
+                    utils.log(Level.INFO, "logged \"" + msg + "\"");
+                    webhook.sendMessage(utils.stripColor(msg));
+                    webhook.delete().join();
+                    break;
+                } catch (CompletionException e) {
+                    if(webhook != null) webhook.delete().join();
+                    utils.log(Level.INFO, "\"" + msg + "\" timed out (" + attempts + "/" + max_attempts + ")");
+                }
+            } while (attempts < max_attempts);
         });
     }
 
