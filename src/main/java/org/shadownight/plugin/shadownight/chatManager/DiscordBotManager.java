@@ -3,10 +3,12 @@ package org.shadownight.plugin.shadownight.chatManager;
 
 
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -50,9 +52,7 @@ import java.util.logging.Level;
 
 public class DiscordBotManager {
     private static JDA jda;
-    //private static DiscordApi api;
     private static TextChannel bridgeChannel;
-    //private static TextableRegularServerChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
 
@@ -60,6 +60,8 @@ public class DiscordBotManager {
     private final static String commandsChannelId = "1203121153124601917";
     //private static SlashCommand commandProfile;
     private static final Color embedColor = new Color(206, 41, 216);
+
+    private static Webhook TMPhook;
 
 
     public static void init(){
@@ -133,6 +135,11 @@ public class DiscordBotManager {
         ;
         api.addSlashCommandCreateListener(DiscordBotManager::onSlashCommandCreate);
  */
+        TMPhook = bridgeChannel.createWebhook("Survival chat")
+            //.setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+            .setAvatar(Icon.from(utils.imageToByteArray(new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB))))
+            .complete()
+        ;
     }
 
 
@@ -142,56 +149,34 @@ public class DiscordBotManager {
         bridgeChannel.sendMessage(utils.stripColor(msg)).complete(); //TODO make async
     }
     public static void sendBridgeMessage(Player player, String msg) {
-/*
-        long latency;
-        try {
-            latency = api.measureRestLatency().get().toMillis();
-            utils.log(Level.WARNING, "Discord Latency: " + latency + "ms");
-        }
-        catch(ExecutionException|InterruptedException e) {
-            e.printStackTrace();
-        }
-*/
-        // Create webhook and send message, then delete it
-        //TODO improve async
+        //sendBridgeMessage(msg);
+
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
             utils.log(Level.INFO, "starting \"" + msg + "\"...");
 
 
+            // Create hook
+            //Webhook hook = bridgeChannel.createWebhook(player.getName())
+            //    .setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+            //    .setAvatar(Icon.from(utils.imageToByteArray(SkinRenderer.getRenderPropic(player))))
+            //    .complete()
+            //;
 
-            Webhook hook = bridgeChannel.createWebhook(player.getName())
-                .setName("test")
-                .setAvatar(Icon.from(utils.imageToByteArray(SkinRenderer.getRenderPropic(player))))
-                .complete()
-            ;
-/*
-            long attempts = 0;
-            long max_attempts = 3;
-            long timeout = 5;
-            do {
-                ++attempts;
-                IncomingWebhook webhook = null;
-                CompletableFuture<IncomingWebhook> webhookFuture = new WebhookBuilder(bridgeChannel)
-                    .setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
-                    .setAvatar(SkinRenderer.getRenderPropic(player))
-                    .create().orTimeout(timeout, TimeUnit.SECONDS)
-                ;
-                try {
-                    webhook = webhookFuture.join();
-                    utils.log(Level.INFO, "logged \"" + msg + "\"");
-                    webhook.sendMessage(utils.stripColor(msg));
-                    webhook.delete().join();
-                    break;
-                } catch (CompletionException e) {
-                    if(webhook != null) webhook.delete().join();
-                    utils.log(Level.INFO, "\"" + msg + "\" timed out (" + attempts + "/" + max_attempts + ")");
-                }
-            } while (attempts < max_attempts);
-*/
-            hook.sendMessage(utils.stripColor(msg)).complete();
+
+            // Send message
+            TMPhook.sendMessage(utils.stripColor(msg)).complete();
+            TMPhook.sendMessageEmbeds(new EmbedBuilder()
+                .setAuthor("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+                .addField("message", utils.stripColor(msg), false)
+                .build()
+            ).complete();
+            //hook.sendMessage(utils.stripColor(msg)).complete();
             utils.log(Level.INFO, "logged \"" + msg + "\"");
-            hook.delete().complete();
-            utils.log(Level.INFO, "deleted hook \"" + player.getName() + "\"");
+
+
+            // Delete hook
+            //hook.delete().complete();
+            //utils.log(Level.INFO, "deleted hook \"" + player.getName() + "\"");
         });
     }
 
