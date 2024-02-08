@@ -17,6 +17,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
@@ -272,5 +276,18 @@ public class utils {
 
     public static void log(Level level, String message) {
         ShadowNight.plugin.getLogger().log(level, message);
+    }
+
+
+
+    public static byte[] imageToByteArray(BufferedImage image) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(image, "png", stream);
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+        return stream.toByteArray();
+        // ByteArrayOutputStreams don't need to be closed (the documentation says so)
     }
 }

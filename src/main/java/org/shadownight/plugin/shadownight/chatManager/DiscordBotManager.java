@@ -1,32 +1,47 @@
 package org.shadownight.plugin.shadownight.chatManager;
 
 
+
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.requests.RestAction;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
-import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.channel.TextableRegularServerChannel;
-import org.javacord.api.entity.message.MessageAuthor;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.webhook.IncomingWebhook;
-import org.javacord.api.entity.webhook.Webhook;
-import org.javacord.api.entity.webhook.WebhookBuilder;
-import org.javacord.api.event.interaction.SlashCommandCreateEvent;
-import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.interaction.SlashCommand;
-import org.javacord.api.interaction.SlashCommandOption;
-import org.javacord.api.interaction.SlashCommandOptionType;
+//import org.javacord.api.DiscordApi;
+//import org.javacord.api.DiscordApiBuilder;
+//import org.javacord.api.entity.channel.TextChannel;
+//import org.javacord.api.entity.channel.TextableRegularServerChannel;
+//import org.javacord.api.entity.message.MessageAuthor;
+//import org.javacord.api.entity.message.embed.EmbedBuilder;
+//import org.javacord.api.entity.webhook.IncomingWebhook;
+//import org.javacord.api.entity.webhook.Webhook;
+//import org.javacord.api.entity.webhook.WebhookBuilder;
+//import org.javacord.api.event.interaction.SlashCommandCreateEvent;
+//import org.javacord.api.event.message.MessageCreateEvent;
+//import org.javacord.api.interaction.SlashCommand;
+//import org.javacord.api.interaction.SlashCommandOption;
+//import org.javacord.api.interaction.SlashCommandOptionType;
+
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 import org.shadownight.plugin.shadownight.utils.utils;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
@@ -34,14 +49,16 @@ import java.util.logging.Level;
 
 
 public class DiscordBotManager {
-    private static DiscordApi api;
-    private static TextableRegularServerChannel bridgeChannel;
+    private static JDA jda;
+    //private static DiscordApi api;
+    private static TextChannel bridgeChannel;
+    //private static TextableRegularServerChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
 
-    private static TextableRegularServerChannel commandsChannel;
+    //private static TextableRegularServerChannel commandsChannel;
     private final static String commandsChannelId = "1203121153124601917";
-    private static SlashCommand commandProfile;
+    //private static SlashCommand commandProfile;
     private static final Color embedColor = new Color(206, 41, 216);
 
 
@@ -59,30 +76,45 @@ public class DiscordBotManager {
 
 
         // Initialize API
-        api = new DiscordApiBuilder()
-            .setToken(token)
-            .setAllIntents()
-            .login().join()
-        ;
+        try {
+            jda = JDABuilder
+                .createDefault(token)
+                .setActivity(Activity.customStatus("test status"))
+                .build()
+                .awaitReady()
+            ;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        //api = new DiscordApiBuilder()
+        //    .setToken(token)
+        //    .setAllIntents()
+        //    .login().join()
+        //;
 
 
         // Get output channel
-        Optional<TextChannel> _bridgeChannel = api.getTextChannelById(new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists() ? bridgeChannelId : testBridgeChannelId);
-        if(_bridgeChannel.isEmpty()) throw new RuntimeException("An error occurred while trying to initialize the Discord Bot Manager: Channel not found");
-        else bridgeChannel = (TextableRegularServerChannel) _bridgeChannel.get();
+        String outputChannelId = new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists() ? bridgeChannelId : testBridgeChannelId;
+        bridgeChannel = jda.getChannelById(TextChannel.class, outputChannelId);
+        //Optional<TextChannel> _bridgeChannel = api.getTextChannelById(new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists() ? bridgeChannelId : testBridgeChannelId);
+        //if(_bridgeChannel.isEmpty()) throw new RuntimeException("An error occurred while trying to initialize the Discord Bot Manager: Channel not found");
+        //else bridgeChannel = (TextableRegularServerChannel) _bridgeChannel.get();
 
 
         // Delete old webhooks if present
-        List<IncomingWebhook> hooks = bridgeChannel.getIncomingWebhooks().join();
+        List<Webhook> hooks = bridgeChannel.retrieveWebhooks().complete();
+        //List<IncomingWebhook> hooks = bridgeChannel.getIncomingWebhooks().join();
         if(!hooks.isEmpty()) {
             utils.log(Level.INFO, "Deleting " + hooks.size() + " old webhooks...");
-            for (IncomingWebhook hook : hooks) {
-                hook.delete().join();
+            for (Webhook hook : hooks) {
+            //for (IncomingWebhook hook : hooks) {
+                hook.delete().complete();
+                //hook.delete().join();
                 utils.log(Level.INFO, "Deleted 1 webhook");
             }
         }
 
-
+/*
         // Add message listener
         api.addMessageCreateListener(DiscordBotManager::onMessageCreate);
 
@@ -100,15 +132,17 @@ public class DiscordBotManager {
             .join()
         ;
         api.addSlashCommandCreateListener(DiscordBotManager::onSlashCommandCreate);
+ */
     }
 
 
 
 
     public static void sendBridgeMessage(String msg) {
-        bridgeChannel.sendMessage(utils.stripColor(msg));
+        bridgeChannel.sendMessage(utils.stripColor(msg)).complete(); //TODO make async
     }
     public static void sendBridgeMessage(Player player, String msg) {
+/*
         long latency;
         try {
             latency = api.measureRestLatency().get().toMillis();
@@ -117,10 +151,20 @@ public class DiscordBotManager {
         catch(ExecutionException|InterruptedException e) {
             e.printStackTrace();
         }
+*/
         // Create webhook and send message, then delete it
+        //TODO improve async
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
             utils.log(Level.INFO, "starting \"" + msg + "\"...");
 
+
+
+            Webhook hook = bridgeChannel.createWebhook(player.getName())
+                .setName("test")
+                .setAvatar(Icon.from(utils.imageToByteArray(SkinRenderer.getRenderPropic(player))))
+                .complete()
+            ;
+/*
             long attempts = 0;
             long max_attempts = 3;
             long timeout = 5;
@@ -143,10 +187,15 @@ public class DiscordBotManager {
                     utils.log(Level.INFO, "\"" + msg + "\" timed out (" + attempts + "/" + max_attempts + ")");
                 }
             } while (attempts < max_attempts);
+*/
+            hook.sendMessage(utils.stripColor(msg)).complete();
+            utils.log(Level.INFO, "logged \"" + msg + "\"");
+            hook.delete().complete();
+            utils.log(Level.INFO, "deleted hook \"" + player.getName() + "\"");
         });
     }
 
-
+/*
     private static void onMessageCreate(MessageCreateEvent event){
         if(event.getChannel().getId() == bridgeChannel.getId()) {
             MessageAuthor author = event.getMessageAuthor();
@@ -155,10 +204,10 @@ public class DiscordBotManager {
             }
         }
     }
+*/
 
 
-
-
+/*
     private static void onSlashCommandCreate(SlashCommandCreateEvent event){
         Optional<TextChannel> channel = event.getInteraction().getChannel();
         if(channel.isEmpty()) throw new RuntimeException("Interaction channel not found");
@@ -203,4 +252,5 @@ public class DiscordBotManager {
         }
         else event.getInteraction().createImmediateResponder().setContent("Sorry, this interaction failed.").respond();
     }
+*/
 }
