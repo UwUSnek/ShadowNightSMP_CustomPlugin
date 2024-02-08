@@ -6,12 +6,13 @@ package org.shadownight.plugin.shadownight.chatManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
@@ -62,6 +63,7 @@ public class DiscordBotManager {
     private static final Color embedColor = new Color(206, 41, 216);
 
     private static Webhook TMPhook;
+    private static WebhookClient webhookClient;
 
 
     public static void init(){
@@ -135,48 +137,33 @@ public class DiscordBotManager {
         ;
         api.addSlashCommandCreateListener(DiscordBotManager::onSlashCommandCreate);
  */
-        TMPhook = bridgeChannel.createWebhook("Survival chat")
+        // Create webhook + client
+        TMPhook = bridgeChannel.createWebhook("Survival Chat")
             //.setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
             .setAvatar(Icon.from(utils.imageToByteArray(new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB))))
             .complete()
         ;
+        webhookClient = WebhookClient.createClient(jda, TMPhook.getUrl());
     }
 
 
 
 
     public static void sendBridgeMessage(String msg) {
-        bridgeChannel.sendMessage(utils.stripColor(msg)).complete(); //TODO make async
+        bridgeChannel.sendMessage(utils.stripColor(msg)).queue();
+        utils.log(Level.INFO, "logged server message \"" + msg + "\"");
     }
+
+
     public static void sendBridgeMessage(Player player, String msg) {
-        //sendBridgeMessage(msg);
-
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
-            utils.log(Level.INFO, "starting \"" + msg + "\"...");
-
-
-            // Create hook
-            //Webhook hook = bridgeChannel.createWebhook(player.getName())
-            //    .setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
-            //    .setAvatar(Icon.from(utils.imageToByteArray(SkinRenderer.getRenderPropic(player))))
-            //    .complete()
-            //;
-
-
-            // Send message
-            TMPhook.sendMessage(utils.stripColor(msg)).complete();
-            TMPhook.sendMessageEmbeds(new EmbedBuilder()
-                .setAuthor("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
-                .addField("message", utils.stripColor(msg), false)
-                .build()
-            ).complete();
-            //hook.sendMessage(utils.stripColor(msg)).complete();
+            webhookClient.sendMessage(utils.stripColor(msg))
+                .setUsername("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+                //.setAvatarUrl("file:///" + SkinRenderer.getRenderPropicUri(player))
+                .setAvatarUrl(SkinRenderer.getRendererUrl(player, SkinRenderer.RenderType.PROPIC))
+                .complete()
+            ;
             utils.log(Level.INFO, "logged \"" + msg + "\"");
-
-
-            // Delete hook
-            //hook.delete().complete();
-            //utils.log(Level.INFO, "deleted hook \"" + player.getName() + "\"");
         });
     }
 
