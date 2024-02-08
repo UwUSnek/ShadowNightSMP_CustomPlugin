@@ -3,67 +3,42 @@ package org.shadownight.plugin.shadownight.chatManager;
 
 
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.requests.RestAction;
-import net.dv8tion.jda.api.utils.FileUpload;
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
-import net.dv8tion.jda.api.utils.messages.MessageData;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
-//import org.javacord.api.DiscordApi;
-//import org.javacord.api.DiscordApiBuilder;
-//import org.javacord.api.entity.channel.TextChannel;
-//import org.javacord.api.entity.channel.TextableRegularServerChannel;
-//import org.javacord.api.entity.message.MessageAuthor;
-//import org.javacord.api.entity.message.embed.EmbedBuilder;
-//import org.javacord.api.entity.webhook.IncomingWebhook;
-//import org.javacord.api.entity.webhook.Webhook;
-//import org.javacord.api.entity.webhook.WebhookBuilder;
-//import org.javacord.api.event.interaction.SlashCommandCreateEvent;
-//import org.javacord.api.event.message.MessageCreateEvent;
-//import org.javacord.api.interaction.SlashCommand;
-//import org.javacord.api.interaction.SlashCommandOption;
-//import org.javacord.api.interaction.SlashCommandOptionType;
 
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.*;
 import java.util.logging.Level;
 
 
 public class DiscordBotManager {
     private static JDA jda;
-    private static TextChannel bridgeChannel;
+    public static TextChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
 
-    //private static TextableRegularServerChannel commandsChannel;
+    public static TextChannel commandsChannel;
+    private final static String testCommandsChannelId = "1205224977284997171";
     private final static String commandsChannelId = "1203121153124601917";
     //private static SlashCommand commandProfile;
     private static final Color embedColor = new Color(206, 41, 216);
 
-    private static Webhook TMPhook;
-    private static WebhookClient webhookClient;
+    private static Webhook webhook;
+    private static IncomingWebhookClient webhookClient;
 
 
     public static void init(){
@@ -83,46 +58,37 @@ public class DiscordBotManager {
         try {
             jda = JDABuilder
                 .createDefault(token)
-                .setActivity(Activity.customStatus("test status"))
+                .setActivity(Activity.customStatus("Helping UwU_Snek fix her code (17 hours in)"))
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .build()
                 .awaitReady()
             ;
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        //api = new DiscordApiBuilder()
-        //    .setToken(token)
-        //    .setAllIntents()
-        //    .login().join()
-        //;
 
 
-        // Get output channel
-        String outputChannelId = new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists() ? bridgeChannelId : testBridgeChannelId;
-        bridgeChannel = jda.getChannelById(TextChannel.class, outputChannelId);
-        //Optional<TextChannel> _bridgeChannel = api.getTextChannelById(new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists() ? bridgeChannelId : testBridgeChannelId);
-        //if(_bridgeChannel.isEmpty()) throw new RuntimeException("An error occurred while trying to initialize the Discord Bot Manager: Channel not found");
-        //else bridgeChannel = (TextableRegularServerChannel) _bridgeChannel.get();
+        // Get output channels
+        boolean isMainServer = new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists();
+        bridgeChannel   = jda.getChannelById(TextChannel.class, isMainServer ? bridgeChannelId   : testBridgeChannelId);
+        commandsChannel = jda.getChannelById(TextChannel.class, isMainServer ? commandsChannelId : testCommandsChannelId);
 
 
         // Delete old webhooks if present
         List<Webhook> hooks = bridgeChannel.retrieveWebhooks().complete();
-        //List<IncomingWebhook> hooks = bridgeChannel.getIncomingWebhooks().join();
         if(!hooks.isEmpty()) {
             utils.log(Level.INFO, "Deleting " + hooks.size() + " old webhooks...");
             for (Webhook hook : hooks) {
-            //for (IncomingWebhook hook : hooks) {
                 hook.delete().complete();
-                //hook.delete().join();
                 utils.log(Level.INFO, "Deleted 1 webhook");
             }
         }
 
-/*
         // Add message listener
-        api.addMessageCreateListener(DiscordBotManager::onMessageCreate);
+        jda.addEventListener(new MessageListener());
 
 
+/*
         // Add profile command
         Optional<TextChannel> _commandsChannel = api.getTextChannelById(commandsChannelId);
         if(_commandsChannel.isEmpty()) throw new RuntimeException("An error occurred while trying to initialize the Discord Bot Manager: Channel not found");
@@ -138,13 +104,15 @@ public class DiscordBotManager {
         api.addSlashCommandCreateListener(DiscordBotManager::onSlashCommandCreate);
  */
         // Create webhook + client
-        TMPhook = bridgeChannel.createWebhook("Survival Chat")
-            //.setName("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+        webhook = bridgeChannel.createWebhook("Survival chat Bridge")
             .setAvatar(Icon.from(utils.imageToByteArray(new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB))))
             .complete()
         ;
-        webhookClient = WebhookClient.createClient(jda, TMPhook.getUrl());
+        webhookClient = WebhookClient.createClient(jda, webhook.getUrl());
     }
+
+
+
 
 
 
@@ -159,7 +127,6 @@ public class DiscordBotManager {
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
             webhookClient.sendMessage(utils.stripColor(msg))
                 .setUsername("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
-                //.setAvatarUrl("file:///" + SkinRenderer.getRenderPropicUri(player))
                 .setAvatarUrl(SkinRenderer.getRendererUrl(player, SkinRenderer.RenderType.PROPIC))
                 .complete()
             ;
@@ -167,16 +134,16 @@ public class DiscordBotManager {
         });
     }
 
-/*
-    private static void onMessageCreate(MessageCreateEvent event){
-        if(event.getChannel().getId() == bridgeChannel.getId()) {
-            MessageAuthor author = event.getMessageAuthor();
-            if(author.getWebhookId().isEmpty() && !author.isBotUser()) {
-                Bukkit.broadcastMessage("§9§l[Discord]§9 " + author.getDisplayName() + ChatManager.playerMessageConnector + event.getMessageContent());
-            }
-        }
-    }
-*/
+
+    //private static void onMessageCreate(MessageCreateEvent event){
+    //    if(event.getChannel().getId() == bridgeChannel.getId()) {
+    //        MessageAuthor author = event.getMessageAuthor();
+    //        if(author.getWebhookId().isEmpty() && !author.isBotUser()) {
+    //            Bukkit.broadcastMessage("§9§l[Discord]§9 " + author.getDisplayName() + ChatManager.playerMessageConnector + event.getMessageContent());
+    //        }
+    //    }
+    //}
+
 
 
 /*
