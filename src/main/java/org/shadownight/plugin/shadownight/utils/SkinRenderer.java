@@ -39,7 +39,7 @@ public class SkinRenderer {
 
 
 
-    public static String getRendererUrl(OfflinePlayer player, RenderType renderType){
+    public static String getRenderUrl(OfflinePlayer player, RenderType renderType){
         String type = "";
         UUID uuid = player.getUniqueId();
         switch(renderType) {
@@ -49,8 +49,8 @@ public class SkinRenderer {
         return "https://starlightskins.lunareclipse.studio/skin-render/ultimate/" + uuid + "/" + type;
     }
 
-    private static String getRenderPropicUri(OfflinePlayer player, RenderType renderType){
-        String type = getRendererUrl(player, renderType);
+    public static String getRenderUri(OfflinePlayer player, RenderType renderType){
+        String type = getRenderUrl(player, renderType);
         UUID uuid = player.getUniqueId();
         String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
         File file = new File(filePath);
@@ -64,7 +64,7 @@ public class SkinRenderer {
 
 
     public static BufferedImage getRender(OfflinePlayer player, RenderType renderType){
-        String type = getRendererUrl(player, renderType);
+        String type = getRenderUrl(player, renderType);
         UUID uuid = player.getUniqueId();
         HashMap<UUID, BufferedImage> typeRuntimeCache = runtimeCache.get(renderType);
         BufferedImage playerRuntimeCache = typeRuntimeCache.get(uuid);

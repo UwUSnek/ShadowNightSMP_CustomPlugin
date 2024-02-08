@@ -2,17 +2,19 @@
   <code_scheme name="Project" version="173">
     <option name="RIGHT_MARGIN" value="500" />
     <JavaCodeStyleSettings>
+      <option name="ALIGN_MULTILINE_RECORDS" value="false" />
       <option name="NEW_LINE_AFTER_LPAREN_IN_RECORD_HEADER" value="true" />
       <option name="RPAREN_ON_NEW_LINE_IN_RECORD_HEADER" value="true" />
+      <option name="ALIGN_MULTILINE_DECONSTRUCTION_LIST_COMPONENTS" value="false" />
     </JavaCodeStyleSettings>
     <codeStyleSettings language="JAVA">
       <option name="RIGHT_MARGIN" value="500" />
       <option name="ELSE_ON_NEW_LINE" value="true" />
       <option name="CASE_STATEMENT_ON_NEW_LINE" value="false" />
-      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
-      <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
-      <option name="ALIGN_MULTILINE_PARENTHESIZED_EXPRESSION" value="true" />
-      <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
+      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+      <option name="ALIGN_MULTILINE_RESOURCES" value="false" />
+      <option name="ALIGN_MULTILINE_FOR" value="false" />
+      <option name="PREFER_PARAMETERS_WRAP" value="true" />
       <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
       <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
       <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
