@@ -79,3 +79,13 @@ commands:
     description: Lets you trade with another player
     usage: /trade <player>
     permission: ShadowNightSMP.command.member
+
+
+
+
+
+# Other
+  dungeontest:
+    description:
+    usage: /dungeontest
+    permission: ShadowNightSMP.command.member

@@ -8,16 +8,16 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.time.LocalTime;
+import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -117,36 +117,50 @@ public class Scythe {
 
 
     public static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
+    private static final HashMap<UUID, Long> last_times = new HashMap<>();
+    private static final long cooldown = 500;
 
     static private void customAttack(Player player, ItemStack item) {
         Location playerPos = player.getLocation();
-        Vector playerDirection = playerPos.getDirection();
-        List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
+        UUID playerId = player.getUniqueId();
+        long currentTime = System.currentTimeMillis();
 
-        double cooldown = player.getAttackCooldown();
-        double damage = cooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
 
-        int damagedEntities = 0;
-        for (Entity e : entities) {
-            if (
-                e instanceof LivingEntity &&
-                playerPos.distance(e.getLocation()) < attackRange &&
-                utils.isInCone(playerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
-            ) {
-                ++damagedEntities;
-                attackQueue.put(player.getUniqueId(), e.getUniqueId());
-                ((LivingEntity) e).damage(damage, player);
-                e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(cooldown))); // Double the normal kb (Damaging e already gives it normal kb)
+        Long last_time = last_times.get(playerId);
+        if(last_time == null || currentTime - last_time >= cooldown) {
+            last_times.put(playerId, currentTime);
+            Vector playerDirection = playerPos.getDirection();
+            List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
+
+            double vanillaCooldown = player.getAttackCooldown();
+            double damage = vanillaCooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
+
+            int damagedEntities = 0;
+            for (Entity e : entities) {
+                if (
+                    e instanceof LivingEntity &&
+                        playerPos.distance(e.getLocation()) < attackRange &&
+                        utils.isInCone(playerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
+                ) {
+                    ++damagedEntities;
+                    attackQueue.put(playerId, e.getUniqueId());
+                    ((LivingEntity) e).damage(damage, player);
+                    attackQueue.remove(playerId, e.getUniqueId());
+                    e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(vanillaCooldown))); // Double the normal kb (Damaging e already gives it normal kb)
+                }
             }
+
+
+            if (damagedEntities > 0) utils.damageItem(player, item);
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
+            player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, playerPos.clone().add(playerDirection.clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
         }
-
-
-
-        if(damagedEntities > 0) utils.damageItem(player, item);
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
-        player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, playerPos.clone().add(playerDirection.clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
     }
 
+    @NotNull
+    private static UUID getUniqueId(Player player) {
+        return player.getUniqueId();
+    }
 
 
     static public void onInteractNormal(PlayerInteractEvent event) {

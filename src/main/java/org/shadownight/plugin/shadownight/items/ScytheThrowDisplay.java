@@ -129,6 +129,7 @@ public class ScytheThrowDisplay {
     }
 
 
+
     private void animateTranslationLoop(double progress, Vector start, Vector end, Function<Double, Double> f, @Nullable Callable<Vector> onTargetUpdate, Runnable onComplete){
         double stepSize = 0.1; //TODO replace this and stepDuration with a configurable steps/s
 
