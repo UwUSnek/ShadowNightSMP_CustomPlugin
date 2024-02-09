@@ -4,7 +4,6 @@ package org.shadownight.plugin.shadownight.chatManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -26,7 +25,6 @@ import java.util.logging.Level;
 
 
 public class DiscordBotManager {
-    private static JDA jda;
     public static TextChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
@@ -36,11 +34,10 @@ public class DiscordBotManager {
     public final static String commandsChannelId = "1203121153124601917";
     public static final Color embedColor = new Color(206, 41, 216);
 
-    private static Webhook webhook;
     private static IncomingWebhookClient webhookClient;
 
 
-    public static void init(){
+    public static void init() {
         // Read bot token from config files
         String token;
         try {
@@ -54,6 +51,7 @@ public class DiscordBotManager {
 
 
         // Initialize API
+        JDA jda;
         try {
             jda = JDABuilder
                 .createDefault(token)
@@ -69,13 +67,13 @@ public class DiscordBotManager {
 
         // Get output channels
         boolean isMainServer = new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists();
-        bridgeChannel   = jda.getChannelById(TextChannel.class, isMainServer ? bridgeChannelId   : testBridgeChannelId);
+        bridgeChannel = jda.getChannelById(TextChannel.class, isMainServer ? bridgeChannelId : testBridgeChannelId);
         commandsChannel = jda.getChannelById(TextChannel.class, isMainServer ? commandsChannelId : testCommandsChannelId);
 
 
         // Delete old webhooks if present
         List<Webhook> hooks = bridgeChannel.retrieveWebhooks().complete();
-        if(!hooks.isEmpty()) {
+        if (!hooks.isEmpty()) {
             utils.log(Level.INFO, "Deleting " + hooks.size() + " old webhooks...");
             for (Webhook hook : hooks) {
                 hook.delete().complete();
@@ -90,11 +88,11 @@ public class DiscordBotManager {
 
 
         // Create webhook + client
-        webhook = bridgeChannel.createWebhook("Survival chat Bridge")
+        webhookClient = WebhookClient.createClient(jda, bridgeChannel.createWebhook("Survival chat Bridge")
             .setAvatar(Icon.from(utils.imageToByteArray(new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB))))
             .complete()
-        ;
-        webhookClient = WebhookClient.createClient(jda, webhook.getUrl());
+            .getUrl()
+        );
     }
 
 

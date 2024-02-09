@@ -12,11 +12,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +28,7 @@ public class Scythe {
     public static final ItemStack netheriteItem = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Netherite Scythe", SCYTHE_DATA, ItemManager.CustomItemId.NETHERITE_SCYTHE);
     public static final ItemStack klaueItem     = utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Klaue's Edgy Scythe", 14, ItemManager.CustomItemId.KLAUE_SCYTHE);
 
-    private static int attackRange = 6;
+    private static final int attackRange = 6;
 
 
 
@@ -157,10 +155,6 @@ public class Scythe {
         }
     }
 
-    @NotNull
-    private static UUID getUniqueId(Player player) {
-        return player.getUniqueId();
-    }
 
 
     static public void onInteractNormal(PlayerInteractEvent event) {

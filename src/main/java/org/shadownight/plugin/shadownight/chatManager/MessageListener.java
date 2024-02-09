@@ -53,7 +53,7 @@ public class MessageListener extends ListenerAdapter {
             event.deferReply().queue(); // Tell discord we received the command
             utils.log(Level.INFO, "Managing profile slash command...");
             if (event.getName().equals("profile")) {
-                String ign = event.getOption("ign").getAsString();
+                String ign = Objects.requireNonNull(event.getOption("ign"), "ign option is null").getAsString();
                 @SuppressWarnings("deprecation") // Using getOfflinePlayer the way it's meant to be used, no need to warn
                 OfflinePlayer player = Bukkit.getOfflinePlayer(ign);
 

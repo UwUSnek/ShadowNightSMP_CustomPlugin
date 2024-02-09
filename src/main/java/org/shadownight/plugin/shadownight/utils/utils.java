@@ -217,11 +217,12 @@ public class utils {
 
 
     /**
-     *
-     * @param pos
+     * Checks if a coordinate is inside a cone
+     * @param pos The origin of the cone
      * @param direction The direction of the cone. Has to be a normalized Vector
-     * @param targetPos
-     * @return
+     * @param targetPos The target coordinate to check
+     * @param viewRadius The starting radius of the cone
+     * @return true if <targetPos> is within a cone positioned in <pos> oriented in the direction <direction>, false otherwise
      */
     public static boolean isInCone(final Vector pos, final Vector direction, final Vector targetPos, double viewRadius) {
         //Vector normDirection = direction.clone().normalize();

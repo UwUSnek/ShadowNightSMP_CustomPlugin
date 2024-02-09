@@ -1,13 +1,10 @@
 package org.shadownight.plugin.shadownight.items;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
@@ -136,8 +133,12 @@ public class ScytheThrowDisplay {
 
 
         // Update target if needed
-        if(onTargetUpdate != null) try { end = onTargetUpdate.call(); }
-        catch (Exception e) { e.printStackTrace(); }
+        if(onTargetUpdate != null) try {
+            end = onTargetUpdate.call();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         final Vector _final_end = end;
 
 
@@ -165,7 +166,7 @@ public class ScytheThrowDisplay {
 
         // Stop the animation if target has been reached
         if(progress + stepSize < 1) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> animateTranslationLoop(progress + stepSize, start, _final_end, f, onTargetUpdate, onComplete), stepDuration);
-        else if(onComplete != null) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, onComplete::run, stepDuration);
+        else if(onComplete != null) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, onComplete, stepDuration);
     }
 
 
@@ -179,24 +180,24 @@ public class ScytheThrowDisplay {
 
 
 
-    private final Function<Double, Double> COMP_linear = x -> x;
+    public final Function<Double, Double> COMP_linear = x -> x;
 
 
 
-    private final Function<Double, Double> COMP_sineIn    = x -> 1 - Math.cos((x * Math.PI) / 2);
-    private final Function<Double, Double> COMP_sineOut   = x ->     Math.sin((x * Math.PI) / 2);
-    private final Function<Double, Double> COMP_sineInOut = x ->   -(Math.cos( x * Math.PI) - 1) / 2;
+    public final Function<Double, Double> COMP_sineIn    = x -> 1 - Math.cos((x * Math.PI) / 2);
+    public final Function<Double, Double> COMP_sineOut   = x ->     Math.sin((x * Math.PI) / 2);
+    public final Function<Double, Double> COMP_sineInOut = x ->   -(Math.cos( x * Math.PI) - 1) / 2;
 
 
 
-    private final Function<Double, Double> COMP_cubicIn    = x ->     Math.pow(    x, 3);
-    private final Function<Double, Double> COMP_cubicOut   = x -> 1 - Math.pow(1 - x, 3);
-    private final Function<Double, Double> COMP_cubicInOut = x -> x < 0.5 ? 4 * Math.pow(x, 3) : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    public final Function<Double, Double> COMP_cubicIn    = x ->     Math.pow(    x, 3);
+    public final Function<Double, Double> COMP_cubicOut   = x -> 1 - Math.pow(1 - x, 3);
+    public final Function<Double, Double> COMP_cubicInOut = x -> x < 0.5 ? 4 * Math.pow(x, 3) : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
 
 
-    private final Function<Double, Double> COMP_bounceIn    = x -> 1 - this.COMP_bounceOut.apply(1 - x);
-    private final Function<Double, Double> COMP_bounceOut   = x -> {
+    public final Function<Double, Double> COMP_bounceIn    = x -> 1 - this.COMP_bounceOut.apply(1 - x);
+    public final Function<Double, Double> COMP_bounceOut   = x -> {
         final double n = 7.5625;
         final double d = 2.75;
         if      (x < 1   / d)                   return n * x * x;
@@ -204,13 +205,13 @@ public class ScytheThrowDisplay {
         else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
         else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
     };
-    private final Function<Double, Double> COMP_bounceInOut = x -> x < 0.5 ? (1 - this.COMP_bounceOut.apply(1 - 2 * x)) / 2 : (1 + this.COMP_bounceOut.apply(2 * x - 1)) / 2;
+    public final Function<Double, Double> COMP_bounceInOut = x -> x < 0.5 ? (1 - this.COMP_bounceOut.apply(1 - 2 * x)) / 2 : (1 + this.COMP_bounceOut.apply(2 * x - 1)) / 2;
 
 
 
-    private final Function<Double, Double> COMP_elasticIn    = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
-    private final Function<Double, Double> COMP_elasticOut   = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
-    private final Function<Double, Double> COMP_elasticInOut = x -> {
+    public final Function<Double, Double> COMP_elasticIn    = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
+    public final Function<Double, Double> COMP_elasticOut   = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
+    public final Function<Double, Double> COMP_elasticInOut = x -> {
         final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
         return utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : (
             x < 0.5 ?

@@ -3,7 +3,6 @@ package org.shadownight.plugin.shadownight;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -31,7 +30,6 @@ public final class ShadowNight extends JavaPlugin {
     public static LuckPerms lpApi;
     public static ProtocolManager protocolManager;
     public static MultiverseCore mvcore;
-    public static MVWorldManager worldManager;
 
     @Override
     public void onEnable() {

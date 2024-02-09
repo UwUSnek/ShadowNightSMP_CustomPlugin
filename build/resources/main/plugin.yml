@@ -86,6 +86,6 @@ commands:
 
 # Other
   dungeontest:
-    description:
+    description: test command
     usage: /dungeontest
     permission: ShadowNightSMP.command.member

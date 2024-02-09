@@ -34,7 +34,7 @@ public class Economy {
         try {
             databaseObject.load(databaseFile);
         } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
 

@@ -32,7 +32,7 @@ public class SkinRenderer {
             }
         }
         catch(IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -42,10 +42,10 @@ public class SkinRenderer {
     public static String getRenderUrl(OfflinePlayer player, RenderType renderType){
         String type = "";
         UUID uuid = player.getUniqueId();
-        switch(renderType) {
-            case PROPIC: type = "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}"; break;
-            case FULL:   type = "full"; break;
-        }
+        type = switch (renderType) {
+            case PROPIC -> "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}";
+            case FULL   -> "full";
+        };
         return "https://starlightskins.lunareclipse.studio/skin-render/ultimate/" + uuid + "/" + type;
     }
 
@@ -84,7 +84,7 @@ public class SkinRenderer {
                 try {
                     playerRuntimeCache = ImageIO.read(file);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -122,8 +122,7 @@ public class SkinRenderer {
             return ImageIO.read(new File(destinationFile));
         }
         catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }

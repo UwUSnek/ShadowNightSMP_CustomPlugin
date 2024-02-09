@@ -7,7 +7,7 @@ import org.bukkit.WorldType;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
 public class Dungeon {
-    static MVWorldManager worldManager = ShadowNight.mvcore.getMVWorldManager();
+    static final MVWorldManager worldManager = ShadowNight.mvcore.getMVWorldManager();
 
 
     public Dungeon() {

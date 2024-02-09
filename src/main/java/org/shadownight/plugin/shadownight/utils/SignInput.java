@@ -90,8 +90,8 @@ public final class SignInput {
             openSign.getBooleans().write(0, true);                      // Set side to open (true = front side)
             try {
                 ShadowNight.protocolManager.sendServerPacket(player, openSign);
-            } catch (InvocationTargetException exception) {
-                exception.printStackTrace();
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
             }
             openSigns.put(player, this);
         }
