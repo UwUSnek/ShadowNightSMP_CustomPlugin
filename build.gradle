@@ -19,6 +19,7 @@ repositories {
     maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
     maven { url = "https://repo.dmulloy2.net/repository/public/" }
     maven { url = "https//hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url = "https://repo.onarandombox.com/content/groups/public/" }
 }
 
 dependencies {
@@ -26,8 +27,8 @@ dependencies {
     compileOnly "me.clip:placeholderapi:2.11.5"
     compileOnly "net.luckperms:api:5.4"
     compileOnly "com.comphenix.protocol:ProtocolLib:4.5.0"
-    //implementation "org.javacord:javacord:3.8.0"
     implementation("net.dv8tion:JDA:5.0.0-beta.20")
+    compileOnly("com.onarandombox.multiversecore:multiverse-core:4.3.12")
 }
 
 

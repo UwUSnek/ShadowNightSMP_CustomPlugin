@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.Damageable;
@@ -16,6 +17,7 @@ import org.bukkit.util.Vector;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -115,7 +117,6 @@ public class Scythe {
 
 
     public static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
-    public static final HashMultimap<UUID, UUID> ongoingAttacks = HashMultimap.create();
 
     static private void customAttack(Player player, ItemStack item) {
         Location playerPos = player.getLocation();
@@ -135,7 +136,6 @@ public class Scythe {
                 ++damagedEntities;
                 attackQueue.put(player.getUniqueId(), e.getUniqueId());
                 ((LivingEntity) e).damage(damage, player);
-                ongoingAttacks.remove(player.getUniqueId(), e.getUniqueId());
                 e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(cooldown))); // Double the normal kb (Damaging e already gives it normal kb)
             }
         }
@@ -161,7 +161,10 @@ public class Scythe {
     static public void onAttackKlaue(EntityDamageByEntityEvent event) {
         Player player = (Player) event.getDamager();
 
-        if(player.isSneaking()) player.sendMessage("shadow fury knock off");
+        if(player.isSneaking()) {
+            player.sendMessage("shadow fury knock off");
+            event.setCancelled(true);
+        }
         else onAttack(event);
     }
 
@@ -174,12 +177,8 @@ public class Scythe {
         UUID targetId = target.getUniqueId();
 
 
-        if(attackQueue.containsEntry(playerId, targetId)) { //TODO remove if present
+        if(attackQueue.containsEntry(playerId, targetId)) {
             attackQueue.remove(playerId, targetId);
-            ongoingAttacks.put(playerId, targetId);
-        }
-        else if(ongoingAttacks.containsEntry(playerId, targetId)) {
-            event.setCancelled(true);
         }
         else {
             event.setCancelled(true);
@@ -194,8 +193,9 @@ public class Scythe {
         Player player = event.getPlayer();
 
         if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
+            event.setCancelled(true);
             if(player.isSneaking()) player.sendMessage("shadow fury knock off");
-            else if(event.getAction() == Action.LEFT_CLICK_AIR) customAttack(player, event.getItem());
+            else customAttack(player, event.getItem());
         }
         else if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
             if(player.isSneaking()) {
@@ -213,7 +213,7 @@ public class Scythe {
                             playerLocation.getYaw(),
                             playerLocation.getPitch()
                         ));
-                        player.getWorld().spawnParticle(Particle.SPELL_WITCH, playerLocation, 1, 0.2, 1, 0, 100, true);
+                        player.getWorld().spawnParticle(Particle.SPELL_WITCH, player.getLocation(), 100, 1, 0.2, 1, 0);
                     }, 2L);
                 }
             }

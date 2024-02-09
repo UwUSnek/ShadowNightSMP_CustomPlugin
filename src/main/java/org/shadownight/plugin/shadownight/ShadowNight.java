@@ -2,10 +2,13 @@ package org.shadownight.plugin.shadownight;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.shadownight.plugin.shadownight.chatManager.DiscordBotManager;
+import org.shadownight.plugin.shadownight.dungeons.CMD_dungeontest;
 import org.shadownight.plugin.shadownight.economy.CMD_trade;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.items.Scythe;
@@ -27,7 +30,8 @@ public final class ShadowNight extends JavaPlugin {
     public static JavaPlugin plugin;
     public static LuckPerms lpApi;
     public static ProtocolManager protocolManager;
-
+    public static MultiverseCore mvcore;
+    public static MVWorldManager worldManager;
 
     @Override
     public void onEnable() {
@@ -80,6 +84,10 @@ public final class ShadowNight extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("discord"),  "getCommand returned null").setExecutor(new CMD_discord());
 
 
+        // Other
+        Objects.requireNonNull(this.getCommand("dungeontest"),  "getCommand returned null").setExecutor(new CMD_dungeontest());
+
+
 
 
         // Initialize skin renderer
@@ -96,6 +104,10 @@ public final class ShadowNight extends JavaPlugin {
 
         // Initialize custom items
         Scythe.createRecipes();
+
+
+        // Initialize multiverse API
+        mvcore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
     }
 
 

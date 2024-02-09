@@ -157,7 +157,6 @@ public class ScytheThrowDisplay {
                 if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && !e.getUniqueId().equals(player.getUniqueId())) {
                     Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
                     ((LivingEntity) e).damage(10, player);
-                    Scythe.ongoingAttacks.remove(player.getUniqueId(), e.getUniqueId());
                 }
             }
         }
