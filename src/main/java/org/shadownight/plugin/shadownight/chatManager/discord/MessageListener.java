@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.chatManager;
+package org.shadownight.plugin.shadownight.chatManager.discord;
 
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
+import org.shadownight.plugin.shadownight.chatManager.ChatManager;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -17,13 +18,13 @@ import org.shadownight.plugin.shadownight.utils.utils;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import static org.shadownight.plugin.shadownight.chatManager.DiscordBotManager.*;
+import static org.shadownight.plugin.shadownight.chatManager.discord.BotManager.*;
 
 
 public class MessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if(event.getChannel().getId().equals(DiscordBotManager.bridgeChannel.getId())) {
+        if(event.getChannel().getId().equals(BotManager.bridgeChannel.getId())) {
             User author = event.getAuthor();
             if(!author.isBot()) {
                 Bukkit.broadcastMessage("§9§l[Discord]§9 " + author.getEffectiveName() + ChatManager.playerMessageConnector + event.getMessage().getContentStripped());

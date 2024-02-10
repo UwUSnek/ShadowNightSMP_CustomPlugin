@@ -6,7 +6,7 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.shadownight.plugin.shadownight.chatManager.DiscordBotManager;
+import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
 import org.shadownight.plugin.shadownight.dungeons.CMD_dungeontest;
 import org.shadownight.plugin.shadownight.economy.CMD_trade;
 import org.shadownight.plugin.shadownight.economy.Economy;
@@ -93,8 +93,8 @@ public final class ShadowNight extends JavaPlugin {
 
 
         // Initialize Discord Bot Manager
-        DiscordBotManager.init();
-        DiscordBotManager.sendBridgeMessage("🟢 Server is online");
+        BotManager.init();
+        BotManager.sendBridgeMessage("🟢 Server is online");
 
 
 
@@ -115,6 +115,6 @@ public final class ShadowNight extends JavaPlugin {
     @Override
     public void onDisable() {
         Economy.saveDatabase();
-        DiscordBotManager.sendBridgeMessage("🔴 Server is offline");
+        BotManager.sendBridgeMessage("🔴 Server is offline");
     }
 }

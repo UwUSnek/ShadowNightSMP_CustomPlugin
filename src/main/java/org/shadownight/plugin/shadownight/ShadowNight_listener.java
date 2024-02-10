@@ -12,7 +12,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.shadownight.plugin.shadownight.chatManager.ChatManager;
 import org.shadownight.plugin.shadownight.chatManager.DeathMessages;
-import org.shadownight.plugin.shadownight.chatManager.DiscordBanner;
+import org.shadownight.plugin.shadownight.chatManager.discord.InGameBanner;
 import org.shadownight.plugin.shadownight.chatManager.JoinLeaveMessages;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.items.ItemManager;
@@ -26,7 +26,7 @@ public class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         JoinLeaveMessages.formatJoin(event);
-        DiscordBanner.startLoop(event.getPlayer(), ShadowNight.plugin);
+        InGameBanner.startLoop(event.getPlayer(), ShadowNight.plugin);
         StarterKit.onJoin(event.getPlayer());
         SurvivalFly.updateState(event.getPlayer());
         Economy.addPlayer(event.getPlayer());

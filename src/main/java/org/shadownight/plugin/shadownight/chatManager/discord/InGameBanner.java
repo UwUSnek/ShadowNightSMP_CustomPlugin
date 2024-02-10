@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.chatManager;
+package org.shadownight.plugin.shadownight.chatManager.discord;
 
 
 import org.bukkit.Bukkit;
@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 
-public class DiscordBanner {
+public class InGameBanner {
     // Starts the banner loop for that player
     public static void startLoop(Player player, Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(

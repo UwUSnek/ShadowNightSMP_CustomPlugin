@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.chatManager;
+package org.shadownight.plugin.shadownight.chatManager.discord;
 
 
 import net.dv8tion.jda.api.JDA;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 
-public class DiscordBotManager {
+public class BotManager {
     public static TextChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
@@ -74,7 +74,7 @@ public class DiscordBotManager {
         // Delete old webhooks if present
         List<Webhook> hooks = bridgeChannel.retrieveWebhooks().complete();
         if (!hooks.isEmpty()) {
-            utils.log(Level.INFO, "Deleting " + hooks.size() + " old webhooks...");
+            utils.log(Level.INFO, "Deleting " + hooks.size() + " old webhook" + (hooks.size() == 1 ? "" : "s") + "...");
             for (Webhook hook : hooks) {
                 hook.delete().complete();
                 utils.log(Level.INFO, "Deleted 1 webhook");

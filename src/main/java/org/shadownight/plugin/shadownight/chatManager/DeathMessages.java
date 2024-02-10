@@ -8,6 +8,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -214,7 +215,7 @@ public class DeathMessages {
         event.setDeathMessage(null);
         String output = a + msg + ".";
         Bukkit.broadcastMessage(output);
-        DiscordBotManager.sendBridgeMessage(output);
+        BotManager.sendBridgeMessage(output);
     }
 }
 
