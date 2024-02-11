@@ -83,6 +83,6 @@ public class IM_KlaueScythe extends IM_Scythe {
             event.setCancelled(true);
             player.sendMessage("shadow fury knock off");
         }
-        else ((IM_Scythe) this).onAttack(event);
+        else super.onAttack(event);
     }
 }

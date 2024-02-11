@@ -17,7 +17,7 @@ public enum CustomItemId {
     CustomItemId() {
         this.value = utils.createHash64(this.name().getBytes(StandardCharsets.UTF_8));
     }
-    public long getValue() {
+    public long getNumericalValue() {
         return value;
     }
 }

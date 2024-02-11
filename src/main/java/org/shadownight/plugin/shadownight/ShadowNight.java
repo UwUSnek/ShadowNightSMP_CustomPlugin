@@ -45,8 +45,8 @@ public final class ShadowNight extends JavaPlugin {
 
         // Print custom items for debug and to make the IDs known to ops
         for(ItemManager itemManager : ItemManager.values()) {
-            CustomItemId itemId = itemManager.getValue().getCustomId();
-            utils.log(Level.INFO, "Loaded CustomItem \"" + itemId.name() + "\" with ID " + itemId.getValue());
+            CustomItemId itemId = itemManager.getInstance().getCustomId();
+            utils.log(Level.INFO, "Loaded CustomItem \"" + itemId.name() + "\" with ID " + itemId.getNumericalValue());
         }
 
 

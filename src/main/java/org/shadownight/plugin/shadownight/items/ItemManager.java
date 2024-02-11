@@ -21,11 +21,11 @@ public enum ItemManager {
     ItemManager(IM_CustomItem item){
         value = item;
     }
-    public IM_CustomItem getValue() {
+    public IM_CustomItem getInstance() {
         return value;
     }
     public static IM_CustomItem getValueFromId(CustomItemId id) {
-        return lookupTable.get(id.getValue());
+        return lookupTable.get(id.getNumericalValue());
     }
     public static IM_CustomItem getValueFromId(long id) {
         return lookupTable.get(id);
@@ -36,7 +36,7 @@ public enum ItemManager {
     static {
         HashMap<Long, IM_CustomItem> lookupTableTmp = new HashMap<>();
         for(ItemManager item : values()) {
-            lookupTableTmp.put(item.value.getCustomId().getValue(), item.value);
+            lookupTableTmp.put(item.value.getCustomId().getNumericalValue(), item.value);
         }
         lookupTable = Collections.unmodifiableMap(lookupTableTmp);
     }

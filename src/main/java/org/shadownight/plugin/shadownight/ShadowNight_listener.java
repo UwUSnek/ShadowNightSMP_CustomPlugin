@@ -1,5 +1,6 @@
 package org.shadownight.plugin.shadownight;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
@@ -9,15 +10,23 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.shadownight.plugin.shadownight.chatManager.ChatManager;
 import org.shadownight.plugin.shadownight.chatManager.DeathMessages;
 import org.shadownight.plugin.shadownight.chatManager.discord.InGameBanner;
 import org.shadownight.plugin.shadownight.chatManager.JoinLeaveMessages;
 import org.shadownight.plugin.shadownight.economy.Economy;
+import org.shadownight.plugin.shadownight.items.IM_CustomItem;
+import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.qol.SpawnInvincibility;
 import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.qol.SurvivalFly;
 import org.shadownight.plugin.shadownight.qol.tpa.CMD_tpa;
+
+import java.util.Objects;
 
 
 public class ShadowNight_listener implements Listener {
@@ -71,5 +80,16 @@ public class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryDrag(InventoryDragEvent event) {
         StarterKit.onDragEvent(event);
+    }
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onInteract(PlayerInteractEvent event) {
+        IM_CustomItem.chooseOnInteract(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onAttack(EntityDamageByEntityEvent event) {
+        IM_CustomItem.chooseOnAttack(event);
     }
 }

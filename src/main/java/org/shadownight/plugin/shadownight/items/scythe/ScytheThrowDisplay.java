@@ -50,7 +50,7 @@ public class ScytheThrowDisplay {
             0,
             90
         ), EntityType.ITEM_DISPLAY);
-        display.setItemStack(utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Edgy Scythe", 14, CustomItemId.KLAUE_SCYTHE.getValue()));
+        display.setItemStack(utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Edgy Scythe", 14, CustomItemId.KLAUE_SCYTHE.getNumericalValue()));
         display.setTeleportDuration(stepDuration);
 
 

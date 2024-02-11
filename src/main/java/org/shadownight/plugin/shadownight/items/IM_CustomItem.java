@@ -4,8 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,20 +16,20 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Objects;
-import java.util.logging.Level;
+
+
+
 
 
 public abstract class IM_CustomItem implements Listener {
-    //private static final HashSet<CustomItemId> initializedItems = new HashSet<>();
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
-
     protected final ItemStack item;
 
 
 
 
     public IM_CustomItem() {
-        item = utils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getValue());
+        item = utils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
         setItemAttributes();
         createRecipe();
         Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
@@ -66,26 +64,28 @@ public abstract class IM_CustomItem implements Listener {
 
 
 
-    private boolean checkUsedItem(ItemStack usedItem) {
+
+    private static Long getCustomItemId(ItemStack usedItem) {
         PersistentDataContainer container = Objects.requireNonNull(usedItem.getItemMeta(), "Item meta is null").getPersistentDataContainer();
-        Long key = container.get(itemIdKey, PersistentDataType.LONG);
-        return key != null && key == getCustomId().getValue();
+        return container.get(IM_CustomItem.itemIdKey, PersistentDataType.LONG);
     }
 
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void _onInteract(PlayerInteractEvent event) {
-        Bukkit.broadcastMessage("BASE INTERACT");
-        ItemStack eventItem = event.getItem();
-        if(eventItem != null && event.getHand() == EquipmentSlot.HAND && checkUsedItem(eventItem)) { // Check if item is being used in the main hand
-            Bukkit.broadcastMessage("DEDICATED INTERACT");
-            onInteract(event);
+    public static void chooseOnInteract(PlayerInteractEvent event) {
+        ItemStack item = event.getItem();
+        if (item != null && event.getHand() == EquipmentSlot.HAND) {
+            Long customItemId = getCustomItemId(item);
+            if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
+                if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) itemManager.getInstance().onInteract(event);
+            }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void _onAttack(EntityDamageByEntityEvent event) {
-        if(event.getDamager() instanceof Player player && checkUsedItem(player.getInventory().getItemInMainHand())){
-            onAttack(event);
+    public static void chooseOnAttack(EntityDamageByEntityEvent event) {
+        if(event.getDamager() instanceof Player player) {
+            ItemStack item = player.getInventory().getItemInMainHand();
+            Long customItemId = getCustomItemId(item);
+            if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
+                if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) itemManager.getInstance().onAttack(event);
+            }
         }
     }
     protected abstract void onInteract(PlayerInteractEvent event);
