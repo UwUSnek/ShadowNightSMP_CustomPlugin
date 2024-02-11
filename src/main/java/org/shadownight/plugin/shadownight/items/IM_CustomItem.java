@@ -51,7 +51,7 @@ public abstract class IM_CustomItem implements Listener {
 
 
 
-    public void createRecipe() {
+    public final void createRecipe() {
         NamespacedKey recipeKey = new NamespacedKey(ShadowNight.plugin, getCustomId().name());
         ShapedRecipe shapedRecipe = new ShapedRecipe(recipeKey, item);
 
