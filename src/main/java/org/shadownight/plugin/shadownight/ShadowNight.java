@@ -12,9 +12,7 @@ import org.shadownight.plugin.shadownight.economy.CMD_trade;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.items.CMD_sngive;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
-import org.shadownight.plugin.shadownight.items.IM_CustomItem;
 import org.shadownight.plugin.shadownight.items.ItemManager;
-import org.shadownight.plugin.shadownight.items.scythe.*;
 import org.shadownight.plugin.shadownight.qol.CMD_flyspeed;
 import org.shadownight.plugin.shadownight.qol.CMD_rtp;
 import org.shadownight.plugin.shadownight.qol.info.*;
@@ -27,9 +25,6 @@ import org.shadownight.plugin.shadownight.utils.SignInput;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 

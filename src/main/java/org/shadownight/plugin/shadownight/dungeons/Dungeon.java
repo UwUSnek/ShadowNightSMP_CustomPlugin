@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -19,7 +18,7 @@ public class Dungeon {
     private static final String namePrefix = "Dungeon_";
 
     public final World world;
-    Random rnd = new Random();
+    final Random rnd = new Random();
 
     public Dungeon() {
         world = Bukkit.createWorld(new WorldCreator("test_dungeon")

@@ -18,6 +18,7 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Objects;
+import java.util.logging.Level;
 
 
 public abstract class IM_CustomItem implements Listener {
@@ -67,20 +68,22 @@ public abstract class IM_CustomItem implements Listener {
 
     private boolean checkUsedItem(ItemStack usedItem) {
         PersistentDataContainer container = Objects.requireNonNull(usedItem.getItemMeta(), "Item meta is null").getPersistentDataContainer();
-        Double key = container.get(itemIdKey, PersistentDataType.DOUBLE);
+        Long key = container.get(itemIdKey, PersistentDataType.LONG);
         return key != null && key == getCustomId().getValue();
     }
 
 
     @EventHandler(priority = EventPriority.LOWEST)
-    private void _onInteract(PlayerInteractEvent event) {
+    public void _onInteract(PlayerInteractEvent event) {
+        Bukkit.broadcastMessage("BASE INTERACT");
         ItemStack eventItem = event.getItem();
         if(eventItem != null && event.getHand() == EquipmentSlot.HAND && checkUsedItem(eventItem)) { // Check if item is being used in the main hand
+            Bukkit.broadcastMessage("DEDICATED INTERACT");
             onInteract(event);
         }
     }
     @EventHandler(priority = EventPriority.LOWEST)
-    private void _onAttack(EntityDamageByEntityEvent event) {
+    public void _onAttack(EntityDamageByEntityEvent event) {
         if(event.getDamager() instanceof Player player && checkUsedItem(player.getInventory().getItemInMainHand())){
             onAttack(event);
         }

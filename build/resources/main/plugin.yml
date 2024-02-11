@@ -88,4 +88,8 @@ commands:
   dungeontest:
     description: test command
     usage: /dungeontest
-    permission: ShadowNightSMP.command.member
+    permission: op
+  sngive:
+    description: admin command
+    usage: /sngive <id> <amount>
+    permission: op

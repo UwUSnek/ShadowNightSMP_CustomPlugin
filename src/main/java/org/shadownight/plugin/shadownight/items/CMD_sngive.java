@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.ShadowNight;
 
 public class CMD_sngive implements CommandExecutor {
     @Override

@@ -39,10 +39,9 @@ public class SkinRenderer {
 
 
 
-    public static String getRenderUrl(OfflinePlayer player, RenderType renderType){
-        String type = "";
+    public static String getRenderUrl(OfflinePlayer player, RenderType renderType){;
         UUID uuid = player.getUniqueId();
-        type = switch (renderType) {
+        String type = switch (renderType) {
             case PROPIC -> "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}";
             case FULL   -> "full";
         };

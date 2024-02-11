@@ -2,12 +2,10 @@ package org.shadownight.plugin.shadownight.items;
 
 
 import org.shadownight.plugin.shadownight.items.scythe.*;
-import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 
 // Initialize custom items
