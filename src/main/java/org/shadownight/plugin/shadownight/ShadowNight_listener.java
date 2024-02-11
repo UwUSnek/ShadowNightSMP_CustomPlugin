@@ -77,11 +77,11 @@ public class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        ItemManager.onInteract(event);
+        //ItemManager.onInteract(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if(event.getDamager() instanceof Player) ItemManager.onAttack(event);
+        //if(event.getDamager() instanceof Player) ItemManager.onAttack(event);
     }
 }

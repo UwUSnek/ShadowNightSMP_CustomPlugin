@@ -10,7 +10,11 @@ import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
 import org.shadownight.plugin.shadownight.dungeons.CMD_dungeontest;
 import org.shadownight.plugin.shadownight.economy.CMD_trade;
 import org.shadownight.plugin.shadownight.economy.Economy;
-import org.shadownight.plugin.shadownight.items.Scythe;
+import org.shadownight.plugin.shadownight.items.CMD_sngive;
+import org.shadownight.plugin.shadownight.items.CustomItemId;
+import org.shadownight.plugin.shadownight.items.IM_CustomItem;
+import org.shadownight.plugin.shadownight.items.ItemManager;
+import org.shadownight.plugin.shadownight.items.scythe.*;
 import org.shadownight.plugin.shadownight.qol.CMD_flyspeed;
 import org.shadownight.plugin.shadownight.qol.CMD_rtp;
 import org.shadownight.plugin.shadownight.qol.info.*;
@@ -21,8 +25,13 @@ import org.shadownight.plugin.shadownight.qol.tpa.CMD_tpaccept;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.shadownight.plugin.shadownight.utils.SignInput;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
+import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
 
 
 public final class ShadowNight extends JavaPlugin {
@@ -31,9 +40,19 @@ public final class ShadowNight extends JavaPlugin {
     public static ProtocolManager protocolManager;
     public static MultiverseCore mvcore;
 
+
+
+
     @Override
     public void onEnable() {
         plugin = this;
+
+
+        // Print custom items for debug and to make the IDs known to ops
+        for(ItemManager itemManager : ItemManager.values()) {
+            CustomItemId itemId = itemManager.getValue().getCustomId();
+            utils.log(Level.INFO, "Loaded CustomItem \"" + itemId.name() + "\" with ID " + itemId.getValue());
+        }
 
 
         // Initialize Luckperms API
@@ -84,6 +103,7 @@ public final class ShadowNight extends JavaPlugin {
 
         // Other
         Objects.requireNonNull(this.getCommand("dungeontest"),  "getCommand returned null").setExecutor(new CMD_dungeontest());
+        Objects.requireNonNull(this.getCommand("sngive"),       "getCommand returned null").setExecutor(new CMD_sngive());
 
 
 
@@ -96,12 +116,6 @@ public final class ShadowNight extends JavaPlugin {
         BotManager.init();
         BotManager.sendBridgeMessage("🟢 Server is online");
 
-
-
-
-
-        // Initialize custom items
-        Scythe.createRecipes();
 
 
         // Initialize multiverse API

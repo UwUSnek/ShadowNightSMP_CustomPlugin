@@ -27,7 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import static org.shadownight.plugin.shadownight.items.ItemManager.itemIdKey;
+import static org.shadownight.plugin.shadownight.items.IM_CustomItem.itemIdKey;
 
 
 public class utils {
@@ -164,7 +164,7 @@ public class utils {
         final int number,
         final String name,
         final int customModelData,
-        final int customItemId,
+        final long customItemId,
         final String... lore
     ) {
         final ItemStack item = new ItemStack(material, number);
@@ -175,7 +175,7 @@ public class utils {
         meta.setCustomModelData(customModelData);
 
         final PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(itemIdKey, PersistentDataType.INTEGER, customItemId);
+        container.set(itemIdKey, PersistentDataType.LONG, customItemId);
 
         item.setItemMeta(meta);
         return item;
@@ -290,5 +290,31 @@ public class utils {
         }
         return stream.toByteArray();
         // ByteArrayOutputStreams don't need to be closed (the documentation says so)
+    }
+
+
+    private static long[] createLookupTable() {
+        long[] byteTable = new long[256];
+        long h = 0x544B2FBACAAF1684L;
+        for (int i = 0; i < 256; i++) {
+            for (int j = 0; j < 31; j++) {
+                h = (h >>> 7) ^ h;
+                h = (h << 11) ^ h;
+                h = (h >>> 10) ^ h;
+            }
+            byteTable[i] = h;
+        }
+        return byteTable;
+    }
+
+
+    public static long createHash64(byte[] data) {
+        long h = 0xBB40E64DA205B064L;
+        final long hmult = 7664345821815920749L;
+        final long[] ht = createLookupTable();
+        for (int len = data.length, i = 0; i < len; i++) {
+            h = (h * hmult) ^ ht[data[i] & 0xff];
+        }
+        return h;
     }
 }
