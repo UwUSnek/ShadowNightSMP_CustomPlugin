@@ -56,7 +56,7 @@ public class Dungeon {
     //    ╰──╴s+t╶──╯  ╰──╴s╶──╯╰┴ t
     //        11           9       3
 
-
+    // FIXME test if this is still broken. it likely is
     private void placeTile(int x, int z, int s, int t) {
         int st = s + t;
         for(int i = x * st + t; i < (x + 1) * st; ++i) for(int j = z * st + t; j < (z + 1) * st; ++j) {
@@ -74,8 +74,8 @@ public class Dungeon {
         //if(wall.up) switch(wall.type) {
         int st = s + t;
         switch(wall.type) {
-            case 'x': for (int i = wall.a.x * st; i < wall.b.x * st; ++i) world.getBlockAt(i, 0, wall.a.z * st).setType(Material.STONE); break;
-            case 'z': for (int i = wall.a.z * st; i < wall.b.z * st; ++i) world.getBlockAt(wall.a.x * st, 0, i).setType(Material.STONE); break;
+            case 'x': for (int i = wall.a.x * st; i < wall.b.x * st + t; ++i) world.getBlockAt(i, 0, wall.a.z * st + st).setType(Material.STONE); break;
+            case 'z': for (int i = wall.a.z * st; i < wall.b.z * st + t; ++i) world.getBlockAt(wall.a.x * st + st, 0, i).setType(Material.STONE); break;
         }
     }
 
@@ -136,11 +136,11 @@ public class Dungeon {
         // Initialize and randomize walls
         int x1 = x - 1;
         int z1 = z - 1;
-        int vNum = x1 * z; // Number of vertical   walls   │
-        int hNum = x * z1; // Number of horizontal walls  ───
+        int vNum = x * z1; // Number of x-axis walls   │
+        int hNum = x1 * z; // Number of z-axis walls  ───
         ArrayList<Wall> walls = new ArrayList<>(vNum + hNum);
-        for(int i = 0; i < x1; ++i) for(int j = 0; j < z; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i + 1, j), 'x'));
-        for(int i = 0; i < x; ++i) for(int j = 0; j < z1; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i, j + 1), 'z'));
+        for(int i = 0; i < x; ++i) for(int j = 0; j < z1; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i + 1, j), 'x'));
+        for(int i = 0; i < x1; ++i) for(int j = 0; j < z; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i, j + 1), 'z'));
         Collections.shuffle(walls);
 
 
@@ -155,12 +155,12 @@ public class Dungeon {
 
         // Draw external walls
         for(int i = 0; i < x * (tileSize + wallThickness) + wallThickness; ++i) {
-            world.getBlockAt(i, 0, 0).setType(Material.PURPLE_CONCRETE);
-            world.getBlockAt(i, 0, z * (tileSize + wallThickness)).setType(Material.PURPLE_CONCRETE);
+            world.getBlockAt(i, -1, 0).setType(Material.PURPLE_CONCRETE);
+            world.getBlockAt(i, -1, z * (tileSize + wallThickness)).setType(Material.PURPLE_CONCRETE);
         }
         for(int i = 0; i < z * (tileSize + wallThickness) + wallThickness; ++i) {
-            world.getBlockAt(0, 0, i).setType(Material.PURPLE_CONCRETE);
-            world.getBlockAt(x * (tileSize + wallThickness), 0, i).setType(Material.PURPLE_CONCRETE);
+            world.getBlockAt(0, -1, i).setType(Material.PURPLE_CONCRETE);
+            world.getBlockAt(x * (tileSize + wallThickness), -1, i).setType(Material.PURPLE_CONCRETE);
         }
 
 
