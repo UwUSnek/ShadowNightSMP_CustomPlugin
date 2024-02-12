@@ -49,29 +49,51 @@ public class Dungeon {
     }
 
 
+    //    s = 9  (9x9 tiles)
+    //    t = 2  (1x2 walls)
+    //
+    //    ||·········||·········||·········||
+    //    ╰──╴s+t╶──╯  ╰──╴s╶──╯╰┴ t
+    //        11           9       3
 
 
-
-
-
-    private void placeTile(int _x, int _z, int tileSize) {
-        for(int x = _x * tileSize; x < (_x + 1) * tileSize ; ++x) for(int z = _z * tileSize; z < (_z + 1) * tileSize; ++z) {
-            world.getBlockAt(x, 0, z).setType(Material.STONE);
+    private void placeTile(int x, int z, int s, int t) {
+        int st = s + t;
+        for(int i = x * st + t; i < (x + 1) * st; ++i) for(int j = z * st + t; j < (z + 1) * st; ++j) {
+            world.getBlockAt(i, -1, j).setType(Material.DIRT);
         }
     }
-    private void placeWall(Wall wall, int tileSize) {
-        if(wall.up) {
-            if (wall.type == 'h') for (int i = wall.a.x * tileSize; i < wall.b.x * tileSize + 1; ++i) world.getBlockAt(i, 0, wall.a.y * tileSize).setType(Material.STONE);
-            if (wall.type == 'v') for (int i = wall.a.y * tileSize; i < wall.b.y * tileSize + 1; ++i) world.getBlockAt(wall.a.x * tileSize, 0, i).setType(Material.STONE);
+
+    /**
+     * Places a wall in the world
+     * @param wall The wall to place
+     * @param s The size of each tile
+     * @param t The thickness of the wall
+     */
+    private void placeWall(Wall wall, int s, int t) {
+        //if(wall.up) switch(wall.type) {
+        int st = s + t;
+        switch(wall.type) {
+            case 'x': for (int i = wall.a.x * st; i < wall.b.x * st; ++i) world.getBlockAt(i, 0, wall.a.z * st).setType(Material.STONE); break;
+            case 'z': for (int i = wall.a.z * st; i < wall.b.z * st; ++i) world.getBlockAt(wall.a.x * st, 0, i).setType(Material.STONE); break;
         }
     }
 
+
+
+
+    private static class v2i {
+        int x, z;
+        public v2i(int _x, int _z) {
+            x = _x;
+            z = _z;
+        }
+    }
 
     private static class TreeNode {
         private TreeNode parent = null;
 
         public TreeNode() {}
-
         public TreeNode(TreeNode _a, TreeNode _b) {
             _a.parent = this;
             _b.parent = this;
@@ -83,11 +105,10 @@ public class Dungeon {
     }
 
     private static class Wall {
-        boolean up = true;
-        Vector2i a;
-        Vector2i b;
+        //boolean up = true;
+        v2i a, b;
         char type;
-        public Wall(Vector2i _a, Vector2i _b, char _type) {
+        public Wall(v2i _a, v2i _b, char _type) {
             a = _a;
             b = _b;
             type = _type;
@@ -95,39 +116,55 @@ public class Dungeon {
     }
 
 
-    private void generateDungeon(){
-        int tileSize = 9;  // The size of each tile
+    public void generateDungeon(){
+        int tileSize = 3;  // The size of each tile
+        int wallThickness = 1;
+
 
         // Initialize tiles
-        int w = 21; // The width  of the maze measured in tiles. Must be an odd number
-        int h = 21; // The height of the maze measured in tiles. Must be an odd number
-        TreeNode[][] tiles = new TreeNode[w][h]; // Defaults to { parent: null }
-        for(int i = 0; i < w; ++i) for(int j = 0; j < h; ++j) tiles[i][j] = new TreeNode();
+        int x = 21; // The width  of the maze measured in tiles. Must be an odd number
+        int z = 41; // The height of the maze measured in tiles. Must be an odd number
+        TreeNode[][] tiles = new TreeNode[x][z]; // Defaults to { parent: null }
+        for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) tiles[i][j] = new TreeNode();
+
+        // TODO remove. this is only for debugging
+        for(int i = 0; i < (x + 1) * (tileSize + wallThickness); ++i)
+        for(int j = 0; j < (z + 1) * (tileSize + wallThickness); ++j)
+        for(int k = -1; k < 2; ++k) world.getBlockAt(i, k, j).setType(Material.AIR);
 
 
         // Initialize and randomize walls
-        int w1 = w - 1;
-        int h1 = h - 1;
-        int vNum = w1 * h; // Number of vertical   walls   │
-        int hNum = h1 * w; // Number of horizontal walls  ───
+        int x1 = x - 1;
+        int z1 = z - 1;
+        int vNum = x1 * z; // Number of vertical   walls   │
+        int hNum = x * z1; // Number of horizontal walls  ───
         ArrayList<Wall> walls = new ArrayList<>(vNum + hNum);
-        for(int i = 0; i < w1; ++i) for(int j = 0; j < h;  ++j) walls.add(new Wall(new Vector2i(i, j), new Vector2i(i + 1, j), 'h'));
-        for(int i = 0; i < w;  ++i) for(int j = 0; j < h1; ++j) walls.add(new Wall(new Vector2i(i, j), new Vector2i(i, j + 1), 'v'));
+        for(int i = 0; i < x1; ++i) for(int j = 0; j < z; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i + 1, j), 'x'));
+        for(int i = 0; i < x; ++i) for(int j = 0; j < z1; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i, j + 1), 'z'));
         Collections.shuffle(walls);
 
 
         // Merge sets with Kruskal's Algorithm
-        for (Wall wall : walls) {
-            TreeNode a = tiles[wall.a.x][wall.a.y];
-            TreeNode b = tiles[wall.b.x][wall.b.y];
-            TreeNode aRoot = a.getRoot();
-            TreeNode bRoot = b.getRoot();
-            if (aRoot != bRoot) {
-                new TreeNode(aRoot, bRoot);
-                wall.up = false;
-            }
-            placeWall(wall, tileSize);
+        for (Wall wall : walls) {/*
+            TreeNode aRoot = tiles[wall.a.x][wall.a.z].getRoot();
+            TreeNode bRoot = tiles[wall.b.x][wall.b.z].getRoot();
+            if (aRoot != bRoot) new TreeNode(aRoot, bRoot);
+            else*/ placeWall(wall, tileSize, wallThickness);
         }
+
+
+        // Draw external walls
+        for(int i = 0; i < x * (tileSize + wallThickness) + wallThickness; ++i) {
+            world.getBlockAt(i, 0, 0).setType(Material.PURPLE_CONCRETE);
+            world.getBlockAt(i, 0, z * (tileSize + wallThickness)).setType(Material.PURPLE_CONCRETE);
+        }
+        for(int i = 0; i < z * (tileSize + wallThickness) + wallThickness; ++i) {
+            world.getBlockAt(0, 0, i).setType(Material.PURPLE_CONCRETE);
+            world.getBlockAt(x * (tileSize + wallThickness), 0, i).setType(Material.PURPLE_CONCRETE);
+        }
+
+
+        //for(int i = 0; i < w; ++i) for(int j = 0; j < h; ++j) placeTile(i, j, tileSize, wallThickness);
     }
 
 

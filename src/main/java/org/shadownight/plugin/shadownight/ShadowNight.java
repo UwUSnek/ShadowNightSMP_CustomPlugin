@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
 import org.shadownight.plugin.shadownight.dungeons.CMD_dungeontest;
+import org.shadownight.plugin.shadownight.dungeons.CMD_recreatedungeon;
 import org.shadownight.plugin.shadownight.dungeons.Dungeon;
 import org.shadownight.plugin.shadownight.economy.CMD_trade;
 import org.shadownight.plugin.shadownight.economy.Economy;
@@ -97,6 +98,7 @@ public final class ShadowNight extends JavaPlugin {
 
         // Other
         Objects.requireNonNull(this.getCommand("dungeontest"),  "getCommand returned null").setExecutor(new CMD_dungeontest());
+        Objects.requireNonNull(this.getCommand("recreatedungeon"),  "getCommand returned null").setExecutor(new CMD_recreatedungeon());
         Objects.requireNonNull(this.getCommand("sngive"),       "getCommand returned null").setExecutor(new CMD_sngive());
 
 

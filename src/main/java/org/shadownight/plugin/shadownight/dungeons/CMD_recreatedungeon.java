@@ -9,16 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Vector;
 
 
-public class CMD_dungeontest implements CommandExecutor {
-    public static final Vector<Dungeon> activeDungeons = new Vector<>();
+public class CMD_recreatedungeon implements CommandExecutor {
+    private static final Vector<Dungeon> activeDungeons = new Vector<>();
 
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        Dungeon newDungeon = new Dungeon();
-        activeDungeons.add(newDungeon);
-        ((Player) sender).teleport(newDungeon.world.getSpawnLocation());
-
+        for(Dungeon dungeon : CMD_dungeontest.activeDungeons) {
+            dungeon.generateDungeon();
+        }
         return true;
     }
 }

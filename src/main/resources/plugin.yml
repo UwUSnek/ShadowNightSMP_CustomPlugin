@@ -85,6 +85,10 @@ commands:
 
 
 # Other
+  recreatedungeon:
+    description: test command
+    usage: /recreatedungeon
+    permission: op
   dungeontest:
     description: test command
     usage: /dungeontest
