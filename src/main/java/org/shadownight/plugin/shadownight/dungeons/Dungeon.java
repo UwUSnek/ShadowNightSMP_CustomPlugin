@@ -141,15 +141,15 @@ public class Dungeon {
         ArrayList<Wall> walls = new ArrayList<>(vNum + hNum);
         for(int i = 0; i < x; ++i) for(int j = 0; j < z1; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i + 1, j), 'x'));
         for(int i = 0; i < x1; ++i) for(int j = 0; j < z; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i, j + 1), 'z'));
-        Collections.shuffle(walls);
+        //Collections.shuffle(walls);
 
 
         // Merge sets with Kruskal's Algorithm
-        for (Wall wall : walls) {/*
+        for (Wall wall : walls) {
             TreeNode aRoot = tiles[wall.a.x][wall.a.z].getRoot();
             TreeNode bRoot = tiles[wall.b.x][wall.b.z].getRoot();
             if (aRoot != bRoot) new TreeNode(aRoot, bRoot);
-            else*/ placeWall(wall, tileSize, wallThickness);
+            else placeWall(wall, tileSize, wallThickness);
         }
 
 
