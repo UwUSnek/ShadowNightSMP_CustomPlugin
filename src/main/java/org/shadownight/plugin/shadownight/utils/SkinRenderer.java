@@ -39,7 +39,7 @@ public class SkinRenderer {
 
 
 
-    public static String getRenderUrl(OfflinePlayer player, RenderType renderType){;
+    public static String getRenderUrl(OfflinePlayer player, RenderType renderType){
         UUID uuid = player.getUniqueId();
         String type = switch (renderType) {
             case PROPIC -> "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}";
@@ -47,6 +47,7 @@ public class SkinRenderer {
         };
         return "https://starlightskins.lunareclipse.studio/skin-render/ultimate/" + uuid + "/" + type;
     }
+
 
     public static String getRenderUri(OfflinePlayer player, RenderType renderType){
         String type = getRenderUrl(player, renderType);

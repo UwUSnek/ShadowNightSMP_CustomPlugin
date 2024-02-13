@@ -2,7 +2,6 @@ package org.shadownight.plugin.shadownight.dungeons.generators;
 
 
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
 
 import java.util.ArrayList;
@@ -14,8 +13,8 @@ import java.util.Collections;
  */
 public class GEN_Walls {
     private static class v2i {
-        int x;
-        int z;
+        final int x;
+        final int z;
         public v2i(int _x, int _z) {
             x = _x;
             z = _z;
@@ -38,9 +37,9 @@ public class GEN_Walls {
 
     private static class Wall {
         //boolean up = true;
-        v2i a;
-        v2i b;
-        char type;
+        final v2i a;
+        final v2i b;
+        final char type;
         public Wall(v2i _a, v2i _b, char _type) {
             a = _a;
             b = _b;
@@ -85,11 +84,6 @@ public class GEN_Walls {
         // Initialize tiles
         TreeNode[][] tiles = new TreeNode[x][z]; // Defaults to { parent: null }
         for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) tiles[i][j] = new TreeNode();
-
-        // TODO remove. this is only for debugging
-        //for(int i = 0; i < (x + 1) * (tileSize + wallThickness); ++i)
-            //for(int j = 0; j < (z + 1) * (tileSize + wallThickness); ++j)
-                //for(int k = -1; k < wallHeight; ++k) buffer.set(i, k, j, Material.AIR);
 
 
         // Initialize and randomize walls

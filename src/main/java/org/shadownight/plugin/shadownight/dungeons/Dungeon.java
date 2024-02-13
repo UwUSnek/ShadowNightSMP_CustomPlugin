@@ -19,8 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
-
-
+import java.util.stream.Stream;
 
 
 public class Dungeon {
@@ -99,7 +98,7 @@ public class Dungeon {
         // Inner walls data
         int tileSize = 9;                                     // The size of each tile
         int wallThickness = 8;                                // The thickness of the inner maze walls
-        int wallHeight = 5;                                   // The height of the inner maze walls
+        int wallHeight = 20;                                  // The height of the inner maze walls
         int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 21;                                        // The width  of the maze expressed in tiles. Must be an odd number
         Material materialWalls = Material.STONE;              // Temporary material used for inner maze walls
@@ -140,8 +139,8 @@ public class Dungeon {
      */
     public static void deleteOldDungeons() {
         List<File> worlds;
-        try {
-            worlds = Files.list(Paths.get(ShadowNight.plugin.getServer().getWorldContainer().getPath()))
+        try(Stream<Path> stream = Files.list(Paths.get(ShadowNight.plugin.getServer().getWorldContainer().getPath()))) {
+            worlds = stream
                 .map(Path::toFile)
                 .filter((File f) -> f.isDirectory() && f.getName().startsWith(namePrefix))
                 .toList()

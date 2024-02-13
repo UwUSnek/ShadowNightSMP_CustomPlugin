@@ -12,9 +12,13 @@ import java.util.logging.Level;
  * Allows for custom shift on set operations
  */
 public class RegionBuffer {
-    private Material[][][] b;
-    int x, y, z;
-    int shift_x, shift_y, shift_z;
+    private final Material[][][] b;
+    final int x;
+    final int y;
+    final int z;
+    final int shift_x;
+    final int shift_y;
+    final int shift_z;
 
 
     public RegionBuffer(int _x, int _y, int _z, int _shift_x, int _shift_y, int _shift_z) {

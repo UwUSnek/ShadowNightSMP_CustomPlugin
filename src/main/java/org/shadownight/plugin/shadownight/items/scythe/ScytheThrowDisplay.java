@@ -2,7 +2,6 @@ package org.shadownight.plugin.shadownight.items.scythe;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
+import org.shadownight.plugin.shadownight.items.IM_CustomItem;
+import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Collection;
@@ -50,7 +51,8 @@ public class ScytheThrowDisplay {
             0,
             90
         ), EntityType.ITEM_DISPLAY);
-        display.setItemStack(utils.createItemStackCustom(Material.NETHERITE_SWORD, 1, "Edgy Scythe", 14, CustomItemId.KLAUE_SCYTHE.getNumericalValue()));
+        IM_CustomItem data = ItemManager.getValueFromId(CustomItemId.KLAUE_SCYTHE);
+        display.setItemStack(utils.createItemStackCustom(data.getMaterial(), 1, data.getDisplayName(), data.getCustomModelData(), data.getCustomId().getNumericalValue()));
         display.setTeleportDuration(stepDuration);
 
 
@@ -182,24 +184,24 @@ public class ScytheThrowDisplay {
 
 
 
-    public final Function<Double, Double> COMP_linear = x -> x;
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_linear = x -> x;
 
 
 
-    public final Function<Double, Double> COMP_sineIn    = x -> 1 - Math.cos((x * Math.PI) / 2);
-    public final Function<Double, Double> COMP_sineOut   = x ->     Math.sin((x * Math.PI) / 2);
-    public final Function<Double, Double> COMP_sineInOut = x ->   -(Math.cos( x * Math.PI) - 1) / 2;
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_sineIn    = x -> 1 - Math.cos((x * Math.PI) / 2);
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_sineOut   = x ->     Math.sin((x * Math.PI) / 2);
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_sineInOut = x ->   -(Math.cos( x * Math.PI) - 1) / 2;
 
 
 
-    public final Function<Double, Double> COMP_cubicIn    = x ->     Math.pow(    x, 3);
-    public final Function<Double, Double> COMP_cubicOut   = x -> 1 - Math.pow(1 - x, 3);
-    public final Function<Double, Double> COMP_cubicInOut = x -> x < 0.5 ? 4 * Math.pow(x, 3) : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_cubicIn    = x ->     Math.pow(    x, 3);
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_cubicOut   = x -> 1 - Math.pow(1 - x, 3);
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_cubicInOut = x -> x < 0.5 ? 4 * Math.pow(x, 3) : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
 
 
-    public final Function<Double, Double> COMP_bounceIn    = x -> 1 - this.COMP_bounceOut.apply(1 - x);
-    public final Function<Double, Double> COMP_bounceOut   = x -> {
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_bounceIn    = x -> 1 - this.COMP_bounceOut.apply(1 - x);
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_bounceOut   = x -> {
         final double n = 7.5625;
         final double d = 2.75;
         if      (x < 1   / d)                   return n * x * x;
@@ -207,13 +209,13 @@ public class ScytheThrowDisplay {
         else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
         else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
     };
-    public final Function<Double, Double> COMP_bounceInOut = x -> x < 0.5 ? (1 - this.COMP_bounceOut.apply(1 - 2 * x)) / 2 : (1 + this.COMP_bounceOut.apply(2 * x - 1)) / 2;
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_bounceInOut = x -> x < 0.5 ? (1 - this.COMP_bounceOut.apply(1 - 2 * x)) / 2 : (1 + this.COMP_bounceOut.apply(2 * x - 1)) / 2;
 
 
 
-    public final Function<Double, Double> COMP_elasticIn    = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
-    public final Function<Double, Double> COMP_elasticOut   = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
-    public final Function<Double, Double> COMP_elasticInOut = x -> {
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticIn    = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticOut   = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticInOut = x -> {
         final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
         return utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : (
             x < 0.5 ?
