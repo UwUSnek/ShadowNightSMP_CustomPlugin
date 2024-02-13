@@ -7,6 +7,7 @@ authors: [UwU_Snek]
 description: A simple plugin that provides useful features for the Shadow Night SMP
 
 depend: [
+  ProtocolLib,
   PlaceholderAPI,
   VoidGenerator,
   LuckPerms
