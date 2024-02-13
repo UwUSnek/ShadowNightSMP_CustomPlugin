@@ -78,8 +78,9 @@ public class GEN_Walls {
         int st = s + t;
         v2i a = wall.a;
         switch(wall.type) {
-            case 'x': for (int i = a.x * st - t; i < a.x * st + st; ++i) for(int j = 0; j < h; ++j) world.getBlockAt(i, j, a.z * st + s).setType(material); break;
-            case 'z': for (int i = a.z * st - t; i < a.z * st + st; ++i) for(int j = 0; j < h; ++j) world.getBlockAt(a.x * st + s, j, i).setType(material); break;
+            //                 Long side                                         Height                            Thickness
+            case 'x': for (int i = a.x * st - t; i < a.x * st + st; ++i) for(int j = 0; j < h; ++j) for(int k = 0; k < t; ++k) world.getBlockAt(i, j, a.z * st + s + k).setType(material); break;
+            case 'z': for (int i = a.z * st - t; i < a.z * st + st; ++i) for(int j = 0; j < h; ++j) for(int k = 0; k < t; ++k) world.getBlockAt(a.x * st + s + k, j, i).setType(material); break;
         }
     }
 
@@ -94,7 +95,7 @@ public class GEN_Walls {
         // TODO remove. this is only for debugging
         for(int i = 0; i < (x + 1) * (tileSize + wallThickness); ++i)
             for(int j = 0; j < (z + 1) * (tileSize + wallThickness); ++j)
-                for(int k = -1; k < 2; ++k) world.getBlockAt(i, k, j).setType(Material.AIR);
+                for(int k = -1; k < wallHeight; ++k) world.getBlockAt(i, k, j).setType(Material.AIR);
 
 
         // Initialize and randomize walls

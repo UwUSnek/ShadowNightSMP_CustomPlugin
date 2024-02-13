@@ -128,8 +128,8 @@ public class Dungeon {
 
 
         // Inner walls
-        int tileSize = 3;                                     // The size of each tile
-        int wallThickness = 1;                                // The thickness of the inner maze walls //TODO implement this
+        int tileSize = 9;                                     // The size of each tile
+        int wallThickness = 2;                                // The thickness of the inner maze walls //TODO implement this
         int wallHeight = 5;                                   // The height of the inner maze walls
         int xNum = 21;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 41;                                        // The width  of the maze expressed in tiles. Must be an odd number
