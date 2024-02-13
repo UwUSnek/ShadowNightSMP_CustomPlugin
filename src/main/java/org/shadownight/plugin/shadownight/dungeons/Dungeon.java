@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_GeneratorShader;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
@@ -91,6 +93,8 @@ public class Dungeon {
     }
 
 
+
+
     public void generateDungeon() {
         long start = System.currentTimeMillis();
 
@@ -117,13 +121,18 @@ public class Dungeon {
 
         // Actually generate the dungeon
         int total_x = x + outerWallsThickness * 2;
+        int total_y = outerWallsHeight + floorThickness;
         int total_z = z + outerWallsThickness * 2;
-        RegionBuffer buffer = new RegionBuffer(total_x, outerWallsHeight + floorThickness, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
+        RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
         GEN_Walls.start(buffer, materialWalls, tileSize, wallThickness, wallHeight, xNum, zNum);
         GEN_BoundingBox.startFloor(buffer, materialFloor, floorThickness, outerWallsThickness, x, z);
         GEN_BoundingBox.startWalls(buffer, materialOuterWalls, outerWallsThickness, outerWallsHeight, x, z);
 
+        float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, materialOuterWalls);
+        buffer.applyShaders(
+            new SHD_FloorMaterial(materialFloor, wallDistanceGradient)
+        );
         buffer.paste(world, -total_x / 2, 0, -total_z / 2);
 
 
@@ -131,6 +140,38 @@ public class Dungeon {
         long duration = System.currentTimeMillis() - start;
         utils.log(Level.INFO, "Dungeon generated in " + utils.msToDuration(duration, true));
     }
+
+
+    private static float[][] createWallDistanceGradient(RegionBuffer b, int y, int tileSize, Material m, Material m2) {
+        float[][] gradient = new float[b.x][b.z];
+        int halfSize = tileSize / 2;
+        for(int i = 0; i < b.x; ++i) for(int j = 0;  j < b.z; ++j) {
+            int k = 0;
+            try {
+                while (
+                    k < halfSize &&
+                    b.get(i + k, y, j + k) != m && b.get(i + k, y, j + k) != m2 &&
+                    b.get(i + k, y, j - k) != m && b.get(i + k, y, j - k) != m2 &&
+                    b.get(i - k, y, j + k) != m && b.get(i - k, y, j + k) != m2 &&
+                    b.get(i - k, y, j - k) != m && b.get(i - k, y, j - k) != m2
+                ) ++k;
+                utils.log(Level.WARNING, "(" + b.get(i + k, y, j + k).name() + ")");
+                utils.log(Level.WARNING, "(" + b.get(i + k, y, j - k).name() + ")");
+                utils.log(Level.WARNING, "(" + b.get(i - k, y, j + k).name() + ")");
+                utils.log(Level.WARNING, "(" + b.get(i - k, y, j - k).name() + ")");
+                gradient[i][j] = (float) k / halfSize;
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                utils.log(Level.SEVERE, "Gradient creation failed: Received index (" + i + ", " + j + ") with k = " + k + " and buffer size (" + b.x + ", " + b.z + ")");
+                utils.log(Level.SEVERE, "(" + (i + k) + ", " + (j + k) + ")");
+                utils.log(Level.SEVERE, "(" + (i + k) + ", " + (j - k) + ")");
+                utils.log(Level.SEVERE, "(" + (i - k) + ", " + (j + k) + ")");
+                utils.log(Level.SEVERE, "(" + (i - k) + ", " + (j - k) + ")");
+            }
+        }
+        return gradient;
+    }
+
 
 
     /**
@@ -162,3 +203,4 @@ public class Dungeon {
         }
     }
 }
+

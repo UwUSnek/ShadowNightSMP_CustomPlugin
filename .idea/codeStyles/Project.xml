@@ -2,6 +2,8 @@
   <code_scheme name="Project" version="173">
     <option name="RIGHT_MARGIN" value="500" />
     <JavaCodeStyleSettings>
+      <option name="NEW_LINE_AFTER_LPAREN_IN_ANNOTATION" value="true" />
+      <option name="RPAREN_ON_NEW_LINE_IN_ANNOTATION" value="true" />
       <option name="ALIGN_MULTILINE_RECORDS" value="false" />
       <option name="NEW_LINE_AFTER_LPAREN_IN_RECORD_HEADER" value="true" />
       <option name="RPAREN_ON_NEW_LINE_IN_RECORD_HEADER" value="true" />
@@ -10,25 +12,33 @@
     <codeStyleSettings language="JAVA">
       <option name="RIGHT_MARGIN" value="500" />
       <option name="ELSE_ON_NEW_LINE" value="true" />
+      <option name="CATCH_ON_NEW_LINE" value="true" />
+      <option name="FINALLY_ON_NEW_LINE" value="true" />
       <option name="CASE_STATEMENT_ON_NEW_LINE" value="false" />
       <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
       <option name="ALIGN_MULTILINE_RESOURCES" value="false" />
       <option name="ALIGN_MULTILINE_FOR" value="false" />
+      <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
       <option name="PREFER_PARAMETERS_WRAP" value="true" />
       <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
       <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
       <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
       <option name="METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
+      <option name="RESOURCE_LIST_LPAREN_ON_NEXT_LINE" value="true" />
+      <option name="RESOURCE_LIST_RPAREN_ON_NEXT_LINE" value="true" />
       <option name="PARENTHESES_EXPRESSION_LPAREN_WRAP" value="true" />
       <option name="PARENTHESES_EXPRESSION_RPAREN_WRAP" value="true" />
       <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
       <option name="KEEP_SIMPLE_LAMBDAS_IN_ONE_LINE" value="true" />
       <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
-      <option name="KEEP_MULTIPLE_EXPRESSIONS_IN_ONE_LINE" value="true" />
       <option name="FOR_STATEMENT_LPAREN_ON_NEXT_LINE" value="true" />
       <option name="FOR_STATEMENT_RPAREN_ON_NEXT_LINE" value="true" />
       <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
       <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
+      <option name="IF_BRACE_FORCE" value="1" />
+      <option name="DOWHILE_BRACE_FORCE" value="1" />
+      <option name="WHILE_BRACE_FORCE" value="1" />
+      <option name="FOR_BRACE_FORCE" value="1" />
       <option name="KEEP_BUILDER_METHODS_INDENTS" value="true" />
       <option name="WRAP_ON_TYPING" value="0" />
       <indentOptions>
