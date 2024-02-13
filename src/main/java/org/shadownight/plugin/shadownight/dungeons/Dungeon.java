@@ -30,31 +30,32 @@ public class Dungeon {
 
 
     public Dungeon() {
-        if(createWorld()) generateDungeon();
+        if (createWorld()) generateDungeon();
     }
 
 
-
-
-    private boolean createWorld(){
+    private boolean createWorld() {
         world = Bukkit.createWorld(new WorldCreator(namePrefix + UUID.randomUUID())
             .environment(World.Environment.NORMAL)
             .type(WorldType.NORMAL) //! FLAT creates errors in console. This is a Minecraft Vanilla bug
             .generator("VoidGenerator")
             .generateStructures(false)
             .biomeProvider(new BiomeProvider() {
-                @NotNull @Override
+                @NotNull
+                @Override
                 public Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
                     return Biome.PLAINS;
                 }
-                @NotNull @Override
+
+                @NotNull
+                @Override
                 public List<Biome> getBiomes(@NotNull WorldInfo worldInfo) {
                     return List.of(Biome.PLAINS);
                 }
             })
         );
 
-        if(world == null) {
+        if (world == null) {
             utils.log(Level.SEVERE, "Dungeon world creation failed: createWorld returned null");
             return false;
         }
@@ -91,11 +92,8 @@ public class Dungeon {
     }
 
 
-
-
-    public void generateDungeon(){
+    public void generateDungeon() {
         long start = System.currentTimeMillis();
-
 
 
         // Inner walls data
@@ -104,29 +102,29 @@ public class Dungeon {
         int wallHeight = 5;                                   // The height of the inner maze walls
         int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 21;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        Material materialWalls = Material.STONE;              // Temporary material used for inner maze walls
 
 
         // Outer walls and floor data
         int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
         int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
         int floorThickness = 5;                               // The thickness of the floor
-        int outerWallsThickness = Math.max(5, wallThickness); // The thickness of the outer walls
+        int outerWallsThickness = 5;                          // The thickness of the outer walls
         int outerWallsHeight = 20;                            // The height of the outer walls
+        Material materialOuterWalls = Material.BEDROCK;       // Temporary material used for outer walls
+        Material materialFloor = Material.DIRT;               // Temporary material used for the floor
+        outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
 
 
+        // Actually generate the dungeon
         int total_x = x + outerWallsThickness * 2;
         int total_z = z + outerWallsThickness * 2;
-        RegionBuffer buffer = new RegionBuffer(
-            total_x,
-            outerWallsHeight + floorThickness,
-            total_z,
-            outerWallsThickness,
-            floorThickness,
-            outerWallsThickness
-        );
-        GEN_Walls.start(buffer, Material.STONE, tileSize, wallThickness, wallHeight, xNum, zNum);
-        GEN_BoundingBox.startFloor(buffer, Material.DIRT, floorThickness, outerWallsThickness, x, z);
-        GEN_BoundingBox.startWalls(buffer, Material.BEDROCK, outerWallsThickness, outerWallsHeight, x, z);
+        RegionBuffer buffer = new RegionBuffer(total_x, outerWallsHeight + floorThickness, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
+
+        GEN_Walls.start(buffer, materialWalls, tileSize, wallThickness, wallHeight, xNum, zNum);
+        GEN_BoundingBox.startFloor(buffer, materialFloor, floorThickness, outerWallsThickness, x, z);
+        GEN_BoundingBox.startWalls(buffer, materialOuterWalls, outerWallsThickness, outerWallsHeight, x, z);
+
         buffer.paste(world, -total_x / 2, 0, -total_z / 2);
 
 
@@ -136,13 +134,11 @@ public class Dungeon {
     }
 
 
-
-
     /**
      * Deleted any remaining dungeon that wasn't deleted on shutdown for whatever reason
      * This MUST be called first in the .onLoad function
      */
-    public static void deleteOldDungeons(){
+    public static void deleteOldDungeons() {
         List<File> worlds;
         try {
             worlds = Files.list(Paths.get(ShadowNight.plugin.getServer().getWorldContainer().getPath()))
@@ -154,7 +150,7 @@ public class Dungeon {
             throw new RuntimeException(e);
         }
 
-        if(!worlds.isEmpty()) {
+        if (!worlds.isEmpty()) {
             utils.log(Level.INFO, "Deleting " + worlds.size() + " old dungeon" + (worlds.size() == 1 ? "" : "s") + "...");
             for (File world : worlds) {
                 utils.log(Level.INFO, "Deleted old dungeon " + world.getName());

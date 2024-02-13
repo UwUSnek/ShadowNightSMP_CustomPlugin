@@ -11,7 +11,7 @@ import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
  */
 public class GEN_BoundingBox {
     public static void startFloor(RegionBuffer buffer, Material material, int thickness, int wt, int x, int z){
-        //      X                          Z                          Thickness
+        //      X                                         Z                                         Thickness
         for(int i = -wt + 1; i < x + wt - 1; ++i) for(int j = -wt + 1; j < z + wt - 1; ++j) for(int k = -thickness; k < 0; ++k) {
             buffer.set(i, k, j, material);
         }
@@ -19,7 +19,7 @@ public class GEN_BoundingBox {
 
 
     public static void startWalls(RegionBuffer buffer, Material material, int t, int height, int x, int z){
-        //      X                               Height                          Thickness
+        //      X                                       Height                          Thickness
         for(int i = -t + 1; i < x + t - 1; ++i) for(int j = 0; j < height; ++j) for(int k = 1; k < t; ++k) {
             buffer.set(i, j,        -k, material);
             buffer.set(i, j, z + k - 1, material);
