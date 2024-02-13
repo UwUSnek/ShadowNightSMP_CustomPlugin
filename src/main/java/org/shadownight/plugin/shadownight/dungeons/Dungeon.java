@@ -27,10 +27,17 @@ public class Dungeon {
     //! Prefix to use in dungeon world names. MUST be all lowercase
     private static final String namePrefix = "dungeon_";
 
-    public final World world;
+    public World world = null;
     final Random rnd = new Random();
 
     public Dungeon() {
+        if(createWorld()) generateDungeon();
+    }
+
+
+
+
+    private boolean createWorld(){
         world = Bukkit.createWorld(new WorldCreator(namePrefix + "fewifjwefoio")
             .environment(World.Environment.NORMAL)
             .type(WorldType.NORMAL) //! FLAT creates errors in console. This is a Minecraft Vanilla bug
@@ -48,79 +55,43 @@ public class Dungeon {
             })
         );
 
-        generateDungeon();
+        if(world == null) {
+            utils.log(Level.SEVERE, "Dungeon world creation failed: createWorld returned null");
+            return false;
+        }
+        else {
+            // Griefing and drop gamerules
+            world.setGameRule(GameRule.MOB_GRIEFING, false);
+            world.setGameRule(GameRule.DO_VINES_SPREAD, false);
+            world.setGameRule(GameRule.DO_MOB_LOOT, false);
+            world.setGameRule(GameRule.DO_ENTITY_DROPS, false);
+
+            // Spawning gamerules
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+            world.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
+            world.setGameRule(GameRule.DO_WARDEN_SPAWNING, false);
+            world.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
+            world.setGameRule(GameRule.DISABLE_RAIDS, true);
+
+            // Environment gamerules
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+            world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+            world.setGameRule(GameRule.DO_FIRE_TICK, false);
+            world.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+            world.setGameRule(GameRule.SNOW_ACCUMULATION_HEIGHT, 0);
+
+            // Player gamerules
+            world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+            world.setGameRule(GameRule.DO_INSOMNIA, false);
+            world.setGameRule(GameRule.KEEP_INVENTORY, true);
+            world.setGameRule(GameRule.PLAYERS_NETHER_PORTAL_DEFAULT_DELAY, 2147483647);
+            world.setGameRule(GameRule.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY, 2147483647);
+            world.setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, 101);
+        }
+        return true;
     }
 
-    /*
-        s = 9  (9x9 tiles)
-        t = 2  (9x2 walls)                             X
-                                                       ╎
-        ||·········||·········||·········||            │
-        ╰──╴s+t╶──╯  ╰──╴s╶──╯╰┴ t                     └───--- Z
-            11           9       3
-    */
 
-    // FIXME test if this is still broken. it likely is
-    private void placeTile(int x, int z, int s, int t) {
-        int st = s + t;
-        for(int i = x * st + t; i < (x + 1) * st; ++i) for(int j = z * st + t; j < (z + 1) * st; ++j) {
-            world.getBlockAt(i, -1, j).setType(Material.DIRT);
-        }
-    }
-
-    /**
-     * Places a wall in the world
-     * @param wall The wall to place
-     * @param s The size of each tile
-     * @param t The thickness of the wall
-     */
-    private void placeWall(Wall wall, int s, int t) {
-        //if(wall.up) switch(wall.type) {
-        int st = s + t;
-        v2i a = wall.a;
-        switch(wall.type) {
-            case 'x': for (int i = a.x * st; i < a.x * st + st + t; ++i) world.getBlockAt(i, 0, a.z * st + st).setType(Material.STONE); break;
-            case 'z': for (int i = a.z * st; i < a.z * st + st + t; ++i) world.getBlockAt(a.x * st + st, 0, i).setType(Material.STONE); break;
-        }
-    }
-
-
-
-
-    private static class v2i {
-        int x;
-        int z;
-        public v2i(int _x, int _z) {
-            x = _x;
-            z = _z;
-        }
-    }
-
-    private static class TreeNode {
-        private TreeNode parent = null;
-
-        public TreeNode() {}
-        public TreeNode(TreeNode _a, TreeNode _b) {
-            _a.parent = this;
-            _b.parent = this;
-        }
-
-        public TreeNode getRoot() {
-            return parent == null ? this : parent.getRoot();
-        }
-    }
-
-    private static class Wall {
-        //boolean up = true;
-        v2i a;
-        v2i b;
-        char type;
-        public Wall(v2i _a, v2i _b, char _type) {
-            a = _a;
-            b = _b;
-            type = _type;
-        }
-    }
 
 
     public void generateDungeon(){
@@ -129,10 +100,10 @@ public class Dungeon {
 
         // Inner walls
         int tileSize = 9;                                     // The size of each tile
-        int wallThickness = 2;                                // The thickness of the inner maze walls //TODO implement this
+        int wallThickness = 8;                                // The thickness of the inner maze walls //TODO implement this
         int wallHeight = 5;                                   // The height of the inner maze walls
-        int xNum = 21;                                        // The height of the maze expressed in tiles. Must be an odd number
-        int zNum = 41;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
+        int zNum = 21;                                        // The width  of the maze expressed in tiles. Must be an odd number
         GEN_Walls.start(world, Material.STONE, tileSize, wallThickness, wallHeight, xNum, zNum);
 
 
@@ -150,8 +121,6 @@ public class Dungeon {
         long duration = System.currentTimeMillis() - start;
         utils.log(Level.INFO, "Dungeon generated in " + utils.msToDuration(duration, true));
     }
-
-
 
 
 

@@ -15,9 +15,12 @@ public class CMD_dungeontest implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        Player player = (Player) sender;
         Dungeon newDungeon = new Dungeon();
+
         activeDungeons.add(newDungeon);
-        ((Player) sender).teleport(newDungeon.world.getSpawnLocation());
+        player.teleport(newDungeon.world.getSpawnLocation());
+        player.setWalkSpeed(0.4f);
 
         return true;
     }
