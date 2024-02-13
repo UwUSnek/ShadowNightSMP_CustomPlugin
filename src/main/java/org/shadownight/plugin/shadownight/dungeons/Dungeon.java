@@ -8,6 +8,8 @@ import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
+import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
@@ -123,54 +125,27 @@ public class Dungeon {
 
     public void generateDungeon(){
         long start = System.currentTimeMillis();
-        int tileSize = 3;  // The size of each tile
-        int wallThickness = 1;
 
 
-        // Initialize tiles
-        int x = 21; // The width  of the maze measured in tiles. Must be an odd number
-        int z = 41; // The height of the maze measured in tiles. Must be an odd number
-        TreeNode[][] tiles = new TreeNode[x][z]; // Defaults to { parent: null }
-        for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) tiles[i][j] = new TreeNode();
-
-        // TODO remove. this is only for debugging
-        for(int i = 0; i < (x + 1) * (tileSize + wallThickness); ++i)
-        for(int j = 0; j < (z + 1) * (tileSize + wallThickness); ++j)
-        for(int k = -1; k < 2; ++k) world.getBlockAt(i, k, j).setType(Material.AIR);
+        // Inner walls
+        int tileSize = 3;                                     // The size of each tile
+        int wallThickness = 1;                                // The thickness of the inner maze walls //TODO implement this
+        int wallHeight = 5;                                   // The height of the inner maze walls
+        int xNum = 21;                                        // The height of the maze expressed in tiles. Must be an odd number
+        int zNum = 41;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        GEN_Walls.start(world, Material.STONE, tileSize, wallThickness, wallHeight, xNum, zNum);
 
 
-        // Initialize and randomize walls
-        int x1 = x - 1;
-        int z1 = z - 1;
-        int vNum = x * z1; // Number of x-axis walls   │
-        int hNum = x1 * z; // Number of z-axis walls  ───
-        ArrayList<Wall> walls = new ArrayList<>(vNum + hNum);
-        for(int i = 0; i < x; ++i) for(int j = 0; j < z1; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i, j + 1), 'x'));
-        for(int i = 0; i < x1; ++i) for(int j = 0; j < z; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i + 1, j), 'z'));
-        Collections.shuffle(walls);
+        // Outer walls and floor
+        int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
+        int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
+        int floorThickness = 5;                               // The thickness of the floor
+        int outerWallsThickness = 5;                          // The thickness of the outer walls
+        int outerWallsHeight = 20;                            // The height of the outer walls
+        GEN_BoundingBox.startFloor(world, Material.DIRT, floorThickness, outerWallsThickness, x, z);
+        GEN_BoundingBox.startWalls(world, Material.BEDROCK, outerWallsThickness, outerWallsHeight, x, z);
 
 
-        // Merge sets with Kruskal's Algorithm
-        for (Wall wall : walls) {
-            TreeNode aRoot = tiles[wall.a.x][wall.a.z].getRoot();
-            TreeNode bRoot = tiles[wall.b.x][wall.b.z].getRoot();
-            if (aRoot != bRoot) new TreeNode(aRoot, bRoot);
-            else placeWall(wall, tileSize, wallThickness);
-        }
-
-
-        // Draw external walls
-        for(int i = 0; i < x * (tileSize + wallThickness) + wallThickness; ++i) {
-            world.getBlockAt(i, -1, 0).setType(Material.PURPLE_CONCRETE);
-            world.getBlockAt(i, -1, z * (tileSize + wallThickness)).setType(Material.PURPLE_CONCRETE);
-        }
-        for(int i = 0; i < z * (tileSize + wallThickness) + wallThickness; ++i) {
-            world.getBlockAt(0, -1, i).setType(Material.PURPLE_CONCRETE);
-            world.getBlockAt(x * (tileSize + wallThickness), -1, i).setType(Material.PURPLE_CONCRETE);
-        }
-
-
-        //for(int i = 0; i < w; ++i) for(int j = 0; j < h; ++j) placeTile(i, j, tileSize, wallThickness);
         // Log generation time
         long duration = System.currentTimeMillis() - start;
         utils.log(Level.INFO, "Dungeon generated in " + utils.msToDuration(duration, true));
