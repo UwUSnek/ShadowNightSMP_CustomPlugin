@@ -8,7 +8,8 @@ description: A simple plugin that provides useful features for the Shadow Night 
 
 depend: [
   PlaceholderAPI,
-  VoidGenerator
+  VoidGenerator,
+  LuckPerms
 ]
 
 

@@ -20,7 +20,7 @@ public class CMD_dungeontest implements CommandExecutor {
 
         activeDungeons.add(newDungeon);
         player.teleport(newDungeon.world.getSpawnLocation());
-        player.setWalkSpeed(0.4f);
+        player.setWalkSpeed(1f); //TODO Reset on leave
 
         return true;
     }

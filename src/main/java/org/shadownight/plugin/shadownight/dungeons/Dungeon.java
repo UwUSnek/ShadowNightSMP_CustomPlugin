@@ -25,10 +25,9 @@ import java.util.logging.Level;
 
 public class Dungeon {
     //! Prefix to use in dungeon world names. MUST be all lowercase
-    private static final String namePrefix = "dungeon_";
-
+    private static final String namePrefix = "sn_world_dungeon_";
     public World world = null;
-    final Random rnd = new Random();
+
 
     public Dungeon() {
         if(createWorld()) generateDungeon();
@@ -38,7 +37,7 @@ public class Dungeon {
 
 
     private boolean createWorld(){
-        world = Bukkit.createWorld(new WorldCreator(namePrefix + "fewifjwefoio")
+        world = Bukkit.createWorld(new WorldCreator(namePrefix + UUID.randomUUID())
             .environment(World.Environment.NORMAL)
             .type(WorldType.NORMAL) //! FLAT creates errors in console. This is a Minecraft Vanilla bug
             .generator("VoidGenerator")
@@ -98,23 +97,37 @@ public class Dungeon {
         long start = System.currentTimeMillis();
 
 
-        // Inner walls
+
+        // Inner walls data
         int tileSize = 9;                                     // The size of each tile
-        int wallThickness = 8;                                // The thickness of the inner maze walls //TODO implement this
+        int wallThickness = 8;                                // The thickness of the inner maze walls
         int wallHeight = 5;                                   // The height of the inner maze walls
         int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 21;                                        // The width  of the maze expressed in tiles. Must be an odd number
-        GEN_Walls.start(world, Material.STONE, tileSize, wallThickness, wallHeight, xNum, zNum);
 
 
-        // Outer walls and floor
+        // Outer walls and floor data
         int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
         int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
         int floorThickness = 5;                               // The thickness of the floor
-        int outerWallsThickness = 5;                          // The thickness of the outer walls
+        int outerWallsThickness = Math.max(5, wallThickness); // The thickness of the outer walls
         int outerWallsHeight = 20;                            // The height of the outer walls
-        GEN_BoundingBox.startFloor(world, Material.DIRT, floorThickness, outerWallsThickness, x, z);
-        GEN_BoundingBox.startWalls(world, Material.BEDROCK, outerWallsThickness, outerWallsHeight, x, z);
+
+
+        int total_x = x + outerWallsThickness * 2;
+        int total_z = z + outerWallsThickness * 2;
+        RegionBuffer buffer = new RegionBuffer(
+            total_x,
+            outerWallsHeight + floorThickness,
+            total_z,
+            outerWallsThickness,
+            floorThickness,
+            outerWallsThickness
+        );
+        GEN_Walls.start(buffer, Material.STONE, tileSize, wallThickness, wallHeight, xNum, zNum);
+        GEN_BoundingBox.startFloor(buffer, Material.DIRT, floorThickness, outerWallsThickness, x, z);
+        GEN_BoundingBox.startWalls(buffer, Material.BEDROCK, outerWallsThickness, outerWallsHeight, x, z);
+        buffer.paste(world, -total_x / 2, 0, -total_z / 2);
 
 
         // Log generation time
