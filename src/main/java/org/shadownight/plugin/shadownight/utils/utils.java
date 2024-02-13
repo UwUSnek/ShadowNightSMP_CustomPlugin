@@ -104,17 +104,24 @@ public class utils {
     }
 
 
-
-
-
-
-
-
-
-    // Returns the time duration in a readable format
-    // e.g. 17d15h13m5s
+    /**
+     * Returns the time duration in a readable format (days, hours, minutes, seconds)
+     * @param s The time duration in seconds
+     * @param useSpaces True to include spaces in the formatted string. e.g. "17d 15h 13m 5s" instead of "17d15h13m5s"
+     * @return A string containing the formatted duration
+     */
     public static String sToDuration(Long s, boolean useSpaces) {
         return sToDuration(s, useSpaces ? " " : "");
+    }
+
+    /**
+     * Returns the time duration in a readable format (minutes, seconds, milliseconds)
+     * @param ms The time duration in seconds
+     * @param useSpaces True to include spaces in the formatted string. e.g. "13m 5s 591ms" instead of "13m5s591ms"
+     * @return A string containing the formatted duration
+     */
+    public static String msToDuration(Long ms, boolean useSpaces) {
+        return msToDuration(ms, useSpaces ? " " : "");
     }
 
     private static String sToDuration(Long s, String c) {
@@ -123,6 +130,14 @@ public class utils {
             (s >= 3600  ? (s / 3600  % 24 + "h" + c) : "") +
             (s >= 60    ? (s / 60    % 60 + "m" + c) : "") +
             s                        % 60 + "s"
+        ;
+    }
+
+    private static String msToDuration(Long m, String c) {
+        return
+            (m >= 60000 ? (m / 60000 % 60000 + "m" + c) : "") +
+            (m >= 1000  ? (m / 1000  % 1000  + "s" + c) : "") +
+            m                        % 1000  + "ms"
         ;
     }
 

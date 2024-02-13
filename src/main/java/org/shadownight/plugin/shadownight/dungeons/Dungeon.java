@@ -7,7 +7,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -18,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
+
+
 
 
 public class Dungeon {
@@ -48,13 +49,14 @@ public class Dungeon {
         generateDungeon();
     }
 
-
-    //    s = 9  (9x9 tiles)
-    //    t = 2  (1x2 walls)
-    //
-    //    ||·········||·········||·········||
-    //    ╰──╴s+t╶──╯  ╰──╴s╶──╯╰┴ t
-    //        11           9       3
+    /*
+        s = 9  (9x9 tiles)
+        t = 2  (9x2 walls)                             X
+                                                       ╎
+        ||·········||·········||·········||            │
+        ╰──╴s+t╶──╯  ╰──╴s╶──╯╰┴ t                     └───--- Z
+            11           9       3
+    */
 
     // FIXME test if this is still broken. it likely is
     private void placeTile(int x, int z, int s, int t) {
@@ -73,9 +75,10 @@ public class Dungeon {
     private void placeWall(Wall wall, int s, int t) {
         //if(wall.up) switch(wall.type) {
         int st = s + t;
+        v2i a = wall.a;
         switch(wall.type) {
-            case 'x': for (int i = wall.a.x * st; i < wall.b.x * st + t; ++i) world.getBlockAt(i, 0, wall.a.z * st + st).setType(Material.STONE); break;
-            case 'z': for (int i = wall.a.z * st; i < wall.b.z * st + t; ++i) world.getBlockAt(wall.a.x * st + st, 0, i).setType(Material.STONE); break;
+            case 'x': for (int i = a.x * st; i < a.x * st + st + t; ++i) world.getBlockAt(i, 0, a.z * st + st).setType(Material.STONE); break;
+            case 'z': for (int i = a.z * st; i < a.z * st + st + t; ++i) world.getBlockAt(a.x * st + st, 0, i).setType(Material.STONE); break;
         }
     }
 
@@ -83,7 +86,8 @@ public class Dungeon {
 
 
     private static class v2i {
-        int x, z;
+        int x;
+        int z;
         public v2i(int _x, int _z) {
             x = _x;
             z = _z;
@@ -106,7 +110,8 @@ public class Dungeon {
 
     private static class Wall {
         //boolean up = true;
-        v2i a, b;
+        v2i a;
+        v2i b;
         char type;
         public Wall(v2i _a, v2i _b, char _type) {
             a = _a;
@@ -117,6 +122,7 @@ public class Dungeon {
 
 
     public void generateDungeon(){
+        long start = System.currentTimeMillis();
         int tileSize = 3;  // The size of each tile
         int wallThickness = 1;
 
@@ -139,9 +145,9 @@ public class Dungeon {
         int vNum = x * z1; // Number of x-axis walls   │
         int hNum = x1 * z; // Number of z-axis walls  ───
         ArrayList<Wall> walls = new ArrayList<>(vNum + hNum);
-        for(int i = 0; i < x; ++i) for(int j = 0; j < z1; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i + 1, j), 'x'));
-        for(int i = 0; i < x1; ++i) for(int j = 0; j < z; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i, j + 1), 'z'));
-        //Collections.shuffle(walls);
+        for(int i = 0; i < x; ++i) for(int j = 0; j < z1; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i, j + 1), 'x'));
+        for(int i = 0; i < x1; ++i) for(int j = 0; j < z; ++j) walls.add(new Wall(new v2i(i, j), new v2i(i + 1, j), 'z'));
+        Collections.shuffle(walls);
 
 
         // Merge sets with Kruskal's Algorithm
@@ -165,6 +171,9 @@ public class Dungeon {
 
 
         //for(int i = 0; i < w; ++i) for(int j = 0; j < h; ++j) placeTile(i, j, tileSize, wallThickness);
+        // Log generation time
+        long duration = System.currentTimeMillis() - start;
+        utils.log(Level.INFO, "Dungeon generated in " + utils.msToDuration(duration, true));
     }
 
 
