@@ -8,9 +8,9 @@ import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.dungeons.generators.DeformWalls;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
-import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -133,6 +133,7 @@ public class Dungeon {
         GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, outerWallsHeight, floorThickness);
         GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness, ceilingThickness); // Must be 2nd in order to generate into the floor
         GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, outerWallsHeight, x, z); //TODO remove x and z parameters
+        DeformWalls.start           (buffer, materialWalls, floorThickness);
 
         float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
         SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);

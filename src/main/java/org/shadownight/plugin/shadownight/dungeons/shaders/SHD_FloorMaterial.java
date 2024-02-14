@@ -29,14 +29,14 @@ public class SHD_FloorMaterial extends Rnd {
 
 
     private static Material compute(int x, int y, int z, float wallDist, int floorThickness) {
-        double noiseSlab = PerlinNoise.perlinCalc(x, z, 12);
-        double noiseMoss = PerlinNoise.perlinCalc(x, z, 20);
+        double noiseSlab = PerlinNoise2D.compute(x, z, 12);
+        double noiseMoss = PerlinNoise2D.compute(x, z, 20);
         boolean isSlab = noiseSlab > 0.55 && noiseSlab < 0.65;
 
         if(y < floorThickness - 1) return Material.STONE_BRICKS;
         else {
             float r = rnd.nextFloat();
-            if (noiseMoss < 0.55 && noiseMoss > 0.4 && noiseMoss < r * 2) return patternMoss.get();
+            if (noiseMoss < 0.55 && noiseMoss > 0.4) return noiseMoss < r * 2 ? patternMoss.get() : Material.MOSSY_STONE_BRICKS;
             else if (wallDist < r) return isSlab ? patternFloorEdgesSlab.get() : patternFloorEdges.get();
             else                   return isSlab ? Material.STONE_BRICK_SLAB : patternFloor.get();
         }

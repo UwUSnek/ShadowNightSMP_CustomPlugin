@@ -16,7 +16,7 @@ public class SHD_FloorVegetation extends Rnd {
         Pair.with(1f, Material.FERN)
     );
     static private BlockPattern patternMushroom = new BlockPattern(
-        Pair.with(32f, Material.AIR),
+        Pair.with(64f, Material.AIR),
         Pair.with(4f, Material.BROWN_MUSHROOM),
         Pair.with(1f, Material.RED_MUSHROOM)
     );
