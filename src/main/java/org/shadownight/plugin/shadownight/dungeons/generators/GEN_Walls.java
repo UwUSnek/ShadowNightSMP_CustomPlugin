@@ -67,20 +67,20 @@ public class GEN_Walls {
      * @param t The thickness of the wall
      * @param h The height of the wall
      */
-    private static void placeWall(RegionBuffer buffer, Material material, Wall wall, int s, int t, int h, int floorThickness) {
+    private static void placeWall(RegionBuffer buffer, Material material, Wall wall, int s, int t, int h, int floorThickness, int ceilingThickness) {
         int st = s + t;
         v2i a = wall.a;
         switch(wall.type) {
             //                 Long side                                         Height                            Thickness
-            case 'x': for (int i = a.x * st - t; i < a.x * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) buffer.set(i, j, a.z * st + s + k, material); break;
-            case 'z': for (int i = a.z * st - t; i < a.z * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) buffer.set(a.x * st + s + k, j, i, material); break;
+            case 'x': for (int i = a.x * st - t; i < a.x * st + st; ++i) for(int j = -floorThickness; j < h + ceilingThickness; ++j) for(int k = 0; k < t; ++k) buffer.setShifted(i, j, a.z * st + s + k, material); break;
+            case 'z': for (int i = a.z * st - t; i < a.z * st + st; ++i) for(int j = -floorThickness; j < h + ceilingThickness; ++j) for(int k = 0; k < t; ++k) buffer.setShifted(a.x * st + s + k, j, i, material); break;
         }
     }
 
 
 
 
-    public static void start(RegionBuffer buffer, Material material, int tileSize, int wallThickness, int wallHeight, int x, int z, int floorThickness){
+    public static void start(RegionBuffer buffer, Material material, int tileSize, int wallThickness, int wallHeight, int x, int z, int floorThickness, int ceilingThickness){
         // Initialize tiles
         TreeNode[][] tiles = new TreeNode[x][z]; // Defaults to { parent: null }
         for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) tiles[i][j] = new TreeNode();
@@ -102,7 +102,7 @@ public class GEN_Walls {
             TreeNode aRoot = tiles[wall.a.x][wall.a.z].getRoot();
             TreeNode bRoot = tiles[wall.b.x][wall.b.z].getRoot();
             if (aRoot != bRoot) new TreeNode(aRoot, bRoot);
-            else placeWall(buffer, material, wall, tileSize, wallThickness, wallHeight, floorThickness);
+            else placeWall(buffer, material, wall, tileSize, wallThickness, wallHeight, floorThickness, ceilingThickness);
         }
     }
 }

@@ -32,7 +32,7 @@ public class SHD_FloorVegetation extends Rnd {
 
     public static void start(RegionBuffer buffer, float[][] wallDistanceGradient, int floorThickness) {
         for(int i = 0; i < buffer.x; ++i) for(int k = 0; k < buffer.z; ++k){
-            if(buffer.get(i, floorThickness, k) == Material.AIR) buffer.setNoShift(i, floorThickness, k, compute(buffer.get(i, floorThickness - 1, k), wallDistanceGradient[i][k]));
+            if(buffer.get(i, floorThickness, k) == Material.AIR) buffer.set(i, floorThickness, k, compute(buffer.get(i, floorThickness - 1, k), wallDistanceGradient[i][k]));
         }
     }
 }

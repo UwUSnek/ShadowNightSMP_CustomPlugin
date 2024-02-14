@@ -2,19 +2,9 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.type.Fence;
-import org.bukkit.block.data.type.Stairs;
 import org.javatuples.Pair;
 import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
-import org.shadownight.plugin.shadownight.utils.GetRandom;
 import org.shadownight.plugin.shadownight.utils.Rnd;
-import org.shadownight.plugin.shadownight.utils.utils;
-
-import java.util.Random;
-import java.util.logging.Level;
 
 
 public class SHD_FloorMaterial extends Rnd {
@@ -54,8 +44,8 @@ public class SHD_FloorMaterial extends Rnd {
 
 
     public static void start(RegionBuffer buffer, Material targetMaterial, float[][] wallDistanceGradient, int floorThickness) {
-        for(int i = 0; i < buffer.x; ++i) for(int j = 1; j < buffer.y; ++j) for(int k = 0; k < buffer.z; ++k){
-            if(buffer.get(i, j, k) == targetMaterial) buffer.setNoShift(i, j, k, compute(i, j, k, wallDistanceGradient[i][k], floorThickness));
+        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.y; ++j) for(int k = 0; k < buffer.z; ++k){
+            if(buffer.get(i, j, k) == targetMaterial) buffer.set(i, j, k, compute(i, j, k, wallDistanceGradient[i][k], floorThickness));
         }
     }
 }

@@ -107,7 +107,7 @@ public class Dungeon {
         int wallHeight = 20;                                  // The height of the inner maze walls
         int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
-        Material materialWalls = Material.STONE;              // Temporary material used for inner maze walls
+        Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
 
 
         // Outer walls and floor data
@@ -117,8 +117,8 @@ public class Dungeon {
         int ceilingThickness = 5;                             // The thickness of the ceiling
         int outerWallsThickness = 5;                          // The thickness of the outer walls
         int outerWallsHeight = 20;                            // The height of the outer walls
-        Material materialFloor = Material.DIRT;               // Temporary material used for the floor
-        Material materialCeiling = Material.BRICKS;           // Temporary material used for the ceiling
+        Material materialFloor = Material.LIGHT_GRAY_CONCRETE;// Temporary material used for the floor
+        Material materialCeiling = Material.ORANGE_CONCRETE;  // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
         floorThickness = Math.max(2, floorThickness);
 
@@ -131,7 +131,7 @@ public class Dungeon {
 
         GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
         GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, outerWallsHeight, floorThickness);
-        GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd to draw into the floor
+        GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness, ceilingThickness); // Must be 2nd in order to generate into the floor
         GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, outerWallsHeight, x, z); //TODO remove x and z parameters
 
         float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);

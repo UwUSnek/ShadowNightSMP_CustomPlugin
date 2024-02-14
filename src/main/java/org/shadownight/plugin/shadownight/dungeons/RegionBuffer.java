@@ -38,7 +38,7 @@ public class RegionBuffer {
 
 
 
-    public void set(int _x, int _y, int _z, Material material) {
+    public void setShifted(int _x, int _y, int _z, Material material) {
         try {
             b[_x + shift_x][_y + shift_y][_z + shift_z] = material;
         }
@@ -46,7 +46,7 @@ public class RegionBuffer {
             utils.log(Level.SEVERE, "Index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift (" + shift_x + ", " + shift_y + ", " + shift_z + ")");
         }
     }
-    public void setNoShift(int _x, int _y, int _z, Material material) {
+    public void set(int _x, int _y, int _z, Material material) {
         try {
             b[_x][_y][_z] = material;
         }
@@ -58,6 +58,9 @@ public class RegionBuffer {
     public Material get(int _x, int _y, int _z){
         return b[_x][_y][_z];
     }
+
+
+
 
     /**
      * Pastes the region at the given location, creating an additional bedrock box around it
