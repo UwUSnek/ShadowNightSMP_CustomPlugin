@@ -8,30 +8,24 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Fence;
 import org.bukkit.block.data.type.Stairs;
 import org.javatuples.Pair;
+import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.GetRandom;
+import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.util.Random;
 import java.util.logging.Level;
 
 
-public class SHD_FloorMaterial extends SHD_GeneratorShader {
-    float[][] wallDistanceGradient;
-    public SHD_FloorMaterial(Material _targetMaterial, float[][] _wallDistanceGradient) {
-        super(_targetMaterial);
-        wallDistanceGradient = _wallDistanceGradient;
-    }
-
-
-
-
-
-
-
-
+public class SHD_FloorMaterial extends Rnd {
     static BlockPattern patternMoss = new BlockPattern(
         Pair.with(2f, Material.MOSS_BLOCK),
         Pair.with(1f, Material.GRASS_BLOCK),
         Pair.with(1f, Material.MOSSY_COBBLESTONE)
+    );
+    static BlockPattern patternFloor = new BlockPattern(
+        Pair.with(8f, Material.STONE_BRICKS),
+        Pair.with(2f, Material.CRACKED_STONE_BRICKS)
     );
     static BlockPattern patternFloorEdges = new BlockPattern(
         Pair.with(8f, Material.MOSSY_STONE_BRICKS),
@@ -43,30 +37,25 @@ public class SHD_FloorMaterial extends SHD_GeneratorShader {
     );
 
 
-    @Override
-    public Material exec(int x, int y, int z) {
-        double noiseSlab = PerlinNoise.perlinCalc(x, z, 6);
+
+    private static Material compute(int x, int y, int z, float wallDist, int floorThickness) {
+        double noiseSlab = PerlinNoise.perlinCalc(x, z, 12);
         double noiseMoss = PerlinNoise.perlinCalc(x, z, 20);
-        double wallDist = wallDistanceGradient[x][z];
+        boolean isSlab = noiseSlab > 0.55 && noiseSlab < 0.65;
 
-        boolean isSlab = noiseSlab > 0.7;
-        /* //TODO create gradient class
-        //TODO BP_Random extends BP_Pattern
-        //TODO BP_Gradient extends BP_Pattern
-        if(n < 0.1) return Material.BLACK_CONCRETE;
-        else if(n < 0.2) return Material.POLISHED_BLACKSTONE_BRICKS;
-        else if(n < 0.3) return Material.CRACKED_DEEPSLATE_BRICKS;
-        else if(n < 0.4) return Material.DEEPSLATE;
-        else if(n < 0.6) return Material.CRACKED_STONE_BRICKS;
-        else if(n < 0.7) return Material.ANDESITE;
-        else if(n < 0.8) return Material.LIGHT_GRAY_CONCRETE_POWDER;
-        else  return Material.SMOOTH_STONE;
-        */
+        if(y < floorThickness - 1) return Material.STONE_BRICKS;
+        else {
+            float r = rnd.nextFloat();
+            if (noiseMoss < 0.55 && noiseMoss > 0.4 && noiseMoss < r * 2) return patternMoss.get();
+            else if (wallDist < r) return isSlab ? patternFloorEdgesSlab.get() : patternFloorEdges.get();
+            else                   return isSlab ? Material.STONE_BRICK_SLAB : patternFloor.get();
+        }
+    }
 
 
-        float r = rnd.nextFloat();
-        if(noiseMoss < 0.45 && noiseMoss > 0.3 && noiseMoss < r * 2) return patternMoss.get();
-        else if(wallDist < r) return isSlab ? patternFloorEdgesSlab.get() : patternFloorEdges.get();
-        else                  return isSlab ? Material.STONE_BRICK_SLAB   : GetRandom.block(Material.CRACKED_STONE_BRICKS, Material.STONE_BRICKS);
+    public static void start(RegionBuffer buffer, Material targetMaterial, float[][] wallDistanceGradient, int floorThickness) {
+        for(int i = 0; i < buffer.x; ++i) for(int j = 1; j < buffer.y; ++j) for(int k = 0; k < buffer.z; ++k){
+            if(buffer.get(i, j, k) == targetMaterial) buffer.setNoShift(i, j, k, compute(i, j, k, wallDistanceGradient[i][k], floorThickness));
+        }
     }
 }

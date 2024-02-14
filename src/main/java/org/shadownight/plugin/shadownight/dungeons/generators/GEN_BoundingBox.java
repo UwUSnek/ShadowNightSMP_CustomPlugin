@@ -9,10 +9,16 @@ import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
  * Generates the outer walls and the floor of a dungeon
  */
 public class GEN_BoundingBox {
-    public static void startFloor(RegionBuffer buffer, Material material, int thickness, int wt, int x, int z){
+    public static void startFloor(RegionBuffer buffer, Material material, int thickness){
         //      X                                 Z                                 Thickness
-        for(int i = -wt; i < x + wt; ++i) for(int j = -wt; j < z + wt; ++j) for(int k = -thickness; k < 0; ++k) {
-            buffer.set(i, k, j, material);
+        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.z; ++j) for(int k = 0; k < thickness; ++k) {
+            buffer.setNoShift(i, k, j, material);
+        }
+    }
+    public static void startCeiling(RegionBuffer buffer, Material material, int thickness, int wh){
+        //      X                                 Z                                 Thickness
+        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.z; ++j) for(int k = wh; k < wh + thickness; ++k) {
+            buffer.setNoShift(i, k, j, material);
         }
     }
 

@@ -12,6 +12,7 @@ import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
 import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
@@ -112,30 +113,30 @@ public class Dungeon {
         int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
         int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
         int floorThickness = 5;                               // The thickness of the floor
+        int ceilingThickness = 5;                             // The thickness of the ceiling
         int outerWallsThickness = 5;                          // The thickness of the outer walls
         int outerWallsHeight = 20;                            // The height of the outer walls
         Material materialOuterWalls = Material.BEDROCK;       // Temporary material used for outer walls
         Material materialFloor = Material.DIRT;               // Temporary material used for the floor
+        Material materialCeiling = Material.BRICKS;           // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
         floorThickness = Math.max(2, floorThickness);
 
 
         // Actually generate the dungeon
         int total_x = x + outerWallsThickness * 2;
-        int total_y = outerWallsHeight + floorThickness;
+        int total_y = outerWallsHeight + floorThickness + ceilingThickness;
         int total_z = z + outerWallsThickness * 2;
         RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
-        GEN_BoundingBox.startFloor(buffer, materialFloor, floorThickness, outerWallsThickness, x, z);
-        GEN_Walls.start(buffer, materialWalls, tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd to draw into the floor
-        GEN_BoundingBox.startWalls(buffer, materialOuterWalls, outerWallsThickness, outerWallsHeight, x, z);
+        GEN_BoundingBox.startFloor  (buffer, materialFloor,      floorThickness);
+        GEN_BoundingBox.startCeiling(buffer, materialFloor,      ceilingThickness, outerWallsHeight);
+        GEN_Walls.start             (buffer, materialWalls,      tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd to draw into the floor
+        GEN_BoundingBox.startWalls  (buffer, materialOuterWalls, outerWallsThickness, outerWallsHeight, x, z); //TODO remove x and z parameters
 
         float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, materialOuterWalls);
-        //GUI.main();
-        PerlinNoise.setSeed(0);
-        buffer.applyShaders(
-            new SHD_FloorMaterial(materialFloor, wallDistanceGradient)
-        );
+        SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
+        SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
         buffer.paste(world, -total_x / 2, 0, -total_z / 2);
 
 

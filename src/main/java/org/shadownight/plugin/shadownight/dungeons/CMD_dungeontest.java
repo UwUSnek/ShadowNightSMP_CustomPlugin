@@ -19,7 +19,7 @@ public class CMD_dungeontest implements CommandExecutor {
         Dungeon newDungeon = new Dungeon();
 
         activeDungeons.add(newDungeon);
-        player.teleport(newDungeon.world.getSpawnLocation());
+        player.teleport(new org.bukkit.util.Vector(0, 10, 0).toLocation(newDungeon.world));
         player.setWalkSpeed(1f); //TODO Reset on leave
 
         return true;

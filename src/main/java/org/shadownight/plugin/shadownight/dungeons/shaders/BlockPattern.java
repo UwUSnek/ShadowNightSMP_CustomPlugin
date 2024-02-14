@@ -2,6 +2,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Material;
 import org.javatuples.Pair;
+import org.shadownight.plugin.shadownight.utils.Rnd;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,8 +16,7 @@ import java.util.Random;
  *
  * Creating new instances every time is inefficient. Save the instances outside of loops or use static members.
  */
-public class BlockPattern {
-    private final Random rnd = new Random();
+public class BlockPattern extends Rnd {
     private final ArrayList<Pair<Float, Material>> w = new ArrayList<>();
 
 
