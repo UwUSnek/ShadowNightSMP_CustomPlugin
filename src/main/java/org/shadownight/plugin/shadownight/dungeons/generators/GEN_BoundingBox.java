@@ -15,9 +15,9 @@ public class GEN_BoundingBox {
             buffer.setNoShift(i, k, j, material);
         }
     }
-    public static void startCeiling(RegionBuffer buffer, Material material, int thickness, int wh){
+    public static void startCeiling(RegionBuffer buffer, Material material, int thickness, int wh, int floorThickness){
         //      X                                 Z                                 Thickness
-        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.z; ++j) for(int k = wh; k < wh + thickness; ++k) {
+        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.z; ++j) for(int k = wh + floorThickness; k < wh + floorThickness + thickness; ++k) {
             buffer.setNoShift(i, k, j, material);
         }
     }

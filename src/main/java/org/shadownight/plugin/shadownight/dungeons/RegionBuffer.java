@@ -59,9 +59,32 @@ public class RegionBuffer {
         return b[_x][_y][_z];
     }
 
+    /**
+     * Pastes the region at the given location, creating an additional bedrock box around it
+     * @param world The world to paste the region in
+     * @param _x The x coordinate of the origin
+     * @param _y The y coordinate of the origin
+     * @param _z The z coordinate of the origin
+     */
     public void paste(World world, int _x, int _y, int _z) {
+        // Main region
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
             world.getBlockAt(_x + i, _y + j, _z + k).setType(b[i][j][k]);
+        }
+        // X-Y vertical plane (bedrock box side)
+        for(int i = -1; i < x + 1; ++i) for(int j = -1; j < y + 1; ++j) {
+            world.getBlockAt(_x + i, _y + j, _z - 1).setType(Material.BEDROCK);
+            world.getBlockAt(_x + i, _y + j, _z + x).setType(Material.BEDROCK);
+        }
+        // Z-Y vertical plane (bedrock box side)
+        for(int i = 0; i < z; ++i) for(int j = -1; j < y + 1; ++j) {
+            world.getBlockAt(_x - 1, _y + j, _z + i).setType(Material.BEDROCK);
+            world.getBlockAt(_x + x, _y + j, _z + i).setType(Material.BEDROCK);
+        }
+        // X-Z horizontal plane (bedrock box side)
+        for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) {
+            world.getBlockAt(_x + i, _y - 1, _z + j).setType(Material.BEDROCK);
+            world.getBlockAt(_x + i, _y + y, _z + j).setType(Material.BEDROCK);
         }
     }
 }

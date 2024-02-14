@@ -98,6 +98,7 @@ public class Dungeon {
 
     public void generateDungeon() {
         long start = System.currentTimeMillis();
+        int padding = 50; // Safety padding for out of bound blocks created by deform shaders
 
 
         // Inner walls data
@@ -116,7 +117,6 @@ public class Dungeon {
         int ceilingThickness = 5;                             // The thickness of the ceiling
         int outerWallsThickness = 5;                          // The thickness of the outer walls
         int outerWallsHeight = 20;                            // The height of the outer walls
-        Material materialOuterWalls = Material.BEDROCK;       // Temporary material used for outer walls
         Material materialFloor = Material.DIRT;               // Temporary material used for the floor
         Material materialCeiling = Material.BRICKS;           // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
@@ -129,12 +129,12 @@ public class Dungeon {
         int total_z = z + outerWallsThickness * 2;
         RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
-        GEN_BoundingBox.startFloor  (buffer, materialFloor,      floorThickness);
-        GEN_BoundingBox.startCeiling(buffer, materialCeiling,    ceilingThickness, outerWallsHeight);
-        GEN_Walls.start             (buffer, materialWalls,      tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd to draw into the floor
-        GEN_BoundingBox.startWalls  (buffer, materialOuterWalls, outerWallsThickness, outerWallsHeight, x, z); //TODO remove x and z parameters
+        GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
+        GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, outerWallsHeight, floorThickness);
+        GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd to draw into the floor
+        GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, outerWallsHeight, x, z); //TODO remove x and z parameters
 
-        float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, materialOuterWalls);
+        float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
         SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
         SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
         buffer.paste(world, -total_x / 2, 0, -total_z / 2);
@@ -146,7 +146,7 @@ public class Dungeon {
     }
 
 
-    private static float[][] createWallDistanceGradient(RegionBuffer b, int y, int tileSize, Material m, Material m2) {
+    private static float[][] createWallDistanceGradient(RegionBuffer b, int y, int tileSize, Material m) {
         float[][] gradient = new float[b.x][b.z];
         int halfSize = tileSize / 2;
         for(int i = 0; i < b.x; ++i) for(int j = 0;  j < b.z; ++j) {
@@ -154,10 +154,10 @@ public class Dungeon {
             try {
                 while (
                     k < halfSize &&
-                    b.get(i + k, y, j + k) != m && b.get(i + k, y, j + k) != m2 &&
-                    b.get(i + k, y, j - k) != m && b.get(i + k, y, j - k) != m2 &&
-                    b.get(i - k, y, j + k) != m && b.get(i - k, y, j + k) != m2 &&
-                    b.get(i - k, y, j - k) != m && b.get(i - k, y, j - k) != m2
+                    b.get(i + k, y, j + k) != m &&
+                    b.get(i + k, y, j - k) != m &&
+                    b.get(i - k, y, j + k) != m &&
+                    b.get(i - k, y, j - k) != m
                 ) ++k;
                 gradient[i][j] = (float) k / halfSize;
             }
