@@ -10,12 +10,12 @@ import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
 public class SHD_FloorVegetation extends Rnd {
-    static private BlockPattern patternGrass = new BlockPattern(
+    static private final BlockPattern patternGrass = new BlockPattern(
         Pair.with(2f, Material.AIR),
         Pair.with(2f, Material.SHORT_GRASS),
         Pair.with(1f, Material.FERN)
     );
-    static private BlockPattern patternMushroom = new BlockPattern(
+    static private final BlockPattern patternMushroom = new BlockPattern(
         Pair.with(64f, Material.AIR),
         Pair.with(4f, Material.BROWN_MUSHROOM),
         Pair.with(1f, Material.RED_MUSHROOM)

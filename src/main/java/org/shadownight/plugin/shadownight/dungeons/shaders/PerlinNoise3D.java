@@ -48,9 +48,8 @@ public class PerlinNoise3D {
      */
     public static void setSeed(long seed) {
         // convert hash table to list (allows for shuffling)
-        ArrayList<Integer> permutationList = new ArrayList<Integer>();
-        for (int i = 0; i < permutation.length; i++)
-            permutationList.add(permutation[i]);
+        ArrayList<Integer> permutationList = new ArrayList<>();
+        for (int j : permutation) permutationList.add(j);
 
         Collections.shuffle(permutationList, new Random(seed));
 
@@ -75,9 +74,6 @@ public class PerlinNoise3D {
         Vector3i[] unitSquare = getSquareCoords(x, y, z);
         double[] dotProds = new double[8];  // stores each gradiant • distance val
 
-
-        // i think my discord isnt working
-        // same
 
 
 
@@ -106,7 +102,6 @@ public class PerlinNoise3D {
 
         return (vert + 1) / 2; // Shift from output range of [-1, 1] to [0, 1]
     }
-
 
     /**
      * Determine the coordinates of the 4 corners of a given point's unit square
@@ -151,7 +146,6 @@ public class PerlinNoise3D {
 
     /***
      * Hashing function based on the function given in
-     * https://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/perlin-noise-part-2,
      * which is based on Ken Perlin's original.
      * @param x x-coordinate of point to generate hash for
      * @param y y-coordinate of point to generate hash for

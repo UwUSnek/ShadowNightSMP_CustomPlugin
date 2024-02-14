@@ -8,20 +8,20 @@ import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
 public class SHD_FloorMaterial extends Rnd {
-    static BlockPattern patternMoss = new BlockPattern(
+    static final BlockPattern patternMoss = new BlockPattern(
         Pair.with(2f, Material.MOSS_BLOCK),
         Pair.with(1f, Material.GRASS_BLOCK),
         Pair.with(1f, Material.MOSSY_COBBLESTONE)
     );
-    static BlockPattern patternFloor = new BlockPattern(
+    static final BlockPattern patternFloor = new BlockPattern(
         Pair.with(8f, Material.STONE_BRICKS),
         Pair.with(2f, Material.CRACKED_STONE_BRICKS)
     );
-    static BlockPattern patternFloorEdges = new BlockPattern(
+    static final BlockPattern patternFloorEdges = new BlockPattern(
         Pair.with(8f, Material.MOSSY_STONE_BRICKS),
         Pair.with(2f, Material.CRACKED_STONE_BRICKS)
     );
-    static BlockPattern patternFloorEdgesSlab = new BlockPattern(
+    static final BlockPattern patternFloorEdgesSlab = new BlockPattern(
         Pair.with(8f, Material.MOSSY_STONE_BRICK_SLAB),
         Pair.with(2f, Material.STONE_BRICK_SLAB)
     );

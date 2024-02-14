@@ -98,8 +98,6 @@ public class Dungeon {
 
     public void generateDungeon() {
         long start = System.currentTimeMillis();
-        int padding = 50; // Safety padding for out of bound blocks created by deform shaders
-
 
         // Inner walls data
         int tileSize = 11;                                    // The size of each tile

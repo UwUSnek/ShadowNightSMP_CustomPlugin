@@ -5,15 +5,11 @@ import org.javatuples.Pair;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-
 
 
 /**
  * A class that can represent a block pattern using Materials and weight values.
  * Blocks can be generated from an instance using the get() method.
- *
  * Creating new instances every time is inefficient. Save the instances outside of loops or use static members.
  */
 public class BlockPattern extends Rnd {
@@ -27,14 +23,14 @@ public class BlockPattern extends Rnd {
     @SafeVarargs
     public BlockPattern(Pair<Float, Material>... blocks) {
         float tot = 0f;
-        for(int i = 0; i < blocks.length; ++i) {
-            tot += blocks[i].getValue0();
+        for (Pair<Float, Material> block : blocks) {
+            tot += block.getValue0();
         }
 
         float prev = 0;
-        for(int i = 0; i < blocks.length; ++i) {
-            float n = blocks[i].getValue0() / tot;
-            w.add(Pair.with(n + prev, blocks[i].getValue1()));
+        for (Pair<Float, Material> block : blocks) {
+            float n = block.getValue0() / tot;
+            w.add(Pair.with(n + prev, block.getValue1()));
             prev += n;
         }
     }

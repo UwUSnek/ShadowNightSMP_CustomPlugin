@@ -48,9 +48,8 @@ public class PerlinNoise2D {
      */
     public static void setSeed(long seed) {
         // convert hash table to list (allows for shuffling)
-        ArrayList<Integer> permutationList = new ArrayList<Integer>();
-        for (int i = 0; i < permutation.length; i++)
-            permutationList.add(permutation[i]);
+        ArrayList<Integer> permutationList = new ArrayList<>();
+        for (int j : permutation) permutationList.add(j);
 
         Collections.shuffle(permutationList, new Random(seed));
 
@@ -136,7 +135,6 @@ public class PerlinNoise2D {
 
     /***
      * Hashing function based on the function given in
-     * https://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/perlin-noise-part-2,
      * which is based on Ken Perlin's original.
      * @param x x-coordinate of point to generate hash for
      * @param y y-coordinate of point to generate hash for
