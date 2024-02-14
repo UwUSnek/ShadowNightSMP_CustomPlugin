@@ -130,7 +130,7 @@ public class Dungeon {
         RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
         GEN_BoundingBox.startFloor  (buffer, materialFloor,      floorThickness);
-        GEN_BoundingBox.startCeiling(buffer, materialFloor,      ceilingThickness, outerWallsHeight);
+        GEN_BoundingBox.startCeiling(buffer, materialCeiling,    ceilingThickness, outerWallsHeight);
         GEN_Walls.start             (buffer, materialWalls,      tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd to draw into the floor
         GEN_BoundingBox.startWalls  (buffer, materialOuterWalls, outerWallsThickness, outerWallsHeight, x, z); //TODO remove x and z parameters
 
