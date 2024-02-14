@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
+import org.shadownight.plugin.shadownight.dungeons.shaders.GUI;
+import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_GeneratorShader;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -100,11 +102,11 @@ public class Dungeon {
 
 
         // Inner walls data
-        int tileSize = 9;                                     // The size of each tile
-        int wallThickness = 8;                                // The thickness of the inner maze walls
+        int tileSize = 11;                                    // The size of each tile
+        int wallThickness = 7;                                // The thickness of the inner maze walls
         int wallHeight = 20;                                  // The height of the inner maze walls
         int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
-        int zNum = 21;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
         Material materialWalls = Material.STONE;              // Temporary material used for inner maze walls
 
 
@@ -117,6 +119,7 @@ public class Dungeon {
         Material materialOuterWalls = Material.BEDROCK;       // Temporary material used for outer walls
         Material materialFloor = Material.DIRT;               // Temporary material used for the floor
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
+        floorThickness = Math.max(2, floorThickness);
 
 
         // Actually generate the dungeon
@@ -125,11 +128,13 @@ public class Dungeon {
         int total_z = z + outerWallsThickness * 2;
         RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
-        GEN_Walls.start(buffer, materialWalls, tileSize, wallThickness, wallHeight, xNum, zNum);
         GEN_BoundingBox.startFloor(buffer, materialFloor, floorThickness, outerWallsThickness, x, z);
+        GEN_Walls.start(buffer, materialWalls, tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd to draw into the floor
         GEN_BoundingBox.startWalls(buffer, materialOuterWalls, outerWallsThickness, outerWallsHeight, x, z);
 
         float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, materialOuterWalls);
+        //GUI.main();
+        PerlinNoise.setSeed(0);
         buffer.applyShaders(
             new SHD_FloorMaterial(materialFloor, wallDistanceGradient)
         );
@@ -155,18 +160,10 @@ public class Dungeon {
                     b.get(i - k, y, j + k) != m && b.get(i - k, y, j + k) != m2 &&
                     b.get(i - k, y, j - k) != m && b.get(i - k, y, j - k) != m2
                 ) ++k;
-                utils.log(Level.WARNING, "(" + b.get(i + k, y, j + k).name() + ")");
-                utils.log(Level.WARNING, "(" + b.get(i + k, y, j - k).name() + ")");
-                utils.log(Level.WARNING, "(" + b.get(i - k, y, j + k).name() + ")");
-                utils.log(Level.WARNING, "(" + b.get(i - k, y, j - k).name() + ")");
                 gradient[i][j] = (float) k / halfSize;
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 utils.log(Level.SEVERE, "Gradient creation failed: Received index (" + i + ", " + j + ") with k = " + k + " and buffer size (" + b.x + ", " + b.z + ")");
-                utils.log(Level.SEVERE, "(" + (i + k) + ", " + (j + k) + ")");
-                utils.log(Level.SEVERE, "(" + (i + k) + ", " + (j - k) + ")");
-                utils.log(Level.SEVERE, "(" + (i - k) + ", " + (j + k) + ")");
-                utils.log(Level.SEVERE, "(" + (i - k) + ", " + (j - k) + ")");
             }
         }
         return gradient;
