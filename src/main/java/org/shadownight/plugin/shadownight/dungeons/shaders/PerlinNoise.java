@@ -77,7 +77,9 @@ public class PerlinNoise {
      * @param y y-coordinate to generate noise value for
      * @return double value in range [0.0, 1.0] for that point
      */
-    public static double perlinCalc(double x, double y) {
+    public static double perlinCalc(double x, double y, int gridSize) {
+        x /= gridSize;
+        y /= gridSize;
         ///////////////////////////////////////////////////////////////
         // CALCULATE DOT PRODUCT BETWEEN GRADIANT & DISTANCE VECTORS //
         ///////////////////////////////////////////////////////////////

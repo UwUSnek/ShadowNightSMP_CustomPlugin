@@ -10,10 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
-import org.shadownight.plugin.shadownight.dungeons.shaders.GUI;
 import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
-import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_GeneratorShader;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;

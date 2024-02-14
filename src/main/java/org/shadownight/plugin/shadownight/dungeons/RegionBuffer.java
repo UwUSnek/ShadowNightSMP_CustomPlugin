@@ -41,7 +41,7 @@ public class RegionBuffer {
     public void applyShaders(SHD_GeneratorShader... shaders) {
         for(int i = 0; i < x; ++i) for(int j = 1; j < y; ++j) for(int k = 0; k < z; ++k){
             for(SHD_GeneratorShader shader : shaders) {
-                if(shader.targetMaterial == b[i][j][k]) b[i][j][k] = shader.exec(i, j, k, 10);
+                if(shader.targetMaterial == b[i][j][k]) b[i][j][k] = shader.exec(i, j, k);
             }
         }
     }

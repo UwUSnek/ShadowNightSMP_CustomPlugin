@@ -13,5 +13,5 @@ public abstract class SHD_GeneratorShader {
     public SHD_GeneratorShader(Material _targetMaterial) {
         targetMaterial = _targetMaterial;
     }
-    public abstract Material exec(int x, int y, int z, int gridSize);
+    public abstract Material exec(int x, int y, int z);
 }

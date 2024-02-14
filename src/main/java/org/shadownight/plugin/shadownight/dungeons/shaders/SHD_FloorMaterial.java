@@ -7,6 +7,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Fence;
 import org.bukkit.block.data.type.Stairs;
+import org.javatuples.Pair;
+import org.shadownight.plugin.shadownight.utils.GetRandom;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.logging.Level;
@@ -19,12 +21,38 @@ public class SHD_FloorMaterial extends SHD_GeneratorShader {
         wallDistanceGradient = _wallDistanceGradient;
     }
 
+
+
+
+
+
+
+
+    static BlockPattern patternMoss = new BlockPattern(
+        Pair.with(2f, Material.MOSS_BLOCK),
+        Pair.with(1f, Material.GRASS_BLOCK),
+        Pair.with(1f, Material.MOSSY_COBBLESTONE)
+    );
+    static BlockPattern patternFloorEdges = new BlockPattern(
+        Pair.with(8f, Material.MOSSY_STONE_BRICKS),
+        Pair.with(2f, Material.CRACKED_STONE_BRICKS)
+    );
+    static BlockPattern patternFloorEdgesSlab = new BlockPattern(
+        Pair.with(8f, Material.MOSSY_STONE_BRICK_SLAB),
+        Pair.with(2f, Material.STONE_BRICK_SLAB)
+    );
+
+
     @Override
-    public Material exec(int x, int y, int z, int gridSize) {
-        double noise = PerlinNoise.perlinCalc((float) x / gridSize, (float) z / gridSize);
-        double noise2 = PerlinNoise.perlinCalc((float) x / (gridSize * 2), (float) z / (gridSize * 2));
-        double dist = wallDistanceGradient[x][z];
-        /*
+    public Material exec(int x, int y, int z) {
+        double noiseSlab = PerlinNoise.perlinCalc(x, z, 6);
+        double noiseMoss = PerlinNoise.perlinCalc(x, z, 20);
+        double wallDist = wallDistanceGradient[x][z];
+
+        boolean isSlab = noiseSlab > 0.7;
+        /* //TODO create gradient class
+        //TODO BP_Random extends BP_Pattern
+        //TODO BP_Gradient extends BP_Pattern
         if(n < 0.1) return Material.BLACK_CONCRETE;
         else if(n < 0.2) return Material.POLISHED_BLACKSTONE_BRICKS;
         else if(n < 0.3) return Material.CRACKED_DEEPSLATE_BRICKS;
@@ -35,12 +63,10 @@ public class SHD_FloorMaterial extends SHD_GeneratorShader {
         else  return Material.SMOOTH_STONE;
         */
 
+
         float r = rnd.nextFloat();
-        if(noise2 < 0.6 && 1 - dist > r / 4) return r > 0.2 ? Material.MOSS_BLOCK : Material.GRASS_BLOCK;
-        else if(dist < r) {
-            if (r < 0.66) return noise < 0.7 ? Material.MOSSY_STONE_BRICKS   : Material.MOSSY_STONE_BRICK_SLAB;
-            else          return noise < 0.7 ? Material.CRACKED_STONE_BRICKS : Material.STONE_BRICK_SLAB;
-        }
-        else return noise < 0.7 ? Material.STONE_BRICKS : Material.STONE_BRICK_SLAB;
+        if(noiseMoss < 0.45 && noiseMoss > 0.3 && noiseMoss < r * 2) return patternMoss.get();
+        else if(wallDist < r) return isSlab ? patternFloorEdgesSlab.get() : patternFloorEdges.get();
+        else                  return isSlab ? Material.STONE_BRICK_SLAB   : GetRandom.block(Material.CRACKED_STONE_BRICKS, Material.STONE_BRICKS);
     }
 }
