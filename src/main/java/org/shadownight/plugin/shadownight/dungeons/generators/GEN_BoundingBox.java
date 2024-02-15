@@ -23,9 +23,9 @@ public class GEN_BoundingBox {
     }
 
 
-    public static void startWalls(RegionBuffer buffer, Material material, int t, int height, int x, int z){
+    public static void startWalls(RegionBuffer buffer, Material material, int t, int height, int x, int z, int floorThickness){
         //      X                               Height                          Thickness
-        for(int i = -t; i < x + t; ++i) for(int j = 0; j < height; ++j) for(int k = 1; k < t + 1; ++k) {
+        for(int i = -t; i < x + t; ++i) for(int j = -floorThickness; j < height; ++j) for(int k = 1; k < t + 1; ++k) {
             buffer.setShifted(i, j,        -k, material);
             buffer.setShifted(i, j, z + k - 1, material);
         }

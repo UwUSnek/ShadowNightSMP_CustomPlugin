@@ -2,6 +2,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
 import org.bukkit.Material;
+import org.javatuples.Pair;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 
 import java.util.ArrayList;
@@ -9,15 +10,18 @@ import java.util.Arrays;
 
 
 public class BlockGradient extends Rnd {
-    private final ArrayList<Material> w;
+    private final ArrayList<Material> w = new ArrayList<>();
 
 
     /**
      * Create the block gradient
      * @param blocks A list of tuples each containing the weight and the block of a given Material
      */
-    public BlockGradient(Material... blocks) {
-        w = new ArrayList<>(Arrays.asList(blocks));
+    @SafeVarargs
+    public BlockGradient(Pair<Integer, Material>... blocks) {
+        for(Pair<Integer, Material> block : blocks) {
+            for(int i = 0; i < block.getValue0(); ++i) w.add(block.getValue1());
+        }
     }
 
 

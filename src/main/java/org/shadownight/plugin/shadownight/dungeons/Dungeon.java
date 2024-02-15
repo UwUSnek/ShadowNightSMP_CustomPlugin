@@ -137,14 +137,14 @@ public class Dungeon {
 
         GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
         GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, wallHeight, floorThickness);
-        GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness, ceilingThickness); // Must be 2nd in order to generate into the floor
-        GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z); //TODO remove x and z parameters
-        GEN_WallsDeform.start           (buffer, materialWalls, floorThickness, wallHeight);
+        GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
+        GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z, floorThickness); //TODO remove x and z parameters
+        GEN_WallsDeform.start       (buffer, materialWalls, floorThickness, wallHeight);
 
-        float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
-        SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
-        SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
-        SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
+        //float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
+        //SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
+        //SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
+        //SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight);
         buffer.paste(world, -total_x / 2, 0, -total_z / 2);
 
 

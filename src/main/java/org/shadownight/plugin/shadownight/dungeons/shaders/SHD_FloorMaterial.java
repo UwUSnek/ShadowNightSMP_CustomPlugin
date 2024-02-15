@@ -44,7 +44,7 @@ public class SHD_FloorMaterial extends Rnd {
 
 
     public static void start(RegionBuffer buffer, Material targetMaterial, float[][] wallDistanceGradient, int floorThickness) {
-        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.y; ++j) for(int k = 0; k < buffer.z; ++k){
+        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < floorThickness; ++j) for(int k = 0; k < buffer.z; ++k){
             if(buffer.get(i, j, k) == targetMaterial) buffer.set(i, j, k, compute(i, j, k, wallDistanceGradient[i][k], floorThickness));
         }
     }
