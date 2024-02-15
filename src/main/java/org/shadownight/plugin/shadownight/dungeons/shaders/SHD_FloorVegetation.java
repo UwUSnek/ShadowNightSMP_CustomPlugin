@@ -3,7 +3,8 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Material;
 import org.javatuples.Pair;
-import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
+import org.shadownight.plugin.shadownight.dungeons.utils.BlockPattern;
+import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 
 

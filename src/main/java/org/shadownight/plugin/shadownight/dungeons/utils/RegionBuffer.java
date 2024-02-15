@@ -1,4 +1,4 @@
-package org.shadownight.plugin.shadownight.dungeons;
+package org.shadownight.plugin.shadownight.dungeons.utils;
 
 
 import org.bukkit.Material;

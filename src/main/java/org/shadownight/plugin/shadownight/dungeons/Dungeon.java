@@ -11,10 +11,8 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_WallsDeform;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
-import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise3D;
-import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
-import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
-import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_WallMaterial;
+import org.shadownight.plugin.shadownight.dungeons.utils.PerlinNoise;
+import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
@@ -135,16 +133,16 @@ public class Dungeon {
         int total_z = z + outerWallsThickness * 2;
         RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
-        GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
-        GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, wallHeight, floorThickness);
-        GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
-        GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z, floorThickness); //TODO remove x and z parameters
-        GEN_WallsDeform.start       (buffer, materialWalls, floorThickness, wallHeight);
+        PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
+        PerlinNoise.resetSeed(); GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, wallHeight, floorThickness);
+        PerlinNoise.resetSeed(); GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
+        PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z, floorThickness); //TODO remove x and z parameters
+        PerlinNoise.resetSeed(); GEN_WallsDeform.start       (buffer, materialWalls, floorThickness, wallHeight);
 
         //float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
-        //SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
-        //SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
-        //SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight);
+        //PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
+        //PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
+        //PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight);
         buffer.paste(world, -total_x / 2, 0, -total_z / 2);
 
 

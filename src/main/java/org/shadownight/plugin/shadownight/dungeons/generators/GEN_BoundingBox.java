@@ -2,7 +2,7 @@ package org.shadownight.plugin.shadownight.dungeons.generators;
 
 
 import org.bukkit.Material;
-import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
+import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
 
 
 /**

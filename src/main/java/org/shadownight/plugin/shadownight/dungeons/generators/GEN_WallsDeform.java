@@ -1,8 +1,8 @@
 package org.shadownight.plugin.shadownight.dungeons.generators;
 
 import org.bukkit.Material;
-import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
-import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise3D;
+import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
+import org.shadownight.plugin.shadownight.dungeons.utils.PerlinNoise3D;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 
