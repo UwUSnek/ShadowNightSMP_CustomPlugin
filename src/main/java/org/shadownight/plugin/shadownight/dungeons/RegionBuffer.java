@@ -70,10 +70,6 @@ public class RegionBuffer {
      * @param _z The z coordinate of the origin
      */
     public void paste(World world, int _x, int _y, int _z) {
-        // Main region
-        for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
-            world.getBlockAt(_x + i, _y + j, _z + k).setType(b[i][j][k]);
-        }
         // X-Y vertical plane (bedrock box side)
         for(int i = -1; i < x + 1; ++i) for(int j = -1; j < y + 1; ++j) {
             world.getBlockAt(_x + i, _y + j, _z - 1).setType(Material.BEDROCK, false);
@@ -88,6 +84,13 @@ public class RegionBuffer {
         for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) {
             world.getBlockAt(_x + i, _y - 1, _z + j).setType(Material.BEDROCK, false);
             world.getBlockAt(_x + i, _y + y, _z + j).setType(Material.BEDROCK, false);
+        }
+
+        // Main region
+        // IMPORTANT: This must be placed last as mushrooms require a low skylight level which the bedrock box provides
+        //            Placing them first will cause most of them to drop as an item
+        for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
+            world.getBlockAt(_x + i, _y + j, _z + k).setType(b[i][j][k]);
         }
     }
 }

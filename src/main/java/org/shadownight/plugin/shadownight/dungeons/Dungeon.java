@@ -93,7 +93,7 @@ public class Dungeon {
             world.setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, 101);
 
             // World settings
-            world.setTime(13000); // Set to night to prevent mushrooms from dropping before the ceiling gets pasted
+            world.setTime(13000); // Night
             world.setClearWeatherDuration(2147483647);
             world.setDifficulty(Difficulty.HARD);
             world.setHardcore(false);
