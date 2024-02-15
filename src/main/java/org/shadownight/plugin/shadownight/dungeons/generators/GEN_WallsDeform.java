@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.dungeons.generators;
 import org.bukkit.Material;
 import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
 import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise3D;
+import org.shadownight.plugin.shadownight.utils.utils;
 
 
 public class GEN_WallsDeform {
@@ -16,8 +17,9 @@ public class GEN_WallsDeform {
                 int shiftZ = (buffer.get(i, j, k + 1) == Material.AIR ? -1 : 0) + (buffer.get(i, j, k - 1) == Material.AIR ? 1 : 0);
 
                 if(shiftX != 0 || shiftZ != 0) {
-                    double noise = PerlinNoise3D.compute(i, j, k, 8);                           // The default perlin noise
-                    int scaledNoise = (int) (noise * 4 * ((float) (j - floorThickness) / h));   // The number of blocks that have to be removed
+                    double noise1 = PerlinNoise3D.compute(i, j, k, 32); // Base layer noise
+                    double noise2 = PerlinNoise3D.compute(i, j, k, 6); // Fine layer noise
+                    int scaledNoise = Math.max(0, (int) (Math.sqrt(utils.linearInt(0.5, noise1, noise2) * 16 * ((float) (j - floorThickness) / h)) - 0.5)); // The number of blocks that have to be removed
 
                     if (shiftX != 0) {
                         int target = i + shiftX * scaledNoise; // The block in the current axis that the wall has to be carved until
@@ -25,7 +27,7 @@ public class GEN_WallsDeform {
                             tmp[Math.max(0, Math.min(l, buffer.x - 1))][j][k] = true;
                         }
                     }
-                    else {
+                    if (shiftZ != 0) {
                         int target = k + shiftZ * scaledNoise; // The block in the current axis that the wall has to be carved until
                         for (int l = k; l != target; l += shiftZ) {
                             tmp[i][j][Math.max(0, Math.min(l, buffer.z - 1))] = true;
