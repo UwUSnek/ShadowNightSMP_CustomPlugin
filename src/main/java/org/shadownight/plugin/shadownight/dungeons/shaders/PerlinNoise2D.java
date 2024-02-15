@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.joml.Vector2d;
 import org.joml.Vector2i;
+import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,24 +41,6 @@ public class PerlinNoise2D {
         61,156,180 };
 
 
-    /**
-     * Changes hash table from Ken Perlin's default to a shuffled form of it,
-     * allowing for many different outputs
-     * @param seed a long, which decides how the hash lookup table will be
-     *             shuffled
-     */
-    public static void setSeed(long seed) {
-        // convert hash table to list (allows for shuffling)
-        ArrayList<Integer> permutationList = new ArrayList<>();
-        for (int j : permutation) permutationList.add(j);
-
-        Collections.shuffle(permutationList, new Random(seed));
-
-        // overwrite hash table
-        for (int i = 0; i < permutation.length; i++)
-            permutation[i] = permutationList.get(i);
-    }
-
 
     /**
      * Returns a Perlin noise value for a given (x, y) coordinate.
@@ -79,12 +62,11 @@ public class PerlinNoise2D {
 
             // Calculate distance vector and grad vector based on given point
             Vector2d distVec = new Vector2d(x - corner.x, y - corner.y);
-            Vector2i gradVec    = selectGradVector(corner.x, corner.y);
+            Vector2i gradVec = selectGradVector(corner.x, corner.y);
 
             // Take dot product: distance vector • gradient vector
             dotProds[i] = distVec.dot(new Vector2d(gradVec.x, gradVec.y));
         }
-
 
 
         // Fade x and y towards integral vals to improve naturalness of the noise
@@ -92,11 +74,12 @@ public class PerlinNoise2D {
         double v = fade(y - (int)y);
 
         // Bilinear interpolation to get the value for the point (using faded vals)
-        double top  = linInt(u, dotProds[0], dotProds[1]); // top lt and top rt corners
-        double bot  = linInt(u, dotProds[2], dotProds[3]); // bot lt and bot rt corners
-        double vert = linInt(v, top, bot);
+        double output = utils.linearInt(v,
+            utils.linearInt(u, dotProds[0], dotProds[1]),
+            utils.linearInt(u, dotProds[2], dotProds[3])
+        );
 
-        return (vert + 1) / 2; // Shift from output range of [-1, 1] to [0, 1]
+        return (output + 1) / 2; // Shift from output range of [-1, 1] to [0, 1]
     }
 
 
@@ -158,20 +141,5 @@ public class PerlinNoise2D {
      */
     private static double fade(double val) {
         return val * val * val * (val * (val * 6 - 15) + 10);
-    }
-
-
-    /**
-     * Perform linear interpretation between points a and b, given that a and b
-     * are points on a unit square's border, and the target point is frac % of
-     * the way across the square from point a to b.
-     * @param frac what % of the way across the square the target point is,
-     *             represented with a double in the range [0.0, 1.0]
-     * @param a a point on a unit square, < b
-     * @param b a point on a unit square, > a
-     * @return linearly interpolated value between a and b
-     */
-    private static double linInt(double frac, double a, double b) {
-        return a + (frac * (b - a));
     }
 }

@@ -1,16 +1,11 @@
 package org.shadownight.plugin.shadownight.dungeons.generators;
 
 import org.bukkit.Material;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
 import org.shadownight.plugin.shadownight.dungeons.RegionBuffer;
 import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise3D;
-import org.shadownight.plugin.shadownight.utils.utils;
-
-import java.util.logging.Level;
 
 
-public class DeformWalls {
+public class GEN_WallsDeform {
     public static void start(RegionBuffer buffer, Material material, int floorThickness, int h){
         boolean[][][] tmp = new boolean[buffer.x][buffer.y][buffer.z]; // Defaults to false
 

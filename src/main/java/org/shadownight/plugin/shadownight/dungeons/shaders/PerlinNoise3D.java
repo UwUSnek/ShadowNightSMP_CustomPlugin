@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.joml.Vector3d;
 import org.joml.Vector3i;
+import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,14 +95,23 @@ public class PerlinNoise3D {
         // Fade x and y towards integral vals to improve naturalness of the noise
         double u = fade(x - (int)x);
         double v = fade(y - (int)y);
+        double w = fade(z - (int)z);
 
         // Bilinear interpolation to get the value for the point (using faded vals)
-        double top  = linInt(u, dotProds[0], dotProds[1]); // top lt and top rt corners
-        double bot  = linInt(u, dotProds[2], dotProds[3]); // bot lt and bot rt corners
-        double vert = linInt(v, top, bot);
+        double output = utils.linearInt(w,
+            utils.linearInt(v,
+                utils.linearInt(u, dotProds[0], dotProds[1]),
+                utils.linearInt(u, dotProds[2], dotProds[3])
+            ),
+            utils.linearInt(v,
+                utils.linearInt(u, dotProds[4], dotProds[5]),
+                utils.linearInt(u, dotProds[6], dotProds[7])
+            )
+        );
 
-        return (vert + 1) / 2; // Shift from output range of [-1, 1] to [0, 1]
+        return (output + 1) / 2; // Shift from output range of [-1, 1] to [0, 1]
     }
+
 
     /**
      * Determine the coordinates of the 4 corners of a given point's unit square
@@ -170,20 +180,5 @@ public class PerlinNoise3D {
      */
     private static double fade(double val) {
         return val * val * val * (val * (val * 6 - 15) + 10);
-    }
-
-
-    /**
-     * Perform linear interpretation between points a and b, given that a and b
-     * are points on a unit square's border, and the target point is frac % of
-     * the way across the square from point a to b.
-     * @param frac what % of the way across the square the target point is,
-     *             represented with a double in the range [0.0, 1.0]
-     * @param a a point on a unit square, < b
-     * @param b a point on a unit square, > a
-     * @return linearly interpolated value between a and b
-     */
-    private static double linInt(double frac, double a, double b) {
-        return a + (frac * (b - a));
     }
 }

@@ -8,9 +8,10 @@ import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.dungeons.generators.DeformWalls;
+import org.shadownight.plugin.shadownight.dungeons.generators.GEN_WallsDeform;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
+import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise3D;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -100,9 +101,9 @@ public class Dungeon {
         long start = System.currentTimeMillis();
 
         // Inner walls data
-        int tileSize = 11;                                    // The size of each tile
-        int wallThickness = 7;                                // The thickness of the inner maze walls
-        int wallHeight = 20;                                  // The height of the inner maze walls
+        int tileSize = 13;                                    // The size of each tile
+        int wallThickness = 9;                                // The thickness of the inner maze walls
+        int wallHeight = 40;                                  // The height of the inner maze walls
         int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
         Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
@@ -114,7 +115,6 @@ public class Dungeon {
         int floorThickness = 5;                               // The thickness of the floor
         int ceilingThickness = 5;                             // The thickness of the ceiling
         int outerWallsThickness = 5;                          // The thickness of the outer walls
-        int outerWallsHeight = 20;                            // The height of the outer walls
         Material materialFloor = Material.LIGHT_GRAY_CONCRETE;// Temporary material used for the floor
         Material materialCeiling = Material.ORANGE_CONCRETE;  // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
@@ -123,15 +123,15 @@ public class Dungeon {
 
         // Actually generate the dungeon
         int total_x = x + outerWallsThickness * 2;
-        int total_y = outerWallsHeight + floorThickness + ceilingThickness;
+        int total_y = wallHeight + floorThickness + ceilingThickness;
         int total_z = z + outerWallsThickness * 2;
         RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
         GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
-        GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, outerWallsHeight, floorThickness);
+        GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, wallHeight, floorThickness);
         GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness, ceilingThickness); // Must be 2nd in order to generate into the floor
-        GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, outerWallsHeight, x, z); //TODO remove x and z parameters
-        DeformWalls.start           (buffer, materialWalls, floorThickness, wallHeight);
+        GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z); //TODO remove x and z parameters
+        GEN_WallsDeform.start           (buffer, materialWalls, floorThickness, wallHeight);
 
         float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
         SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);

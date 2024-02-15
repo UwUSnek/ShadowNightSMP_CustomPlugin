@@ -332,4 +332,18 @@ public class utils {
         }
         return h;
     }
+
+
+
+
+    /**
+     * Calculates the linear interpretation between the points a and b
+     * @param progress what % of the way across the square the target point is
+     * @param a A point on a unit square, < b
+     * @param b A point on a unit square, > a
+     * @return linearly interpolated value between a and b
+     */
+    public static double linearInt(double progress, double a, double b) {
+        return a + (progress * (b - a));
+    }
 }
