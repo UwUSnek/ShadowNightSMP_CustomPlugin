@@ -76,18 +76,18 @@ public class RegionBuffer {
         }
         // X-Y vertical plane (bedrock box side)
         for(int i = -1; i < x + 1; ++i) for(int j = -1; j < y + 1; ++j) {
-            world.getBlockAt(_x + i, _y + j, _z - 1).setType(Material.BEDROCK);
-            world.getBlockAt(_x + i, _y + j, _z + x).setType(Material.BEDROCK);
+            world.getBlockAt(_x + i, _y + j, _z - 1).setType(Material.BEDROCK, false);
+            world.getBlockAt(_x + i, _y + j, _z + x).setType(Material.BEDROCK, false);
         }
         // Z-Y vertical plane (bedrock box side)
         for(int i = 0; i < z; ++i) for(int j = -1; j < y + 1; ++j) {
-            world.getBlockAt(_x - 1, _y + j, _z + i).setType(Material.BEDROCK);
-            world.getBlockAt(_x + x, _y + j, _z + i).setType(Material.BEDROCK);
+            world.getBlockAt(_x - 1, _y + j, _z + i).setType(Material.BEDROCK, false);
+            world.getBlockAt(_x + x, _y + j, _z + i).setType(Material.BEDROCK, false);
         }
         // X-Z horizontal plane (bedrock box side)
         for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) {
-            world.getBlockAt(_x + i, _y - 1, _z + j).setType(Material.BEDROCK);
-            world.getBlockAt(_x + i, _y + y, _z + j).setType(Material.BEDROCK);
+            world.getBlockAt(_x + i, _y - 1, _z + j).setType(Material.BEDROCK, false);
+            world.getBlockAt(_x + i, _y + y, _z + j).setType(Material.BEDROCK, false);
         }
     }
 }

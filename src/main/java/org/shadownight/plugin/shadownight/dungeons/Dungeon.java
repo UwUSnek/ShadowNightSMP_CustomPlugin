@@ -14,6 +14,7 @@ import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
 import org.shadownight.plugin.shadownight.dungeons.shaders.PerlinNoise3D;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_WallMaterial;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
@@ -90,6 +91,13 @@ public class Dungeon {
             world.setGameRule(GameRule.PLAYERS_NETHER_PORTAL_DEFAULT_DELAY, 2147483647);
             world.setGameRule(GameRule.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY, 2147483647);
             world.setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, 101);
+
+            // World settings
+            world.setTime(13000); // Set to night to prevent mushrooms from dropping before the ceiling gets pasted
+            world.setClearWeatherDuration(2147483647);
+            world.setDifficulty(Difficulty.HARD);
+            world.setHardcore(false);
+            world.setPVP(true);
         }
         return true;
     }
@@ -136,6 +144,7 @@ public class Dungeon {
         float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
         SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
         SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
+        SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
         buffer.paste(world, -total_x / 2, 0, -total_z / 2);
 
 
