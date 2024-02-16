@@ -7,7 +7,7 @@ import org.shadownight.plugin.shadownight.utils.math.Func;
 
 
 public final class GEN_CeilingDeform {
-    public static void start(RegionBuffer buffer, Material material, float[][] wallDist, int floorThickness, int wallHeight) {
+    public static void start(RegionBuffer buffer, Material material, Material vineMaterial, float[][] wallDist, int floorThickness, int wallHeight) {
         int y = floorThickness + wallHeight - 1; // First y under the flat ceiling
         for(int i = 1; i < buffer.x - 1; ++i) for(int k = 1; k < buffer.z - 1; ++k) {
             // Create noise values
@@ -24,11 +24,12 @@ public final class GEN_CeilingDeform {
             ) / 9 + 0.15f;
 
             // Calculate heights and modify the buffer
-            double wallShift = (1 - avgWallDist) * 15;
-            double noise = noise1 * 14 + Func.clampMax(Math.pow(noise2, 6) * 25, 15) * avgWallDist * (mask2 + 0.5);
-            int h = (int)(wallShift + noise);
+            double vineHeight = Func.clampMax(Math.pow(noise2, 6) * 25, 15) * avgWallDist * (mask2 + 0.5);
+            double noise = noise1 * 14 + vineHeight;
+            int h = (int)((1 - avgWallDist) * 15 + noise);
+            double vineY = y - h + vineHeight;
             for(int j = y; j > y - h; --j) {
-                if(buffer.get(i, j, k) == Material.AIR) buffer.set(i, j, k, material);
+                if(buffer.get(i, j, k) == Material.AIR) buffer.set(i, j, k, j > vineY ? material : vineMaterial);
             }
         }
     }

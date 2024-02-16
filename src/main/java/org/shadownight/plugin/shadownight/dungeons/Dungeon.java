@@ -115,7 +115,7 @@ public final class Dungeon {
         // Inner walls data
         int tileSize = 13;                                    // The size of each tile
         int wallThickness = 9;                                // The thickness of the inner maze walls
-        int wallHeight = 40;                                  // The height of the inner maze walls
+        int wallHeight = 60;                                  // The height of the inner maze walls
         int xNum = 5;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 5;                                        // The width  of the maze expressed in tiles. Must be an odd number
         Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
@@ -129,6 +129,7 @@ public final class Dungeon {
         int outerWallsThickness = 5;                          // The thickness of the outer walls
         Material materialFloor = Material.LIGHT_GRAY_CONCRETE;// Temporary material used for the floor
         Material materialCeiling = Material.ORANGE_CONCRETE;  // Temporary material used for the ceiling
+        Material materialVines = Material.GREEN_CONCRETE;     // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
         floorThickness = Func.clampMin(floorThickness, 2);
 
@@ -150,7 +151,7 @@ public final class Dungeon {
 
             // Calculate full wall distance gradient and generate the rest of the base layout
             float[][] wallDistanceGradientHigh = createWallDistanceGradient(buffer, floorThickness + wallHeight - 1, tileSize, materialWalls, true);
-            PerlinNoise.resetSeed(); GEN_CeilingDeform.start(buffer, materialCeiling, wallDistanceGradientHigh, floorThickness, wallHeight);
+            PerlinNoise.resetSeed(); GEN_CeilingDeform.start(buffer, materialCeiling, materialVines, wallDistanceGradientHigh, floorThickness, wallHeight);
 
             // Calculate wall distance gradient and apply material shaders
             float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);

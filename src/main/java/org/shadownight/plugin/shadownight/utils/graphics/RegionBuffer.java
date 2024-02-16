@@ -3,6 +3,9 @@ package org.shadownight.plugin.shadownight.utils.graphics;
 
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Leaves;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.logging.Level;
@@ -90,7 +93,24 @@ public final class RegionBuffer {
         // IMPORTANT: This must be placed last as mushrooms require a low skylight level which the bedrock box provides
         //            Placing them first will cause most of them to drop as an item
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
-            world.getBlockAt(_x + i, _y + j, _z + k).setType(b[i][j][k]);
+            Material material = b[i][j][k];
+            Block block = world.getBlockAt(_x + i, _y + j, _z + k);
+            block.setType(material);
+            if(
+                material == Material.ACACIA_LEAVES   ||
+                material == Material.AZALEA_LEAVES   ||
+                material == Material.BIRCH_LEAVES    ||
+                material == Material.CHERRY_LEAVES   ||
+                material == Material.JUNGLE_LEAVES   ||
+                material == Material.DARK_OAK_LEAVES ||
+                material == Material.MANGROVE_LEAVES ||
+                material == Material.OAK_LEAVES      ||
+                material == Material.SPRUCE_LEAVES
+            ) {
+                Leaves data = (Leaves)material.createBlockData();
+                data.setPersistent(true);
+                block.setBlockData(data);
+            }
         }
     }
 }

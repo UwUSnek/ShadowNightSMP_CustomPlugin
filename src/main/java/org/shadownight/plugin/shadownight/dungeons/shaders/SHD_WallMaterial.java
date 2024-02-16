@@ -17,7 +17,7 @@ public final class SHD_WallMaterial extends Rnd {
         Pair.with(2, Material.DEEPSLATE),
         Pair.with(2, Material.COBBLESTONE),
         Pair.with(2, Material.ANDESITE),
-        Pair.with(1, Material.DIORITE)
+        Pair.with(8, Material.DIORITE)
     );
 
 
