@@ -346,4 +346,21 @@ public class utils {
     public static double linearInt(double progress, double a, double b) {
         return a + (progress * (b - a));
     }
+
+    public static double safeLinearInt(double progress, double a, double b) {
+        if(a > b) { double tmp = a; a = b; b = tmp; }
+        return a + (progress * (b - a));
+    }
+
+    public static double clampMin(double n, double min) {
+        return Math.max(min, n);
+    }
+
+    public static double clampMax(double n, double max) {
+        return Math.min(n, max);
+    }
+
+    public static double clamp(double n, double max, double min) {
+        return Math.max(min, Math.min(n, max));
+    }
 }

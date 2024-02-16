@@ -8,9 +8,13 @@ import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.dungeons.generators.GEN_CeilingDeform;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_WallsDeform;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_WallMaterial;
 import org.shadownight.plugin.shadownight.dungeons.utils.PerlinNoise;
 import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -110,8 +114,10 @@ public class Dungeon {
         int tileSize = 13;                                    // The size of each tile
         int wallThickness = 9;                                // The thickness of the inner maze walls
         int wallHeight = 40;                                  // The height of the inner maze walls
-        int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
-        int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        int xNum = 5;                                        // The height of the maze expressed in tiles. Must be an odd number
+        int zNum = 5;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        //int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
+        //int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
         Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
 
 
@@ -128,22 +134,33 @@ public class Dungeon {
 
 
         // Actually generate the dungeon
-        int total_x = x + outerWallsThickness * 2;
-        int total_y = wallHeight + floorThickness + ceilingThickness;
-        int total_z = z + outerWallsThickness * 2;
-        RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
+        {
+            // Calculate total size and create region buffer
+            int total_x = x + outerWallsThickness * 2;
+            int total_y = wallHeight + floorThickness + ceilingThickness;
+            int total_z = z + outerWallsThickness * 2;
+            RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
-        PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
-        PerlinNoise.resetSeed(); GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, wallHeight, floorThickness);
-        PerlinNoise.resetSeed(); GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
-        PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z, floorThickness); //TODO remove x and z parameters
-        PerlinNoise.resetSeed(); GEN_WallsDeform.start       (buffer, materialWalls, floorThickness, wallHeight);
+            // Generate base layout
+            PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
+            PerlinNoise.resetSeed(); GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, wallHeight, floorThickness);
+            PerlinNoise.resetSeed(); GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
+            PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z, floorThickness); //TODO remove x and z parameters
+            PerlinNoise.resetSeed(); GEN_WallsDeform.start       (buffer, materialWalls,   floorThickness, wallHeight);
 
-        //float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls);
-        //PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
-        //PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
-        //PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight);
-        buffer.paste(world, -total_x / 2, 0, -total_z / 2);
+            // Calculate full wall distance gradient and generate the rest of the base layout
+            float[][] wallDistanceGradientHigh = createWallDistanceGradient(buffer, floorThickness + wallHeight - 1, tileSize, materialWalls, true);
+            PerlinNoise.resetSeed(); GEN_CeilingDeform.start(buffer, materialCeiling, wallDistanceGradientHigh, floorThickness, wallHeight);
+
+            // Calculate wall distance gradient and apply material shaders
+            float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);
+            PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
+            PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
+            PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight);
+
+            // Paste the region into the world
+            buffer.paste(world, -total_x / 2, 0, -total_z / 2);
+        }
 
 
         // Log generation time
@@ -152,7 +169,8 @@ public class Dungeon {
     }
 
 
-    private static float[][] createWallDistanceGradient(RegionBuffer b, int y, int tileSize, Material m) {
+
+    private static float[][] createWallDistanceGradient(RegionBuffer b, int y, int tileSize, Material m, boolean calculateNegative) {
         float[][] gradient = new float[b.x][b.z];
         int halfSize = tileSize / 2;
         for(int i = 0; i < b.x; ++i) for(int j = 0;  j < b.z; ++j) {
@@ -165,7 +183,17 @@ public class Dungeon {
                     b.get(i - k, y, j + k) != m &&
                     b.get(i - k, y, j - k) != m
                 ) ++k;
-                gradient[i][j] = (float) k / halfSize;
+                if(calculateNegative && k == 0) {
+                    while (
+                        k < halfSize &&
+                        i + k < b.x - 1 && j + k < b.z - 1 && b.get(i + k, y, j + k) == m &&
+                        i + k < b.x - 1 && j - k > 0       && b.get(i + k, y, j - k) == m &&
+                        i - k > 0       && j + k < b.z - 1 && b.get(i - k, y, j + k) == m &&
+                        i - k > 0       && j - k > 0       && b.get(i - k, y, j - k) == m
+                    ) ++k;
+                    gradient[i][j] = -(float)k / halfSize;
+                }
+                else gradient[i][j] = (float)k / halfSize;
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 utils.log(Level.SEVERE, "Gradient creation failed: Received index (" + i + ", " + j + ") with k = " + k + " and buffer size (" + b.x + ", " + b.z + ")");

@@ -19,7 +19,7 @@ public class GEN_WallsDeform {
                 if(shiftX != 0 || shiftZ != 0) {
                     double noise1 = PerlinNoise3D.compute(i, j, k, 32); // Base layer noise
                     double noise2 = PerlinNoise3D.compute(i, j, k, 6); // Fine layer noise
-                    int scaledNoise = Math.max(0, (int) (Math.sqrt(utils.linearInt(0.5, noise1, noise2) * 16 * ((float) (j - floorThickness) / h)) - 0.5)); // The number of blocks that have to be removed
+                    int scaledNoise = Math.max(0, (int) (Math.sqrt(utils.safeLinearInt(0.5, noise1, noise2) * 16 * ((float) (j - floorThickness) / h)) - 0.5)); // The number of blocks that have to be removed
 
                     if (shiftX != 0) {
                         int target = i + shiftX * scaledNoise; // The block in the current axis that the wall has to be carved until
