@@ -13,18 +13,19 @@ import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 public final class SHD_CeilingMaterial extends Rnd {
     static private final BlockGradient patternCeiling = new BlockGradient(
         Pair.with(4, new BlockPattern(
-            Pair.with(1f, Material.DEEPSLATE_COAL_ORE),
-            Pair.with(4f, Material.DEEPSLATE_TILES)
+            Pair.with(0.5f, Material.DEEPSLATE_COAL_ORE),
+            Pair.with(4f,   Material.DEEPSLATE_TILES)
         )),
         Pair.with(1, new BlockPattern(
             Pair.with(0.5f, Material.COAL_ORE),
             Pair.with(1f,   Material.DEEPSLATE_COAL_ORE),
             Pair.with(4f,   Material.TUFF),
-            Pair.with(1f,   Material.BLACKSTONE)
+            Pair.with(1f,   Material.DIORITE),
+            Pair.with(1f,   Material.POLISHED_DIORITE)
         )),
         Pair.with(4, new BlockPattern(
-            Pair.with(1f, Material.DEEPSLATE_COAL_ORE),
-            Pair.with(4f, Material.DEEPSLATE_TILES)
+            Pair.with(0.5f, Material.DEEPSLATE_COAL_ORE),
+            Pair.with(4f,   Material.DEEPSLATE_TILES)
         ))
     );
 

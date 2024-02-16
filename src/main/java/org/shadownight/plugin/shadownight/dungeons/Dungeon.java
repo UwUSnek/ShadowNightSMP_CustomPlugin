@@ -155,7 +155,7 @@ public final class Dungeon {
             float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);
             PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
             PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
-            PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight);
+            PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
             PerlinNoise.resetSeed(); SHD_CeilingMaterial.start(buffer, materialCeiling);
             PerlinNoise.resetSeed(); SHD_CeilingVines.start   (buffer, materialVines);
 
