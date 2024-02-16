@@ -11,15 +11,28 @@ import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 
 
 public final class SHD_CeilingMaterial extends Rnd {
-    static private final BlockPattern patternCeiling = new BlockPattern(
-        Pair.with(6f, Material.DEEPSLATE_TILES)
+    static private final BlockGradient patternCeiling = new BlockGradient(
+        Pair.with(4, new BlockPattern(
+            Pair.with(1f, Material.DEEPSLATE_COAL_ORE),
+            Pair.with(4f, Material.DEEPSLATE_TILES)
+        )),
+        Pair.with(1, new BlockPattern(
+            Pair.with(0.5f, Material.COAL_BLOCK),
+            Pair.with(1f, Material.DEEPSLATE_COAL_ORE),
+            Pair.with(4f, Material.TUFF),
+            Pair.with(1f, Material.BLACKSTONE)
+        )),
+        Pair.with(4, new BlockPattern(
+            Pair.with(1f, Material.DEEPSLATE_COAL_ORE),
+            Pair.with(4f, Material.DEEPSLATE_TILES)
+        ))
     );
 
 
 
 
     private static Material compute(int x, int y, int z) {
-        return patternCeiling.get();
+        return patternCeiling.get((float)PerlinNoise3D.compute(x, y, z, 32));
     }
 
     public static void start(RegionBuffer buffer, Material material) {
