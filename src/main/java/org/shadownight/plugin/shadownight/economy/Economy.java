@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class Economy {
+public final class Economy {
     private static File databaseFile;
     public static FileConfiguration databaseObject;
 

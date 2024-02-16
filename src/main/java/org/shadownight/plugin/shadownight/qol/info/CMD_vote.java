@@ -8,10 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.utils.utils;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 
-public class CMD_vote implements CommandExecutor {
+public final class CMD_vote implements CommandExecutor {
     public static void sendLink(Player player, String msg, String url) {
         @SuppressWarnings("deprecation")
         TextComponent component = new TextComponent(TextComponent.fromLegacyText("§r§l>§r " + msg));
@@ -27,8 +27,8 @@ public class CMD_vote implements CommandExecutor {
         Player player = (Player)sender;
         String fake_dot = "․";
 
-        utils.newline(player);
-        utils.separator(player);
+        Chat.newline(player);
+        Chat.separator(player);
         player.sendMessage("§dClick to vote for the server!");
         sendLink(player, "GTop100" + fake_dot + "com",                 "https://gtop100.com/topsites/Minecraft-Servers/sitedetails/Shadow-Night-SMP-103158");
         sendLink(player, "MinecraftServers" + fake_dot + "org",        "https://minecraftservers.org/vote/658865");
@@ -37,8 +37,8 @@ public class CMD_vote implements CommandExecutor {
         sendLink(player, "Minecraft-Server" + fake_dot + "eu",         "https://minecraft-server.eu/server/index/22E1D/Shadow-Night");
         sendLink(player, "Minecraft-Servers" + fake_dot + "de",        "https://minecraft-servers.de/server/shadow-night");
         sendLink(player, "Minecraft-Serverlist" + fake_dot + "net",    "https://www.minecraft-serverlist.net/server/58114");
-        utils.separator(player);
-        utils.newline(player);
+        Chat.separator(player);
+        Chat.newline(player);
         return true;
     }
 }

@@ -16,6 +16,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,21 +31,8 @@ import java.util.logging.Level;
 import static org.shadownight.plugin.shadownight.items.IM_CustomItem.itemIdKey;
 
 
-public class utils {
-    public static final String serverPrefix = "§d§l[§5§lSN§d§l] §r";
+public final class utils {
     public static final String serverIp = "shadownight.g-portal.game";
-
-    public static void sendMessage(@NotNull Player player, String message) {
-        player.sendMessage(serverPrefix + message);
-    }
-
-    public static void newline(@NotNull Player player) {
-        player.sendMessage("");
-    }
-
-    public static void separator(@NotNull Player player) {
-        player.sendMessage("§d§m                                                                               ");
-    }
 
 
     // Returns the display name if the item has one.
@@ -71,7 +59,7 @@ public class utils {
      */
     public static boolean playerOfflineCheck(@NotNull Player player, @Nullable Player target, String targetName) {
         if (target == null) {
-            utils.sendMessage(player, "§cThe player \"" + targetName + "\" is offline or doesn't exist. Did you spell their name correctly?");
+            Chat.sendMessage(player, "§cThe player \"" + targetName + "\" is offline or doesn't exist. Did you spell their name correctly?");
             return true;
         }
         return false;
@@ -104,58 +92,11 @@ public class utils {
     }
 
 
-    /**
-     * Returns the time duration in a readable format (days, hours, minutes, seconds)
-     * @param s The time duration in seconds
-     * @param useSpaces True to include spaces in the formatted string. e.g. "17d 15h 13m 5s" instead of "17d15h13m5s"
-     * @return A string containing the formatted duration
-     */
-    public static String sToDuration(Long s, boolean useSpaces) {
-        return sToDuration(s, useSpaces ? " " : "");
-    }
-
-    /**
-     * Returns the time duration in a readable format (minutes, seconds, milliseconds)
-     * @param ms The time duration in seconds
-     * @param useSpaces True to include spaces in the formatted string. e.g. "13m 5s 591ms" instead of "13m5s591ms"
-     * @return A string containing the formatted duration
-     */
-    public static String msToDuration(Long ms, boolean useSpaces) {
-        return msToDuration(ms, useSpaces ? " " : "");
-    }
-
-    private static String sToDuration(Long s, String c) {
-        return
-            (s >= 86400 ? (s / 86400      + "d" + c) : "") +
-            (s >= 3600  ? (s / 3600  % 24 + "h" + c) : "") +
-            (s >= 60    ? (s / 60    % 60 + "m" + c) : "") +
-            s                        % 60 + "s"
-        ;
-    }
-
-    private static String msToDuration(Long m, String c) {
-        return
-            (m >= 60000 ? (m / 60000 % 60000 + "m" + c) : "") +
-            (m >= 1000  ? (m / 1000  % 1000  + "s" + c) : "") +
-            m                        % 1000  + "ms"
-        ;
-    }
 
 
 
 
 
-    public static String stripPrivateCharacters(String s) {
-        return s.replaceAll("[\uE000-\uF8FF]", "");
-    }
-
-    public static String stripColor(String s) {
-        return s.replaceAll("[&§]([0-9a-fk-or])", "");
-    }
-
-    public static String translateColor(String s) {
-        return s.replaceAll("&([0-9a-fk-or])", "§$1");
-    }
 
 
 
@@ -225,10 +166,6 @@ public class utils {
         ), "Luckperms group object is null").getDisplayName();
     }
 
-
-    public static boolean doubleEquals(double n, double target, double threshold) {
-        return !(n < target - threshold || n > target + threshold);
-    }
 
 
     /**
@@ -335,32 +272,4 @@ public class utils {
 
 
 
-
-    /**
-     * Calculates the linear interpretation between the points a and b
-     * @param progress what % of the way across the square the target point is
-     * @param a A point on a unit square, < b
-     * @param b A point on a unit square, > a
-     * @return linearly interpolated value between a and b
-     */
-    public static double linearInt(double progress, double a, double b) {
-        return a + (progress * (b - a));
-    }
-
-    public static double safeLinearInt(double progress, double a, double b) {
-        if(a > b) { double tmp = a; a = b; b = tmp; }
-        return a + (progress * (b - a));
-    }
-
-    public static double clampMin(double n, double min) {
-        return Math.max(min, n);
-    }
-
-    public static double clampMax(double n, double max) {
-        return Math.min(n, max);
-    }
-
-    public static double clamp(double n, double max, double min) {
-        return Math.max(min, Math.min(n, max));
-    }
 }

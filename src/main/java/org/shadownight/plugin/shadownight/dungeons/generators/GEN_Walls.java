@@ -2,7 +2,7 @@ package org.shadownight.plugin.shadownight.dungeons.generators;
 
 
 import org.bukkit.Material;
-import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import java.util.Collections;
 /**
  * Generates the inner maze walls of a dungeon
  */
-public class GEN_Walls {
+public final class GEN_Walls {
     private static class v2i {
         final int x;
         final int z;

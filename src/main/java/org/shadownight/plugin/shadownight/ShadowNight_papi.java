@@ -10,12 +10,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.chatManager.CMD_msg;
 import org.shadownight.plugin.shadownight.economy.Economy;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.lang.Math;
 
 
-public class ShadowNight_papi extends PlaceholderExpansion {
+public final class ShadowNight_papi extends PlaceholderExpansion {
     @Override
     public @NotNull String getAuthor() {
         return "UwU_Snek";
@@ -77,7 +78,7 @@ public class ShadowNight_papi extends PlaceholderExpansion {
                 else return "§dMessaging " + targetName;
             }
             case "playtime": {
-                return "Your playtime: " + utils.sToDuration(offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true);
+                return "Your playtime: " + Chat.sToDuration(offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true);
             }
             case "player_balance": {
                 return String.valueOf(Economy.getBalance(offlinePlayer));

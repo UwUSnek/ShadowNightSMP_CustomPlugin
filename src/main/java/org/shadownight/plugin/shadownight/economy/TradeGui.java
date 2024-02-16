@@ -20,6 +20,7 @@ import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SignInput;
 import org.shadownight.plugin.shadownight.utils.Timer;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.Vector;
 
 
 
-public class TradeGui implements Listener {
+public final class TradeGui implements Listener {
     private static final int buttonAddCoins = 4;
     private static final int buttonAddClaimBlocks = 13;
     private static final int buttonPlayerAccept = 40;
@@ -145,7 +146,7 @@ public class TradeGui implements Listener {
      */
     public void selectItem(ItemStack item){
         if(items.size() == 24) {
-            utils.sendMessage(player, "§cYou can only trade up to 24 items!");
+            Chat.sendMessage(player, "§cYou can only trade up to 24 items!");
         }
         else {
             items.add(new ItemStack(item));
@@ -201,7 +202,7 @@ public class TradeGui implements Listener {
         alreadyClosed = true;
         giveItems(player, linkedGui.items);
         player.closeInventory();
-        utils.sendMessage(player, "§aTrade completed with " + utils.getFancyName(linkedGui.player) + "§a!");
+        Chat.sendMessage(player, "§aTrade completed with " + utils.getFancyName(linkedGui.player) + "§a!");
     }
 
     //! Executes once and manages both players
@@ -264,7 +265,7 @@ public class TradeGui implements Listener {
                     }
                 }
                 catch(NumberFormatException e) {
-                    player.sendMessage("\"§c" + utils.stripColor(lines[0]) + "\" is not a number!");
+                    player.sendMessage("\"§c" + Chat.stripColor(lines[0]) + "\" is not a number!");
                     return false;
                 }
             },
@@ -285,7 +286,7 @@ public class TradeGui implements Listener {
                     selectItem(coinItem);
                 }
                 else {
-                    utils.sendMessage(player, "§cYou don't have that many coins!");
+                    Chat.sendMessage(player, "§cYou don't have that many coins!");
                     // Re-open the trade GUI and add the new item
                     openInventory();
                     readingInput = false;
@@ -308,8 +309,8 @@ public class TradeGui implements Listener {
     public void onGuiClose(final InventoryCloseEvent event){
         if(!readingInput && !alreadyClosed && event.getInventory() == inv) {
             cancelTrade();
-            utils.sendMessage(player, "§cYou cancelled the trade with " + utils.getFancyName(linkedGui.player) + "§c.");
-            utils.sendMessage(linkedGui.player, utils.getFancyName(player) + "§c has cancelled the trade.");
+            Chat.sendMessage(player, "§cYou cancelled the trade with " + utils.getFancyName(linkedGui.player) + "§c.");
+            Chat.sendMessage(linkedGui.player, utils.getFancyName(player) + "§c has cancelled the trade.");
         }
     }
 

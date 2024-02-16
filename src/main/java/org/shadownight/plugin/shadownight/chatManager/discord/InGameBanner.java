@@ -4,7 +4,7 @@ package org.shadownight.plugin.shadownight.chatManager.discord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.shadownight.plugin.shadownight.utils.utils;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 
 public class InGameBanner {
@@ -13,8 +13,8 @@ public class InGameBanner {
         Bukkit.getScheduler().runTaskTimer(
             plugin,
             () -> {
-                utils.newline(player);
-                utils.separator(player);
+                Chat.newline(player);
+                Chat.separator(player);
                 player.sendMessage(
                     """
                         §rDo you want to suggest a new feature or report a bug?
@@ -22,8 +22,8 @@ public class InGameBanner {
                         §rYou will also find details, rules and news.
                         §dWe hope to see you there!"""
                 );
-                utils.separator(player);
-                utils.newline(player);
+                Chat.separator(player);
+                Chat.newline(player);
             },
             200L,       // Wait 10s
             3600 * 20L  // Repeat every 30m

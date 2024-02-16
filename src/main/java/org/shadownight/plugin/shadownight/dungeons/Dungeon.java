@@ -15,8 +15,10 @@ import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_WallMaterial;
-import org.shadownight.plugin.shadownight.dungeons.utils.PerlinNoise;
-import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.math.Func;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
@@ -29,7 +31,7 @@ import java.util.logging.Level;
 import java.util.stream.Stream;
 
 
-public class Dungeon {
+public final class Dungeon {
     //! Prefix to use in dungeon world names. MUST be all lowercase
     private static final String namePrefix = "sn_world_dungeon_";
     public World world = null;
@@ -116,8 +118,6 @@ public class Dungeon {
         int wallHeight = 40;                                  // The height of the inner maze walls
         int xNum = 5;                                        // The height of the maze expressed in tiles. Must be an odd number
         int zNum = 5;                                        // The width  of the maze expressed in tiles. Must be an odd number
-        //int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
-        //int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
         Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
 
 
@@ -130,7 +130,7 @@ public class Dungeon {
         Material materialFloor = Material.LIGHT_GRAY_CONCRETE;// Temporary material used for the floor
         Material materialCeiling = Material.ORANGE_CONCRETE;  // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
-        floorThickness = Math.max(2, floorThickness);
+        floorThickness = Func.clampMin(floorThickness, 2);
 
 
         // Actually generate the dungeon
@@ -165,7 +165,7 @@ public class Dungeon {
 
         // Log generation time
         long duration = System.currentTimeMillis() - start;
-        utils.log(Level.INFO, "Dungeon generated in " + utils.msToDuration(duration, true));
+        utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(duration, true));
     }
 
 
@@ -186,10 +186,12 @@ public class Dungeon {
                 if(calculateNegative && k == 0) {
                     while (
                         k < halfSize &&
-                        i + k < b.x - 1 && j + k < b.z - 1 && b.get(i + k, y, j + k) == m &&
-                        i + k < b.x - 1 && j - k > 0       && b.get(i + k, y, j - k) == m &&
-                        i - k > 0       && j + k < b.z - 1 && b.get(i - k, y, j + k) == m &&
-                        i - k > 0       && j - k > 0       && b.get(i - k, y, j - k) == m
+                        i + k < b.x - 1 && j + k < b.z - 1 &&
+                        i - k > 0       && j - k > 0       &&
+                        b.get(i + k, y, j + k) == m &&
+                        b.get(i + k, y, j - k) == m &&
+                        b.get(i - k, y, j + k) == m &&
+                        b.get(i - k, y, j - k) == m
                     ) ++k;
                     gradient[i][j] = -(float)k / halfSize;
                 }

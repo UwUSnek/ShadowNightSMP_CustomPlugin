@@ -1,12 +1,12 @@
 package org.shadownight.plugin.shadownight.dungeons.generators;
 
 import org.bukkit.Material;
-import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
-import org.shadownight.plugin.shadownight.dungeons.utils.PerlinNoise3D;
-import org.shadownight.plugin.shadownight.utils.utils;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise3D;
+import org.shadownight.plugin.shadownight.utils.math.Func;
 
 
-public class GEN_WallsDeform {
+public final class GEN_WallsDeform {
     public static void start(RegionBuffer buffer, Material material, int floorThickness, int h){
         boolean[][][] tmp = new boolean[buffer.x][buffer.y][buffer.z]; // Defaults to false
 
@@ -19,18 +19,18 @@ public class GEN_WallsDeform {
                 if(shiftX != 0 || shiftZ != 0) {
                     double noise1 = PerlinNoise3D.compute(i, j, k, 32); // Base layer noise
                     double noise2 = PerlinNoise3D.compute(i, j, k, 6); // Fine layer noise
-                    int scaledNoise = Math.max(0, (int) (Math.sqrt(utils.safeLinearInt(0.5, noise1, noise2) * 16 * ((float) (j - floorThickness) / h)) - 0.5)); // The number of blocks that have to be removed
+                    int scaledNoise = Func.clampMin((int) (Math.sqrt(Func.linearIntSafe(0.5, noise1, noise2) * 16 * ((float) (j - floorThickness) / h)) - 0.5), 0); // The number of blocks that have to be removed
 
                     if (shiftX != 0) {
                         int target = i + shiftX * scaledNoise; // The block in the current axis that the wall has to be carved until
                         for (int l = i; l != target; l += shiftX) {
-                            tmp[Math.max(0, Math.min(l, buffer.x - 1))][j][k] = true;
+                            tmp[Func.clamp(l, 0, buffer.x - 1)][j][k] = true;
                         }
                     }
                     if (shiftZ != 0) {
                         int target = k + shiftZ * scaledNoise; // The block in the current axis that the wall has to be carved until
                         for (int l = k; l != target; l += shiftZ) {
-                            tmp[i][j][Math.max(0, Math.min(l, buffer.z - 1))] = true;
+                            tmp[i][j][Func.clamp(l, 0, buffer.z - 1)] = true;
                         }
                     }
                 }

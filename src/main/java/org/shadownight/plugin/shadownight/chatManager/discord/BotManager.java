@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.awt.*;
@@ -102,14 +103,14 @@ public class BotManager {
 
 
     public static void sendBridgeMessage(String msg) {
-        bridgeChannel.sendMessage(utils.stripColor(msg)).queue();
+        bridgeChannel.sendMessage(Chat.stripColor(msg)).queue();
         utils.log(Level.INFO, "logged server message \"" + msg + "\"");
     }
 
 
     public static void sendBridgeMessage(Player player, String msg) {
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
-            webhookClient.sendMessage(utils.stripColor(msg))
+            webhookClient.sendMessage(Chat.stripColor(msg))
                 .setUsername("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
                 .setAvatarUrl(SkinRenderer.getRenderUrl(player, SkinRenderer.RenderType.PROPIC))
                 .complete()

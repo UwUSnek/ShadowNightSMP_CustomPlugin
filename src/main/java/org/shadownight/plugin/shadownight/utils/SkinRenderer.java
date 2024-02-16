@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 
-public class SkinRenderer {
+public final class SkinRenderer {
     public enum RenderType {
         PROPIC,
         FULL

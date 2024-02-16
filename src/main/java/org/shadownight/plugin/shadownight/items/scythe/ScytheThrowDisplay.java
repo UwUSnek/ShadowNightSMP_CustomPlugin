@@ -15,6 +15,7 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 import org.shadownight.plugin.shadownight.items.IM_CustomItem;
 import org.shadownight.plugin.shadownight.items.ItemManager;
+import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Collection;
@@ -22,7 +23,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 
-public class ScytheThrowDisplay {
+public final class ScytheThrowDisplay {
     private final ItemDisplay display;
     private static final float throwDistance = 40;
     private static final int stepDuration = 2;
@@ -84,7 +85,7 @@ public class ScytheThrowDisplay {
      * @param rotations_s The number of rotations per second
      */
     public void animateRotation(double rotations_s) {
-        int third_duration = (int) Math.max(1, 20 / (rotations_s * 3));      // This is 1 / (rotations_s / 20) / 3
+        int third_duration = (int)Func.clampMin(20 / (rotations_s * 3), 1);      // This is 1 / (rotations_s / 20) / 3
         display.setInterpolationDuration(third_duration);
         display.setInterpolationDelay(0);
         Transformation transformation = display.getTransformation();
@@ -213,11 +214,11 @@ public class ScytheThrowDisplay {
 
 
 
-    @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticIn    = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
-    @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticOut   = x -> utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticIn    = x -> Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
+    @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticOut   = x -> Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
     @SuppressWarnings("unused") public final Function<Double, Double> COMP_elasticInOut = x -> {
         final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
-        return utils.doubleEquals(x, 0, 0.001) ? 0 : (utils.doubleEquals(x, 1, 0.001) ? 1 : (
+        return Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 : (
             x < 0.5 ?
             -(Math.pow(2,  20 * x - 10) * c) / 2 :
              (Math.pow(2, -20 * x + 10) * c) / 2 + 1

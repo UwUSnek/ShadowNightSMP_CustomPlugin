@@ -13,6 +13,7 @@ import org.bukkit.Statistic;
 import org.shadownight.plugin.shadownight.chatManager.ChatManager;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Objects;
@@ -75,7 +76,7 @@ public class MessageListener extends ListenerAdapter {
                             - Status: %s"""
                             .formatted(
                                 utils.getGroupDisplayNameOffline(player),
-                                utils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true),
+                                Chat.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true),
                                 player.isOnline() ? "**Online**" : "_Offline_"
                             ), false)
                         .addField("───────────────────────────────────────────────────────", "", false)

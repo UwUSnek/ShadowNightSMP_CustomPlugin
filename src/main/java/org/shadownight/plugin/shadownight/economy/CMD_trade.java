@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import static org.bukkit.Bukkit.getServer;
 
 
-public class CMD_trade implements CommandExecutor {
+public final class CMD_trade implements CommandExecutor {
     private static class TradeRequest {
         final String target;
         final BukkitTask task;
@@ -40,13 +41,13 @@ public class CMD_trade implements CommandExecutor {
             Player target = org.bukkit.Bukkit.getPlayer(args[0]);
             if (utils.playerOfflineCheck(player, target, args[0])) return true;
             if (player.equals(target)) {
-                utils.sendMessage(player, "§cYou cannot trade yourself!");
+                Chat.sendMessage(player, "§cYou cannot trade yourself!");
                 return true;
             }
 
 
             if (tradeRequests.get(player.getName()) != null) {
-                utils.sendMessage(player, "§cYou already have a pending trade request! Please wait for it to expire before opening a new one.");
+                Chat.sendMessage(player, "§cYou already have a pending trade request! Please wait for it to expire before opening a new one.");
             }
             else {
                 @SuppressWarnings("DataFlowIssue")  //checked in playerOfflineCheck
@@ -78,20 +79,20 @@ public class CMD_trade implements CommandExecutor {
                             Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> {
                                 if(tradeRequests.get(player.getName()) != null) {
                                     tradeRequests.remove(player.getName());
-                                    utils.sendMessage(player, "§7Your trade request to " + utils.getFancyName(target) + "§7 has expired.");
-                                    utils.sendMessage(target, "§7The trade request from " + utils.getFancyName(player) + "§7 has expired.");
+                                    Chat.sendMessage(player, "§7Your trade request to " + utils.getFancyName(target) + "§7 has expired.");
+                                    Chat.sendMessage(target, "§7The trade request from " + utils.getFancyName(player) + "§7 has expired.");
                                 }
                             }, timeout * 20L)
                         )
                                      );
-                    utils.sendMessage(player, "§7Sending a trade request to " + utils.getFancyName(target) + "...");
+                    Chat.sendMessage(player, "§7Sending a trade request to " + utils.getFancyName(target) + "...");
 
                     String _command = "/trade " + player.getName();
                     TextComponent c = new TextComponent("§a" + _command);
                     c.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
                     TextComponent c2 = new TextComponent("§a(or click here)");
                     c2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
-                    target.spigot().sendMessage(new TextComponent(utils.serverPrefix + utils.getFancyName(player) + "§f sent you a trade request! Use "), c, new TextComponent("§r to accept "), c2);
+                    target.spigot().sendMessage(new TextComponent(Chat.serverPrefix + utils.getFancyName(player) + "§f sent you a trade request! Use "), c, new TextComponent("§r to accept "), c2);
 
                 }
             }

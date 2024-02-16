@@ -2,13 +2,13 @@ package org.shadownight.plugin.shadownight.dungeons.generators;
 
 
 import org.bukkit.Material;
-import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 
 
 /**
  * Generates the outer walls and the floor of a dungeon
  */
-public class GEN_BoundingBox {
+public final class GEN_BoundingBox {
     public static void startFloor(RegionBuffer buffer, Material material, int thickness){
         //      X                                 Z                                 Thickness
         for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.z; ++j) for(int k = 0; k < thickness; ++k) {

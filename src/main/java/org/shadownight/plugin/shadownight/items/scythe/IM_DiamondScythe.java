@@ -6,7 +6,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 
 
-public class IM_DiamondScythe extends IM_Scythe {
+public final class IM_DiamondScythe extends IM_Scythe {
     @Override public Material     getMaterial()        { return Material.DIAMOND_SWORD;      }
     @Override public String       getDisplayName()     { return "Diamond Scythe";            }
     @Override public int          getCustomModelData() { return 1;                           }

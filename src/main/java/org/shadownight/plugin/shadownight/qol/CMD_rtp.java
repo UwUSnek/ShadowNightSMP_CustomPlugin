@@ -3,7 +3,7 @@ package org.shadownight.plugin.shadownight.qol;
 
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.utils.utils;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -34,14 +34,14 @@ public class CMD_rtp implements CommandExecutor {
             Long time_diff = System.currentTimeMillis() - last_time;
             if (time_diff < cooldown){
                 long s_left = (cooldown - time_diff) / 1000;
-                utils.sendMessage(player, "§cThis command is on cooldown! Try again in " + s_left / 60 + "m" + s_left % 60 + "s");
+                Chat.sendMessage(player, "§cThis command is on cooldown! Try again in " + s_left / 60 + "m" + s_left % 60 + "s");
                 if(!player.hasPermission("group.mod")) return true;
-                utils.sendMessage(player, "§7Skipping cooldown... (Mod rank or higher)");
+                Chat.sendMessage(player, "§7Skipping cooldown... (Mod rank or higher)");
             }
         }
 
-        utils.sendMessage(player, "§aTeleporting you to a random location...");
-        utils.sendMessage(player, "§7You gained damage immunity for 15s");
+        Chat.sendMessage(player, "§aTeleporting you to a random location...");
+        Chat.sendMessage(player, "§7You gained damage immunity for 15s");
         prev.put(player.getName(), System.currentTimeMillis());
 
         float r = rnd.nextFloat(0, max);
@@ -53,7 +53,7 @@ public class CMD_rtp implements CommandExecutor {
         player.addPotionEffect(effect2);
         player.setInvulnerable(true);
         Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> { // Logout exploit is managed by event listener in onPlayerQuit
-            utils.sendMessage(player, "§7Your damage immunity ran out");
+            Chat.sendMessage(player, "§7Your damage immunity ran out");
             player.setInvulnerable(false);
         }, 300L);
         return true;

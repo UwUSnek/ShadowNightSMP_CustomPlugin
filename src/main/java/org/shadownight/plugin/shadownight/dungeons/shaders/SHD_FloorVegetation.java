@@ -3,14 +3,14 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Material;
 import org.javatuples.Pair;
-import org.shadownight.plugin.shadownight.dungeons.utils.BlockPattern;
-import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
 
 
-public class SHD_FloorVegetation extends Rnd {
+public final class SHD_FloorVegetation extends Rnd {
     static private final BlockPattern patternGrass = new BlockPattern(
         Pair.with(2f, Material.AIR),
         Pair.with(2f, Material.SHORT_GRASS),

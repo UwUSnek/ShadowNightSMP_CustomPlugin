@@ -7,7 +7,7 @@ import org.shadownight.plugin.shadownight.items.CustomItemId;
 
 
 
-public class IM_IronScythe extends IM_Scythe {
+public final class IM_IronScythe extends IM_Scythe {
     @Override public Material     getMaterial()        { return Material.IRON_SWORD;      }
     @Override public String       getDisplayName()     { return "Iron Scythe";            }
     @Override public int          getCustomModelData() { return 1;                        }

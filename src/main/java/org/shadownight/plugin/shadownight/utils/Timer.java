@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
-public class Timer {
+public final class Timer {
     private final int max;
     private int s;
     final Runnable onStart;

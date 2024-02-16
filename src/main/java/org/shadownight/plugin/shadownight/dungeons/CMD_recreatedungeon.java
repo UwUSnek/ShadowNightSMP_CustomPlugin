@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
-public class CMD_recreatedungeon implements CommandExecutor {
+public final class CMD_recreatedungeon implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         for(Dungeon dungeon : CMD_dungeontest.activeDungeons) {

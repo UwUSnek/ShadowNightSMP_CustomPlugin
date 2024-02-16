@@ -2,20 +2,20 @@ package org.shadownight.plugin.shadownight.qol.info;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.utils.utils;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class CMD_help implements CommandExecutor {
+public final class CMD_help implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         Player player = (Player)sender;
-        utils.newline(player);
-        utils.sendMessage(player, "Useful commands:\n");
-        utils.newline(player);
+        Chat.newline(player);
+        Chat.sendMessage(player, "Useful commands:\n");
+        Chat.newline(player);
         player.sendMessage(
             """
                 §d§lInfo:§r
@@ -27,7 +27,7 @@ public class CMD_help implements CommandExecutor {
                 §d  §a/discord §7| Join the Shadow Night Community Discord server
             """
         );
-        utils.newline(player);
+        Chat.newline(player);
         player.sendMessage(
             """
                 §d§lMovement:§r
@@ -41,7 +41,7 @@ public class CMD_help implements CommandExecutor {
                 §d  §7/warps | List available warp locations
             """
         );
-        utils.newline(player);
+        Chat.newline(player);
         player.sendMessage(
             """
                 §d§lMenus:§r
@@ -50,7 +50,7 @@ public class CMD_help implements CommandExecutor {
                 §d  §a/trade §7| Trade with another player
             """
         );
-        utils.newline(player);
+        Chat.newline(player);
         player.sendMessage(
             """
                 §d§lChat:§r
@@ -58,7 +58,7 @@ public class CMD_help implements CommandExecutor {
                 §d  §a/r §7| Message the last player that sent you a message
             """
         );
-        utils.newline(player);
+        Chat.newline(player);
         return true;
     }
 }

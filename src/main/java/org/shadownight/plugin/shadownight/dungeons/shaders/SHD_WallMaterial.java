@@ -3,13 +3,13 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Material;
 import org.javatuples.Pair;
-import org.shadownight.plugin.shadownight.dungeons.utils.BlockGradient;
-import org.shadownight.plugin.shadownight.dungeons.utils.PerlinNoise3D;
-import org.shadownight.plugin.shadownight.dungeons.utils.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
+import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise3D;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
-public class SHD_WallMaterial extends Rnd {
+public final class SHD_WallMaterial extends Rnd {
     static private final BlockGradient patternWall = new BlockGradient(
         Pair.with(6, Material.DEEPSLATE_TILES),
         Pair.with(4, Material.DEEPSLATE_BRICKS),

@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 
@@ -44,7 +45,7 @@ public class StarterKit {
     public static boolean isBlacklisted(ItemStack item) {
         if (item != null) {
             ItemMeta meta = item.getItemMeta();
-            return (meta != null && utils.stripColor(meta.getDisplayName()).startsWith(utils.stripColor(kit_prefix)));
+            return (meta != null && Chat.stripColor(meta.getDisplayName()).startsWith(Chat.stripColor(kit_prefix)));
         }
         return false;
     }

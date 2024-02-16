@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Vector;
 
 
-public class CMD_dungeontest implements CommandExecutor {
+public final class CMD_dungeontest implements CommandExecutor {
     public static final Vector<Dungeon> activeDungeons = new Vector<>();
 
 

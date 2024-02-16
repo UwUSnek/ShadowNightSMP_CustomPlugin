@@ -21,7 +21,7 @@ import org.shadownight.plugin.shadownight.qol.SurvivalFly;
 import org.shadownight.plugin.shadownight.qol.tpa.CMD_tpa;
 
 
-public class ShadowNight_listener implements Listener {
+public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         JoinLeaveMessages.formatJoin(event);
