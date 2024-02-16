@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 public final class CMD_help implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        Player player = (Player)sender;
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+        final Player player = (Player)sender;
         Chat.newline(player);
         Chat.sendMessage(player, "Useful commands:\n");
         Chat.newline(player);

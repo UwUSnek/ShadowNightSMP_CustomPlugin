@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class CMD_sngive implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
         long id;
         int amount;
         if(args.length > 0) {
-            Player player = (Player) sender;
+            final Player player = (Player) sender;
             try {
                 id = Long.parseLong(args[0]);
                 amount = args.length > 1 ? Integer.parseInt(args[1]) : 1;

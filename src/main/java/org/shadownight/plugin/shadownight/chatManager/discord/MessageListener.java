@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.chatManager.ChatManager;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
@@ -24,9 +25,9 @@ import static org.shadownight.plugin.shadownight.chatManager.discord.BotManager.
 
 public final class MessageListener extends ListenerAdapter {
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
         if(event.getChannel().getId().equals(BotManager.bridgeChannel.getId())) {
-            User author = event.getAuthor();
+            final User author = event.getAuthor();
             if(!author.isBot()) {
                 Bukkit.broadcastMessage("§9§l[Discord]§9 " + author.getEffectiveName() + ChatManager.playerMessageConnector + event.getMessage().getContentStripped());
             }
@@ -38,7 +39,7 @@ public final class MessageListener extends ListenerAdapter {
 
 
     @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+    public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
         utils.log(Level.INFO, "Detected slash command");
 
 

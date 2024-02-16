@@ -3,6 +3,8 @@ package org.shadownight.plugin.shadownight.qol;
 
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.Rnd;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,17 +19,16 @@ import java.util.HashMap;
 import java.util.Random;
 
 
-public class CMD_rtp implements CommandExecutor {
-    final Random rnd = new Random();
-    final HashMap<String, Long> prev = new HashMap<>();
+public class CMD_rtp implements CommandExecutor, Rnd {
+    private final HashMap<String, Long> prev = new HashMap<>();
 
 
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        Player player = (Player)sender;
-        int max = 10000;
-        Long cooldown = 10L * 60 * 1000;
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+        final Player player = (Player)sender;
+        final int max = 10000;
+        final Long cooldown = 10L * 60 * 1000;
 
         Long last_time = prev.get(player.getName());
         if(last_time != null) {

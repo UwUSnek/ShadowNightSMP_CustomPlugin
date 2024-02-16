@@ -31,7 +31,7 @@ import java.util.logging.Level;
 import static org.shadownight.plugin.shadownight.items.IM_CustomItem.itemIdKey;
 
 
-public final class utils {
+public final class utils extends UtilityClass {
     public static final String serverIp = "shadownight.g-portal.game";
 
 

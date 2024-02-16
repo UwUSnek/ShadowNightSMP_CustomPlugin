@@ -8,7 +8,10 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
+import org.shadownight.plugin.shadownight.utils.Rnd;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -18,12 +21,12 @@ import java.util.Random;
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 
-public final class DeathMessages {
-    public static class DeathData {
-        final String icon;
-        final String[] variants;
+public final class DeathMessages extends UtilityClass implements Rnd {
+    public static final class DeathData {
+        public final String icon;
+        public final String[] variants;
 
-        public DeathData(String _icon, String[] _variants){
+        public DeathData(@NotNull final String _icon, @NotNull final String[] _variants){
             icon = _icon;
             variants = _variants;
         }
@@ -31,7 +34,7 @@ public final class DeathMessages {
 
 
 
-    static final Map<EntityDamageEvent.DamageCause, DeathData> environmentData = Map.ofEntries(
+    private static final Map<EntityDamageEvent.DamageCause, DeathData> environmentData = Map.ofEntries(
         // Passive-only
         new AbstractMap.SimpleEntry<>(DamageCause.CONTACT,                new DeathData("§l💥", new String[]{ "was poked to death", "was pricked to death" })),
         new AbstractMap.SimpleEntry<>(DamageCause.CRAMMING,               new DeathData("☠",   new String[]{ "was squished too much" })),
@@ -57,7 +60,7 @@ public final class DeathMessages {
 
 
 
-    static final Map<EntityDamageEvent.DamageCause, DeathData> environmentAssistData = Map.ofEntries(
+    private static final Map<EntityDamageEvent.DamageCause, DeathData> environmentAssistData = Map.ofEntries(
         // Passive-only
         //new AbstractMap.SimpleEntry<>(DamageCause.CONTACT,                new DeathData("§l💥", new String[]{ "was poked to death", "was pricked to death" })),
         //new AbstractMap.SimpleEntry<>(DamageCause.CRAMMING,               new DeathData("☠",   new String[]{ "was squished too much" })),
@@ -83,7 +86,7 @@ public final class DeathMessages {
 
 
 
-    static final Map<EntityDamageEvent.DamageCause, DeathData> activeData = Map.ofEntries(
+    private static final Map<EntityDamageEvent.DamageCause, DeathData> activeData = Map.ofEntries(
         new AbstractMap.SimpleEntry<>(DamageCause.ENTITY_EXPLOSION,       new DeathData("§l💥", new String[]{ "was blown up by %killer%", "was disintegrated by %killer%", "was blown to bits by %killer%" })),
         new AbstractMap.SimpleEntry<>(DamageCause.ENTITY_SWEEP_ATTACK,    new DeathData("§l⚔", new String[]{ "was accidentally killed by %killer%" })),
         new AbstractMap.SimpleEntry<>(DamageCause.ENTITY_ATTACK,          new DeathData("§l⚔", new String[]{ "was killed by %killer%", "was slain by %killer%", "was destroyed by %killer%" })),
@@ -95,7 +98,7 @@ public final class DeathMessages {
 
 
 
-    static final Map<EntityType, String[]> projectileData = Map.ofEntries(
+    private static final Map<EntityType, String[]> projectileData = Map.ofEntries(
         new AbstractMap.SimpleEntry<>(EntityType.ARROW,             new String[]{ "was shot by %killer%", "was sniped by %killer%", "underestimated %killer%'s aim", "couldn't dodge %killer%'s arrows" }),
         new AbstractMap.SimpleEntry<>(EntityType.SPECTRAL_ARROW,    new String[]{ "was shot by %killer%", "was sniped by %killer%", "underestimated %killer%'s aim", "couldn't dodge %killer%'s spectral arrows" }),
         new AbstractMap.SimpleEntry<>(EntityType.TRIDENT,           new String[]{ "was impaled by %killer%", "couldn't dodge %killer%'s trident" }),
@@ -109,11 +112,11 @@ public final class DeathMessages {
         //new AbstractMap.SimpleEntry<>(EntityType.EGG,               new String[]{ "" }),  // This is not possible
         //new AbstractMap.SimpleEntry<>(EntityType.ENDER_PEARL,       new String[]{ "" }),  // This is not possible
         //new AbstractMap.SimpleEntry<>(EntityType.DRAGON_FIREBALL,   new String[]{ "" }),  // This is not possible
-                                                                         );
+    );
 
-    static final String[] playerSpecificVariants = {"lost a fight with %killer%", "was rejected by %killer%", "couldn't escape %killer%", "ended their friendship with %killer%", "skill issued during a fight with %killer%", "was killed by lag while fighting %killer%", "was slaughtered by %killer%" };
+    private static final String[] playerSpecificVariants = {"lost a fight with %killer%", "was rejected by %killer%", "couldn't escape %killer%", "ended their friendship with %killer%", "skill issued during a fight with %killer%", "was killed by lag while fighting %killer%", "was slaughtered by %killer%" };
 
-    static final String[] defaultAssistModifiers = {"trying to escape %killer%", "while fighting %killer%", "during a fight with %killer%" };
+    private static final String[] defaultAssistModifiers = {"trying to escape %killer%", "while fighting %killer%", "during a fight with %killer%" };
 
     //new AbstractMap.SimpleEntry<>(DamageCause.CUSTOM,                 new DeathData("", new String[]{ "" })),     // Custom damage
     //new AbstractMap.SimpleEntry<>(DamageCause.DRAGON_BREATH,          new DeathData("", new String[]{ "" })),     // This cannot happen naturally
@@ -125,13 +128,9 @@ public final class DeathMessages {
 
 
 
-    static final Random rnd = new Random();
-
-
-
-    static public void formatDeathMessage(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        Player killer = event.getEntity().getKiller();
+    public static void formatDeathMessage(@NotNull final PlayerDeathEvent event) {
+        final Player player = event.getEntity();
+        final Player killer = event.getEntity().getKiller();
         EntityDamageEvent.DamageCause cause;
         try {
             cause = Objects.requireNonNull(player.getLastDamageCause(), "Damage cause is null").getCause();
@@ -139,15 +138,15 @@ public final class DeathMessages {
             return;
         }
 
-        String a = "§8[§4";
-        String b = "§8] §r§7";
-        String m = "§l⚔§4";
+        final String a = "§8[§4";
+        final String b = "§8] §r§7";
+        final String m = "§l⚔§4";
         String msg;
 
 
         // If death was an active action
         if (cause == DamageCause.ENTITY_SWEEP_ATTACK || cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE || cause == DamageCause.THORNS || cause == DamageCause.ENTITY_EXPLOSION) {
-            DeathData data = activeData.get(cause);
+            final DeathData data = activeData.get(cause);
             if (data == null) {
                 event.setDeathMessage(null);
                 return;
@@ -163,12 +162,12 @@ public final class DeathMessages {
             }
             // If killer was not a player
             else {
-                EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) player.getLastDamageCause();
-                Entity damager = entityEvent.getDamager();
+                final EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) player.getLastDamageCause();
+                final Entity damager = entityEvent.getDamager();
 
                 // If player was shot by a projectile, use custom message
                 if (cause == DamageCause.PROJECTILE) {
-                    String[] projectileVariants = projectileData.get(damager.getType());
+                    final String[] projectileVariants = projectileData.get(damager.getType());
                     causeMessage = projectileVariants[rnd.nextInt(projectileVariants.length)];
                     killerName = ((Entity) Objects.requireNonNull(((Projectile) damager).getShooter(), "Shooter is null")).getName();
                 }
@@ -185,7 +184,7 @@ public final class DeathMessages {
 
         // If death was from the environment
         else {
-            DeathData data = environmentData.get(cause);
+            final DeathData data = environmentData.get(cause);
             if (data == null) {
                 event.setDeathMessage(null);
                 return;
@@ -195,7 +194,7 @@ public final class DeathMessages {
 
             // If a player helped with the kill
             if (killer != null) {
-                DeathData customMessages = environmentAssistData.get(cause);
+                final DeathData customMessages = environmentAssistData.get(cause);
                 msg = (
                     m + msg +
                     (
@@ -213,7 +212,7 @@ public final class DeathMessages {
 
 
         event.setDeathMessage(null);
-        String output = a + msg + ".";
+        final String output = a + msg + ".";
         Bukkit.broadcastMessage(output);
         BotManager.sendBridgeMessage(output);
     }

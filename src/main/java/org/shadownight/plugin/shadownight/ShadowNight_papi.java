@@ -44,16 +44,16 @@ public final class ShadowNight_papi extends PlaceholderExpansion {
 
     @Override
     @SuppressWarnings("deprecation") // This is for getOfflinePlayer bc GriefPrevention doesn't have a placeholder to get the UUID
-    public String onRequest(OfflinePlayer offlinePlayer, String placeholder) {
-        Player player = offlinePlayer.getPlayer();
+    public String onRequest(@NotNull final OfflinePlayer offlinePlayer, @NotNull final String placeholder) {
+        final Player player = offlinePlayer.getPlayer();
         switch (placeholder.toLowerCase()) {
             case "location": {
                 if (player == null) return null;
-                String worldName = player.getWorld().getName();
+                final String worldName = player.getWorld().getName();
                 if (worldName.equals("Spawn")) return "§6Public Spawn point";
                 if (worldName.equals("Survival") || worldName.equals("Survival_nether") || worldName.equals("Survival_the_end")) {
                     //else {
-                    String ownerName = PlaceholderAPI.setPlaceholders(player, "%griefprevention_currentclaim_ownername%");
+                    final String ownerName = PlaceholderAPI.setPlaceholders(player, "%griefprevention_currentclaim_ownername%");
                     if (!ownerName.equals("Unclaimed")) {
                         Player owner = Bukkit.getPlayer(ownerName);
                         if (owner == null) return utils.getFancyNameOffline(Bukkit.getOfflinePlayer(ownerName)) + "§r's Claim §7(Offline)";
@@ -73,7 +73,7 @@ public final class ShadowNight_papi extends PlaceholderExpansion {
             }
             case "chat_channel": {
                 if (player == null) return null;
-                String targetName = CMD_msg.openDms.get(player.getName());
+                final String targetName = CMD_msg.openDms.get(player.getName());
                 if (targetName == null) return "Chat channel: §aPublic";
                 else return "§dMessaging " + targetName;
             }

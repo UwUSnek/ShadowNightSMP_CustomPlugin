@@ -5,26 +5,32 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.type.Leaves;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.logging.Level;
 
 /**
- * A simple world region that only contains block types (Material)
+ * A simple world region that only contains block types (Material) and data (BlockData)
  * Allows for custom shift on set operations
  */
 public final class RegionBuffer {
     private final Material[][][] b;
-    public final int x;
-    public final int y;
-    public final int z;
-    private final int shift_x;
-    private final int shift_y;
-    private final int shift_z;
+    private final BlockData[][][] d;
+    public final int x, y, z;
+    private final int shift_x, shift_y, shift_z;
 
 
-    public RegionBuffer(int _x, int _y, int _z, int _shift_x, int _shift_y, int _shift_z) {
+    /**
+     * Creates a new RegionBuffer
+     * @param _x The length of the buffer
+     * @param _y The height of the buffer
+     * @param _z The width of the buffer
+     * @param _shift_x The shift on the x-axis applied by the setShifted functions
+     * @param _shift_y The shift on the y-axis applied by the setShifted functions
+     * @param _shift_z The shift on the z-axis applied by the setShifted functions
+     */
+    public RegionBuffer(final int _x, final int _y, final int _z, final int _shift_x, final int _shift_y, final int _shift_z) {
         x = _x;
         y = _y;
         z = _z;
@@ -33,32 +39,85 @@ public final class RegionBuffer {
         shift_z = _shift_z;
 
         b = new Material[x][y][z];
+        d = new BlockData[x][y][z];
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
             b[i][j][k] = Material.AIR;
+            d[i][j][k] = Material.AIR.createBlockData();
         }
     }
 
 
 
 
-    public void setShifted(int _x, int _y, int _z, Material material) {
+
+
+    /**
+     * Sets the material and data of the specified block, shifting the provided coordinates by the amount set when this buffer was created.
+     * @param _x The x coordinate of the block
+     * @param _y The y coordinate of the block
+     * @param _z The z coordinate of the block
+     * @param material The material to set
+     * @param data The data to set
+     */
+    public void setShifted(final int _x, final int _y, final int _z, @NotNull final Material material, @NotNull final BlockData data) {
         try {
             b[_x + shift_x][_y + shift_y][_z + shift_z] = material;
+            d[_x + shift_x][_y + shift_y][_z + shift_z] = data;
         }
         catch(ArrayIndexOutOfBoundsException e){
             utils.log(Level.SEVERE, "Index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift (" + shift_x + ", " + shift_y + ", " + shift_z + ")");
         }
     }
-    public void set(int _x, int _y, int _z, Material material) {
+    /**
+     * Sets the material of the specified block using its default data, shifting the provided coordinates by the amount set when this buffer was created.
+     * @param _x The x coordinate of the block
+     * @param _y The y coordinate of the block
+     * @param _z The z coordinate of the block
+     * @param material The material to set
+     */
+    public void setShifted(final int _x, final int _y, final int _z, @NotNull final Material material) {
+        setShifted(_x, _y, _z, material, material.createBlockData());
+    }
+
+
+
+
+    /**
+     * Sets the material and data of the specified block.
+     * @param _x The x coordinate of the block
+     * @param _y The y coordinate of the block
+     * @param _z The z coordinate of the block
+     * @param material The material to set
+     * @param data The data to set
+     */
+    public void set(final int _x, final int _y, final int _z, @NotNull final Material material, @NotNull final BlockData data) {
         try {
             b[_x][_y][_z] = material;
+            d[_x][_y][_z] = data;
         }
         catch(ArrayIndexOutOfBoundsException e){
             utils.log(Level.SEVERE, "Index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift 0");
         }
     }
+    /**
+     * Sets the material of the specified block using its default data.
+     * @param _x The x coordinate of the block
+     * @param _y The y coordinate of the block
+     * @param _z The z coordinate of the block
+     * @param material The material to set
+     */
+    public void set(final int _x, final int _y, final int _z, @NotNull final Material material) {
+        set(_x, _y, _z, material, material.createBlockData());
+    }
 
-    public Material get(int _x, int _y, int _z){
+    /**
+     * Returns the material of the specified block.
+     * @param _x The x coordinate of the block
+     * @param _y The y coordinate of the block
+     * @param _z The z coordinate of the block
+     * @return The block material
+     */
+    public Material get(final int _x, final int _y, final int _z){
         return b[_x][_y][_z];
     }
 
@@ -66,13 +125,14 @@ public final class RegionBuffer {
 
 
     /**
-     * Pastes the region at the given location, creating an additional bedrock box around it
+     * Pastes the region at the given location, optionally creating a bedrock box around it.
      * @param world The world to paste the region in
      * @param _x The x coordinate of the origin
      * @param _y The y coordinate of the origin
      * @param _z The z coordinate of the origin
+     * @param createBox Whether or not to create the bedrock box. This is always created before pasting the actual region
      */
-    public void paste(World world, int _x, int _y, int _z) {
+    public void paste(@NotNull final World world, final int _x, final int _y, final int _z, final boolean createBox) {
         // X-Y vertical plane (bedrock box side)
         for(int i = -1; i < x + 1; ++i) for(int j = -1; j < y + 1; ++j) {
             world.getBlockAt(_x + i, _y + j, _z - 1).setType(Material.BEDROCK, false);
@@ -91,26 +151,11 @@ public final class RegionBuffer {
 
         // Main region
         // IMPORTANT: This must be placed last as mushrooms require a low skylight level which the bedrock box provides
-        //            Placing them first will cause most of them to drop as an item
+        //            Placing them first will cause most of them to drop as items
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
-            Material material = b[i][j][k];
             Block block = world.getBlockAt(_x + i, _y + j, _z + k);
-            block.setType(material);
-            if(
-                material == Material.ACACIA_LEAVES   ||
-                material == Material.AZALEA_LEAVES   ||
-                material == Material.BIRCH_LEAVES    ||
-                material == Material.CHERRY_LEAVES   ||
-                material == Material.JUNGLE_LEAVES   ||
-                material == Material.DARK_OAK_LEAVES ||
-                material == Material.MANGROVE_LEAVES ||
-                material == Material.OAK_LEAVES      ||
-                material == Material.SPRUCE_LEAVES
-            ) {
-                Leaves data = (Leaves)material.createBlockData();
-                data.setPersistent(true);
-                block.setBlockData(data);
-            }
+            block.setType(b[i][j][k]);
+            block.setBlockData(d[i][j][k]);
         }
     }
 }

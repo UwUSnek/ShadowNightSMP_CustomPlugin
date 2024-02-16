@@ -1,6 +1,7 @@
 package org.shadownight.plugin.shadownight.utils;
 
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
 import javax.imageio.ImageIO;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 
-public final class SkinRenderer {
+public final class SkinRenderer extends UtilityClass {
     public enum RenderType {
         PROPIC,
         FULL
@@ -22,7 +23,9 @@ public final class SkinRenderer {
     private static final HashMap<RenderType, HashMap<UUID, BufferedImage>> runtimeCache = new HashMap<>();
 
 
-
+    /**
+     * Initializes the skin renderer. This must be called exactly once before using any method of this class
+     */
     public static void init(){
         cachePath = ShadowNight.plugin.getDataFolder() + "/skinRenders/";
         try {
@@ -37,11 +40,16 @@ public final class SkinRenderer {
     }
 
 
-
-
-    public static String getRenderUrl(OfflinePlayer player, RenderType renderType){
-        UUID uuid = player.getUniqueId();
-        String type = switch (renderType) {
+    /**
+     * Returns the URL of the render based on the render type.
+     * This method doesn't cache renders.
+     * @param player The player to render
+     * @param renderType The type of render
+     * @return The generated URL
+     */
+    public static String getRenderUrl(@NotNull final OfflinePlayer player, @NotNull final RenderType renderType){
+        final UUID uuid = player.getUniqueId();
+        final String type = switch (renderType) {
             case PROPIC -> "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}";
             case FULL   -> "full";
         };
@@ -49,11 +57,19 @@ public final class SkinRenderer {
     }
 
 
-    public static String getRenderUri(OfflinePlayer player, RenderType renderType){
-        String type = getRenderUrl(player, renderType);
-        UUID uuid = player.getUniqueId();
-        String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
-        File file = new File(filePath);
+
+    /**
+     * Creates a new skin render and returns its URI.
+     * Renders are cached to improve performance.
+     * @param player The player to render
+     * @param renderType The type of render
+     * @return The URI of the generated render
+     */
+    public static String getRenderUri(@NotNull final OfflinePlayer player, @NotNull final RenderType renderType){
+        final String type = getRenderUrl(player, renderType);
+        final UUID uuid = player.getUniqueId();
+        final String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
+        final File file = new File(filePath);
 
         // If file cache doesn't exist, create a new render, save it and load the data
         if (!file.exists()) {
@@ -63,17 +79,26 @@ public final class SkinRenderer {
     }
 
 
-    public static BufferedImage getRender(OfflinePlayer player, RenderType renderType){
-        String type = getRenderUrl(player, renderType);
-        UUID uuid = player.getUniqueId();
-        HashMap<UUID, BufferedImage> typeRuntimeCache = runtimeCache.get(renderType);
+
+
+    /**
+     * Creates a new skin render and returns it as an image.
+     * Renders are cached to improve performance.
+     * @param player The player to render
+     * @param renderType The type of render
+     * @return The generated render image
+     */
+    public static BufferedImage getRender(@NotNull final OfflinePlayer player, @NotNull final RenderType renderType){
+        final String type = getRenderUrl(player, renderType);
+        final UUID uuid = player.getUniqueId();
+        final HashMap<UUID, BufferedImage> typeRuntimeCache = runtimeCache.get(renderType);
         BufferedImage playerRuntimeCache = typeRuntimeCache.get(uuid);
 
 
         // Load from runtime cache if it exists
         if (playerRuntimeCache == null) {
-            String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
-            File file = new File(filePath);
+            final String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
+            final File file = new File(filePath);
 
             // If file cache doesn't exist, create a new render, save it and load the data
             if (!file.exists()) {
@@ -101,13 +126,13 @@ public final class SkinRenderer {
 
 
 
-    private static BufferedImage saveImage(String imageUrl, String destinationFile) {
+    private static BufferedImage saveImage(@NotNull final String imageUrl, @NotNull final String destinationFile) {
         try {
-            URL url = new URL(imageUrl);
-            InputStream inputStream = url.openStream();
-            OutputStream outputFile = new FileOutputStream(destinationFile);
+            final URL url = new URL(imageUrl);
+            final InputStream inputStream = url.openStream();
+            final OutputStream outputFile = new FileOutputStream(destinationFile);
 
-            byte[] buffer = new byte[2048];
+            final byte[] buffer = new byte[2048];
             int length;
 
 

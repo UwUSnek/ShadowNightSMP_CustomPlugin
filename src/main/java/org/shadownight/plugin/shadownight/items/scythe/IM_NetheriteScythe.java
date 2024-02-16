@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.items.scythe;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 
 
@@ -17,7 +18,7 @@ public final class IM_NetheriteScythe extends IM_Scythe {
 
 
     @Override
-    protected void setRecipe(ShapedRecipe recipe) {
+    protected void setRecipe(@NotNull final ShapedRecipe recipe) {
         recipe.shape("III", "  S", " S ");
         recipe.setIngredient('I', Material.NETHERITE_INGOT);
         recipe.setIngredient('S', Material.COMMAND_BLOCK);

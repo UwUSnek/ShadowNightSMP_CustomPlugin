@@ -1,6 +1,7 @@
 package org.shadownight.plugin.shadownight.items;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.items.scythe.*;
 
 import java.util.Collections;
@@ -18,9 +19,15 @@ public enum ItemManager {
 
 
     private final IM_CustomItem value;
-    ItemManager(IM_CustomItem item){
+    ItemManager(@NotNull final IM_CustomItem item){
         value = item;
     }
+
+    /**
+     * Returns the instance of this Item Manager.
+     * This can be used to retrieve item-specific data
+     * @return The manager instance
+     */
     public IM_CustomItem getInstance() {
         return value;
     }
@@ -28,16 +35,28 @@ public enum ItemManager {
 
     private static final Map<Long, IM_CustomItem> lookupTable;
     static {
-        HashMap<Long, IM_CustomItem> lookupTableTmp = new HashMap<>();
+        final HashMap<Long, IM_CustomItem> lookupTableTmp = new HashMap<>();
         for(ItemManager item : values()) {
             lookupTableTmp.put(item.value.getCustomId().getNumericalValue(), item.value);
         }
         lookupTable = Collections.unmodifiableMap(lookupTableTmp);
     }
-    public static IM_CustomItem getValueFromId(CustomItemId id) {
+
+
+    /**
+     * Returns the ItemManager instance with CustomItemId <id>.
+     * @param id The id to search for
+     * @return The manger instance
+     */
+    public static IM_CustomItem getValueFromId(@NotNull final CustomItemId id) {
         return lookupTable.get(id.getNumericalValue());
     }
-    public static IM_CustomItem getValueFromId(long id) {
+    /**
+     * Returns the ItemManager instance with CustomItemId <id>.
+     * @param id The id to search for
+     * @return The manger instance
+     */
+    public static IM_CustomItem getValueFromId(final long id) {
         return lookupTable.get(id);
     }
 }

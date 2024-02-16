@@ -3,12 +3,18 @@ package org.shadownight.plugin.shadownight.qol;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 
-public class SurvivalFly {
-    public static void updateState(Player player) {
+public class SurvivalFly extends UtilityClass {
+    /**
+     * Updates the allowFlight value of the player <player> based on their rank and current world.
+     * @param player The player to check
+     */
+    public static void updateState(@NotNull final Player player) {
         if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
             if (player.hasPermission("group.vip")) {
                 if (player.getWorld().getName().equals("Spawn") && !player.getAllowFlight()) {

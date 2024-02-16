@@ -2,6 +2,7 @@ package org.shadownight.plugin.shadownight.qol.tpa;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 import org.bukkit.command.Command;
@@ -15,13 +16,13 @@ import java.util.Vector;
 public final class CMD_tpaccept implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
         if (args.length == 0) {
             return false;
         }
 
-        Player target = (Player) sender;
-        Player player = org.bukkit.Bukkit.getPlayer(args[0]);
+        final Player target = (Player) sender;
+        final Player player = org.bukkit.Bukkit.getPlayer(args[0]);
         if (utils.playerOfflineCheck(target, player, args[0])) return true;
 
         @SuppressWarnings("DataFlowIssue") // checked in playerOfflineCheck

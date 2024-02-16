@@ -4,9 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent.RespawnReason;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
 
-public class SpawnInvincibility {
+public class SpawnInvincibility extends UtilityClass {
     public static void onRespawn(Player player, RespawnReason reason) {
         if (reason == RespawnReason.DEATH) {
             player.setInvulnerable(true);

@@ -8,6 +8,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ShapedRecipe;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 
@@ -23,7 +24,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
     @Override
-    protected void setRecipe(ShapedRecipe recipe) {
+    protected void setRecipe(@NotNull final ShapedRecipe recipe) {
         recipe.shape("III", "  S", " S ");
         recipe.setIngredient('I', Material.COMMAND_BLOCK);
         recipe.setIngredient('S', Material.COMMAND_BLOCK);

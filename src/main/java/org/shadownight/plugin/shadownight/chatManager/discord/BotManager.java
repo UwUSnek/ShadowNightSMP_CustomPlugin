@@ -11,8 +11,10 @@ import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 
-public final class BotManager {
+public final class BotManager extends UtilityClass {
     public static TextChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";
@@ -38,6 +40,9 @@ public final class BotManager {
     private static IncomingWebhookClient webhookClient;
 
 
+    /**
+     * Initializes the bot manager.
+     */
     public static void init() {
         // Read bot token from config files
         String token;
@@ -67,7 +72,7 @@ public final class BotManager {
 
 
         // Get output channels
-        boolean isMainServer = new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists();
+        final boolean isMainServer = new File(ShadowNight.plugin.getDataFolder() + "/.mainServer").exists();
         bridgeChannel = jda.getChannelById(TextChannel.class, isMainServer ? bridgeChannelId : testBridgeChannelId);
         commandsChannel = jda.getChannelById(TextChannel.class, isMainServer ? commandsChannelId : testCommandsChannelId);
 
@@ -97,18 +102,22 @@ public final class BotManager {
     }
 
 
-
-
-
-
-
-    public static void sendBridgeMessage(String msg) {
+    /**
+     * Sends a system message to the bridge channel.
+     * @param msg The message string
+     */
+    public static void sendBridgeMessage(@NotNull final String msg) {
         bridgeChannel.sendMessage(Chat.stripColor(msg)).queue();
         utils.log(Level.INFO, "logged server message \"" + msg + "\"");
     }
 
 
-    public static void sendBridgeMessage(Player player, String msg) {
+    /**
+     * Sends a player message to the bridge channel
+     * @param player The player that sent the message
+     * @param msg The message string
+     */
+    public static void sendBridgeMessage(@NotNull final Player player, @NotNull final String msg) {
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
             webhookClient.sendMessage(Chat.stripColor(msg))
                 .setUsername("[" + utils.getGroupDisplayName(player) + "] " + player.getName())

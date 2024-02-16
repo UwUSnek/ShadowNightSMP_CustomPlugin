@@ -2,42 +2,59 @@ package org.shadownight.plugin.shadownight.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
 
 public final class Timer {
-    private final int max;
+    private final int duration;
     private int s;
-    final Runnable onStart;
-    final Runnable onUpdate;
-    final Runnable onFinish;
-    BukkitTask task;
+    private final Runnable onStart;
+    private final Runnable onUpdate;
+    private final Runnable onFinish;
+    private BukkitTask task;
 
-    public Timer(int _max, Runnable _onStart, Runnable _onUpdate, Runnable _onFinish){
+
+    /**
+     * Creates a new Timer.
+     * @param _duration The duration of the timer expressed in seconds
+     * @param _onStart The function to run when the timer is started
+     * @param _onUpdate The function to run when the remaining time is updated
+     * @param _onFinish The function to run when the time runs out
+     */
+    public Timer(final int _duration, @Nullable final Runnable _onStart, @Nullable final Runnable _onUpdate, @Nullable final Runnable _onFinish){
+        duration = _duration;
         onStart = _onStart;
         onUpdate = _onUpdate;
         onFinish = _onFinish;
-        max = _max;
     }
 
+
+    /**
+     * Returns the remaining time expressed in seconds
+     * @return The remaining time
+     */
     public int getTimeLeft(){
         return s;
     }
 
-    public void update(){
+
+    private void update(){
         s--;
         if(s == 0) {
             task.cancel();
-            onFinish.run();
+            if(onFinish != null) onFinish.run();
         }
-        else onUpdate.run();
+        else if(onUpdate != null) onUpdate.run();
     }
 
+
+    /**
+     * Calls the onStart function and starts the timer
+     */
     public void start(){
         if(task != null) task.cancel();
-        s = max;
-        onStart.run();
+        s = duration;
+        if(onStart != null) onStart.run();
         task = Bukkit.getScheduler().runTaskTimer(ShadowNight.plugin, this::update, 20, 20);
     }
-
-
 }

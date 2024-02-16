@@ -20,19 +20,19 @@ public final class CMD_msg implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
         processCommand((Player) sender, new Vector<>(Arrays.asList(args)));
         return true;
     }
 
 
-    public static void processCommand(@NotNull Player player, Vector<String> args) {
+    public static void processCommand(@NotNull final Player player, @NotNull final Vector<String> args) {
         if (args.isEmpty()) {
             openDms.remove(player.getName());
             Chat.sendMessage(player, "§aYou returned to the Public chat channel.");
         }
         else {
-            Player target = org.bukkit.Bukkit.getPlayer(args.get(0));
+            final Player target = org.bukkit.Bukkit.getPlayer(args.get(0));
             if (utils.playerOfflineCheck(player, target, args.get(0))) return;
             if (player.equals(target)) {
                 Chat.sendMessage(player, "§cYou cannot message yourself!");

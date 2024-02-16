@@ -3,8 +3,11 @@ package org.shadownight.plugin.shadownight.utils.spigot;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
-public final class Chat {
+
+
+public final class Chat extends UtilityClass {
     public static final String serverPrefix = "§d§l[§5§lSN§d§l] §r";
 
 
@@ -14,7 +17,7 @@ public final class Chat {
      * @param message The message string
      */
     @SuppressWarnings("unused")
-    public static void sendMessage(@NotNull Player player, String message) {
+    public static void sendMessage(@NotNull final Player player, @NotNull final String message) {
         player.sendMessage(serverPrefix + message);
     }
 
@@ -23,7 +26,7 @@ public final class Chat {
      * @param player The player to send the message to
      */
     @SuppressWarnings("unused")
-    public static void newline(@NotNull Player player) {
+    public static void newline(@NotNull final Player player) {
         player.sendMessage("");
     }
 
@@ -32,7 +35,7 @@ public final class Chat {
      * @param player The player to send the message to
      */
     @SuppressWarnings("unused")
-    public static void separator(@NotNull Player player) {
+    public static void separator(@NotNull final Player player) {
         player.sendMessage("§d§m                                                                               ");
     }
 
@@ -46,7 +49,7 @@ public final class Chat {
      * @return A string containing the formatted duration
      */
     @SuppressWarnings("unused")
-    public static String sToDuration(Long s, boolean useSpaces) {
+    public static String sToDuration(@NotNull final Long s, final boolean useSpaces) {
         return sToDuration(s, useSpaces ? " " : "");
     }
 
@@ -57,11 +60,11 @@ public final class Chat {
      * @return A string containing the formatted duration
      */
     @SuppressWarnings("unused")
-    public static String msToDuration(Long ms, boolean useSpaces) {
+    public static String msToDuration(@NotNull final Long ms, final boolean useSpaces) {
         return msToDuration(ms, useSpaces ? " " : "");
     }
 
-    private static String sToDuration(Long s, String c) {
+    private static String sToDuration(@NotNull final Long s, @NotNull final String c) {
         return
             (s >= 86400 ? (s / 86400      + "d" + c) : "") +
             (s >= 3600  ? (s / 3600  % 24 + "h" + c) : "") +
@@ -70,7 +73,7 @@ public final class Chat {
             ;
     }
 
-    private static String msToDuration(Long m, String c) {
+    private static String msToDuration(@NotNull final Long m, @NotNull final String c) {
         return
             (m >= 60000 ? (m / 60000 % 60000 + "m" + c) : "") +
             (m >= 1000  ? (m / 1000  % 1000  + "s" + c) : "") +
@@ -87,7 +90,7 @@ public final class Chat {
      * @return The stripped string
      */
     @SuppressWarnings("unused")
-    public static String stripPrivateCharacters(String s) {
+    public static String stripPrivateCharacters(@NotNull final String s) {
         return s.replaceAll("[\uE000-\uF8FF]", "");
     }
 
@@ -97,7 +100,7 @@ public final class Chat {
      * @return The stripped string
      */
     @SuppressWarnings("unused")
-    public static String stripColor(String s) {
+    public static String stripColor(@NotNull final String s) {
         return s.replaceAll("[&§]([0-9a-fk-or])", "");
     }
 
@@ -107,7 +110,7 @@ public final class Chat {
      * @return The translated string
      */
     @SuppressWarnings("unused")
-    public static String translateColor(String s) {
+    public static String translateColor(@NotNull final String s) {
         return s.replaceAll("&([0-9a-fk-or])", "§$1");
     }
 }

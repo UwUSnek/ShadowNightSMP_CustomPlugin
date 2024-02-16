@@ -35,11 +35,18 @@ public final class Dungeon {
     public World world = null;
 
 
+    /**
+     * Creates a new Dungeon.
+     */
     public Dungeon() {
         if (createWorld()) generateDungeon();
     }
 
 
+    /**
+     * Creates the world the dungeon will be in.
+     * @return True if the world was generated correctly, false otherwise
+     */
     private boolean createWorld() {
         world = Bukkit.createWorld(new WorldCreator(namePrefix + UUID.randomUUID())
             .environment(World.Environment.NORMAL)
@@ -105,29 +112,30 @@ public final class Dungeon {
     }
 
 
-
-
+    /**
+     * Generates the dungeon structure.
+     */
     public void generateDungeon() {
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
 
         // Inner walls data
-        int tileSize = 13;                                    // The size of each tile
-        int wallThickness = 9;                                // The thickness of the inner maze walls
-        int wallHeight = 60;                                  // The height of the inner maze walls
-        int xNum = 5;                                        // The height of the maze expressed in tiles. Must be an odd number
-        int zNum = 5;                                        // The width  of the maze expressed in tiles. Must be an odd number
-        Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
+        final int tileSize = 13;                                    // The size of each tile
+        final int wallThickness = 9;                                // The thickness of the inner maze walls
+        final int wallHeight = 60;                                  // The height of the inner maze walls
+        final int xNum = 5;                                        // The height of the maze expressed in tiles. Must be an odd number
+        final int zNum = 5;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        final Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
 
 
         // Outer walls and floor data
-        int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
-        int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
-        int floorThickness = 5;                               // The thickness of the floor
-        int ceilingThickness = 5;                             // The thickness of the ceiling
-        int outerWallsThickness = 5;                          // The thickness of the outer walls
-        Material materialFloor = Material.LIGHT_GRAY_CONCRETE;// Temporary material used for the floor
-        Material materialCeiling = Material.ORANGE_CONCRETE;  // Temporary material used for the ceiling
-        Material materialVines = Material.GREEN_CONCRETE;     // Temporary material used for the ceiling
+        final int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
+        final int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
+        int floorThickness = 5;                                     // The thickness of the floor
+        final int ceilingThickness = 5;                             // The thickness of the ceiling
+        int outerWallsThickness = 5;                                // The thickness of the outer walls
+        final Material materialFloor = Material.LIGHT_GRAY_CONCRETE;// Temporary material used for the floor
+        final Material materialCeiling = Material.ORANGE_CONCRETE;  // Temporary material used for the ceiling
+        final Material materialVines = Material.GREEN_CONCRETE;     // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
         floorThickness = Func.clampMin(floorThickness, 2);
 
@@ -135,10 +143,10 @@ public final class Dungeon {
         // Actually generate the dungeon
         {
             // Calculate total size and create region buffer
-            int total_x = x + outerWallsThickness * 2;
-            int total_y = wallHeight + floorThickness + ceilingThickness;
-            int total_z = z + outerWallsThickness * 2;
-            RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
+            final int total_x = x + outerWallsThickness * 2;
+            final int total_y = wallHeight + floorThickness + ceilingThickness;
+            final int total_z = z + outerWallsThickness * 2;
+            final RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
             // Generate base layout
             PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
@@ -148,11 +156,11 @@ public final class Dungeon {
             PerlinNoise.resetSeed(); GEN_WallsDeform.start       (buffer, materialWalls,   floorThickness, wallHeight);
 
             // Calculate full wall distance gradient and generate the rest of the base layout
-            float[][] wallDistanceGradientHigh = createWallDistanceGradient(buffer, floorThickness + wallHeight - 1, tileSize, materialWalls, true);
+            final float[][] wallDistanceGradientHigh = createWallDistanceGradient(buffer, floorThickness + wallHeight - 1, tileSize, materialWalls, true);
             PerlinNoise.resetSeed(); GEN_CeilingDeform.start(buffer, materialCeiling, materialVines, wallDistanceGradientHigh, floorThickness, wallHeight);
 
             // Calculate wall distance gradient and apply material shaders
-            float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);
+            final float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);
             PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
             PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
             PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
@@ -160,20 +168,29 @@ public final class Dungeon {
             PerlinNoise.resetSeed(); SHD_CeilingVines.start   (buffer, materialVines);
 
             // Paste the region into the world
-            buffer.paste(world, -total_x / 2, 0, -total_z / 2);
+            buffer.paste(world, -total_x / 2, 0, -total_z / 2, true);
         }
 
 
         // Log generation time
-        long duration = System.currentTimeMillis() - start;
+        final long duration = System.currentTimeMillis() - start;
         utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(duration, true));
     }
 
 
-
-    private static float[][] createWallDistanceGradient(RegionBuffer b, int y, int tileSize, Material m, boolean calculateNegative) {
-        float[][] gradient = new float[b.x][b.z];
-        int halfSize = tileSize / 2;
+    /**
+     * Creates a float gradient in which each cell indicates the distance of the block from the closest wall.
+     * @param b The RegionBuffer containing the walls
+     * @param y The Y level to use when performing calculations
+     * @param tileSize The size of each tile
+     * @param m The Material that was used for the walls
+     * @param calculateNegative Whether or not negative distances should be calculated for blocks inside walls.
+     *                          If false, internal blocks will have a distance value of 0
+     * @return The distance gradient
+     */
+    private static float[][] createWallDistanceGradient(@NotNull final RegionBuffer b, final int y, final int tileSize, @NotNull final Material m, final boolean calculateNegative) {
+        final float[][] gradient = new float[b.x][b.z];
+        final int halfSize = tileSize / 2;
         for(int i = 0; i < b.x; ++i) for(int j = 0;  j < b.z; ++j) {
             int k = 0;
             try {
@@ -212,7 +229,7 @@ public final class Dungeon {
      * This MUST be called first in the .onLoad function
      */
     public static void deleteOldDungeons() {
-        List<File> worlds;
+        final List<File> worlds;
         try(Stream<Path> stream = Files.list(Paths.get(ShadowNight.plugin.getServer().getWorldContainer().getPath()))) {
             worlds = stream
                 .map(Path::toFile)

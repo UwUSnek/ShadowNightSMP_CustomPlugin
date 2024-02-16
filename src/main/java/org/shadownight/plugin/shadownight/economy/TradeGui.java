@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SignInput;
@@ -51,7 +52,12 @@ public final class TradeGui implements Listener {
     private final NamespacedKey coin_key = new NamespacedKey(ShadowNight.plugin, "coin_value");
 
 
-    public TradeGui(Player _player, Player target){
+    /**
+     * Creates a new Trade GUI that allows 2 players to trade items and coins.
+     * @param _player The first player
+     * @param target The second player
+     */
+    public TradeGui(@NotNull final Player _player, @NotNull final Player target){
         player = _player;
         inv = Bukkit.createInventory(null, 54, "§rYou §l⮀§r " + target.getName());
         inv.setItem(buttonAddCoins,       utils.createItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1, "§eClick to add coins"));
@@ -59,7 +65,13 @@ public final class TradeGui implements Listener {
         inv.setItem(22,                   utils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r"));
         inv.setItem(31,                   utils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r"));
     }
-    public void TradeGuiInit(TradeGui _linkedGui) {
+
+    /**
+     * Initializes the Trade GUI and sets it's linked GUI.
+     * Must be called after creating the instance.
+     * @param _linkedGui The GUI instance of the other player
+     */
+    public void TradeGuiInit(@NotNull final TradeGui _linkedGui) {
         linkedGui = _linkedGui;
         updateStatus();
         timer = new Timer(
@@ -76,35 +88,46 @@ public final class TradeGui implements Listener {
     }
 
 
-
-
-
-
+    /**
+     * Toggles the confirmation state of the other player.
+     */
     public void toggleTarget(){
         targetHasAccepted = !targetHasAccepted;
         updateStatus();
     }
+
+    /**
+     * Toggles the confirmation state of the current player.
+     */
     private void togglePlayer(){
         playerHasAccepted = !playerHasAccepted;
         updateStatus();
     }
 
 
-
-
+    /**
+     * Updates the remaining time display.
+     */
     public void updateConfirmationNameTimer() {
-        ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
+        final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
         if(meta != null) meta.setDisplayName("§7Click to accept the trade! (" + timer.getTimeLeft() + "s)");
         Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
     }
+
+    /**
+     * Updates the text that tells the player if they have confirmed or can do so.
+     */
     public void updateConfirmationName() {
-        ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
+        final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
         if(meta != null) meta.setDisplayName(playerHasAccepted ? "§aYou accepted the trade. Click to cancel." : "§dClick to accept the trade!");
         Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
     }
 
+    /**
+     * Updates the list of given and received items.
+     */
     public void updateConfirmationLore() {
-        ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
+        final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
         if(meta != null) {
             ArrayList<String> lore = new ArrayList<>();
 
@@ -118,8 +141,9 @@ public final class TradeGui implements Listener {
     }
 
 
-
-
+    /**
+     * Updates the list of given items for the current player.
+     */
     private void updatePlayerItemList() {
         for (int i = 0; i < items.size(); ++i) {
             inv.setItem(i % 4 + 9 * (i / 4), items.get(i));
@@ -129,6 +153,9 @@ public final class TradeGui implements Listener {
         }
         timer.start();
     }
+    /**
+     * Updates the list of received items for the current player.
+     */
     public void updateTargetItemList(){
         for (int i = 0; i < linkedGui.items.size(); ++i) {
             inv.setItem(i % 4 + 9 * (i / 4) + 5, linkedGui.items.get(i));
@@ -141,10 +168,10 @@ public final class TradeGui implements Listener {
 
 
     /**
-     * Adds an item to the item list
+     * Adds an item to the list of given items.
      * @param item the item to add. Coin  items are allowed and the metadata is set by the SignInput.
      */
-    public void selectItem(ItemStack item){
+    public void selectItem(@NotNull final ItemStack item){
         if(items.size() == 24) {
             Chat.sendMessage(player, "§cYou can only trade up to 24 items!");
         }
@@ -157,13 +184,18 @@ public final class TradeGui implements Listener {
             linkedGui.updateConfirmationLore();
         }
     }
-    public void retrieveItem(int slot){
+
+    /**
+     * Removes an item from the list of given items.
+     * @param slot The clicked slot
+     */
+    public void retrieveItem(final int slot){
         // Retrieve item stack
-        int i = slot % 9 + 4 * (slot / 9);
-        ItemStack item = items.get(i);
+        final int i = slot % 9 + 4 * (slot / 9);
+        final ItemStack item = items.get(i);
 
         // Give item back to the player
-        PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
+        final PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
         if(container.has(coin_key, PersistentDataType.LONG)) {
             Economy.addToBalance(player, container.get(coin_key, PersistentDataType.LONG));
         }
@@ -178,13 +210,14 @@ public final class TradeGui implements Listener {
     }
 
 
-
-
-
-
-    private void giveItems(Player _player, Vector<ItemStack> _items) {
-        Inventory playerInv = _player.getInventory();
-        World world = _player.getWorld();
+    /**
+     * Gives an item list to the player <_player>.
+     * @param _player The player to give the items to
+     * @param _items The list of items
+     */
+    private void giveItems(@NotNull final Player _player, @NotNull final Vector<ItemStack> _items) {
+        final Inventory playerInv = _player.getInventory();
+        final World world = _player.getWorld();
         for(ItemStack item : _items){
             PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
             if(container.has(coin_key, PersistentDataType.LONG)) {
@@ -197,7 +230,10 @@ public final class TradeGui implements Listener {
         }
     }
 
-    //! Executes twice and manages the current player
+
+    /**
+     * Completes the trade for the current player.
+     */
     public void completeTrade(){
         alreadyClosed = true;
         giveItems(player, linkedGui.items);
@@ -205,7 +241,10 @@ public final class TradeGui implements Listener {
         Chat.sendMessage(player, "§aTrade completed with " + utils.getFancyName(linkedGui.player) + "§a!");
     }
 
-    //! Executes once and manages both players
+
+    /**
+     * Cancels the trade and closes the GUI for both players.
+     */
     public void cancelTrade() {
         alreadyClosed = true;
         giveItems(player, items);
@@ -216,6 +255,10 @@ public final class TradeGui implements Listener {
     }
 
 
+    /**
+     * Updates the confirmation status GUI for the current player.
+     * completeTrade is called when both players confirm.
+     */
     private void updateStatus(){
         if(playerHasAccepted && targetHasAccepted) {
             // The other player is managed by its own completion call after its target gets toggled
@@ -235,17 +278,17 @@ public final class TradeGui implements Listener {
     }
 
 
-
-
-
-
+    /**
+     * Opens this GUI for the current player.
+     */
     public void openInventory() {
         player.openInventory(inv);
     }
 
 
-
-
+    /**
+     * Opens the coin input GUI and adds the entered number as a coin item to the item list.
+     */
     private void readCoinInput(){
         readingInput = true;
 

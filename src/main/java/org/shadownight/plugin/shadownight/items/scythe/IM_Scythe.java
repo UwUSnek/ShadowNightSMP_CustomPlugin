@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.items.IM_CustomItem;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -21,9 +22,7 @@ import java.util.UUID;
 
 
 public abstract class IM_Scythe extends IM_CustomItem {
-
-    public IM_Scythe() {
-    }
+    public IM_Scythe() {}
 
     protected abstract double getAttackSpeed();
     protected abstract double getDamage();
@@ -32,7 +31,7 @@ public abstract class IM_Scythe extends IM_CustomItem {
 
     @Override
     protected void setItemAttributes() {
-        ItemMeta meta = item.getItemMeta();
+        final ItemMeta meta = item.getItemMeta();
         Objects.requireNonNull(meta, "Object meta is null");
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,  new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed",  getAttackSpeed(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", getDamage(),      AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
@@ -42,7 +41,7 @@ public abstract class IM_Scythe extends IM_CustomItem {
 
 
 
-    static private void breakBlocks(Player player) {
+    static private void breakBlocks(@NotNull final Player player) {
         Location playerPos = player.getLocation();
         Vector playerDirection = playerPos.getDirection();
 
@@ -59,20 +58,20 @@ public abstract class IM_Scythe extends IM_CustomItem {
     private static final double attackRange = 6;
     private static final long cooldown = 500;
 
-    protected void customAttack(Player player, ItemStack item) {
-        Location playerPos = player.getLocation();
-        UUID playerId = player.getUniqueId();
-        long currentTime = System.currentTimeMillis();
+    protected void customAttack(@NotNull final Player player, @NotNull final ItemStack item) {
+        final Location playerPos = player.getLocation();
+        final UUID playerId = player.getUniqueId();
+        final long currentTime = System.currentTimeMillis();
 
 
-        Long last_time = last_times.get(playerId);
+        final Long last_time = last_times.get(playerId);
         if(last_time == null || currentTime - last_time >= cooldown) {
             last_times.put(playerId, currentTime);
-            Vector playerDirection = playerPos.getDirection();
-            List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
+            final Vector playerDirection = playerPos.getDirection();
+            final List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
 
-            double vanillaCooldown = player.getAttackCooldown();
-            double damage = vanillaCooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
+            final double vanillaCooldown = player.getAttackCooldown();
+            final double damage = vanillaCooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
 
             int damagedEntities = 0;
             for (Entity e : entities) {
@@ -99,7 +98,7 @@ public abstract class IM_Scythe extends IM_CustomItem {
 
 
     @Override
-    protected void onInteract(PlayerInteractEvent event) {
+    protected void onInteract(@NotNull final PlayerInteractEvent event) {
         if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
             customAttack(event.getPlayer(), event.getItem());
@@ -112,12 +111,12 @@ public abstract class IM_Scythe extends IM_CustomItem {
 
 
     @Override
-    protected void onAttack(EntityDamageByEntityEvent event) {
-        Player player = (Player) event.getDamager();
-        Entity target = event.getEntity();
+    protected void onAttack(@NotNull final EntityDamageByEntityEvent event) {
+        final Player player = (Player) event.getDamager();
+        final Entity target = event.getEntity();
 
-        UUID playerId = player.getUniqueId();
-        UUID targetId = target.getUniqueId();
+        final UUID playerId = player.getUniqueId();
+        final UUID targetId = target.getUniqueId();
 
 
         if(attackQueue.containsEntry(playerId, targetId)) {

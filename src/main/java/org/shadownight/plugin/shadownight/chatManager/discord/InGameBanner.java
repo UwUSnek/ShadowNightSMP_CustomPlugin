@@ -4,12 +4,17 @@ package org.shadownight.plugin.shadownight.chatManager.discord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 
 public final class InGameBanner {
-    // Starts the banner loop for that player
-    public static void startLoop(Player player, Plugin plugin) {
+    /**
+     * Starts the banner message loop for the specified player.
+     * @param player The player
+     * @param plugin The plugin instance
+     */
+    public static void startLoop(@NotNull final Player player, @NotNull final Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(
             plugin,
             () -> {

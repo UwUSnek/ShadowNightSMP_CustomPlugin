@@ -2,6 +2,7 @@ package org.shadownight.plugin.shadownight.qol.tpa;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -20,7 +21,7 @@ public final class CMD_tpa implements CommandExecutor {
     public static final HashMap<String, Vector<String>> tpa_requests = new HashMap<>();
 
 
-    public static void removeTargetFromAllRequesters(String targetName){
+    public static void removeTargetFromAllRequesters(@NotNull final String targetName){
         for(Vector<String> targets : tpa_requests.values()) {
             targets.removeIf(s -> (s.equals(targetName)));
         }
@@ -29,13 +30,13 @@ public final class CMD_tpa implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
         if(args.length == 0) {
             return false;
         }
 
-        Player player = (Player)sender;
-        Player target = org.bukkit.Bukkit.getPlayer(args[0]);
+        final Player player = (Player)sender;
+        final Player target = org.bukkit.Bukkit.getPlayer(args[0]);
 
         if(utils.playerOfflineCheck(player, target, args[0])) return true;
         if(player.equals(target)) {

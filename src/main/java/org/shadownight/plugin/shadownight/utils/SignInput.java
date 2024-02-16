@@ -60,13 +60,13 @@ public final class SignInput {
 
 
     /**
-     * A sign GUI that allows the player to input a value
+     * Creates a new sign GUI that allows the player to input values
      * @param reopenIfFail True if the GUI has to be re-opened if the player has entered an invalid input
      * @param lines The placeholder lines to display in the sign when it is opened by the player. Must contain exactly 4 strings
      * @param inputCallback Called after the player clicks done or closes the GUI. Has to return true if the input is valid
      * @param afterCloseCallback Called after the GUI is closed (or after a valid input if _reopenIfFail is set to true)
      */
-    public SignInput(boolean reopenIfFail, @Nullable String[] lines, BiPredicate<Player, @NotNull String[]> inputCallback, @Nullable Runnable afterCloseCallback) {
+    public SignInput(final boolean reopenIfFail, @Nullable final String[] lines, @NotNull final BiPredicate<Player, @NotNull String[]> inputCallback, @Nullable final Runnable afterCloseCallback) {
         this.reopenIfFail = reopenIfFail;
         this.lines = lines;
         this.inputCallback = inputCallback;
@@ -74,10 +74,11 @@ public final class SignInput {
     }
 
 
-
-
-
-    public void open(@NotNull Player player) {
+    /**
+     * Opens the GUI for the player <player>
+     * @param player The target player
+     */
+    public void open(@NotNull final Player player) {
         if (player.isOnline()) {
             Location location = player.getLocation();
             posWrapper = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
@@ -98,7 +99,12 @@ public final class SignInput {
     }
 
 
-    public void close(@NotNull Player player, boolean force) {
+    /**
+     * Closes the GUI for the player <player>
+     * @param player The target player
+     * @param force True to forcibly close the GUI and ignore the reopenIfFail option specified in the constructor, false to respect it
+     */
+    public void close(@NotNull Player player, final boolean force) {
         forceClose = force;
         if (player.isOnline()) player.closeInventory();
     }

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class CMD_recreatedungeon implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
         for(Dungeon dungeon : CMD_dungeontest.activeDungeons) {
             if(dungeon.world == ((Player) sender).getWorld()) {
                 dungeon.generateDungeon();

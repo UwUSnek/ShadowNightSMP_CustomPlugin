@@ -14,9 +14,9 @@ public final class CMD_dungeontest implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        Player player = (Player) sender;
-        Dungeon newDungeon = new Dungeon();
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+        final Player player = (Player) sender;
+        final Dungeon newDungeon = new Dungeon();
 
         activeDungeons.add(newDungeon);
         player.teleport(new org.bukkit.util.Vector(0, 10, 0).toLocation(newDungeon.world));

@@ -19,9 +19,9 @@ public final class CMD_r implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        Player player = (Player) sender;
-        String targetName = lastDmFrom.get(player.getName());
+    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+        final Player player = (Player) sender;
+        final String targetName = lastDmFrom.get(player.getName());
         if (targetName == null) Chat.sendMessage(player, "§cNobody has messaged you recently!");
         else {
             Player target = Bukkit.getPlayer(targetName);

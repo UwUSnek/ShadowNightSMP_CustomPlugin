@@ -35,7 +35,7 @@ public final class CMD_trade implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
         if (args.length == 0) return false;
         else {
             Player target = org.bukkit.Bukkit.getPlayer(args[0]);
@@ -57,8 +57,8 @@ public final class CMD_trade implements CommandExecutor {
                     tradeRequests.remove(target.getName());
 
                     //Create GUIs
-                    TradeGui playerGui = new TradeGui(player, target);
-                    TradeGui targetGui = new TradeGui(target, player);
+                    final TradeGui playerGui = new TradeGui(player, target);
+                    final TradeGui targetGui = new TradeGui(target, player);
 
                     // Open GUI for player
                     playerGui.TradeGuiInit(targetGui);

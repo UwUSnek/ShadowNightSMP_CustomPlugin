@@ -23,7 +23,7 @@ import org.shadownight.plugin.shadownight.qol.tpa.CMD_tpa;
 
 public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(final PlayerJoinEvent event) {
         JoinLeaveMessages.formatJoin(event);
         InGameBanner.startLoop(event.getPlayer(), ShadowNight.plugin);
         StarterKit.onJoin(event.getPlayer());
@@ -32,56 +32,56 @@ public final class ShadowNight_listener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(final PlayerQuitEvent event) {
         JoinLeaveMessages.formatQuit(event);
         CMD_tpa.removeTargetFromAllRequesters(event.getPlayer().getName());
         event.getPlayer().setInvulnerable(false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onPlayerDeath(final PlayerDeathEvent event) {
         DeathMessages.formatDeathMessage(event);
     }
 
     @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
+    public void onPlayerRespawn(final PlayerRespawnEvent event) {
         StarterKit.onRespawn(event.getPlayer(), event.getRespawnReason());
         SpawnInvincibility.onRespawn(event.getPlayer(), event.getRespawnReason());
     }
 
     @EventHandler
-    public void onItemSpawn(ItemSpawnEvent event) {
+    public void onItemSpawn(final ItemSpawnEvent event) {
         StarterKit.onItemDrop(event.getEntity());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+    public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
         SurvivalFly.updateState(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onChatEvent(AsyncPlayerChatEvent event) {
+    public void onChatEvent(final AsyncPlayerChatEvent event) {
         ChatManager.processPlayerMessage(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClick(final InventoryClickEvent event) {
         StarterKit.onClickEvent(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInventoryDrag(InventoryDragEvent event) {
+    public void onInventoryDrag(final InventoryDragEvent event) {
         StarterKit.onDragEvent(event);
     }
 
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInteract(PlayerInteractEvent event) {
+    public void onInteract(final PlayerInteractEvent event) {
         IM_CustomItem.chooseOnInteract(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onAttack(EntityDamageByEntityEvent event) {
+    public void onAttack(final EntityDamageByEntityEvent event) {
         IM_CustomItem.chooseOnAttack(event);
     }
 }

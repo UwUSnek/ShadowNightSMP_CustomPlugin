@@ -3,7 +3,9 @@ package org.shadownight.plugin.shadownight.utils.graphics;
 
 import org.bukkit.Material;
 import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.Rnd;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -11,17 +13,17 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 
-public final class BlockGradient extends Rnd {
+public final class BlockGradient implements Rnd {
     private final ArrayList<Object> w = new ArrayList<>();
 
 
     /**
-     * Create the block gradient
+     * Create the block gradient.
      * @param blocks A list of tuples each containing the weight and material of a given entry.
      *               The Second value must be either a Material or a BlockPattern
      */
     @SafeVarargs
-    public BlockGradient(Pair<Integer, Object>... blocks) {
+    public BlockGradient(@NotNull final Pair<Integer, Object>... blocks) {
         for(Pair<Integer, Object> block : blocks) {
             for(int i = 0; i < block.getValue0(); ++i) w.add(block.getValue1());
         }
@@ -29,10 +31,10 @@ public final class BlockGradient extends Rnd {
 
 
     /**
-     * Generate the block based on the weight of the blocks configured in this instance
+     * Generate the block based on the weight of the blocks configured in this instance.
      * @return The generated block
      */
-    public Material get(float n) {
+    public Material get(final float n) {
         double scaled_n = Func.clamp(w.size() * n, 0, w.size()); //       0 to 1            -->   0 to max
         double target_n = scaled_n - 0.5f;                       //       0 to max          -->   -0.5 to max-0.5
         if(target_n <= 0) return compute(0);                       // Return if too low to be interpolated
@@ -44,7 +46,7 @@ public final class BlockGradient extends Rnd {
         return compute(rnd.nextFloat() > chance ? base_material : alt_material);
     }
 
-    private Material compute(int i) {
+    private Material compute(final int i) {
         Object value = w.get(i);
         if(value instanceof Material     r) return r;
         if(value instanceof BlockPattern r) return r.get();

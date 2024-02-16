@@ -12,7 +12,7 @@ import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 
 public final class CMD_vote implements CommandExecutor {
-    public static void sendLink(Player player, String msg, String url) {
+    private static void sendLink(Player player, String msg, String url) {
         @SuppressWarnings("deprecation")
         TextComponent component = new TextComponent(TextComponent.fromLegacyText("§r§l>§r " + msg));
         component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));

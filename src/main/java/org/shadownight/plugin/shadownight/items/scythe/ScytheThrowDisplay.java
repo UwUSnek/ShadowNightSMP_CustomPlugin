@@ -33,14 +33,16 @@ public final class ScytheThrowDisplay {
     private final ItemStack item;
 
 
-
-
-
-
-    public ScytheThrowDisplay(Player _player, ItemStack _item) {
+    //TODO make specific class for this type of objects
+    /**
+     * Creates a new scythe display.
+     * @param _player The player that owns this object
+     * @param _item The item stack to display
+     */
+    public ScytheThrowDisplay(@NotNull final Player _player, @NotNull final ItemStack _item) {
         player = _player;
         item = _item;
-        Location playerPos = player.getLocation();
+        final Location playerPos = player.getLocation();
 
 
 
@@ -61,7 +63,7 @@ public final class ScytheThrowDisplay {
         //player.swingMainHand(); // For some reason, right-clicking air triggers left clicks as well
         animateRotation(2);
 
-        Vector startPos = player.getLocation().toVector().add(new Vector(0, 1, 0));
+        final Vector startPos = player.getLocation().toVector().add(new Vector(0, 1, 0));
         animateTranslation(
             startPos.clone().add(playerPos.getDirection().multiply(throwDistance)),
             COMP_sineOut,
@@ -81,10 +83,10 @@ public final class ScytheThrowDisplay {
 
 
     /**
-     * Animates a rotation loop on the entity
+     * Animates a rotation loop on the entity.
      * @param rotations_s The number of rotations per second
      */
-    public void animateRotation(double rotations_s) {
+    public void animateRotation(final double rotations_s) {
         int third_duration = (int)Func.clampMin(20 / (rotations_s * 3), 1);      // This is 1 / (rotations_s / 20) / 3
         display.setInterpolationDuration(third_duration);
         display.setInterpolationDelay(0);
@@ -108,31 +110,43 @@ public final class ScytheThrowDisplay {
 
 
     /**
-     * Animates the translation of the entity to a static target location <target>
+     * Animates the translation of the entity to a static target location <target>.
      * @param target The target location where the animation ends
      * @param f The easing function to use
      * @param onComplete A function to run when the animation ends
      */
-    public void animateTranslation(@NotNull Vector target, @NotNull Function<Double, Double> f, @Nullable Runnable onComplete) {
+    public void animateTranslation(@NotNull final Vector target, @NotNull final Function<Double, Double> f, @Nullable final Runnable onComplete) {
         utils.damageItem(player, item);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, null, onComplete);
     }
 
     /**
-     * Animates the translation of the entity to a target location which can be changed freely. The animation will adapt accordingly
+     * Animates the translation of the entity to a target location which can be changed freely. The animation will adapt accordingly.
      * @param target The initial target location
      * @param f The easing function to use
      * @param onTargetUpdate The function to run before each step. Used to update the dynamic target location
      * @param onComplete A function to run when the animation ends
      */
-    public void animateTranslationDynamic(@NotNull Vector target, @NotNull Function<Double, Double> f, @NotNull Callable<Vector> onTargetUpdate, @Nullable Runnable onComplete) {
+    public void animateTranslationDynamic(
+        @NotNull final Vector target,
+        @NotNull final Function<Double, Double> f,
+        @NotNull final Callable<Vector> onTargetUpdate,
+        @Nullable final Runnable onComplete
+    ) {
         utils.damageItem(player, item);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, onTargetUpdate, onComplete);
     }
 
 
 
-    private void animateTranslationLoop(double progress, Vector start, Vector end, Function<Double, Double> f, @Nullable Callable<Vector> onTargetUpdate, Runnable onComplete){
+    private void animateTranslationLoop(
+        final double progress,
+        @NotNull final Vector start,
+        @NotNull Vector end,
+        @NotNull final Function<Double, Double> f,
+        @Nullable final Callable<Vector> onTargetUpdate,
+        @Nullable final Runnable onComplete
+    ){
         double stepSize = 0.1; //TODO replace this and stepDuration with a configurable steps/s
 
 
@@ -175,7 +189,7 @@ public final class ScytheThrowDisplay {
     }
 
 
-    private Vector progressToCoords(double progress, Vector start, Vector end){
+    private Vector progressToCoords(final double progress, @NotNull final Vector start, @NotNull final Vector end){
         return start.clone().add((end.clone().subtract(start)).multiply(progress));
     }
 

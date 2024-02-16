@@ -1,8 +1,11 @@
 package org.shadownight.plugin.shadownight.utils.math;
 
 
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
-public final class Func {
+
+
+public final class Func extends UtilityClass {
     /**
      * Checks if a double value is within a certain threshold from a target value.
      * This is used to avoid precision related problems when comparing double values.
@@ -12,7 +15,7 @@ public final class Func {
      * @return True if the value is withing the threshold, false otherwise
      */
     @SuppressWarnings("unused")
-    public static boolean doubleEquals(double n, double target, double threshold) {
+    public static boolean doubleEquals(final double n, final double target, final double threshold) {
         return !(n < target - threshold || n > target + threshold);
     }
     /**
@@ -24,7 +27,7 @@ public final class Func {
      * @return True if the value is withing the threshold, false otherwise
      */
     @SuppressWarnings("unused")
-    public static boolean floatEquals(float n, float target, float threshold) {
+    public static boolean floatEquals(final float n, final float target, final float threshold) {
         return !(n < target - threshold || n > target + threshold);
     }
 
@@ -39,7 +42,7 @@ public final class Func {
      * @return Linearly interpolated value between a and b
      */
     @SuppressWarnings("unused")
-    public static double linearInt(double progress, double a, double b) {
+    public static double linearInt(final double progress, final double a, final double b) {
         return a + (progress * (b - a));
     }
 
@@ -52,7 +55,7 @@ public final class Func {
      * @return Linearly interpolated value between a and b
      */
     @SuppressWarnings("unused")
-    public static double linearIntSafe(double progress, double a, double b) {
+    public static double linearIntSafe(final double progress, double a, double b) {
         if(a > b) { double tmp = a; a = b; b = tmp; }
         return a + (progress * (b - a));
     }
@@ -68,7 +71,7 @@ public final class Func {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
-    public static double clampMin(double n, double min) {
+    public static double clampMin(final double n, final double min) {
         return Math.max(min, n);
     }
     /**
@@ -78,7 +81,7 @@ public final class Func {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
-    public static int clampMin(int n, int min) {
+    public static int clampMin(final int n, final int min) {
         return Math.max(min, n);
     }
 
@@ -91,7 +94,7 @@ public final class Func {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
-    public static double clampMax(double n, double max) {
+    public static double clampMax(final double n, final double max) {
         return Math.min(n, max);
     }
     /**
@@ -101,7 +104,7 @@ public final class Func {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
-    public static int clampMax(int n, int max) {
+    public static int clampMax(final int n, final int max) {
         return Math.min(n, max);
     }
 
@@ -115,7 +118,7 @@ public final class Func {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
-    public static double clamp(double n, double min, double max) {
+    public static double clamp(final double n, final double min, final double max) {
         return Math.max(min, Math.min(n, max));
     }
     /**
@@ -126,7 +129,7 @@ public final class Func {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
-    public static int clamp(int n, int min, int max) {
+    public static int clamp(final int n, final int min, final int max) {
         return Math.max(min, Math.min(n, max));
     }
 }

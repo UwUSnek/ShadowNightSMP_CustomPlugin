@@ -3,13 +3,16 @@ package org.shadownight.plugin.shadownight.chatManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import static java.lang.Character.toLowerCase;
 
-public final class ChatManager {
+public final class ChatManager extends UtilityClass {
     public static final String playerMessageConnector = " §8➟§f ";
     /* add this to hover event
     - '%player_name%'
@@ -33,9 +36,9 @@ public final class ChatManager {
     // Returns the message with the offending part highlighted in red if it contains the word <word>
     // Returns null if it doesn't
     @SuppressWarnings("SpellCheckingInspection")
-    static private String checkWord(String msg, String word) {
+    static private String checkWord(@NotNull String msg, @NotNull final String word) {
         msg = Chat.stripColor(msg);
-        String msg_clean = msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a");
+        final String msg_clean = msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a");
 
 
         try {
@@ -114,12 +117,16 @@ public final class ChatManager {
 
 
 
-
-    // Returns true if the message doesn't contain any of the blocked words.
-    // If it does, a warning is sent to the player and false is returned
-    static public boolean checkBlockedWords(Player player, String msg) {
+    /**
+     * Check if a string contains blocked words.
+     * Sends a warning message to the player if it does.
+     * @param player The player that sent the message
+     * @param msg The message string
+     * @return True if the string doesn't contain any blocked word, false otherwise
+     */
+    public static boolean checkBlockedWords(@NotNull final Player player, @NotNull final String msg) {
         for (String word : blockedWords) {
-            String offendingMessage = checkWord(msg, word);
+            final String offendingMessage = checkWord(msg, word);
             if(offendingMessage != null) {
                 Chat.sendMessage(player, "§c§lYour message has not been sent because it contained a blocked word. Please, be respectful in chat!");
                 Chat.sendMessage(player, offendingMessage);
@@ -130,8 +137,15 @@ public final class ChatManager {
     }
 
 
-    // Sends a dm, also checks that target is not null. Sends an error to the player if that's the case
-    public static void sendDm(Player player, Player target, String msg) {
+
+    /**
+     * Sends a direct message to a player.
+     * @param player The player that sent the message
+     * @param target The player that has to receive the message.
+     *               If this is null, an error message is sent to <player>
+     * @param msg The message string
+     */
+    public static void sendDm(@NotNull final Player player, @Nullable final Player target, @NotNull final String msg) {
         if (target == null) player.sendMessage("§cThe player you are trying to message is offline!");
         else if (ChatManager.checkBlockedWords(player, msg)) {
             CMD_r.lastDmFrom.put(target.getName(), player.getName());
@@ -142,14 +156,18 @@ public final class ChatManager {
     }
 
 
-    static public void processPlayerMessage(AsyncPlayerChatEvent event) {
+    /**
+     * Manages a player's message and either blocks it or sends it to a chat channel depending on its contents and on the player's state.
+     * @param event The chat event
+     */
+    public static void processPlayerMessage(@NotNull final AsyncPlayerChatEvent event) {
         event.setCancelled(true);
-        String msg = event.getMessage();
+        final String msg = event.getMessage();
 
-        Player player = event.getPlayer();
-        String targetName = CMD_msg.openDms.get(player.getName());
+        final Player player = event.getPlayer();
+        final String targetName = CMD_msg.openDms.get(player.getName());
         if (targetName == null) {
-            String strippedMsg = Chat.stripPrivateCharacters(event.getPlayer().hasPermission("group.vip") ? Chat.translateColor(msg) : Chat.stripColor(msg));
+            final String strippedMsg = Chat.stripPrivateCharacters(event.getPlayer().hasPermission("group.vip") ? Chat.translateColor(msg) : Chat.stripColor(msg));
             if (checkBlockedWords(player, strippedMsg)) {
                 Bukkit.broadcastMessage(utils.getFancyName(event.getPlayer()) + playerMessageConnector + strippedMsg);
                 BotManager.sendBridgeMessage(event.getPlayer(), strippedMsg);

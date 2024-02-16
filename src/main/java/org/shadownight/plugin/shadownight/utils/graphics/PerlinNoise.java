@@ -1,6 +1,7 @@
 package org.shadownight.plugin.shadownight.utils.graphics;
 
 import org.shadownight.plugin.shadownight.utils.Rnd;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 
 
-public abstract class PerlinNoise extends Rnd {
+public abstract class PerlinNoise extends UtilityClass implements Rnd {
     // Default hash lookup table as defined by Ken Perlin
     // This is a randomly arranged array of all numbers from 0-255 inclusive, repeated twice.
     protected static final Integer[] permutation = {
@@ -35,7 +36,7 @@ public abstract class PerlinNoise extends Rnd {
 
 
     /**
-     * Recreates the permutation list
+     * Recreates the permutation list.
      */
     public static void resetSeed() {
         ArrayList<Integer> permutationList = new ArrayList<>(Arrays.asList(permutation));
@@ -53,7 +54,7 @@ public abstract class PerlinNoise extends Rnd {
      *            a point which is 25% of the way across its unit square)
      * @return smoothed value for the coordinate at that point in range [0.0, 1.0]
      */
-    protected static double fade(double val) {
+    protected static double fade(final double val) {
         return val * val * val * (val * (val * 6 - 15) + 10);
     }
 }
