@@ -12,9 +12,7 @@ import org.shadownight.plugin.shadownight.dungeons.generators.GEN_CeilingDeform;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_WallsDeform;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
-import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorMaterial;
-import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_FloorVegetation;
-import org.shadownight.plugin.shadownight.dungeons.shaders.SHD_WallMaterial;
+import org.shadownight.plugin.shadownight.dungeons.shaders.*;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise;
 import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.math.Func;
@@ -158,6 +156,8 @@ public final class Dungeon {
             PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
             PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
             PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight);
+            PerlinNoise.resetSeed(); SHD_CeilingMaterial.start(buffer, materialCeiling);
+            PerlinNoise.resetSeed(); SHD_CeilingVines.start   (buffer, materialVines);
 
             // Paste the region into the world
             buffer.paste(world, -total_x / 2, 0, -total_z / 2);
