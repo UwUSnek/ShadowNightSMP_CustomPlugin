@@ -18,7 +18,7 @@ import java.util.Random;
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 
-public class DeathMessages {
+public final class DeathMessages {
     public static class DeathData {
         final String icon;
         final String[] variants;

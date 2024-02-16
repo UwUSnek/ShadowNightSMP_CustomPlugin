@@ -15,7 +15,7 @@ import java.util.Vector;
 
 
 
-public class CMD_msg implements CommandExecutor {
+public final class CMD_msg implements CommandExecutor {
     public static final HashMap<String, String> openDms = new HashMap<>();
 
 

@@ -9,7 +9,7 @@ import org.shadownight.plugin.shadownight.utils.utils;
 
 import static java.lang.Character.toLowerCase;
 
-public class ChatManager {
+public final class ChatManager {
     public static final String playerMessageConnector = " §8➟§f ";
     /* add this to hover event
     - '%player_name%'

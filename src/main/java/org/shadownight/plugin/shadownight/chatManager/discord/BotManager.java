@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 
-public class BotManager {
+public final class BotManager {
     public static TextChannel bridgeChannel;
     private static final String bridgeChannelId = "1202610915694870558";
     private static final String testBridgeChannelId = "1202960128421138494";

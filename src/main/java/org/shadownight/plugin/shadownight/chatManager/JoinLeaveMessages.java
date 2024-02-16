@@ -6,7 +6,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
 
 
-public class JoinLeaveMessages {
+public final class JoinLeaveMessages {
     static public void formatJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.setJoinMessage("§8[§a§l+§8]§7 " + player.getName());

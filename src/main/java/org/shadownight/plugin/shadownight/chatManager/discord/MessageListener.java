@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import static org.shadownight.plugin.shadownight.chatManager.discord.BotManager.*;
 
 
-public class MessageListener extends ListenerAdapter {
+public final class MessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if(event.getChannel().getId().equals(BotManager.bridgeChannel.getId())) {

@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 
-public class InGameBanner {
+public final class InGameBanner {
     // Starts the banner loop for that player
     public static void startLoop(Player player, Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(

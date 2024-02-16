@@ -14,7 +14,7 @@ import java.util.Vector;
 import java.util.Arrays;
 
 
-public class CMD_r implements CommandExecutor {
+public final class CMD_r implements CommandExecutor {
     public static final HashMap<String, String> lastDmFrom = new HashMap<>();
 
 
