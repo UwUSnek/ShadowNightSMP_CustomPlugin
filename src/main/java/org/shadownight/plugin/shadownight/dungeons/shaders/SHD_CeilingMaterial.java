@@ -17,7 +17,7 @@ public final class SHD_CeilingMaterial extends Rnd {
             Pair.with(4f, Material.DEEPSLATE_TILES)
         )),
         Pair.with(1, new BlockPattern(
-            Pair.with(0.1f, Material.COAL_BLOCK),
+            Pair.with(0.5f, Material.COAL_ORE),
             Pair.with(1f,   Material.DEEPSLATE_COAL_ORE),
             Pair.with(4f,   Material.TUFF),
             Pair.with(1f,   Material.BLACKSTONE)

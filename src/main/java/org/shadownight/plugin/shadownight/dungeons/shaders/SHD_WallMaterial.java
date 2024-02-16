@@ -11,13 +11,13 @@ import org.shadownight.plugin.shadownight.utils.Rnd;
 
 public final class SHD_WallMaterial extends Rnd {
     static private final BlockGradient patternWall = new BlockGradient(
-        Pair.with(6, Material.DEEPSLATE_TILES),
-        Pair.with(4, Material.DEEPSLATE_BRICKS),
-        Pair.with(2, Material.COBBLED_DEEPSLATE),
-        Pair.with(2, Material.DEEPSLATE),
-        Pair.with(2, Material.COBBLESTONE),
-        Pair.with(2, Material.ANDESITE),
-        Pair.with(8, Material.DIORITE)
+        Pair.with(3, Material.DEEPSLATE_TILES),
+        Pair.with(2, Material.DEEPSLATE_BRICKS),
+        Pair.with(1, Material.COBBLED_DEEPSLATE),
+        Pair.with(1, Material.DEEPSLATE),
+        Pair.with(1, Material.COBBLESTONE),
+        Pair.with(1, Material.ANDESITE),
+        Pair.with(4, Material.DIORITE)
     );
 
 

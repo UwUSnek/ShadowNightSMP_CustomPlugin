@@ -115,7 +115,7 @@ public final class Func {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
-    public static double clamp(double n, double max, double min) {
+    public static double clamp(double n, double min, double max) {
         return Math.max(min, Math.min(n, max));
     }
     /**
