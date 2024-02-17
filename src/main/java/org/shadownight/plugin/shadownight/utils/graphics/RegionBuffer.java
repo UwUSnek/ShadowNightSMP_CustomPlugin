@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.utils.graphics;
 
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
@@ -17,6 +18,7 @@ import java.util.logging.Level;
  */
 public final class RegionBuffer {
     private final BlockData[][][] d;
+    private final Biome[][][] b;
     public final int x, y, z;
     private final int shift_x, shift_y, shift_z;
 
@@ -39,8 +41,11 @@ public final class RegionBuffer {
         shift_z = _shift_z;
 
         d = new BlockData[x][y][z];
+        b = new Biome[x][y][z];
+        BlockData data = Material.AIR.createBlockData();
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
-            d[i][j][k] = Material.AIR.createBlockData();
+            d[i][j][k] = data;
+            b[i][j][k] = null;
         }
     }
 
@@ -74,6 +79,22 @@ public final class RegionBuffer {
     public void setShifted(final int _x, final int _y, final int _z, @NotNull final Material material) {
         setShifted(_x, _y, _z, material.createBlockData());
     }
+
+
+
+
+
+    /**
+     * Sets the biome of the specified block.
+     * @param _x The x coordinate of the block
+     * @param _y The y coordinate of the block
+     * @param _z The z coordinate of the block
+     * @param biome The biome to set
+     */
+    public void setBiome(final int _x, final int _y, final int _z, @NotNull final Biome biome) {
+        b[_x][_y][_z] = biome;
+    }
+
 
 
 
@@ -157,8 +178,9 @@ public final class RegionBuffer {
         // IMPORTANT: This must be placed last as mushrooms require a low skylight level which the bedrock box provides
         //            Placing them first will cause most of them to drop as items
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
-            Block block = world.getBlockAt(_x + i, _y + j, _z + k);
-            block.setBlockData(d[i][j][k]);
+            world.getBlockAt(_x + i, _y + j, _z + k).setBlockData(d[i][j][k]);
+            Biome biome = b[i][j][k];
+            if(biome != null) world.setBiome(i, j, k, biome);
         }
     }
 }

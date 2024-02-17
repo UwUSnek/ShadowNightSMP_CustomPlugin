@@ -2,6 +2,8 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.javatuples.Pair;
@@ -31,7 +33,7 @@ public final class SHD_FloorMaterial extends UtilityClass implements Rnd {
         Pair.with(2f, Material.CRACKED_STONE_BRICKS.createBlockData())
     );
     private static final BlockPattern M_FloorSlab = new BlockPattern(
-        Pair.with(1f, new DataBuilderSlab(Material.STONE_BRICK_SLAB).setType(Slab.Type.BOTTOM).setWaterlogged(true).build())
+        Pair.with(1f, new DataBuilderSlab(Material.STONE_BRICK_SLAB).setType(Slab.Type.BOTTOM).setWaterlogged(false).build())
     );
     private static final BlockPattern M_FloorHidden = new BlockPattern(
         Pair.with(1f, Material.STONE_BRICKS.createBlockData())
@@ -43,25 +45,39 @@ public final class SHD_FloorMaterial extends UtilityClass implements Rnd {
         Pair.with(2f, Material.CRACKED_STONE_BRICKS.createBlockData())
     );
     private static final BlockPattern M_FloorEdgesSlab = new BlockPattern(
+        Pair.with(8f, new DataBuilderSlab(Material.MOSSY_STONE_BRICK_SLAB).setType(org.bukkit.block.data.type.Slab.Type.BOTTOM).setWaterlogged(false).build()),
+        Pair.with(2f, new DataBuilderSlab(Material.STONE_BRICK_SLAB      ).setType(org.bukkit.block.data.type.Slab.Type.BOTTOM).setWaterlogged(false).build())
+    );
+    private static final BlockPattern M_Puddle = new BlockPattern(
         Pair.with(8f, new DataBuilderSlab(Material.MOSSY_STONE_BRICK_SLAB).setType(org.bukkit.block.data.type.Slab.Type.BOTTOM).setWaterlogged(true).build()),
-        Pair.with(2f, Material.STONE_BRICK_SLAB.createBlockData())
+        Pair.with(1f, new DataBuilderSlab(Material.MUD_BRICK_SLAB        ).setType(org.bukkit.block.data.type.Slab.Type.BOTTOM).setWaterlogged(true).build()),
+        Pair.with(1f, new DataBuilderSlab(Material.STONE_BRICK_SLAB      ).setType(org.bukkit.block.data.type.Slab.Type.BOTTOM).setWaterlogged(true).build()),
+        Pair.with(2f, new DataBuilderSlab(Material.ANDESITE_SLAB         ).setType(org.bukkit.block.data.type.Slab.Type.BOTTOM).setWaterlogged(true).build())
     );
 
 
 
-    private static BlockData compute(final int x, final int y, final int z, final float wallDist, final int floorThickness) {
-        double noiseSlab = PerlinNoise2D.compute(x, z, 12);
-        double noiseMoss = PerlinNoise2D.compute(x, z, 20);
-        boolean isSlab = noiseSlab > 0.55 && noiseSlab < 0.65;
+    private static BlockData compute(@NotNull final RegionBuffer buffer, final int x, final int y, final int z, final float wallDist, final int floorThickness) {
+        final double noiseSlab   = PerlinNoise2D.compute(x, z, 12);
+        final double noisePuddle = PerlinNoise2D.compute(x + 5000, z + 5000, 25);
+        final double noiseMoss   = PerlinNoise2D.compute(x, z, 20);
+        final boolean isSlab   = noiseSlab   > 0.56 && noiseSlab   < 0.64;
+        final boolean isPuddle = noisePuddle > 0.22 && noisePuddle < 0.27;
+        final boolean isPuddleBorder = noisePuddle > 0.27 && noisePuddle < 0.4;
 
         if(y < floorThickness - 1) return M_FloorHidden.get();
         else {
             float r = rnd.nextFloat();
             if (noiseMoss < 0.55 && noiseMoss > 0.4) return noiseMoss < r * 2 ? M_Moss.get() : M_MossFill.get();
-            else if (wallDist < r) return isSlab ? M_FloorEdgesSlab.get() : M_FloorEdges.get();
-            else                   return isSlab ? M_FloorSlab.get() : M_Floor.get();
+            else if (isPuddle) {
+                buffer.setBiome(x, y, z, Biome.SWAMP);
+                return M_Puddle.get();
+            }
+            else if (wallDist < r) return isSlab && !isPuddleBorder ? M_FloorEdgesSlab.get() : M_FloorEdges.get();
+            else                   return isSlab && !isPuddleBorder ? M_FloorSlab.get() : M_Floor.get();
         }
     }
+
 
 
     /**
@@ -73,7 +89,7 @@ public final class SHD_FloorMaterial extends UtilityClass implements Rnd {
      */
     public static void start(@NotNull final RegionBuffer buffer, @NotNull final Material targetMaterial, final float[][] dist, final int ft) {
         for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < ft; ++j) for(int k = 0; k < buffer.z; ++k){
-            if(buffer.get(i, j, k) == targetMaterial) buffer.set(i, j, k, compute(i, j, k, dist[i][k], ft));
+            if(buffer.get(i, j, k) == targetMaterial) buffer.set(i, j, k, compute(buffer, i, j, k, dist[i][k], ft));
         }
     }
 }

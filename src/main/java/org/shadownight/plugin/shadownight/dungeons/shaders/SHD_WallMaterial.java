@@ -3,13 +3,11 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Axis;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.data.DataBuilderDeepslate;
+import org.shadownight.plugin.shadownight.utils.data.DataBuilderOrientable;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise3D;
@@ -26,8 +24,8 @@ public final class SHD_WallMaterial extends UtilityClass implements Rnd {
         Pair.with(2, Material.DEEPSLATE_BRICKS.createBlockData()),
         Pair.with(1, Material.COBBLED_DEEPSLATE.createBlockData()),
         Pair.with(1, new BlockPattern(
-            Pair.with(1f, new DataBuilderDeepslate(Material.DEEPSLATE).setFacing(Axis.X).build()),
-            Pair.with(1f, new DataBuilderDeepslate(Material.DEEPSLATE).setFacing(Axis.Z).build())
+            Pair.with(1f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.X).build()),
+            Pair.with(1f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.Z).build())
         )),
         Pair.with(1, new BlockPattern(
             Pair.with(1f, Material.DEEPSLATE.createBlockData()),
