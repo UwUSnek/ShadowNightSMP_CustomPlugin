@@ -61,18 +61,19 @@ public final class SHD_FloorMaterial extends UtilityClass implements Rnd {
         final double noiseSlab   = PerlinNoise2D.compute(x, z, 12);
         final double noisePuddle = PerlinNoise2D.compute(x + 5000, z + 5000, 25);
         final double noiseMoss   = PerlinNoise2D.compute(x, z, 20);
+
+        final boolean isMoss   = noiseMoss   < 0.55 && noiseMoss   > 0.4;
         final boolean isSlab   = noiseSlab   > 0.56 && noiseSlab   < 0.64;
         final boolean isPuddle = noisePuddle > 0.22 && noisePuddle < 0.27;
         final boolean isPuddleBorder = noisePuddle > 0.27 && noisePuddle < 0.4;
 
         if(y < floorThickness - 1) return M_FloorHidden.get();
         else {
-            float r = rnd.nextFloat();
-            if (noiseMoss < 0.55 && noiseMoss > 0.4) return noiseMoss < r * 2 ? M_Moss.get() : M_MossFill.get();
-            else if (isPuddle) {
-                buffer.setBiome(x, y, z, Biome.SWAMP);
-                return M_Puddle.get();
-            }
+            final float r = rnd.nextFloat();
+            if(isPuddleBorder && !isMoss) buffer.setBiome(x, y, z, Biome.SWAMP);
+
+            if (isMoss) return noiseMoss < r * 2 ? M_Moss.get() : M_MossFill.get();
+            else if (isPuddle)     return M_Puddle.get();
             else if (wallDist < r) return isSlab && !isPuddleBorder ? M_FloorEdgesSlab.get() : M_FloorEdges.get();
             else                   return isSlab && !isPuddleBorder ? M_FloorSlab.get() : M_Floor.get();
         }

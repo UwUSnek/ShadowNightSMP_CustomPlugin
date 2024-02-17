@@ -180,7 +180,7 @@ public final class RegionBuffer {
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
             world.getBlockAt(_x + i, _y + j, _z + k).setBlockData(d[i][j][k]);
             Biome biome = b[i][j][k];
-            if(biome != null) world.setBiome(i, j, k, biome);
+            if(biome != null) world.setBiome(_x + i, _y + j, _z + k, biome);
         }
     }
 }
