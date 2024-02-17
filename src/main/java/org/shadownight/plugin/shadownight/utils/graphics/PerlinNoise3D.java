@@ -3,7 +3,6 @@ package org.shadownight.plugin.shadownight.utils.graphics;
 
 import org.joml.Vector3d;
 import org.joml.Vector3i;
-import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 
 

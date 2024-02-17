@@ -2,31 +2,38 @@ package org.shadownight.plugin.shadownight.utils.graphics;
 
 
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.Rnd;
-import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.math.Func;
-import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 
 public final class BlockGradient implements Rnd {
-    private final ArrayList<Object> w = new ArrayList<>();
+    private final ArrayList<BlockPattern> w = new ArrayList<>();
+
 
 
     /**
      * Create the block gradient.
-     * @param blocks A list of tuples each containing the weight and material of a given entry.
-     *               The Second value must be either a Material or a BlockPattern
+     * @param blocks A list of Pairs each containing the weight(Integer) and either a BlockPattern or a BlockData.
      */
     @SafeVarargs
-    public BlockGradient(@NotNull final Pair<Integer, Object>... blocks) {
-        for(Pair<Integer, Object> block : blocks) {
-            for(int i = 0; i < block.getValue0(); ++i) w.add(block.getValue1());
+    public BlockGradient(@NotNull final Pair<Integer, ?>... blocks) {
+        for(Pair<?, ?> b : blocks) {
+            if (b.getValue0() instanceof Integer n) {
+                if(     b.getValue1() instanceof BlockPattern p) for (int i = 0; i < n; ++i) w.add(p);
+                else if(b.getValue1() instanceof BlockData    d) for (int i = 0; i < n; ++i) w.add(new BlockPattern(Pair.with(1f, d)));
+                else _throw(b);
+            }
+            else _throw(b);
         }
+    }
+    private static void _throw(final Object value) {
+        throw new RuntimeException("Cannot create BlockGradient: \"" + value.getClass().getName() + "\" is not a valid Object type.");
     }
 
 
@@ -34,22 +41,15 @@ public final class BlockGradient implements Rnd {
      * Generate the block based on the weight of the blocks configured in this instance.
      * @return The generated block
      */
-    public Material get(final float n) {
-        double scaled_n = Func.clamp(w.size() * n, 0, w.size()); //       0 to 1            -->   0 to max
-        double target_n = scaled_n - 0.5f;                       //       0 to max          -->   -0.5 to max-0.5
-        if(target_n <= 0) return compute(0);                       // Return if too low to be interpolated
-        if(target_n >= w.size() - 1) return compute(w.size() - 1); // Return if too high to be interpolated
+    public BlockData get(final float n) {
+        double scaled_n = Func.clamp(w.size() * n, 0, w.size());       //       0 to 1            -->   0 to max
+        double target_n = scaled_n - 0.5f;                             //       0 to max          -->   -0.5 to max-0.5
+        if(target_n <= 0) return w.get(0).get();                       // Return if too low to be interpolated
+        if(target_n >= w.size() - 1) return w.get(w.size() - 1).get(); // Return if too high to be interpolated
 
         int base_material = (int)target_n;
         int alt_material  = base_material + 1;
         double chance = target_n - base_material;
-        return compute(rnd.nextFloat() > chance ? base_material : alt_material);
-    }
-
-    private Material compute(final int i) {
-        Object value = w.get(i);
-        if(value instanceof Material     r) return r;
-        if(value instanceof BlockPattern r) return r.get();
-        else throw new RuntimeException("Cannot compute block gradient: Instance was created using invalid Object type \"" + value.getClass().getName() + "\"");
+        return w.get(rnd.nextFloat() > chance ? base_material : alt_material).get();
     }
 }

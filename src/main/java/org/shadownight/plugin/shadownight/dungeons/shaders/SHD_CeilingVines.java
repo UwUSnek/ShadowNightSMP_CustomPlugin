@@ -2,24 +2,27 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
+import org.shadownight.plugin.shadownight.utils.data.DataBuilderLeaves;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 
 
 public final class SHD_CeilingVines extends UtilityClass implements Rnd {
-    private static final BlockPattern patternVines = new BlockPattern(
-        Pair.with(6f, Material.OAK_LEAVES)
+    private static final BlockPattern M_Vines = new BlockPattern(
+        Pair.with(6f, new DataBuilderLeaves(Material.OAK_LEAVES).setPersistent(true).build())
     );
 
 
 
 
-    private static Material compute(final int x, final int y, final int z) {
-        return patternVines.get();
+    private static BlockData compute(final int x, final int y, final int z) {
+        return M_Vines.get();
     }
 
 

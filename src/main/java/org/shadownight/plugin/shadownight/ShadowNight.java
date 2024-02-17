@@ -4,6 +4,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.shadownight.plugin.shadownight.chatManager.discord.BotManager;
 import org.shadownight.plugin.shadownight.dungeons.CMD_dungeontest;

@@ -16,7 +16,6 @@ import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 

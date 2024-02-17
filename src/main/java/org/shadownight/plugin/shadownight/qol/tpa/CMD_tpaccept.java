@@ -2,7 +2,6 @@ package org.shadownight.plugin.shadownight.qol.tpa;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
 import org.bukkit.command.Command;

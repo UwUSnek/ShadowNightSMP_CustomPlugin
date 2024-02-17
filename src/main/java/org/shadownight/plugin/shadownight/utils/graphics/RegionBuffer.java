@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -15,7 +16,6 @@ import java.util.logging.Level;
  * Allows for custom shift on set operations
  */
 public final class RegionBuffer {
-    private final Material[][][] b;
     private final BlockData[][][] d;
     public final int x, y, z;
     private final int shift_x, shift_y, shift_z;
@@ -38,10 +38,8 @@ public final class RegionBuffer {
         shift_y = _shift_y;
         shift_z = _shift_z;
 
-        b = new Material[x][y][z];
         d = new BlockData[x][y][z];
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
-            b[i][j][k] = Material.AIR;
             d[i][j][k] = Material.AIR.createBlockData();
         }
     }
@@ -56,12 +54,10 @@ public final class RegionBuffer {
      * @param _x The x coordinate of the block
      * @param _y The y coordinate of the block
      * @param _z The z coordinate of the block
-     * @param material The material to set
      * @param data The data to set
      */
-    public void setShifted(final int _x, final int _y, final int _z, @NotNull final Material material, @NotNull final BlockData data) {
+    public void setShifted(final int _x, final int _y, final int _z, @NotNull final BlockData data) {
         try {
-            b[_x + shift_x][_y + shift_y][_z + shift_z] = material;
             d[_x + shift_x][_y + shift_y][_z + shift_z] = data;
         }
         catch(ArrayIndexOutOfBoundsException e){
@@ -76,7 +72,7 @@ public final class RegionBuffer {
      * @param material The material to set
      */
     public void setShifted(final int _x, final int _y, final int _z, @NotNull final Material material) {
-        setShifted(_x, _y, _z, material, material.createBlockData());
+        setShifted(_x, _y, _z, material.createBlockData());
     }
 
 
@@ -87,12 +83,10 @@ public final class RegionBuffer {
      * @param _x The x coordinate of the block
      * @param _y The y coordinate of the block
      * @param _z The z coordinate of the block
-     * @param material The material to set
      * @param data The data to set
      */
-    public void set(final int _x, final int _y, final int _z, @NotNull final Material material, @NotNull final BlockData data) {
+    public void set(final int _x, final int _y, final int _z, @NotNull final BlockData data) {
         try {
-            b[_x][_y][_z] = material;
             d[_x][_y][_z] = data;
         }
         catch(ArrayIndexOutOfBoundsException e){
@@ -107,7 +101,7 @@ public final class RegionBuffer {
      * @param material The material to set
      */
     public void set(final int _x, final int _y, final int _z, @NotNull final Material material) {
-        set(_x, _y, _z, material, material.createBlockData());
+        set(_x, _y, _z, material.createBlockData());
     }
 
     /**
@@ -118,7 +112,17 @@ public final class RegionBuffer {
      * @return The block material
      */
     public Material get(final int _x, final int _y, final int _z){
-        return b[_x][_y][_z];
+        return d[_x][_y][_z].getMaterial();
+    }
+    /**
+     * Returns the data of the specified block.
+     * @param _x The x coordinate of the block
+     * @param _y The y coordinate of the block
+     * @param _z The z coordinate of the block
+     * @return The block material
+     */
+    public BlockData getData(final int _x, final int _y, final int _z){
+        return d[_x][_y][_z];
     }
 
 
@@ -154,7 +158,6 @@ public final class RegionBuffer {
         //            Placing them first will cause most of them to drop as items
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
             Block block = world.getBlockAt(_x + i, _y + j, _z + k);
-            block.setType(b[i][j][k]);
             block.setBlockData(d[i][j][k]);
         }
     }

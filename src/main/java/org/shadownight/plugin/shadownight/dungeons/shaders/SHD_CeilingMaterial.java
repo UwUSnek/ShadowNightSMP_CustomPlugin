@@ -2,7 +2,9 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
@@ -13,29 +15,29 @@ import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 
 
 public final class SHD_CeilingMaterial extends UtilityClass implements Rnd {
-    static private final BlockGradient patternCeiling = new BlockGradient(
+    static private final BlockGradient M_Ceiling = new BlockGradient(
         Pair.with(4, new BlockPattern(
-            Pair.with(0.5f, Material.DEEPSLATE_COAL_ORE),
-            Pair.with(4f,   Material.DEEPSLATE_TILES)
+            Pair.with(0.5f, Material.DEEPSLATE_COAL_ORE.createBlockData()),
+            Pair.with(4f,   Material.DEEPSLATE_TILES.createBlockData())
         )),
         Pair.with(1, new BlockPattern(
-            Pair.with(0.5f, Material.COAL_ORE),
-            Pair.with(1f,   Material.DEEPSLATE_COAL_ORE),
-            Pair.with(4f,   Material.TUFF),
-            Pair.with(1f,   Material.DIORITE),
-            Pair.with(1f,   Material.POLISHED_DIORITE)
+            Pair.with(0.5f, Material.COAL_ORE.createBlockData()),
+            Pair.with(1f,   Material.DEEPSLATE_COAL_ORE.createBlockData()),
+            Pair.with(4f,   Material.TUFF.createBlockData()),
+            Pair.with(1f,   Material.DIORITE.createBlockData()),
+            Pair.with(1f,   Material.POLISHED_DIORITE.createBlockData())
         )),
         Pair.with(4, new BlockPattern(
-            Pair.with(0.5f, Material.DEEPSLATE_COAL_ORE),
-            Pair.with(4f,   Material.DEEPSLATE_TILES)
+            Pair.with(0.5f, Material.DEEPSLATE_COAL_ORE.createBlockData()),
+            Pair.with(4f,   Material.DEEPSLATE_TILES.createBlockData())
         ))
     );
 
 
 
 
-    private static Material compute(final int x, final int y, final int z) {
-        return patternCeiling.get((float)PerlinNoise3D.compute(x, y, z, 32));
+    private static BlockData compute(final int x, final int y, final int z) {
+        return M_Ceiling.get((float)PerlinNoise3D.compute(x, y, z, 32));
     }
 
 

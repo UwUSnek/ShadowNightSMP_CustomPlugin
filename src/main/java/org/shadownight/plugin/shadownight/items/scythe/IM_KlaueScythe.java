@@ -38,8 +38,8 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
     @Override
-    protected void onInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+    protected void onInteract(@NotNull final PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
 
         if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
             event.setCancelled(true);
@@ -77,8 +77,8 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
     @Override
-    protected void onAttack(EntityDamageByEntityEvent event) {
-        Player player = (Player) event.getDamager();
+    protected void onAttack(@NotNull final EntityDamageByEntityEvent event) {
+        final Player player = (Player) event.getDamager();
 
         if(player.isSneaking()) {
             event.setCancelled(true);
