@@ -113,6 +113,8 @@ public final class Dungeon {
     }
 
 
+
+
     /**
      * Generates the dungeon structure.
      */
@@ -160,28 +162,29 @@ public final class Dungeon {
             final float[][] wallDistanceGradientHigh = createWallDistanceGradient(buffer, floorThickness + wallHeight - 1, tileSize, materialWalls, true);
             PerlinNoise.resetSeed(); GEN_CeilingDeform.start(buffer, materialCeiling, materialVines, wallDistanceGradientHigh, floorThickness, wallHeight);
 
+
             // Calculate wall distance gradient and apply material shaders
             final float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);
-            PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
-            PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
-            PerlinNoise.resetSeed(); SHD_WallMoss.start       (buffer, materialWalls, wallDistanceGradient, wallHeight, floorThickness);
-            //PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
-            buffer.dispatchShaders(4,
-                Pair.with(materialWalls, new SHD_WallMaterial(wallHeight, floorThickness))
+            //PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
+            buffer.dispatchShaders(8,
+                Arrays.asList(
+                    Pair.with(materialFloor,   new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
+                    Pair.with(materialWalls,   new SHD_WallMoss(wallHeight, floorThickness)),
+                    Pair.with(materialWalls,   new SHD_WallMaterial(wallHeight, floorThickness)),
+                    Pair.with(materialCeiling, new SHD_CeilingMaterial()),
+                    Pair.with(materialVines,   new SHD_CeilingVines())
+                ),
+                () -> {
+                    // Paste and log generation time
+                    buffer.paste(world, -total_x / 2, 0, -total_z / 2, true);
+                    final long duration = System.currentTimeMillis() - start;
+                    utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(duration, true));
+                }
             );
-            //PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
-            PerlinNoise.resetSeed(); SHD_CeilingMaterial.start(buffer, materialCeiling);
-            PerlinNoise.resetSeed(); SHD_CeilingVines.start   (buffer, materialVines);
-
-            // Paste the region into the world
-            buffer.paste(world, -total_x / 2, 0, -total_z / 2, true);
         }
-
-
-        // Log generation time
-        final long duration = System.currentTimeMillis() - start;
-        utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(duration, true));
     }
+
+
 
 
     /**

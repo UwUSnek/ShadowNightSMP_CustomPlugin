@@ -14,6 +14,7 @@ import org.shadownight.plugin.shadownight.dungeons.shaders.SHD;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -205,45 +206,53 @@ public final class RegionBuffer {
     /**
      * Executes a list of material shaders, equally splitting the execution of each shader between a configured amount of threads.
      * All the shaders are executed at the same time and their order is not preserved, but the output uses a dedicated temporary buffer to avoid interferences.
+     * This method doesn't wait for the shaders to finish. Pass a runnable to <onComplete> to execute code after.
      * @param threads The number of threads to use
      * @param shaders A list of pairs each containing the material the shader will be called on and the shader to compute
+     * @param onComplete The task to run after all the threads have finished computing their shaders.
+     *                   This task is ran on the Main Thread
      */
-    @SafeVarargs
-    public final void dispatchShaders(final int threads, @NotNull final Pair<Material, SHD>... shaders) {
-        // Create temporary buffer
-        final RegionBuffer output = new RegionBuffer(this);
-        final int sectionSize = x / threads + 1;
+    public void dispatchShaders(final int threads, @NotNull final List<Pair<Material, SHD>> shaders, @NotNull final Runnable onComplete) {
+        Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
+            // Create temporary buffer
+            final RegionBuffer output = new RegionBuffer(this);
+            final int sectionSize = x / threads + 1;
 
-        //waitForTasks(); //FIXME wait for copy operation
-        activeTasks.set(threads);
-        for(int i = 0; i < threads; ++i) {
-            // Create hashmap
-            final HashMultimap<Material, SHD> shaderMap = HashMultimap.create();
-            for(Pair<Material, SHD> s : shaders) {
-                shaderMap.put(s.getValue0(), s.getValue1());
+            waitForTasks();
+            activeTasks.set(threads);
+            for (int i = 0; i < threads; ++i) {
+                // Create hashmap
+                final HashMultimap<Material, SHD> shaderMap = HashMultimap.create();
+                for (Pair<Material, SHD> s : shaders) {
+                    s.getValue1().setBuffers(this, output);
+                    shaderMap.put(s.getValue0(), s.getValue1());
+                }
+                // Start shader tasks
+                int x0 = Func.clampMax(sectionSize * i, x);
+                int x1 = Func.clampMax(sectionSize * (i + 1), x);
+                if (x0 != x1) Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
+                    computeShaderSection(x0, x1, shaderMap);
+                    activeTasks.decrementAndGet();
+                });
             }
-            // Start shader tasks
-            int x0 = Func.clampMax(sectionSize * i, x);
-            int x1 = Func.clampMax(sectionSize * (i + 1), x);
-            if(x0 != x1) Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
-                computeShaderSection(output, x0, x1, shaderMap);
-                activeTasks.decrementAndGet();
-            });
-        }
-        //waitForTasks();
+            waitForTasks();
 
-        // Paste data from temporary buffer back into this buffer
-        for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
-            d[i][j][k] = output.d[i][j][k];
-            b[i][j][k] = output.b[i][j][k];
-        }
+            // Paste data from temporary buffer back into this buffer
+            for (int i = 0; i < x; ++i) for (int j = 0; j < y; ++j) for (int k = 0; k < z; ++k) {
+                d[i][j][k] = output.d[i][j][k];
+                b[i][j][k] = output.b[i][j][k];
+            }
+
+            // Run callback on main thread
+            Bukkit.getScheduler().runTask(ShadowNight.plugin, onComplete);
+        });
     }
 
 
-    private void computeShaderSection(@NotNull final RegionBuffer output, final int x0, final int x1, @NotNull final HashMultimap<Material, SHD> shaders) {
+    private void computeShaderSection(final int x0, final int x1, @NotNull final HashMultimap<Material, SHD> shaders) {
         for(int i = x0; i < x1; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
             for(SHD s : shaders.get(d[i][j][k].getMaterial())) {
-                s.compute(this, output, i, j, k);
+                s.compute(i, j, k);
             }
         }
     }
@@ -251,8 +260,7 @@ public final class RegionBuffer {
     private void waitForTasks(){
         while(activeTasks.get() > 0) {
             try {
-                utils.log(Level.WARNING, "" + activeTasks.get());
-                TimeUnit.MILLISECONDS.sleep(1000);
+                TimeUnit.MILLISECONDS.sleep(1);
             }
             catch (InterruptedException e) {
                 throw new RuntimeException(e);

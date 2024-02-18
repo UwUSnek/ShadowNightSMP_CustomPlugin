@@ -15,34 +15,27 @@ import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise3D;
 import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 
 
-public final class SHD_WallMoss extends UtilityClass implements Rnd {
+public final class SHD_WallMoss extends SHD {
     static private final BlockPattern M_WallMoss = new BlockPattern(
         Pair.with(1f, Material.MOSS_BLOCK.createBlockData())
     );
 
 
 
-
-    private static BlockData compute(@NotNull final RegionBuffer buffer, final int x, final int z) {
-        return M_WallMoss.get();
-    }
+    final int wh;
+    final int ft;
 
     /**
-     * Generates the material of the walls.
-     * @param buffer The data buffer
-     * @param material The material that was used for the walls
-     * @param dist The distance gradient taken at the lowest exposed wall height
-     * @param h The height of the walls
-     * @param ft The thickness of the floor
+     * @param _wh The wall height
+     * @param _ft The thickness of the floor
      */
-    public static void start(@NotNull final RegionBuffer buffer, @NotNull final Material material, final float[][] dist, final int h, final int ft) {
-        for(int i = 0; i < buffer.x; ++i) for(int k = 0; k < buffer.z; ++k){
-            if(dist[i][k] < 0.1) for(int j = ft; j < ft + h; ++j) {
-                if(buffer.get(i, j, k) != material) {
-                    buffer.set(i, j, k, compute(buffer, i, k));
-                    break;
-                }
-            }
-        }
+    public SHD_WallMoss(final int _wh, final int _ft) {
+        wh = _wh;
+        ft = _ft;
+    }
+
+    @Override
+    public void compute(final int x, final int y, final int z) {
+        if(y < i.y - 1 && i.get(x, y + 1, z) == Material.AIR) o.set(x, y + 1, z, M_WallMoss.get());
     }
 }

@@ -3,10 +3,8 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Axis;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.data.DataBuilderOrientable;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
@@ -15,7 +13,7 @@ import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
-public final class SHD_WallMaterial extends SHD implements Rnd {
+public final class SHD_WallMaterial extends SHD {
     static private final BlockPattern M_WallBase = new BlockPattern(
         Pair.with(1f, Material.POLISHED_DEEPSLATE.createBlockData())
     );
@@ -75,7 +73,8 @@ public final class SHD_WallMaterial extends SHD implements Rnd {
         ft = _ft;
     }
 
-    public void compute(@NotNull final RegionBuffer i, @NotNull final RegionBuffer o, final int x, final int y, final int z) {
+    @Override
+    public void compute(final int x, final int y, final int z) {
         o.set(x, y, z,
             y < ft + 2 ?
             M_WallBase.get() :
