@@ -90,6 +90,7 @@ public final class SHD_FloorMaterial extends SHD {
     }
 
 
+
     @Override
     public void compute(final int x, final int y, final int z) {
         final double noiseSlab   = PerlinNoise2D.compute(x, z, 12);
@@ -101,7 +102,8 @@ public final class SHD_FloorMaterial extends SHD {
         final boolean isPuddle = noisePuddle > 0.22 && noisePuddle < 0.27;
         final boolean isPuddleBorder = noisePuddle > 0.27 && noisePuddle < 0.4;
 
-        BlockData output;
+
+        final BlockData output;
         if(y < ft - 1) output = M_FloorHidden.get();
         else {
             final float r = rnd.nextFloat();
@@ -113,5 +115,15 @@ public final class SHD_FloorMaterial extends SHD {
             else                         output = isSlab && !isPuddleBorder ? M_FloorSlab.get() : M_Floor.get();
         }
         o.set(x, y, z, output);
+
+
+        if(y < o.y - 1 && (output.getMaterial() == Material.MOSS_BLOCK || output.getMaterial() == Material.GRASS_BLOCK)) {
+            final BlockData vegetationOutput = M_Grass.get();
+            o.set(x, y + 1, z, vegetationOutput);
+            if(y < o.y - 2) {
+                if (vegetationOutput.getMaterial() == Material.TALL_GRASS) o.set(x, y + 2, z, new DataBuilderBisected(Material.TALL_GRASS).setHalf(Bisected.Half.TOP).build());
+                if (vegetationOutput.getMaterial() == Material.LARGE_FERN) o.set(x, y + 2, z, new DataBuilderBisected(Material.LARGE_FERN).setHalf(Bisected.Half.TOP).build());
+            }
+        }
     }
 }
