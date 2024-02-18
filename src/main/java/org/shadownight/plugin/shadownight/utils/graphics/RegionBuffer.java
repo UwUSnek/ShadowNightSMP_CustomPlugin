@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -125,6 +126,7 @@ public final class RegionBuffer {
 
     /**
      * Sets the material and data of the specified block.
+     * The top part of bisected blocks is automatically placed.
      * @param _x The x coordinate of the block
      * @param _y The y coordinate of the block
      * @param _z The z coordinate of the block
@@ -133,6 +135,11 @@ public final class RegionBuffer {
     public void set(final int _x, final int _y, final int _z, @NotNull final BlockData data) {
         try {
             d[_x][_y][_z] = data;
+            if(data instanceof Bisected && _y + 1 < y - 1) {
+                Bisected top = (Bisected)data.clone();
+                top.setHalf(Bisected.Half.TOP);
+                d[_x][_y + 1][_z] = top;
+            }
         }
         catch(ArrayIndexOutOfBoundsException e){
             utils.log(Level.SEVERE, "Index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift 0");
@@ -224,7 +231,7 @@ public final class RegionBuffer {
                 // Create hashmap
                 final HashMultimap<Material, SHD> shaderMap = HashMultimap.create();
                 for (Pair<Material, SHD> s : shaders) {
-                    s.getValue1().setBuffers(this, output);
+                    s.getValue1().setData(this, output);
                     shaderMap.put(s.getValue0(), s.getValue1());
                 }
                 // Start shader tasks

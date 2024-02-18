@@ -78,7 +78,7 @@ public final class SHD_WallMaterial extends SHD {
         o.set(x, y, z,
             y < ft + 2 ?
             M_WallBase.get() :
-            M_Wall.get((float)y / wh + ((float)PerlinNoise3D.compute(x, y, z, 7) - 0.5f) / 3)
+            M_Wall.get((float)y / wh + ((float)perlinNoise3D.compute(x, y, z, 7) - 0.5f) / 3)
         );
     }
 }

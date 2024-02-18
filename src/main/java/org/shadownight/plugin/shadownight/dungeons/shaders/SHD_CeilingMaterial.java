@@ -34,6 +34,6 @@ public final class SHD_CeilingMaterial extends SHD {
 
     @Override
     public void compute(final int x, final int y, final int z) {
-        o.set(x, y, z, M_Ceiling.get((float)PerlinNoise3D.compute(x, y, z, 32)));
+        o.set(x, y, z, M_Ceiling.get((float)perlinNoise3D.compute(x, y, z, 32)));
     }
 }

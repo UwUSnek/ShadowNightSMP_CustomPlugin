@@ -3,10 +3,11 @@ package org.shadownight.plugin.shadownight.utils.graphics;
 
 import org.joml.Vector3d;
 import org.joml.Vector3i;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 
 
-public final class PerlinNoise3D extends PerlinNoise {
+public final class PerlinNoise3D  extends UtilityClass implements PerlinNoise {
     /**
      * Returns a Perlin noise value for a given (x, y) coordinate.
      * @param x x-coordinate to generate noise value for
@@ -40,9 +41,9 @@ public final class PerlinNoise3D extends PerlinNoise {
 
 
         // Fade x and y towards integral vals to improve naturalness of the noise
-        double u = fade(x - (int)x);
-        double v = fade(y - (int)y);
-        double w = fade(z - (int)z);
+        double u = PerlinNoise.fade(x - (int)x);
+        double v = PerlinNoise.fade(y - (int)y);
+        double w = PerlinNoise.fade(z - (int)z);
 
         // Bilinear interpolation to get the value for the point (using faded vals)
         double output = Func.linearInt(w,

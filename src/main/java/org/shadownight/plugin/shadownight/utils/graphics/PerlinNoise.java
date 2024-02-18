@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.utils.graphics;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,10 +12,10 @@ import java.util.Random;
 
 
 
-public abstract class PerlinNoise extends UtilityClass implements Rnd {
+public interface PerlinNoise {
     // Default hash lookup table as defined by Ken Perlin
     // This is a randomly arranged array of all numbers from 0-255 inclusive, repeated twice.
-    protected static final Integer[] permutation = {
+    Integer[] permutation = {
         151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,   225, 140, 36,  103, 30,  69,  142, 8,   99,  37,  240, 21,  10,  23,  190, 6,   148,
         247, 120, 234, 75,  0,   26,  197, 62,  94,  252, 219, 203, 117, 35,  11,  32,  57,  177, 33,  88,  237, 149, 56,  87,  174, 20,  125, 136, 171, 168, 68,  175,
         74,  165, 71,  134, 139, 48,  27,  166, 77,  146, 158, 231, 83,  111, 229, 122, 60,  211, 133, 230, 220, 105, 92,  41,  55,  46,  245, 40,  244, 102, 143, 54,
@@ -38,9 +39,9 @@ public abstract class PerlinNoise extends UtilityClass implements Rnd {
     /**
      * Recreates the permutation list.
      */
-    public static void resetSeed() {
+    static void resetSeed() {
         ArrayList<Integer> permutationList = new ArrayList<>(Arrays.asList(permutation));
-        Collections.shuffle(permutationList, new Random(rnd.nextInt()));
+        Collections.shuffle(permutationList, new Random(new SecureRandom().nextInt()));
         for (int i = 0; i < permutation.length; i++) permutation[i] = permutationList.get(i);
     }
 
@@ -54,7 +55,7 @@ public abstract class PerlinNoise extends UtilityClass implements Rnd {
      *            a point which is 25% of the way across its unit square)
      * @return smoothed value for the coordinate at that point in range [0.0, 1.0]
      */
-    protected static double fade(final double val) {
+    static double fade(final double val) {
         return val * val * val * (val * (val * 6 - 15) + 10);
     }
 }

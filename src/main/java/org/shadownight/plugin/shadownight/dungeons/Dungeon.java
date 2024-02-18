@@ -125,8 +125,8 @@ public final class Dungeon {
         final int tileSize = 13;                                    // The size of each tile
         final int wallThickness = 9;                                // The thickness of the inner maze walls
         final int wallHeight = 60;                                  // The height of the inner maze walls
-        final int xNum = 5;                                        // The height of the maze expressed in tiles. Must be an odd number
-        final int zNum = 5;                                        // The width  of the maze expressed in tiles. Must be an odd number
+        final int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
+        final int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
         final Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
 
 

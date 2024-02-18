@@ -17,6 +17,7 @@ import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise2D;
 import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.Rnd;
+import org.shadownight.plugin.shadownight.utils.math.Func;
 
 
 public final class SHD_FloorMaterial extends SHD {
@@ -68,9 +69,9 @@ public final class SHD_FloorMaterial extends SHD {
         Pair.with(1f, new DataBuilderBisected(Material.LARGE_FERN).setHalf(Bisected.Half.BOTTOM).build())
     );
     static private final BlockPattern M_Mushroom = new BlockPattern(
-        Pair.with(64f, Material.AIR.createBlockData()),
-        Pair.with(4f,  Material.BROWN_MUSHROOM.createBlockData()),
-        Pair.with(1f,  Material.RED_MUSHROOM.createBlockData())
+        Pair.with(1f,    Material.AIR.createBlockData()),
+        Pair.with(0.04f, Material.BROWN_MUSHROOM.createBlockData()),
+        Pair.with(0.01f, Material.RED_MUSHROOM.createBlockData())
     );
 
 
@@ -93,37 +94,34 @@ public final class SHD_FloorMaterial extends SHD {
 
     @Override
     public void compute(final int x, final int y, final int z) {
-        final double noiseSlab   = PerlinNoise2D.compute(x, z, 12);
-        final double noisePuddle = PerlinNoise2D.compute(x + 5000, z + 5000, 25);
-        final double noiseMoss   = PerlinNoise2D.compute(x, z, 20);
+        final double noiseSlab   = perlinNoise2D.compute(x, z, 12);
+        final double noisePuddle = perlinNoise2D.compute(x, z, 25) * 0.85 + perlinNoise2D.compute(x, z, 6) * 0.14;
+        final double noiseMoss   = perlinNoise2D.compute(x, z, 20);
 
-        final boolean isMoss   = noiseMoss   < 0.55 && noiseMoss   > 0.4;
-        final boolean isSlab   = noiseSlab   > 0.56 && noiseSlab   < 0.64;
-        final boolean isPuddle = noisePuddle > 0.22 && noisePuddle < 0.27;
-        final boolean isPuddleBorder = noisePuddle > 0.27 && noisePuddle < 0.4;
+        final boolean isMoss        = noiseMoss   < 0.55 && noiseMoss   > 0.4;
+        final boolean isSlab        = noiseSlab   > 0.56 && noiseSlab   < 0.64;
+        final boolean isPuddleWater = noisePuddle > 0.22 && noisePuddle < 0.27;
+        final boolean isPuddle      = noisePuddle > 0.11 && noisePuddle < 0.41;
 
 
         final BlockData output;
         if(y < ft - 1) output = M_FloorHidden.get();
         else {
             final float r = rnd.nextFloat();
-            if(isPuddleBorder && !isMoss) o.setBiome(x, y, z, Biome.SWAMP);
-
             if (isMoss) output = noiseMoss < r * 2 ? M_Moss.get() : M_MossFill.get();
-            else if (isPuddle)           output = M_Puddle.get();
-            else if (wallDist[x][z] < r) output = isSlab && !isPuddleBorder ? M_FloorEdgesSlab.get() : M_FloorEdges.get();
-            else                         output = isSlab && !isPuddleBorder ? M_FloorSlab.get() : M_Floor.get();
+            else if (isPuddleWater) {
+                output = M_Puddle.get();
+                for(int j = Func.clampMin(y - 2, 0); j < Func.clampMax(y + 2, o.y - 1); ++j) o.setBiome(x, j, z, Biome.SWAMP);
+            }
+            else if (wallDist[x][z] < r) output = isSlab && !isPuddle ? M_FloorEdgesSlab.get() : M_FloorEdges.get();
+            else                         output = isSlab && !isPuddle ? M_FloorSlab.get() : M_Floor.get();
         }
         o.set(x, y, z, output);
 
 
-        if(y < o.y - 1 && (output.getMaterial() == Material.MOSS_BLOCK || output.getMaterial() == Material.GRASS_BLOCK)) {
-            final BlockData vegetationOutput = M_Grass.get();
-            o.set(x, y + 1, z, vegetationOutput);
-            if(y < o.y - 2) {
-                if (vegetationOutput.getMaterial() == Material.TALL_GRASS) o.set(x, y + 2, z, new DataBuilderBisected(Material.TALL_GRASS).setHalf(Bisected.Half.TOP).build());
-                if (vegetationOutput.getMaterial() == Material.LARGE_FERN) o.set(x, y + 2, z, new DataBuilderBisected(Material.LARGE_FERN).setHalf(Bisected.Half.TOP).build());
-            }
+        if(y < o.y - 1) {
+            if(output.getMaterial() == Material.MOSS_BLOCK || output.getMaterial() == Material.GRASS_BLOCK) o.set(x, y + 1, z, M_Grass.get());
+            else if(!isSlab && !isPuddleWater && wallDist[x][z] < 0.4) o.set(x, y + 1, z, M_Mushroom.get());
         }
     }
 }
