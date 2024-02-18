@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import static org.shadownight.plugin.shadownight.items.IM_CustomItem.itemIdKey;
+import static org.shadownight.plugin.shadownight.items.IM.itemIdKey;
 
 
 public final class utils extends UtilityClass {

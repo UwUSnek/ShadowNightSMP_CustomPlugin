@@ -14,7 +14,7 @@ import org.shadownight.plugin.shadownight.chatManager.DeathMessages;
 import org.shadownight.plugin.shadownight.chatManager.discord.InGameBanner;
 import org.shadownight.plugin.shadownight.chatManager.JoinLeaveMessages;
 import org.shadownight.plugin.shadownight.economy.Economy;
-import org.shadownight.plugin.shadownight.items.IM_CustomItem;
+import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.qol.SpawnInvincibility;
 import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.qol.SurvivalFly;
@@ -77,11 +77,11 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(final PlayerInteractEvent event) {
-        IM_CustomItem.chooseOnInteract(event);
+        IM.chooseOnInteract(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAttack(final EntityDamageByEntityEvent event) {
-        IM_CustomItem.chooseOnAttack(event);
+        IM.chooseOnAttack(event);
     }
 }

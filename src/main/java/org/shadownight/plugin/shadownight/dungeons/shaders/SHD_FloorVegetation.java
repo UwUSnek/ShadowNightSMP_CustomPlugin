@@ -17,7 +17,7 @@ import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
 public final class SHD_FloorVegetation extends UtilityClass implements Rnd {
-    static private final BlockPattern M_Grass = new BlockPattern(
+    static public final BlockPattern M_Grass = new BlockPattern(
         Pair.with(8f, Material.AIR.createBlockData()),
         Pair.with(4f, Material.SHORT_GRASS.createBlockData()),
         Pair.with(2f, Material.FERN.createBlockData()),

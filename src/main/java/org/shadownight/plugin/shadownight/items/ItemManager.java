@@ -18,8 +18,8 @@ public enum ItemManager {
     ;
 
 
-    private final IM_CustomItem value;
-    ItemManager(@NotNull final IM_CustomItem item){
+    private final IM value;
+    ItemManager(@NotNull final IM item){
         value = item;
     }
 
@@ -28,14 +28,14 @@ public enum ItemManager {
      * This can be used to retrieve item-specific data
      * @return The manager instance
      */
-    public IM_CustomItem getInstance() {
+    public IM getInstance() {
         return value;
     }
 
 
-    private static final Map<Long, IM_CustomItem> lookupTable;
+    private static final Map<Long, IM> lookupTable;
     static {
-        final HashMap<Long, IM_CustomItem> lookupTableTmp = new HashMap<>();
+        final HashMap<Long, IM> lookupTableTmp = new HashMap<>();
         for(ItemManager item : values()) {
             lookupTableTmp.put(item.value.getCustomId().getNumericalValue(), item.value);
         }
@@ -48,7 +48,7 @@ public enum ItemManager {
      * @param id The id to search for
      * @return The manger instance
      */
-    public static IM_CustomItem getValueFromId(@NotNull final CustomItemId id) {
+    public static IM getValueFromId(@NotNull final CustomItemId id) {
         return lookupTable.get(id.getNumericalValue());
     }
     /**
@@ -56,7 +56,7 @@ public enum ItemManager {
      * @param id The id to search for
      * @return The manger instance
      */
-    public static IM_CustomItem getValueFromId(final long id) {
+    public static IM getValueFromId(final long id) {
         return lookupTable.get(id);
     }
 }

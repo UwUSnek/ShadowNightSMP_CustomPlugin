@@ -12,7 +12,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.items.IM_CustomItem;
+import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public abstract class IM_Scythe extends IM_CustomItem {
+public abstract class IM_Scythe extends IM {
     public IM_Scythe() {}
 
     protected abstract double getAttackSpeed();

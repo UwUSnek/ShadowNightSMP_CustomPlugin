@@ -15,25 +15,43 @@ import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
-public final class SHD_WallMaterial extends UtilityClass implements Rnd {
+public final class SHD_WallMaterial extends SHD implements Rnd {
     static private final BlockPattern M_WallBase = new BlockPattern(
         Pair.with(1f, Material.POLISHED_DEEPSLATE.createBlockData())
     );
     static private final BlockGradient M_Wall = new BlockGradient(
-        Pair.with(3, Material.DEEPSLATE_TILES.createBlockData()),
-        Pair.with(2, Material.DEEPSLATE_BRICKS.createBlockData()),
+        Pair.with(3, new BlockPattern(
+            Pair.with(1.65f, Material.DEEPSLATE_TILES.createBlockData()),
+            Pair.with(1.35f, Material.CRACKED_DEEPSLATE_TILES.createBlockData()),
+            Pair.with(0.65f, Material.DEEPSLATE_BRICKS.createBlockData()),
+            Pair.with(0.35f, Material.CRACKED_DEEPSLATE_BRICKS.createBlockData())
+        )),
+        Pair.with(2, new BlockPattern(
+            Pair.with(0.65f, Material.DEEPSLATE_TILES.createBlockData()),
+            Pair.with(0.35f, Material.CRACKED_DEEPSLATE_TILES.createBlockData()),
+            Pair.with(1.65f, Material.DEEPSLATE_BRICKS.createBlockData()),
+            Pair.with(1.35f, Material.CRACKED_DEEPSLATE_BRICKS.createBlockData())
+        )),
         Pair.with(1, Material.COBBLED_DEEPSLATE.createBlockData()),
         Pair.with(1, new BlockPattern(
-            Pair.with(1f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.X).build()),
-            Pair.with(1f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.Z).build())
+            Pair.with(1.5f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.X).build()),
+            Pair.with(1.5f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.Z).build()),
+            Pair.with(0.5f, Material.DEEPSLATE.createBlockData()),
+            Pair.with(0.5f, Material.COBBLESTONE.createBlockData())
         )),
         Pair.with(1, new BlockPattern(
-            Pair.with(1f, Material.DEEPSLATE.createBlockData()),
-            Pair.with(1f, Material.COBBLESTONE.createBlockData())
+            Pair.with(0.5f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.X).build()),
+            Pair.with(0.5f, new DataBuilderOrientable(Material.DEEPSLATE).setFacing(Axis.Z).build()),
+            Pair.with(1.0f, Material.DEEPSLATE.createBlockData()),
+            Pair.with(1.0f, Material.COBBLESTONE.createBlockData()),
+            Pair.with(0.5f, Material.COBBLESTONE.createBlockData()),
+            Pair.with(0.5f, Material.ANDESITE.createBlockData())
         )),
         Pair.with(1, new BlockPattern(
-            Pair.with(1f, Material.COBBLESTONE.createBlockData()),
-            Pair.with(1f, Material.ANDESITE.createBlockData())
+            Pair.with(1.5f, Material.COBBLESTONE.createBlockData()),
+            Pair.with(1.5f, Material.ANDESITE.createBlockData()),
+            Pair.with(0.5f, Material.ANDESITE.createBlockData()),
+            Pair.with(0.5f, Material.DIORITE.createBlockData())
         )),
         Pair.with(1, new BlockPattern(
             Pair.with(1f, Material.ANDESITE.createBlockData()),
@@ -45,23 +63,23 @@ public final class SHD_WallMaterial extends UtilityClass implements Rnd {
 
 
 
-    private static BlockData compute(final int x, final int y, final int z, final int wallHeight, final int floorThickness) {
-        return y < floorThickness + 2 ?
-            M_WallBase.get() :
-            M_Wall.get((float)y / wallHeight + ((float)PerlinNoise3D.compute(x, y, z, 7) - 0.5f) / 3)
-        ;
-    }
+    final int wh;
+    final int ft;
 
     /**
-     * Generates the material of the walls.
-     * @param buffer The data buffer
-     * @param material The material that was used for the walls
-     * @param h The height of the walls
-     * @param ft The thickness of the floor
+     * @param _wh The wall height
+     * @param _ft The thickness of the floor
      */
-    public static void start(@NotNull final RegionBuffer buffer, @NotNull final Material material, final int h, final int ft) {
-        for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.y; ++j) for(int k = 0; k < buffer.z; ++k){
-            if(buffer.get(i, j, k) == material) buffer.set(i, j, k, compute(i, j, k, h, ft));
-        }
+    public SHD_WallMaterial(final int _wh, final int _ft) {
+        wh = _wh;
+        ft = _ft;
+    }
+
+    public void compute(@NotNull final RegionBuffer i, @NotNull final RegionBuffer o, final int x, final int y, final int z) {
+        o.set(x, y, z,
+            y < ft + 2 ?
+            M_WallBase.get() :
+            M_Wall.get((float)y / wh + ((float)PerlinNoise3D.compute(x, y, z, 7) - 0.5f) / 3)
+        );
     }
 }

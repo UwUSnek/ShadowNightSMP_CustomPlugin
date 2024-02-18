@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
-import org.shadownight.plugin.shadownight.items.IM_CustomItem;
+import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -54,7 +54,7 @@ public final class ScytheThrowDisplay {
             0,
             90
         ), EntityType.ITEM_DISPLAY);
-        IM_CustomItem data = ItemManager.getValueFromId(CustomItemId.KLAUE_SCYTHE);
+        IM data = ItemManager.getValueFromId(CustomItemId.KLAUE_SCYTHE);
         display.setItemStack(utils.createItemStackCustom(data.getMaterial(), 1, data.getDisplayName(), data.getCustomModelData(), data.getCustomId().getNumericalValue()));
         display.setTeleportDuration(stepDuration);
 

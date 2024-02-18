@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
+import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.dungeons.generators.GEN_CeilingDeform;
@@ -163,7 +164,12 @@ public final class Dungeon {
             final float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);
             PerlinNoise.resetSeed(); SHD_FloorMaterial.start  (buffer, materialFloor, wallDistanceGradient, floorThickness);
             PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
-            PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
+            PerlinNoise.resetSeed(); SHD_WallMoss.start       (buffer, materialWalls, wallDistanceGradient, wallHeight, floorThickness);
+            //PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
+            buffer.dispatchShaders(4,
+                Pair.with(materialWalls, new SHD_WallMaterial(wallHeight, floorThickness))
+            );
+            //PerlinNoise.resetSeed(); SHD_WallMaterial.start   (buffer, materialWalls,           wallHeight, floorThickness);
             PerlinNoise.resetSeed(); SHD_CeilingMaterial.start(buffer, materialCeiling);
             PerlinNoise.resetSeed(); SHD_CeilingVines.start   (buffer, materialVines);
 

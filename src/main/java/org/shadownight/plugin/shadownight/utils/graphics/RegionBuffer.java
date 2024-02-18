@@ -1,15 +1,21 @@
 package org.shadownight.plugin.shadownight.utils.graphics;
 
 
+import com.google.common.collect.HashMultimap;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.dungeons.shaders.SHD;
+import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 /**
@@ -21,6 +27,8 @@ public final class RegionBuffer {
     private final Biome[][][] b;
     public final int x, y, z;
     private final int shift_x, shift_y, shift_z;
+
+    private final AtomicInteger activeTasks = new AtomicInteger(0);
 
 
     /**
@@ -46,6 +54,21 @@ public final class RegionBuffer {
         for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
             d[i][j][k] = data;
             b[i][j][k] = null;
+        }
+    }
+    public RegionBuffer(@NotNull final RegionBuffer copy) {
+        x = copy.x;
+        y = copy.y;
+        z = copy.z;
+        shift_x = copy.shift_x;
+        shift_y = copy.shift_y;
+        shift_z = copy.shift_z;
+
+        d = new BlockData[x][y][z];
+        b = new Biome[x][y][z];
+        for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
+            d[i][j][k] = copy.d[i][j][k];
+            b[i][j][k] = copy.b[i][j][k];
         }
     }
 
@@ -135,16 +158,6 @@ public final class RegionBuffer {
     public Material get(final int _x, final int _y, final int _z){
         return d[_x][_y][_z].getMaterial();
     }
-    /**
-     * Returns the data of the specified block.
-     * @param _x The x coordinate of the block
-     * @param _y The y coordinate of the block
-     * @param _z The z coordinate of the block
-     * @return The block material
-     */
-    public BlockData getData(final int _x, final int _y, final int _z){
-        return d[_x][_y][_z];
-    }
 
 
 
@@ -181,6 +194,69 @@ public final class RegionBuffer {
             world.getBlockAt(_x + i, _y + j, _z + k).setBlockData(d[i][j][k]);
             Biome biome = b[i][j][k];
             if(biome != null) world.setBiome(_x + i, _y + j, _z + k, biome);
+        }
+    }
+
+
+
+
+
+
+    /**
+     * Executes a list of material shaders, equally splitting the execution of each shader between a configured amount of threads.
+     * All the shaders are executed at the same time and their order is not preserved, but the output uses a dedicated temporary buffer to avoid interferences.
+     * @param threads The number of threads to use
+     * @param shaders A list of pairs each containing the material the shader will be called on and the shader to compute
+     */
+    @SafeVarargs
+    public final void dispatchShaders(final int threads, @NotNull final Pair<Material, SHD>... shaders) {
+        // Create temporary buffer
+        final RegionBuffer output = new RegionBuffer(this);
+        final int sectionSize = x / threads + 1;
+
+        //waitForTasks(); //FIXME wait for copy operation
+        activeTasks.set(threads);
+        for(int i = 0; i < threads; ++i) {
+            // Create hashmap
+            final HashMultimap<Material, SHD> shaderMap = HashMultimap.create();
+            for(Pair<Material, SHD> s : shaders) {
+                shaderMap.put(s.getValue0(), s.getValue1());
+            }
+            // Start shader tasks
+            int x0 = Func.clampMax(sectionSize * i, x);
+            int x1 = Func.clampMax(sectionSize * (i + 1), x);
+            if(x0 != x1) Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
+                computeShaderSection(output, x0, x1, shaderMap);
+                activeTasks.decrementAndGet();
+            });
+        }
+        //waitForTasks();
+
+        // Paste data from temporary buffer back into this buffer
+        for(int i = 0; i < x; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
+            d[i][j][k] = output.d[i][j][k];
+            b[i][j][k] = output.b[i][j][k];
+        }
+    }
+
+
+    private void computeShaderSection(@NotNull final RegionBuffer output, final int x0, final int x1, @NotNull final HashMultimap<Material, SHD> shaders) {
+        for(int i = x0; i < x1; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
+            for(SHD s : shaders.get(d[i][j][k].getMaterial())) {
+                s.compute(this, output, i, j, k);
+            }
+        }
+    }
+
+    private void waitForTasks(){
+        while(activeTasks.get() > 0) {
+            try {
+                utils.log(Level.WARNING, "" + activeTasks.get());
+                TimeUnit.MILLISECONDS.sleep(1000);
+            }
+            catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
