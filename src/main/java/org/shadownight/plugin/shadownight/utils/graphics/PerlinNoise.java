@@ -1,8 +1,5 @@
 package org.shadownight.plugin.shadownight.utils.graphics;
 
-import org.shadownight.plugin.shadownight.utils.Rnd;
-import org.shadownight.plugin.shadownight.utils.UtilityClass;
-
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;

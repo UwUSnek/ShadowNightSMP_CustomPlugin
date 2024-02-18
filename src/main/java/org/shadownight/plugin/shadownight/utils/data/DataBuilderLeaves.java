@@ -19,15 +19,15 @@ public final class DataBuilderLeaves {
 
 
 
-    public DataBuilderLeaves setPersistent(final boolean n) {
+    @SuppressWarnings("unused") public DataBuilderLeaves setPersistent(final boolean n) {
         data.setPersistent(n);
         return this;
     }
-    public DataBuilderLeaves setWaterlogged(final boolean n) {
+    @SuppressWarnings("unused") public DataBuilderLeaves setWaterlogged(final boolean n) {
         data.setWaterlogged(n);
         return this;
     }
-    public DataBuilderLeaves setDistance(final int n) {
+    @SuppressWarnings("unused") public DataBuilderLeaves setDistance(final int n) {
         data.setDistance(n);
         return this;
     }

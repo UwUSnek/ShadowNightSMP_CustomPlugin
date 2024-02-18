@@ -21,7 +21,7 @@ public final class DataBuilderOrientable {
 
 
 
-    public DataBuilderOrientable setFacing(@NotNull final Axis n) {
+    @SuppressWarnings("unused") public DataBuilderOrientable setFacing(@NotNull final Axis n) {
         data.setAxis(n);
         return this;
     }

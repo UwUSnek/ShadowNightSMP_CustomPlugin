@@ -4,13 +4,9 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.javatuples.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.data.DataBuilderOrientable;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
-import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise3D;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
-import org.shadownight.plugin.shadownight.utils.Rnd;
 
 
 public final class SHD_WallMaterial extends SHD {

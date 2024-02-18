@@ -1,9 +1,7 @@
 package org.shadownight.plugin.shadownight.utils.graphics;
 
-import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 

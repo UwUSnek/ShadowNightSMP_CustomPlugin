@@ -1,18 +1,9 @@
 package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
-import org.bukkit.Axis;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
-import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.utils.Rnd;
-import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.data.DataBuilderOrientable;
-import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
-import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise3D;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 
 
 public final class SHD_WallMoss extends SHD {
@@ -37,6 +28,5 @@ public final class SHD_WallMoss extends SHD {
     @Override
     public void compute(final int x, final int y, final int z) {
         if(y < i.y - 1 && i.get(x, y + 1, z) == Material.AIR) o.set(x, y + 1, z, M_WallMoss.get());
-
     }
 }
