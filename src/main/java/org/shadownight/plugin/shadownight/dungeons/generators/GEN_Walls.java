@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBufferTemplate;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionTemplateData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,13 +68,19 @@ public final class GEN_Walls extends UtilityClass {
      * @param t The thickness of the wall
      * @param h The height of the wall
      */
-    private static void placeWall(@NotNull final RegionBuffer buffer, @NotNull final Material material, @NotNull final Wall wall, final int s, final int t, final int h, final int floorThickness) {
+    private static void placeWall(@NotNull final RegionBufferTemplate buffer, @NotNull final Wall wall, final int s, final int t, final int h, final int floorThickness) {
         final int st = s + t;
         final v2i a = wall.a;
         switch(wall.type) {
             //                 Long side                                         Height                            Thickness
-            case 'x': for (int i = a.x * st - t; i < a.x * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) buffer.setShifted(i, j, a.z * st + s + k, material); break;
-            case 'z': for (int i = a.z * st - t; i < a.z * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) buffer.setShifted(a.x * st + s + k, j, i, material); break;
+            case 'x': for (int i = a.x * st - t; i < a.x * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) {
+                buffer.setShifted(i, j, a.z * st + s + k, RegionTemplateData.WALL);
+            }
+            break;
+            case 'z': for (int i = a.z * st - t; i < a.z * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) {
+                buffer.setShifted(a.x * st + s + k, j, i, RegionTemplateData.WALL);
+            }
+            break;
         }
     }
 
@@ -80,7 +88,6 @@ public final class GEN_Walls extends UtilityClass {
     /**
      * Generates the maze and places all the walls.
      * @param buffer The data buffer
-     * @param material The material to use for the walls
      * @param tileSize The size of each tile
      * @param wt The thickness of the walls
      * @param h The height of the walls
@@ -88,7 +95,7 @@ public final class GEN_Walls extends UtilityClass {
      * @param z The z size of the buffer //TODO
      * @param ft The thickness of the floor
      */
-    public static void start(RegionBuffer buffer, Material material, int tileSize, int wt, int h, int x, int z, int ft){
+    public static void start(@NotNull final RegionBufferTemplate buffer, final int tileSize, final int wt, final int h, final int x, final int z, final int ft){
         // Initialize tiles
         final TreeNode[][] tiles = new TreeNode[x][z]; // Defaults to { parent: null }
         for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) tiles[i][j] = new TreeNode();
@@ -110,7 +117,7 @@ public final class GEN_Walls extends UtilityClass {
             final TreeNode aRoot = tiles[wall.a.x][wall.a.z].getRoot();
             final TreeNode bRoot = tiles[wall.b.x][wall.b.z].getRoot();
             if (aRoot != bRoot) new TreeNode(aRoot, bRoot);
-            else placeWall(buffer, material, wall, tileSize, wt, h, ft);
+            else placeWall(buffer, wall, tileSize, wt, h, ft);
         }
     }
 }

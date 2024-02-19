@@ -3,9 +3,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.Rnd;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
-import org.shadownight.plugin.shadownight.utils.graphics._PerlinNoise2D_impl;
-import org.shadownight.plugin.shadownight.utils.graphics._PerlinNoise3D_impl;
+import org.shadownight.plugin.shadownight.utils.graphics.*;
 
 
 /**
@@ -14,8 +12,8 @@ import org.shadownight.plugin.shadownight.utils.graphics._PerlinNoise3D_impl;
  */
 public abstract class SHD implements Rnd {
     /** The input data buffer.*/
-    protected RegionBuffer i;
-    /** The input data buffer.*/
+    protected RegionBufferTemplate i;
+    /** The output data buffer.*/
     protected RegionBuffer o;
     /** A 3D perlin noise generator initialized with a random seed that is unique to this shader.*/
     protected _PerlinNoise3D_impl perlinNoise3D;
@@ -24,7 +22,7 @@ public abstract class SHD implements Rnd {
 
 
 
-    public final void setData(@NotNull final RegionBuffer _i, @NotNull final RegionBuffer _o) {
+    public final void setData(@NotNull final RegionBufferTemplate _i, @NotNull final RegionBuffer _o) {
         i = _i;
         o = _o;
         perlinNoise3D = new _PerlinNoise3D_impl();

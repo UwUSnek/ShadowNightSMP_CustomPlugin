@@ -16,6 +16,8 @@ import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
 import org.shadownight.plugin.shadownight.dungeons.shaders.*;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise;
 import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionBufferTemplate;
+import org.shadownight.plugin.shadownight.utils.graphics.RegionTemplateData;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -127,7 +129,6 @@ public final class Dungeon {
         final int wallHeight = 60;                                  // The height of the inner maze walls
         final int xNum = 11;                                        // The height of the maze expressed in tiles. Must be an odd number
         final int zNum = 11;                                        // The width  of the maze expressed in tiles. Must be an odd number
-        final Material materialWalls = Material.WHITE_CONCRETE;     // Temporary material used for inner maze walls
 
 
         // Outer walls and floor data
@@ -136,9 +137,6 @@ public final class Dungeon {
         int floorThickness = 5;                                     // The thickness of the floor
         final int ceilingThickness = 5;                             // The thickness of the ceiling
         int outerWallsThickness = 5;                                // The thickness of the outer walls
-        final Material materialFloor = Material.LIGHT_GRAY_CONCRETE;// Temporary material used for the floor
-        final Material materialCeiling = Material.ORANGE_CONCRETE;  // Temporary material used for the ceiling
-        final Material materialVines = Material.GREEN_CONCRETE;     // Temporary material used for the ceiling
         outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
         floorThickness = Func.clampMin(floorThickness, 2);
 
@@ -149,34 +147,33 @@ public final class Dungeon {
             final int total_x = x + outerWallsThickness * 2;
             final int total_y = wallHeight + floorThickness + ceilingThickness;
             final int total_z = z + outerWallsThickness * 2;
-            final RegionBuffer buffer = new RegionBuffer(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
+            final RegionBufferTemplate templateBuffer = new RegionBufferTemplate(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
             // Generate base layout
-            PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (buffer, materialFloor,   floorThickness);
-            PerlinNoise.resetSeed(); GEN_BoundingBox.startCeiling(buffer, materialCeiling, ceilingThickness, wallHeight, floorThickness);
-            PerlinNoise.resetSeed(); GEN_Walls.start             (buffer, materialWalls,   tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
-            PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (buffer, materialWalls,   outerWallsThickness, wallHeight, x, z, floorThickness); //TODO remove x and z parameters
-            PerlinNoise.resetSeed(); GEN_WallsDeform.start       (buffer, materialWalls,   floorThickness, wallHeight);
+            PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (templateBuffer, floorThickness);
+            PerlinNoise.resetSeed(); GEN_BoundingBox.startCeiling(templateBuffer, ceilingThickness, wallHeight, floorThickness);
+            PerlinNoise.resetSeed(); GEN_Walls.start             (templateBuffer, tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
+            PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (templateBuffer, outerWallsThickness, wallHeight, floorThickness, wallThickness);
+            PerlinNoise.resetSeed(); GEN_WallsDeform.start       (templateBuffer, floorThickness, wallHeight);
 
             // Calculate full wall distance gradient and generate the rest of the base layout
-            final float[][] wallDistanceGradientHigh = createWallDistanceGradient(buffer, floorThickness + wallHeight - 1, tileSize, materialWalls, true);
-            PerlinNoise.resetSeed(); GEN_CeilingDeform.start(buffer, materialCeiling, materialVines, wallDistanceGradientHigh, floorThickness, wallHeight);
+            final float[][] wallDistanceGradientHigh = createWallDistanceGradient(templateBuffer, floorThickness + wallHeight - 1, tileSize, true);
+            PerlinNoise.resetSeed(); GEN_CeilingDeform.start(templateBuffer, wallDistanceGradientHigh, floorThickness, wallHeight);
 
 
             // Calculate wall distance gradient and apply material shaders
-            final float[][] wallDistanceGradient = createWallDistanceGradient(buffer, floorThickness, tileSize, materialWalls, false);
-            //PerlinNoise.resetSeed(); SHD_FloorVegetation.start(buffer,                wallDistanceGradient, floorThickness);
-            buffer.dispatchShaders(8,
+            final float[][] wallDistanceGradient = createWallDistanceGradient(templateBuffer, floorThickness, tileSize, false);
+            templateBuffer.dispatchShaders(8,
                 Arrays.asList(
-                    Pair.with(materialFloor,   new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
-                    Pair.with(materialWalls,   new SHD_WallMoss(wallHeight, floorThickness)),
-                    Pair.with(materialWalls,   new SHD_WallMaterial(wallHeight, floorThickness)),
-                    Pair.with(materialCeiling, new SHD_CeilingMaterial()),
-                    Pair.with(materialVines,   new SHD_CeilingVines())
+                    Pair.with(RegionTemplateData.FLOOR,        new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
+                    Pair.with(RegionTemplateData.WALL,         new SHD_WallMoss(wallHeight, floorThickness)),
+                    Pair.with(RegionTemplateData.WALL,         new SHD_WallMaterial(wallHeight, floorThickness)),
+                    Pair.with(RegionTemplateData.CEILING,      new SHD_CeilingMaterial()),
+                    Pair.with(RegionTemplateData.CEILING_VINE, new SHD_CeilingVines())
                 ),
-                () -> {
+                (outputBuffer) -> {
                     // Paste and log generation time
-                    buffer.paste(world, -total_x / 2, 0, -total_z / 2, true);
+                    outputBuffer.paste(world, -total_x / 2, 0, -total_z / 2, true);
                     final long duration = System.currentTimeMillis() - start;
                     utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(duration, true));
                 }
@@ -192,12 +189,11 @@ public final class Dungeon {
      * @param b The RegionBuffer containing the walls
      * @param y The Y level to use when performing calculations
      * @param tileSize The size of each tile
-     * @param m The Material that was used for the walls
      * @param calculateNegative Whether or not negative distances should be calculated for blocks inside walls.
      *                          If false, internal blocks will have a distance value of 0
      * @return The distance gradient
      */
-    private static float[][] createWallDistanceGradient(@NotNull final RegionBuffer b, final int y, final int tileSize, @NotNull final Material m, final boolean calculateNegative) {
+    private static float[][] createWallDistanceGradient(@NotNull final RegionBufferTemplate b, final int y, final int tileSize, final boolean calculateNegative) {
         final float[][] gradient = new float[b.x][b.z];
         final int halfSize = tileSize / 2;
         for(int i = 0; i < b.x; ++i) for(int j = 0;  j < b.z; ++j) {
@@ -205,20 +201,20 @@ public final class Dungeon {
             try {
                 while (
                     k < halfSize &&
-                    b.get(i + k, y, j + k) != m &&
-                    b.get(i + k, y, j - k) != m &&
-                    b.get(i - k, y, j + k) != m &&
-                    b.get(i - k, y, j - k) != m
+                    b.get(i + k, y, j + k) != RegionTemplateData.WALL &&
+                    b.get(i + k, y, j - k) != RegionTemplateData.WALL &&
+                    b.get(i - k, y, j + k) != RegionTemplateData.WALL &&
+                    b.get(i - k, y, j - k) != RegionTemplateData.WALL
                 ) ++k;
                 if(calculateNegative && k == 0) {
                     while (
                         k < halfSize &&
                         i + k < b.x - 1 && j + k < b.z - 1 &&
                         i - k > 0       && j - k > 0       &&
-                        b.get(i + k, y, j + k) == m &&
-                        b.get(i + k, y, j - k) == m &&
-                        b.get(i - k, y, j + k) == m &&
-                        b.get(i - k, y, j - k) == m
+                        b.get(i + k, y, j + k) == RegionTemplateData.WALL &&
+                        b.get(i + k, y, j - k) == RegionTemplateData.WALL &&
+                        b.get(i - k, y, j + k) == RegionTemplateData.WALL &&
+                        b.get(i - k, y, j - k) == RegionTemplateData.WALL
                     ) ++k;
                     gradient[i][j] = -(float)k / halfSize;
                 }
