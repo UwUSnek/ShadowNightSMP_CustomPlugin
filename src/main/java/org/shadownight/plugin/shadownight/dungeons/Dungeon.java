@@ -169,6 +169,7 @@ public final class Dungeon {
                     Pair.with(BlueprintData.FLOOR,        new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
                     Pair.with(BlueprintData.WALL,         new SHD_WallMoss(wallHeight, floorThickness, wallNormals)),
                     Pair.with(BlueprintData.WALL,         new SHD_WallMaterial(wallHeight, floorThickness)),
+                    Pair.with(BlueprintData.WALL_VINE,    new SHD_WallVines()),
                     Pair.with(BlueprintData.CEILING,      new SHD_CeilingMaterial()),
                     Pair.with(BlueprintData.CEILING_VINE, new SHD_CeilingVines())
                 ),
