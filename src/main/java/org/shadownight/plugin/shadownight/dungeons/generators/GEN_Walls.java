@@ -1,12 +1,10 @@
 package org.shadownight.plugin.shadownight.dungeons.generators;
 
 
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBufferTemplate;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionTemplateData;
+import org.shadownight.plugin.shadownight.utils.containers.RegionBlueprint;
+import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,17 +66,17 @@ public final class GEN_Walls extends UtilityClass {
      * @param t The thickness of the wall
      * @param h The height of the wall
      */
-    private static void placeWall(@NotNull final RegionBufferTemplate buffer, @NotNull final Wall wall, final int s, final int t, final int h, final int floorThickness) {
+    private static void placeWall(@NotNull final RegionBlueprint buffer, @NotNull final Wall wall, final int s, final int t, final int h, final int floorThickness) {
         final int st = s + t;
         final v2i a = wall.a;
         switch(wall.type) {
             //                 Long side                                         Height                            Thickness
             case 'x': for (int i = a.x * st - t; i < a.x * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) {
-                buffer.setShifted(i, j, a.z * st + s + k, RegionTemplateData.WALL);
+                buffer.setShifted(i, j, a.z * st + s + k, BlueprintData.WALL);
             }
             break;
             case 'z': for (int i = a.z * st - t; i < a.z * st + st; ++i) for(int j = -floorThickness; j < h; ++j) for(int k = 0; k < t; ++k) {
-                buffer.setShifted(a.x * st + s + k, j, i, RegionTemplateData.WALL);
+                buffer.setShifted(a.x * st + s + k, j, i, BlueprintData.WALL);
             }
             break;
         }
@@ -95,7 +93,7 @@ public final class GEN_Walls extends UtilityClass {
      * @param z The z size of the buffer //TODO
      * @param ft The thickness of the floor
      */
-    public static void start(@NotNull final RegionBufferTemplate buffer, final int tileSize, final int wt, final int h, final int x, final int z, final int ft){
+    public static void start(@NotNull final RegionBlueprint buffer, final int tileSize, final int wt, final int h, final int x, final int z, final int ft){
         // Initialize tiles
         final TreeNode[][] tiles = new TreeNode[x][z]; // Defaults to { parent: null }
         for(int i = 0; i < x; ++i) for(int j = 0; j < z; ++j) tiles[i][j] = new TreeNode();

@@ -1,12 +1,10 @@
 package org.shadownight.plugin.shadownight.dungeons.generators;
 
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise2D;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBufferTemplate;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionTemplateData;
+import org.shadownight.plugin.shadownight.utils.containers.RegionBlueprint;
+import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 
 
@@ -18,7 +16,7 @@ public final class GEN_CeilingDeform extends UtilityClass {
      * @param ft The thickness of the floor
      * @param h The height of the walls
      */
-    public static void start(@NotNull final RegionBufferTemplate buffer, final float[][] dist, final int ft, final int h) {
+    public static void start(@NotNull final RegionBlueprint buffer, final float[][] dist, final int ft, final int h) {
         final int y = ft + h - 1; // First y under the flat ceiling
         for(int i = 1; i < buffer.x - 1; ++i) for(int k = 1; k < buffer.z - 1; ++k) {
             // Create noise values
@@ -40,7 +38,7 @@ public final class GEN_CeilingDeform extends UtilityClass {
             final int ch = (int)((1 - avgWallDist) * 15 + noise);
             final double vineY = y - ch + vineHeight;
             for(int j = y; j > y - ch; --j) {
-                if(buffer.get(i, j, k) == RegionTemplateData.NULL) buffer.set(i, j, k, j > vineY ? RegionTemplateData.CEILING : RegionTemplateData.CEILING_VINE);
+                if(buffer.get(i, j, k) == BlueprintData.AIR) buffer.set(i, j, k, j > vineY ? BlueprintData.CEILING : BlueprintData.CEILING_VINE);
             }
         }
     }

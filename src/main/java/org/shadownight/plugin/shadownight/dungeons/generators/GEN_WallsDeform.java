@@ -1,12 +1,10 @@
 package org.shadownight.plugin.shadownight.dungeons.generators;
 
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise3D;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionBufferTemplate;
-import org.shadownight.plugin.shadownight.utils.graphics.RegionTemplateData;
+import org.shadownight.plugin.shadownight.utils.containers.RegionBlueprint;
+import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 
 
@@ -17,14 +15,14 @@ public final class GEN_WallsDeform extends UtilityClass {
      * @param ft The thickness of the floor
      * @param h The height of the walls
      */
-    public static void start(@NotNull final RegionBufferTemplate buffer, final int ft, final int h){
+    public static void start(@NotNull final RegionBlueprint buffer, final int ft, final int h){
         final boolean[][][] tmp = new boolean[buffer.x][buffer.y][buffer.z]; // Defaults to false
 
         // Create modified copy
         for(int i = 1; i < buffer.x - 1; ++i) for(int j = ft; j < buffer.y; ++j) for(int k = 1; k < buffer.z - 1; ++k) {
-            if (buffer.get(i, j, k) == RegionTemplateData.WALL) {
-                final int shiftX = (buffer.get(i + 1, j, k) == RegionTemplateData.NULL ? -1 : 0) + (buffer.get(i - 1, j, k) == RegionTemplateData.NULL ? 1 : 0);
-                final int shiftZ = (buffer.get(i, j, k + 1) == RegionTemplateData.NULL ? -1 : 0) + (buffer.get(i, j, k - 1) == RegionTemplateData.NULL ? 1 : 0);
+            if (buffer.get(i, j, k) == BlueprintData.WALL) {
+                final int shiftX = (buffer.get(i + 1, j, k) == BlueprintData.AIR ? -1 : 0) + (buffer.get(i - 1, j, k) == BlueprintData.AIR ? 1 : 0);
+                final int shiftZ = (buffer.get(i, j, k + 1) == BlueprintData.AIR ? -1 : 0) + (buffer.get(i, j, k - 1) == BlueprintData.AIR ? 1 : 0);
 
                 if(shiftX != 0 || shiftZ != 0) {
                     final double noise1 = PerlinNoise3D.compute(i, j, k, 32); // Base layer noise
@@ -49,7 +47,7 @@ public final class GEN_WallsDeform extends UtilityClass {
 
         // Paste copy back into the original buffer
         for(int i = 0; i < buffer.x; ++i) for(int j = ft; j < buffer.y; ++j) for(int k = 0; k < buffer.z; ++k) {
-            if(tmp[i][j][k]) buffer.set(i, j, k, RegionTemplateData.NULL);
+            if(tmp[i][j][k]) buffer.set(i, j, k, BlueprintData.AIR);
         }
     }
 }

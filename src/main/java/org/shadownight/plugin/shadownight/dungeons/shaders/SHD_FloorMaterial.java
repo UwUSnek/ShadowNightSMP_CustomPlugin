@@ -7,8 +7,8 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.javatuples.Pair;
-import org.shadownight.plugin.shadownight.utils.data.DataBuilderBisected;
-import org.shadownight.plugin.shadownight.utils.data.DataBuilderSlab;
+import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderBisected;
+import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderSlab;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 

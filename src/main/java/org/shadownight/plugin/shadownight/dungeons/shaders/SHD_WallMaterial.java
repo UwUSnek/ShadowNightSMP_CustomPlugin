@@ -4,7 +4,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.javatuples.Pair;
-import org.shadownight.plugin.shadownight.utils.data.DataBuilderOrientable;
+import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderOrientable;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 
