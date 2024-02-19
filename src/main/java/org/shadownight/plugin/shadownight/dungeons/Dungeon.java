@@ -10,10 +10,7 @@ import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.dungeons.generators.GEN_CeilingDeform;
-import org.shadownight.plugin.shadownight.dungeons.generators.GEN_WallsDeform;
-import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
-import org.shadownight.plugin.shadownight.dungeons.generators.GEN_Walls;
+import org.shadownight.plugin.shadownight.dungeons.generators.*;
 import org.shadownight.plugin.shadownight.dungeons.shaders.*;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise;
 import org.shadownight.plugin.shadownight.utils.containers.RegionBlueprint;
@@ -149,25 +146,28 @@ public final class Dungeon {
             final int total_z = z + outerWallsThickness * 2;
             final RegionBlueprint templateBuffer = new RegionBlueprint(total_x, total_y, total_z, outerWallsThickness, floorThickness, outerWallsThickness);
 
-            // Generate base layout
+            // Generate blueprint
             PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (templateBuffer, floorThickness);
             PerlinNoise.resetSeed(); GEN_BoundingBox.startCeiling(templateBuffer, ceilingThickness, wallHeight, floorThickness);
             PerlinNoise.resetSeed(); GEN_Walls.start             (templateBuffer, tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
             PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (templateBuffer, outerWallsThickness, wallHeight, floorThickness, wallThickness);
-            PerlinNoise.resetSeed(); GEN_WallsDeform.start       (templateBuffer, floorThickness, wallHeight);
 
-            // Calculate full wall distance gradient and generate the rest of the base layout
+            // Calculate normals and base distance gradient using the default walls, then run the wall deform shader
             final float[][] wallDistanceGradient = templateBuffer.createWallDistanceGradient(floorThickness, tileSize, wallThickness, false);
+            final Vector2i[][] wallNormals = templateBuffer.createWallNormals(floorThickness, wallThickness, tileSize);
+            PerlinNoise.resetSeed(); GEN_WallsDeform.start(templateBuffer, floorThickness, wallHeight);
+            PerlinNoise.resetSeed(); GEN_WallVines.start(templateBuffer, wallNormals, wallThickness, wallHeight, floorThickness);
+
+            // Calculate top distance gradient and generate the rest of the blueprint
             final float[][] wallDistanceGradientHigh = templateBuffer.createWallDistanceGradient(floorThickness + wallHeight - 1, tileSize, wallThickness, true);
-            //final Vector2i[][] wallNormals = templateBuffer.createWallNormals(floorThickness, wallThickness, tileSize);
             PerlinNoise.resetSeed(); GEN_CeilingDeform.start(templateBuffer, wallDistanceGradientHigh, floorThickness, wallHeight);
 
 
-            // Calculate wall distance gradient and apply material shaders
+            // Apply material shaders and paste the structure into the world
             templateBuffer.dispatchShaders(8,
                 Arrays.asList(
                     Pair.with(BlueprintData.FLOOR,        new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
-                    Pair.with(BlueprintData.WALL,         new SHD_WallMoss(wallHeight, floorThickness)),
+                    Pair.with(BlueprintData.WALL,         new SHD_WallMoss(wallHeight, floorThickness, wallNormals)),
                     Pair.with(BlueprintData.WALL,         new SHD_WallMaterial(wallHeight, floorThickness)),
                     Pair.with(BlueprintData.CEILING,      new SHD_CeilingMaterial()),
                     Pair.with(BlueprintData.CEILING_VINE, new SHD_CeilingVines())

@@ -124,38 +124,35 @@ public final class RegionBlueprint {
      * @param calculateNegative Whether or not negative distances should be calculated for blocks inside walls.
      *                          If false, internal blocks will have a distance value of 0
      */
-    public float[][] createWallDistanceGradient(final int y, final int tileSize, final int wt, final boolean calculateNegative) {
-        final float[][] gradient = new float[x][z];
+    public float[][] createWallDistanceGradient(final int y, final int tileSize, final int wt, final boolean calculateNegative) { //TODO start loops from 1
+        final float[][] gradient = new float[x][z]; // Initialized to 0
         final int halfSize = tileSize / 2;
         final int halfWt = wt / 2;
         for(int i = 0; i < x; ++i) for(int j = 0;  j < z; ++j) {
             int k = 0;
-            try {
+            if(d[i][y][j] != BlueprintData.WALL) {
                 while (
-                    k < halfSize &&
+                    k <= halfSize &&
                     i + k < x - 1 && j + k < z - 1 &&
-                    i - k > 0 && j - k > 0 &&
-                    d[i + k][y][j    ] != BlueprintData.WALL &&
-                    d[i    ][y][j + k] != BlueprintData.WALL &&
-                    d[i - k][y][j    ] != BlueprintData.WALL &&
-                    d[i    ][y][j - k] != BlueprintData.WALL
+                    i - k >= 0 && j - k >= 0 &&
+                    d[i + k][y][j + k] != BlueprintData.WALL &&
+                    d[i - k][y][j + k] != BlueprintData.WALL &&
+                    d[i + k][y][j - k] != BlueprintData.WALL &&
+                    d[i - k][y][j - k] != BlueprintData.WALL
                 ) ++k;
-                if(calculateNegative && k == 0) {
-                    while (
-                        k < halfWt &&
-                        i + k < x - 1 && j + k < z - 1 &&
-                        i - k > 0 && j - k > 0 &&
-                        d[i + k][y][j    ] == BlueprintData.WALL &&
-                        d[i    ][y][j + k] == BlueprintData.WALL &&
-                        d[i - k][y][j    ] == BlueprintData.WALL &&
-                        d[i    ][y][j - k] == BlueprintData.WALL
-                    ) ++k;
-                    gradient[i][j] = -(float)k / halfWt;
-                }
-                else gradient[i][j] = (float)k / halfSize;
+                gradient[i][j] = (float)k / halfSize;
             }
-            catch (ArrayIndexOutOfBoundsException e) {
-                utils.log(Level.SEVERE, "Gradient creation failed: Received index (" + i + ", " + j + ") with k = " + k + " and buffer size (" + x + ", " + z + ")");
+            else if(calculateNegative) {
+                while (
+                    k <= halfWt &&
+                    i + k < x - 1 && j + k < z - 1 &&
+                    i - k >= 0 && j - k >= 0 &&
+                    d[i + k][y][j + k] == BlueprintData.WALL &&
+                    d[i - k][y][j + k] == BlueprintData.WALL &&
+                    d[i + k][y][j - k] == BlueprintData.WALL &&
+                    d[i - k][y][j - k] == BlueprintData.WALL
+                ) ++k;
+                gradient[i][j] = -(float)k / halfWt;
             }
         }
         return gradient;
@@ -164,52 +161,47 @@ public final class RegionBlueprint {
 
 
     /**
-     * Creates a float gradient in which each cell indicates the distance of the block from the closest wall.
+     * Creates a 2D matrix of 3D vectors, each indicating the normal of a given block column relative to its closest wall block.
+     * This method uses a simplified algorithm to improve performance. Actual, accurate normals are excessive for most applications.
      * @param y The Y level to use when performing calculations
      * @param wt The thickness of the walls
      * @param tileSize The size of each tile
      * @return The generated normals
-     *//*
-    public Vector2i[][] createWallNormals(final int y, final int wt, final int tileSize) {
+     */
+    public Vector2i[][] createWallNormals(final int y, final int wt, final int tileSize) { //TODO start loops from 1
         final Vector2i[][] normals = new Vector2i[x][z];
         final int halfSize = tileSize / 2;
         final int halfWt = wt / 2;
         for(int i = 0; i < x; ++i) for(int j = 0;  j < z; ++j) {
-            int k = 0;
-            try {
-                while (
-                    k < halfSize &&
-                    i + k < x - 1 && j + k < z - 1 &&
-                    i - k > 0 && j - k > 0
-                ) {
-                    if(i + k < x - 1 &&  j + k < z - 1 && d[i + k][y][j + k] == BlueprintData.WALL) { normals[i][j] = new Vector2i(1, 1); break; }
-                    if(i + k < x - 1 &&  j - k >     0 && d[i + k][y][j - k] == BlueprintData.WALL) { normals[i][j] = new Vector2i(1, 0); break; }
-                    if(i - k >     0 &&  j + k < z - 1 && d[i - k][y][j + k] == BlueprintData.WALL) { normals[i][j] = new Vector2i(0, 0); break; }
-                    if(i - k >     0 &&  j - k >     0 && d[i - k][y][j - k] == BlueprintData.WALL) { normals[i][j] = new Vector2i(0, 0); break; }
-                    ++k;
-                }
-                if(k == 0) {
-                    while (
-                        k < halfWt &&
-                        i + k < x - 1 && j + k < z - 1 &&
-                        i - k > 0 && j - k > 0 &&
-                        d[i + k][y][j + k] == BlueprintData.WALL &&
-                        d[i + k][y][j - k] == BlueprintData.WALL &&
-                        d[i - k][y][j + k] == BlueprintData.WALL &&
-                        d[i - k][y][j - k] == BlueprintData.WALL
-                    ) ++k;
-                    normals[i][j] = -(float)k / halfWt;
-                }
-                else normals[i][j] = (float)k / halfSize;
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                utils.log(Level.SEVERE, "Gradient creation failed: Received index (" + i + ", " + j + ") with k = " + k + " and buffer size (" + x + ", " + z + ")");
-            }
+            if(d[i][y][j] != BlueprintData.WALL) normals[i][j] = searchNearby(i, j, y, halfSize, BlueprintData.WALL);
+            else                                 normals[i][j] = searchNearby(i, j, y, halfWt,   BlueprintData.AIR).mul(-1);
         }
         return normals;
     }
 
-*/
+
+    private Vector2i searchNearby(final int i, final int j, final int y, final int limit, BlueprintData targetData) {
+        int k = 0;
+        Vector2i output = new Vector2i(0, 0);
+        while (k <= limit) {
+            if(i + k >= x || d[i + k][y][j    ] == targetData) output.x -= 1;
+            if(j + k >= z || d[i    ][y][j + k] == targetData) output.y -= 1;
+            if(i - k <  0 || d[i - k][y][j    ] == targetData) output.x += 1;
+            if(j - k <  0 || d[i    ][y][j - k] == targetData) output.y += 1;
+            if(output.x != 0 || output.y != 0) return output;
+            else {
+                if(i + k >= x || j + k >= z || d[i + k][y][j + k] == targetData) { output.x -= 1; output.y -= 1; }
+                if(i - k <  0 || j + k >= z || d[i - k][y][j + k] == targetData) { output.x += 1; output.y -= 1; }
+                if(i + k >= x || j - k <  0 || d[i + k][y][j - k] == targetData) { output.x -= 1; output.y += 1; }
+                if(i - k <  0 || j - k <  0 || d[i - k][y][j - k] == targetData) { output.x += 1; output.y += 1; }
+                if(output.x != 0) return output;
+                else ++k;
+            }
+        }
+        return new Vector2i(0, 0);
+    }
+
+
 
 
 
