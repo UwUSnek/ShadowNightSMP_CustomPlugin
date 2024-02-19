@@ -36,6 +36,7 @@ public final class SHD_WallMoss extends SHD {
 
     @Override
     public void compute(final int x, final int y, final int z) {
-        if(y < i.y - 1 && i.get(x, y + 1, z) == BlueprintData.AIR) o.set(x, y + 1, z, M_WallMoss.get());
+        final double noise = perlinNoise3D.compute(x, y, z, 31);
+        if(y < i.y - 1 && i.get(x, y + 1, z) == BlueprintData.AIR && noise < 0.51 + rnd.nextFloat() * 0.2) o.set(x, y + 1, z, M_WallMoss.get());
     }
 }
