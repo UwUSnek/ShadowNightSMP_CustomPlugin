@@ -131,11 +131,17 @@ public final class Dungeon {
         // Outer walls and floor data
         final int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
         final int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
-        int floorThickness = 5;                                     // The thickness of the floor
+        final int floorThickness = 5;                               // The thickness of the floor
         final int ceilingThickness = 5;                             // The thickness of the ceiling
-        int outerWallsThickness = 5;                                // The thickness of the outer walls
-        outerWallsThickness = Math.max(outerWallsThickness, wallThickness); // Prevents accidental out of bound exceptions. Negligible performance impact
-        floorThickness = Func.clampMin(floorThickness, 2);
+        final int outerWallsThickness = 9;                          // The thickness of the outer walls
+
+        //noinspection ConstantConditions
+        if(outerWallsThickness > wallThickness) utils.log(Level.SEVERE, "Outer wall thickness must be >= wall thickness"); // Prevent out of bounds
+        //noinspection ConstantConditions
+        if(floorThickness < 2) utils.log(Level.SEVERE, "Floor thickness must be at least 2");
+        //noinspection ConstantConditions
+        if(ceilingThickness < 2) utils.log(Level.SEVERE, "Ceiling thickness must be at least 2");
+
 
 
         // Actually generate the dungeon
@@ -156,7 +162,8 @@ public final class Dungeon {
             final float[][] wallDistanceGradient = templateBuffer.createWallDistanceGradient(floorThickness, tileSize, wallThickness, false);
             final Vector2i[][] wallNormals = templateBuffer.createWallNormals(floorThickness, wallThickness, tileSize);
             PerlinNoise.resetSeed(); GEN_WallsDeform.start(templateBuffer, floorThickness, wallHeight);
-            PerlinNoise.resetSeed(); GEN_WallVines.start(templateBuffer, wallNormals, wallThickness, wallHeight, floorThickness);
+            PerlinNoise.resetSeed(); GEN_WallVines.start(templateBuffer, wallNormals, floorThickness);
+            PerlinNoise.resetSeed(); GEN_WallMoss.start(templateBuffer, floorThickness);
 
             // Calculate top distance gradient and generate the rest of the blueprint
             final float[][] wallDistanceGradientHigh = templateBuffer.createWallDistanceGradient(floorThickness + wallHeight - 1, tileSize, wallThickness, true);
@@ -167,17 +174,20 @@ public final class Dungeon {
             templateBuffer.dispatchShaders(8,
                 Arrays.asList(
                     Pair.with(BlueprintData.FLOOR,        new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
-                    Pair.with(BlueprintData.WALL,         new SHD_WallMoss(wallHeight, floorThickness, wallNormals)),
                     Pair.with(BlueprintData.WALL,         new SHD_WallMaterial(wallHeight, floorThickness)),
+                    Pair.with(BlueprintData.WALL_MOSS,    new SHD_WallMoss()),
                     Pair.with(BlueprintData.WALL_VINE,    new SHD_WallVines()),
                     Pair.with(BlueprintData.CEILING,      new SHD_CeilingMaterial()),
                     Pair.with(BlueprintData.CEILING_VINE, new SHD_CeilingVines())
                 ),
                 (outputBuffer) -> {
-                    // Paste and log generation time
+                    // Log generation time
+                    utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(System.currentTimeMillis() - start, true));
+
+                    // Paste and log pasting time
+                    final long pasteStart = System.currentTimeMillis();
                     outputBuffer.paste(world, -total_x / 2, 0, -total_z / 2, true);
-                    final long duration = System.currentTimeMillis() - start;
-                    utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(duration, true));
+                    utils.log(Level.INFO, "Dungeon pasted in " + Chat.msToDuration(System.currentTimeMillis() - pasteStart, true));
                 }
             );
         }

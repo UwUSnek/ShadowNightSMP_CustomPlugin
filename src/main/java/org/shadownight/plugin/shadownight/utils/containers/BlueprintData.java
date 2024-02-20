@@ -7,5 +7,6 @@ public enum BlueprintData {
     FLOOR,
     CEILING,
     CEILING_VINE,
-    WALL_VINE
+    WALL_VINE,
+    WALL_MOSS
 }

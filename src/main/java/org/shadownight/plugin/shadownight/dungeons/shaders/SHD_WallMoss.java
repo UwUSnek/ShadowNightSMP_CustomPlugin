@@ -19,24 +19,9 @@ public final class SHD_WallMoss extends SHD {
     );
 
 
-    final int wh;
-    final int ft;
-    final Vector2i[][] normals;
-
-    /**
-     * @param _wh The wall height
-     * @param _ft The thickness of the floor
-     * @param _normals The normals of each block
-     */
-    public SHD_WallMoss(final int _wh, final int _ft, @NotNull final Vector2i[][] _normals) {
-        wh = _wh;
-        ft = _ft;
-        normals = _normals;
-    }
-
     @Override
     public void compute(final int x, final int y, final int z) {
-        final double noise = perlinNoise3D.compute(x, y, z, 31);
-        if(y < i.y - 1 && i.get(x, y + 1, z) == BlueprintData.AIR && noise < 0.51 + rnd.nextFloat() * 0.2) o.set(x, y + 1, z, M_WallMoss.get());
+        o.set(x, y, z, M_WallMoss.get());
+        if(i.get(x, y + 1, z) == BlueprintData.AIR) o.set(x, y + 1, z, SHD_FloorMaterial.M_Grass.get());
     }
 }
