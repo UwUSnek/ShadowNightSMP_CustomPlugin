@@ -9,7 +9,7 @@ import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 
 public final class SHD_CeilingVines extends SHD {
     private static final BlockPattern M_Vines = new BlockPattern(
-        Pair.with(1f, new DataBuilderLeaves(Material.OAK_LEAVES).setPersistent(true).build())
+        Pair.with(1f, new DataBuilderLeaves(Material.MANGROVE_LEAVES).setPersistent(true).build())
     );
 
     @Override
