@@ -42,9 +42,10 @@ public final class GEN_WallVines extends UtilityClass implements Rnd {
                 ) {
                     if(buffer.get(i2, j2, k2) != BlueprintData.AIR) {
                         final Vector2i normal = normals[i2][k2];
-                        i2 += normal.x;
-                        k2 += normal.y;
-                        if(rnd.nextFloat() > 0.7) ++j2; // More natural looking folds
+                        i2 += normal.x;                                       // Follow normals
+                        k2 += normal.y;                                       // Follow normals
+                        if(rnd.nextFloat() > 0.7) ++j2;                       // Randomize folds to make them look more natural
+                        if(buffer.get(i2, j2, k2) != BlueprintData.AIR) ++j2; // Don't poke the floor
                     }
                     buffer.set(i2, j2, k2, BlueprintData.WALL_VINE);
                 }

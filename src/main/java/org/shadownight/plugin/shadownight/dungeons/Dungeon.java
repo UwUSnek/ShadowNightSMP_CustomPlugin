@@ -10,6 +10,7 @@ import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.dungeons.debug.SHD_VisualizePerlinNoise;
 import org.shadownight.plugin.shadownight.dungeons.generators.*;
 import org.shadownight.plugin.shadownight.dungeons.shaders.*;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise;
@@ -161,9 +162,9 @@ public final class Dungeon {
             // Calculate normals and base distance gradient using the default walls, then run the wall deform shader
             final float[][] wallDistanceGradient = templateBuffer.createWallDistanceGradient(floorThickness, tileSize, wallThickness, false);
             final Vector2i[][] wallNormals = templateBuffer.createWallNormals(floorThickness, wallThickness, tileSize);
-            PerlinNoise.resetSeed(); GEN_WallsDeform.start(templateBuffer, floorThickness, wallHeight);
-            PerlinNoise.resetSeed(); GEN_WallVines.start(templateBuffer, wallNormals, floorThickness);
-            PerlinNoise.resetSeed(); GEN_WallMoss.start(templateBuffer, floorThickness);
+            //PerlinNoise.resetSeed(); GEN_WallsDeform.start(templateBuffer, floorThickness, wallHeight);
+            //PerlinNoise.resetSeed(); GEN_WallVines.start(templateBuffer, wallNormals, floorThickness);
+            //PerlinNoise.resetSeed(); GEN_WallMoss.start(templateBuffer, floorThickness);
 
             // Calculate top distance gradient and generate the rest of the blueprint
             final float[][] wallDistanceGradientHigh = templateBuffer.createWallDistanceGradient(floorThickness + wallHeight - 1, tileSize, wallThickness, true);
@@ -174,9 +175,12 @@ public final class Dungeon {
             templateBuffer.dispatchShaders(8,
                 Arrays.asList(
                     Pair.with(BlueprintData.FLOOR,        new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
-                    Pair.with(BlueprintData.WALL,         new SHD_WallMaterial(wallHeight, floorThickness)),
-                    Pair.with(BlueprintData.WALL_MOSS,    new SHD_WallMoss()),
-                    Pair.with(BlueprintData.WALL_VINE,    new SHD_WallVines()),
+                    //Pair.with(BlueprintData.WALL,         new SHD_WallMaterial(wallHeight, floorThickness)),
+                    //Pair.with(BlueprintData.WALL_MOSS,    new SHD_WallMoss()),
+                    //Pair.with(BlueprintData.WALL_VINE,    new SHD_WallVines()),
+                    Pair.with(BlueprintData.AIR,       new SHD_VisualizePerlinNoise(28, 10)),
+                    Pair.with(BlueprintData.WALL,      new SHD_VisualizePerlinNoise(28, 10)),
+
                     Pair.with(BlueprintData.CEILING,      new SHD_CeilingMaterial()),
                     Pair.with(BlueprintData.CEILING_VINE, new SHD_CeilingVines())
                 ),
