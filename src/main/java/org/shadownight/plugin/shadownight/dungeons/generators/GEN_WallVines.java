@@ -37,7 +37,7 @@ public final class GEN_WallVines extends UtilityClass implements Rnd {
                 if(noise < vineChance) for(
                     int i2 = i, j2 = j, k2 = k;                                             // Setup target block coordinates
                     i2 >= 0 && k2 >= 0 && i2 < buffer.x && k2 < buffer.z && j2 >= 0 &&      // Don't overflow the buffer
-                    j2 > j - rnd.nextInt(0, (int)((noise + (1 - vineChance))* 16));         // Shorter vines near the edges, max 16 blocks
+                    j2 > j - rnd.nextInt(0, (int)((noise + (1 - vineChance))* 24));         // Shorter vines near the edges, max 24 blocks
                     --j2                                                                    // Move down 1 block
                 ) {
                     if(buffer.get(i2, j2, k2) != BlueprintData.AIR) {

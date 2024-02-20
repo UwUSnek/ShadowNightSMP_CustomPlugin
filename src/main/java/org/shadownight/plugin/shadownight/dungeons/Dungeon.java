@@ -4,6 +4,7 @@ package org.shadownight.plugin.shadownight.dungeons;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.javatuples.Pair;
@@ -41,6 +42,15 @@ public final class Dungeon {
      */
     public Dungeon() {
         if (createWorld()) generateDungeon();
+
+        Bukkit.getScheduler().runTaskTimer(ShadowNight.plugin, () -> {
+            for(Player p : world.getPlayers()) {
+                Location location = p.getLocation();
+                p.spawnParticle(Particle.ASH,               location, 50, 10, 10, 10);
+                p.spawnParticle(Particle.WHITE_ASH,         location, 20, 10, 10, 10);
+                p.spawnParticle(Particle.SPORE_BLOSSOM_AIR, location, 5,  10, 10, 10);
+            }
+        }, 0L, 2L);
     }
 
 
@@ -145,6 +155,7 @@ public final class Dungeon {
 
 
 
+
         // Actually generate the dungeon
         {
             // Calculate total size and create region buffer
@@ -170,8 +181,14 @@ public final class Dungeon {
             final float[][] wallDistanceGradientHigh = templateBuffer.createWallDistanceGradient(floorThickness + wallHeight - 1, tileSize, wallThickness, true);
             PerlinNoise.resetSeed(); GEN_CeilingDeform.start(templateBuffer, wallDistanceGradientHigh, floorThickness, wallHeight);
 
+            // Log generation time
+            utils.log(Level.INFO, "Blueprint generated in " + Chat.msToDuration(System.currentTimeMillis() - start, true));
+
+
+
 
             // Apply material shaders and paste the structure into the world
+            final long materialStart = System.currentTimeMillis();
             templateBuffer.dispatchShaders(8,
                 Arrays.asList(
                     Pair.with(BlueprintData.FLOOR,        new SHD_FloorMaterial(wallDistanceGradient, floorThickness)),
@@ -183,7 +200,7 @@ public final class Dungeon {
                 ),
                 (outputBuffer) -> {
                     // Log generation time
-                    utils.log(Level.INFO, "Dungeon generated in " + Chat.msToDuration(System.currentTimeMillis() - start, true));
+                    utils.log(Level.INFO, "Materials computed in " + Chat.msToDuration(System.currentTimeMillis() - materialStart, true));
 
                     // Paste and log pasting time
                     final long pasteStart = System.currentTimeMillis();
