@@ -9,6 +9,7 @@ import org.bukkit.block.data.type.Slab;
 import org.javatuples.Pair;
 import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderBisected;
 import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderSlab;
+import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 
@@ -31,8 +32,14 @@ public final class SHD_FloorMaterial extends SHD {
     private static final BlockPattern M_FloorSlab = new BlockPattern(
         Pair.with(1f, new DataBuilderSlab(Material.STONE_BRICK_SLAB).setType(Slab.Type.BOTTOM).setWaterlogged(false).build())
     );
-    private static final BlockPattern M_FloorHidden = new BlockPattern(
-        Pair.with(1f, Material.STONE_BRICKS.createBlockData())
+    public static final BlockGradient M_FloorHidden = new BlockGradient(
+        Pair.with(4, Material.OBSIDIAN.createBlockData()),
+        Pair.with(4, Material.DEEPSLATE.createBlockData()),
+        Pair.with(3, new BlockPattern(
+            Pair.with(1f, Material.DIRT.createBlockData()),
+            Pair.with(1f, Material.COARSE_DIRT.createBlockData())
+        )),
+        Pair.with(2, Material.STONE_BRICKS.createBlockData())
     );
 
 
@@ -98,7 +105,7 @@ public final class SHD_FloorMaterial extends SHD {
 
 
         final BlockData output;
-        if(y < ft - 1) output = M_FloorHidden.get();
+        if(y < ft - 1) output = M_FloorHidden.get((float)y / ft);
         else {
             final float r = rnd.nextFloat();
             if (isMoss) output = noiseMoss < r * 2 ? M_Moss.get() : M_MossFill.get();

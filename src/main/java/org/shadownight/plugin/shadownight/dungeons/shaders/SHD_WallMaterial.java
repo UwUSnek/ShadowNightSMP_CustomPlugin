@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Axis;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
 import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderOrientable;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
@@ -71,10 +72,12 @@ public final class SHD_WallMaterial extends SHD {
 
     @Override
     public void compute(final int x, final int y, final int z) {
-        o.set(x, y, z,
+        BlockData hiddenBlock = SHD_FloorMaterial.M_FloorHidden.get((float)y / ft);
+        if(hiddenBlock.getMaterial() == Material.OBSIDIAN) o.set(x, y, z, hiddenBlock);
+        else o.set(x, y, z,
             y < ft + 2 ?
             M_WallBase.get() :
-            M_Wall.get((float)y / wh + ((float)perlinNoise3D.compute(x, y, z, 7) - 0.5f) / 3)
+            M_Wall.get((float)(y - ft) / wh + ((float)perlinNoise3D.compute(x, y, z, 7) - 0.5f) / 3)
         );
     }
 }

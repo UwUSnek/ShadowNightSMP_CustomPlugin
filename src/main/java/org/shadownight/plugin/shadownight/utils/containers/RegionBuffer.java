@@ -104,6 +104,7 @@ public final class RegionBuffer {
         }
         catch(ArrayIndexOutOfBoundsException e){
             utils.log(Level.SEVERE, "Index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift 0");
+            throw new RuntimeException(e);
         }
     }
     /**

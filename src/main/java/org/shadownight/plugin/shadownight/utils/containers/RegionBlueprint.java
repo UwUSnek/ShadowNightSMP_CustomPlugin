@@ -70,7 +70,8 @@ public final class RegionBlueprint {
             d[_x + shift_x][_y + shift_y][_z + shift_z] = type;
         }
         catch(ArrayIndexOutOfBoundsException e){
-            utils.log(Level.SEVERE, "Template index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift (" + shift_x + ", " + shift_y + ", " + shift_z + ")");
+            utils.log(Level.SEVERE, "Blueprint index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift (" + shift_x + ", " + shift_y + ", " + shift_z + ")");
+            throw new RuntimeException(e);
         }
     }
 
@@ -89,7 +90,8 @@ public final class RegionBlueprint {
             d[_x][_y][_z] = data;
         }
         catch(ArrayIndexOutOfBoundsException e){
-            utils.log(Level.SEVERE, "Template index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift 0");
+            utils.log(Level.SEVERE, "Blueprint index out of bounds: Received index (" + _x + ", " + _y + ", " + _z + ") with shift 0");
+            throw new RuntimeException(e);
         }
     }
 

@@ -36,17 +36,20 @@ public final class GEN_WallVines extends UtilityClass implements Rnd {
                 // Loop down n blocks from the starting position and move the target block on the XZ plane based on the normals when encountering a non-air block
                 if(noise < vineChance) for(
                     int i2 = i, j2 = j, k2 = k;                                             // Setup target block coordinates
-                    i2 >= 0 && k2 >= 0 && i2 < buffer.x && k2 < buffer.z && j2 >= 0 &&      // Don't overflow the buffer
                     j2 > j - rnd.nextInt(0, (int)((noise + (1 - vineChance))* 20));         // Shorter vines near the edges, max 20 blocks
                     --j2                                                                    // Move down 1 block
                 ) {
-                    if(buffer.get(i2, j2, k2) != BlueprintData.AIR) {
-                        final Vector2i normal = normals[i2][k2];
-                        i2 += normal.x;                                       // Follow normals
-                        k2 += normal.y;                                       // Follow normals
-                        if(rnd.nextFloat() > 0.7) ++j2;                       // Randomize folds to make them look more natural
-                        if(buffer.get(i2, j2, k2) != BlueprintData.AIR) ++j2; // Don't poke the floor
+                    if(j2 < 0) break;                                                           // [Prevent overflow from last for iteration]
+                    if(buffer.get(i2, j2, k2) != BlueprintData.AIR) {                           // If block is not air, [Move XZ based on normals]
+                        final Vector2i normal = normals[i2][k2];                                    // Choose a random direction if normal is diagonal
+                        if(normal.x != 0 && normal.y != 0) if (rnd.nextBoolean()) normal.x = 0; else normal.y = 0;
+                        i2 += normal.x;                                                             // Follow normals
+                        k2 += normal.y;                                                             // Follow normals
+                        if(rnd.nextFloat() > 0.7) ++j2;                                             // Randomize folds to make them look more natural
+                        if(i2 < 0 || j2 < 0 || k2 < 0 || i2 >= buffer.x || j2 >= buffer.y || k2 >= buffer.z) break; // [Prevent overflow from repositioning and y adjustments]
+                        if(buffer.get(i2, j2, k2) != BlueprintData.AIR) ++j2;                       // Don't poke the floor
                     }
+                    if(j2 >= buffer.y) break; // [Prevent overflow from floor anti-poke y adjustments]
                     buffer.set(i2, j2, k2, BlueprintData.WALL_VINE);
                 }
                 break;

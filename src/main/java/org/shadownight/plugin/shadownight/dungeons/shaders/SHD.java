@@ -24,7 +24,7 @@ public abstract class SHD implements Rnd {
 
 
 
-    public final void setData(@NotNull final RegionBlueprint _i, @NotNull final RegionBuffer _o) {
+    public void setData(@NotNull final RegionBlueprint _i, @NotNull final RegionBuffer _o) {
         i = _i;
         o = _o;
         perlinNoise3D = new _PerlinNoise3D_impl();

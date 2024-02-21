@@ -142,12 +142,12 @@ public final class Dungeon {
         // Outer walls and floor data
         final int x = xNum * tileSize + (xNum - 1) * wallThickness; // The height of the dungeon expressed in blocks
         final int z = zNum * tileSize + (zNum - 1) * wallThickness; // The width  of the dungeon expressed in blocks
-        final int floorThickness = 5;                               // The thickness of the floor
-        final int ceilingThickness = 5;                             // The thickness of the ceiling
-        final int outerWallsThickness = 9;                          // The thickness of the outer walls
+        final int floorThickness = 20;                              // The thickness of the floor
+        final int ceilingThickness = 10;                            // The thickness of the ceiling
+        final int outerWallsThickness = 20;                          // The thickness of the outer walls
 
         //noinspection ConstantConditions
-        if(outerWallsThickness > wallThickness) utils.log(Level.SEVERE, "Outer wall thickness must be >= wall thickness"); // Prevent out of bounds
+        if(outerWallsThickness < wallThickness) utils.log(Level.SEVERE, "Outer wall thickness must be >= wall thickness"); // Prevent out of bounds
         //noinspection ConstantConditions
         if(floorThickness < 2) utils.log(Level.SEVERE, "Floor thickness must be at least 2");
         //noinspection ConstantConditions
@@ -168,7 +168,7 @@ public final class Dungeon {
             PerlinNoise.resetSeed(); GEN_BoundingBox.startFloor  (templateBuffer, floorThickness);
             PerlinNoise.resetSeed(); GEN_BoundingBox.startCeiling(templateBuffer, ceilingThickness, wallHeight, floorThickness);
             PerlinNoise.resetSeed(); GEN_Walls.start             (templateBuffer, tileSize, wallThickness, wallHeight, xNum, zNum, floorThickness); // Must be 2nd in order to generate into the floor
-            PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (templateBuffer, outerWallsThickness, wallHeight, floorThickness, wallThickness);
+            PerlinNoise.resetSeed(); GEN_BoundingBox.startWalls  (templateBuffer, wallHeight, floorThickness, outerWallsThickness, wallThickness);
 
             // Calculate normals and base distance gradient using the default walls, then run the wall deform shader
             final float[][] wallDistanceGradient = templateBuffer.createWallDistanceGradient(floorThickness, tileSize, wallThickness, false);
@@ -195,6 +195,7 @@ public final class Dungeon {
                     Pair.with(BlueprintData.WALL,         new SHD_WallMaterial(wallHeight, floorThickness)),
                     Pair.with(BlueprintData.WALL_MOSS,    new SHD_WallMoss()),
                     Pair.with(BlueprintData.WALL_VINE,    new SHD_WallVines()),
+                    Pair.with(BlueprintData.OUTER_WALL,   new SHD_OuterWallMaterial(wallHeight, floorThickness, outerWallsThickness, wallThickness)),
                     Pair.with(BlueprintData.CEILING,      new SHD_CeilingMaterial()),
                     Pair.with(BlueprintData.CEILING_VINE, new SHD_CeilingVines())
                 ),
