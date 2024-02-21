@@ -15,6 +15,7 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
+import org.shadownight.plugin.shadownight.utils.math.Easing;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -66,10 +67,10 @@ public final class ScytheThrowDisplay {
         final Vector startPos = player.getLocation().toVector().add(new Vector(0, 1, 0));
         animateTranslation(
             startPos.clone().add(playerPos.getDirection().multiply(throwDistance)),
-            COMP_sineOut,
+            Easing::sineOut,
             () -> animateTranslationDynamic(
                 startPos,
-                COMP_sineIn,
+                Easing::sineIn,
                 () -> player.getLocation().toVector().add(new Vector(0, 1, 0)),
                 () -> {
                     rotationTask.cancel();
@@ -192,50 +193,4 @@ public final class ScytheThrowDisplay {
     private Vector progressToCoords(final double progress, @NotNull final Vector start, @NotNull final Vector end){
         return start.clone().add((end.clone().subtract(start)).multiply(progress));
     }
-
-
-
-
-
-
-
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_linear = x -> x;
-
-
-
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_sineIn    = x -> 1 - Math.cos((x * Math.PI) / 2);
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_sineOut   = x ->     Math.sin((x * Math.PI) / 2);
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_sineInOut = x ->   -(Math.cos( x * Math.PI) - 1) / 2;
-
-
-
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_cubicIn    = x ->     Math.pow(    x, 3);
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_cubicOut   = x -> 1 - Math.pow(1 - x, 3);
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_cubicInOut = x -> x < 0.5 ? 4 * Math.pow(x, 3) : 1 - Math.pow(-2 * x + 2, 3) / 2;
-
-
-
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_bounceIn    = x -> 1 - ScytheThrowDisplay.COMP_bounceOut.apply(1 - x);
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_bounceOut   = x -> {
-        final double n = 7.5625;
-        final double d = 2.75;
-        if      (x < 1   / d)                   return n * x * x;
-        else if (x < 2   / d) { x -=   1.5 / d; return n * x * x + 0.75;     }
-        else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
-        else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
-    };
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_bounceInOut = x -> x < 0.5 ? (1 - ScytheThrowDisplay.COMP_bounceOut.apply(1 - 2 * x)) / 2 : (1 + ScytheThrowDisplay.COMP_bounceOut.apply(2 * x - 1)) / 2;
-
-
-
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_elasticIn    = x -> Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_elasticOut   = x -> Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
-    @SuppressWarnings("unused") public static final Function<Double, Double> COMP_elasticInOut = x -> {
-        final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
-        return Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 : (
-            x < 0.5 ?
-            -(Math.pow(2,  20 * x - 10) * c) / 2 :
-             (Math.pow(2, -20 * x + 10) * c) / 2 + 1
-        ));
-    };
 }
