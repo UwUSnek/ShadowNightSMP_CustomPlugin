@@ -93,7 +93,6 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onProjectileHit(final ProjectileHitEvent event) {
-        Bukkit.broadcastMessage("HIT DETECTED 1");
         if(event.getEntityType() == EntityType.ARROW) IM_Bow.chooseOnProjectileHit(event);
     }
 }

@@ -46,8 +46,11 @@ public abstract class IM_Bow extends IM {
 
     public static void chooseOnProjectileHit(@NotNull final ProjectileHitEvent event) {
         final Pair<IM_Bow, ItemStack> projectileData = activeProjectiles.get(event.getEntity().getUniqueId());
-        if(projectileData != null) projectileData.getValue0().onProjectileHit(event, projectileData.getValue1());
-        utils.log(Level.WARNING, activeProjectiles.toString());
+        if(projectileData != null) {
+            activeProjectiles.remove(event.getEntity().getUniqueId());
+            event.getEntity().remove();
+            projectileData.getValue0().onProjectileHit(event, projectileData.getValue1());
+        }
     }
     protected abstract void onProjectileHit(@NotNull final ProjectileHitEvent event, @NotNull final ItemStack usedBow);
 
