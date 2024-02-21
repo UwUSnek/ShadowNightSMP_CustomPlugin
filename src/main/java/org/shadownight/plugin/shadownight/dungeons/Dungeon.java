@@ -63,21 +63,11 @@ public final class Dungeon {
         world = Bukkit.createWorld(new WorldCreator(namePrefix + UUID.randomUUID())
             .environment(World.Environment.NORMAL)
             .type(WorldType.NORMAL) //! FLAT creates errors in console. This is a Minecraft Vanilla bug
-            //.generator("VoidGenerator")
             .generator("CleanroomGenerator:^256|bedrock")
             .generateStructures(false)
             .biomeProvider(new BiomeProvider() {
-                @NotNull
-                @Override
-                public Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
-                    return Biome.PLAINS;
-                }
-
-                @NotNull
-                @Override
-                public List<Biome> getBiomes(@NotNull WorldInfo worldInfo) {
-                    return List.of(Biome.PLAINS);
-                }
+                @NotNull @Override public      Biome   getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) { return         Biome.PLAINS;  }
+                @NotNull @Override public List<Biome> getBiomes(@NotNull WorldInfo worldInfo)                      { return List.of(Biome.PLAINS); }
             })
         );
 

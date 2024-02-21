@@ -15,7 +15,7 @@ import org.shadownight.plugin.shadownight.items.CustomItemId;
 
 public final class IM_KlaueScythe extends IM_Scythe {
     @Override public Material     getMaterial()        { return Material.NETHERITE_SWORD;  }
-    @Override public String       getDisplayName()     { return "Edgy Scythe";             }
+    @Override public String       getDisplayName()     { return "§6Edgy Scythe";           }
     @Override public int          getCustomModelData() { return 14;                        }
     @Override public CustomItemId getCustomId()        { return CustomItemId.KLAUE_SCYTHE; }
 

@@ -10,6 +10,8 @@ public enum CustomItemId {
     DIAMOND_SCYTHE(),
     NETHERITE_SCYTHE(),
     KLAUE_SCYTHE(),
+
+    HELLFIRE_BOW(),
     ;
 
 

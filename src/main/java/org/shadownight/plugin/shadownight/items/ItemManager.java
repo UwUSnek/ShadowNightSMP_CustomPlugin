@@ -2,6 +2,7 @@ package org.shadownight.plugin.shadownight.items;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.items.bow.IM_HellfireBow;
 import org.shadownight.plugin.shadownight.items.scythe.*;
 
 import java.util.Collections;
@@ -15,6 +16,7 @@ public enum ItemManager {
     DiamondScythe  (new IM_DiamondScythe()),
     NetheriteScythe(new IM_NetheriteScythe()),
     KlaueScythe    (new IM_KlaueScythe()),
+    HellfireBow    (new IM_HellfireBow()),
     ;
 
 

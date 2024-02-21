@@ -18,9 +18,9 @@ public final class CMD_sngive implements CommandExecutor {
                 id = Long.parseLong(args[0]);
                 amount = args.length > 1 ? Integer.parseInt(args[1]) : 1;
 
-                ItemStack item = ItemManager.getValueFromId(id).createStackCopy();
+                ItemStack item = ItemManager.getValueFromId(id).createDefaultItemStack();
                 item.setAmount(amount);
-                player.getWorld().dropItem(player.getLocation(), item);
+                player.getInventory().setItem(player.getInventory().firstEmpty(), item);
             }
             catch(NumberFormatException e) {
                 player.sendMessage("§cInvalid ID or amount. Usage: /sngive <ID> <amount>");

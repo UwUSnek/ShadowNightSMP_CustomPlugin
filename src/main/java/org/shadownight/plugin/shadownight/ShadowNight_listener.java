@@ -1,11 +1,11 @@
 package org.shadownight.plugin.shadownight;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
@@ -15,6 +15,7 @@ import org.shadownight.plugin.shadownight.chatManager.discord.InGameBanner;
 import org.shadownight.plugin.shadownight.chatManager.JoinLeaveMessages;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.items.IM;
+import org.shadownight.plugin.shadownight.items.bow.IM_Bow;
 import org.shadownight.plugin.shadownight.qol.SpawnInvincibility;
 import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.qol.SurvivalFly;
@@ -83,5 +84,16 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAttack(final EntityDamageByEntityEvent event) {
         IM.chooseOnAttack(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onShoot(final EntityShootBowEvent event) {
+        IM_Bow.chooseOnShoot(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onProjectileHit(final ProjectileHitEvent event) {
+        Bukkit.broadcastMessage("HIT DETECTED 1");
+        if(event.getEntityType() == EntityType.ARROW) IM_Bow.chooseOnProjectileHit(event);
     }
 }

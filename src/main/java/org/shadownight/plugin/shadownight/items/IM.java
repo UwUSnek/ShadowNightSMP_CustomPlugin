@@ -24,14 +24,14 @@ import java.util.Objects;
 
 public abstract class IM implements Listener {
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
-    protected final ItemStack item;
+    protected final ItemStack defaultItem;
 
 
     /**
      * Creates a new Item Manager.
      */
     public IM() {
-        item = utils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
+        defaultItem = utils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
         setItemAttributes();
         createRecipe();
         Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
@@ -43,17 +43,17 @@ public abstract class IM implements Listener {
 
 
     /**
-     * Creates a copy of the ItemStack this CustomItem uses.
+     * Creates a copy of the default ItemStack this CustomItem uses.
      * @return The item stack copy
      */
-    public ItemStack createStackCopy() {
-        return new ItemStack(item);
+    public ItemStack createDefaultItemStack() {
+        return new ItemStack(defaultItem);
     }
 
 
     private void createRecipe() {
         final NamespacedKey recipeKey = new NamespacedKey(ShadowNight.plugin, getCustomId().name());
-        final ShapedRecipe shapedRecipe = new ShapedRecipe(recipeKey, item);
+        final ShapedRecipe shapedRecipe = new ShapedRecipe(recipeKey, defaultItem);
 
         setRecipe(shapedRecipe);
         Bukkit.addRecipe(shapedRecipe);
@@ -65,7 +65,7 @@ public abstract class IM implements Listener {
 
 
 
-    private static Long getCustomItemId(@NotNull final ItemStack usedItem) {
+    protected static Long getCustomItemId(@NotNull final ItemStack usedItem) {
         PersistentDataContainer container = Objects.requireNonNull(usedItem.getItemMeta(), "Item meta is null").getPersistentDataContainer();
         return container.get(IM.itemIdKey, PersistentDataType.LONG);
     }
@@ -75,7 +75,7 @@ public abstract class IM implements Listener {
      * @param event The interaction event
      */
     public static void chooseOnInteract(@NotNull final PlayerInteractEvent event) {
-        ItemStack item = event.getItem();
+        final ItemStack item = event.getItem();
         if (item != null && event.getHand() == EquipmentSlot.HAND) {
             Long customItemId = getCustomItemId(item);
             if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
@@ -90,7 +90,7 @@ public abstract class IM implements Listener {
      */
     public static void chooseOnAttack(@NotNull final EntityDamageByEntityEvent event) {
         if(event.getDamager() instanceof Player player) {
-            ItemStack item = player.getInventory().getItemInMainHand();
+            final ItemStack item = player.getInventory().getItemInMainHand();
             Long customItemId = getCustomItemId(item);
             if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
                 if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) itemManager.getInstance().onAttack(event);
