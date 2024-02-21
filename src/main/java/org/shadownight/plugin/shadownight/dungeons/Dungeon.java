@@ -5,10 +5,11 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
-import org.bukkit.generator.BiomeProvider;
-import org.bukkit.generator.WorldInfo;
+import org.bukkit.generator.*;
+import org.bukkit.util.Vector;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.dungeons.debug.SHD_VisualizePerlinNoise2D;
@@ -62,7 +63,8 @@ public final class Dungeon {
         world = Bukkit.createWorld(new WorldCreator(namePrefix + UUID.randomUUID())
             .environment(World.Environment.NORMAL)
             .type(WorldType.NORMAL) //! FLAT creates errors in console. This is a Minecraft Vanilla bug
-            .generator("VoidGenerator")
+            //.generator("VoidGenerator")
+            .generator("CleanroomGenerator:^256|bedrock")
             .generateStructures(false)
             .biomeProvider(new BiomeProvider() {
                 @NotNull
@@ -205,7 +207,7 @@ public final class Dungeon {
 
                     // Paste and log pasting time
                     final long pasteStart = System.currentTimeMillis();
-                    outputBuffer.paste(world, -total_x / 2, 0, -total_z / 2, true);
+                    outputBuffer.paste(world, -total_x / 2, 0, -total_z / 2, false); //No walls, the world is already 100% bedrock
                     utils.log(Level.INFO, "Dungeon pasted in " + Chat.msToDuration(System.currentTimeMillis() - pasteStart, true));
                 }
             );
