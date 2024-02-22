@@ -61,7 +61,7 @@ public final class IM_HellfireBow extends IM_Bow {
         final Arrow e = (Arrow)event.getEntity();
         final Vector dir = e.getVelocity().multiply(new Vector(1, 0, 1)).normalize();
         final Vector side = dir.clone().rotateAroundY(Math.PI / 2);
-        final int width = (int)Func.clamp(e.getVelocity().length(), 1,        maxSpeed);      // Min 1, Max 3
+        final int width = (int)Func.clamp(e.getVelocity().length(), 1,        maxSpeed) - 1;  // Min 0 (1 wide), Max 2 (2+1+2 wide)
         final double  length = Func.clamp(e.getVelocity().length(), minSpeed, maxSpeed) * 10; // Min 4, Max 30
 
         // Start animation
