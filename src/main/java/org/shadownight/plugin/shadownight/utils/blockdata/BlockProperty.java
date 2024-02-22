@@ -109,6 +109,7 @@ public final class BlockProperty extends UtilityClass {
             material == Material.BIG_DRIPLEAF ||
             material == Material.SWEET_BERRY_BUSH ||
             material == Material.LILY_PAD ||
+            material == Material.SUGAR_CANE ||
 
             material == Material.REDSTONE_WIRE ||
             material == Material.REDSTONE_TORCH ||

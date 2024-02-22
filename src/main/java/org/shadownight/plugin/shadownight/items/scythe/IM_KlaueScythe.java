@@ -11,6 +11,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
+import org.shadownight.plugin.shadownight.utils.blockdata.BlockProperty;
+import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 
 
@@ -52,7 +54,8 @@ public final class IM_KlaueScythe extends IM_Scythe {
         else if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
             event.setCancelled(true);
             if(player.isSneaking()) {
-                Block targetBlock = player.getTargetBlockExact(1000, FluidCollisionMode.NEVER);
+                //Block targetBlock = player.getTargetBlockExact(200, FluidCollisionMode.NEVER);
+                Block targetBlock = PlayerUtils.getTargetBlock(player.getEyeLocation(), BlockProperty::isWalkable, 200);
                 if(targetBlock != null) {
                     Location targetBlockLocation = targetBlock.getLocation();
                     Location playerLocation = player.getLocation();
