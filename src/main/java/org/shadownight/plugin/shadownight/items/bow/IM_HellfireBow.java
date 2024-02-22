@@ -67,8 +67,8 @@ public final class IM_HellfireBow extends IM_Bow {
         // Start animation
         final int maxWidth = 8; // 7 max width + 1 for safety
         loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir, side);
-        //loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(Math.PI /  8), side.clone().rotateAroundY(Math.PI /  8));
-        //loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(Math.PI / -8), side.clone().rotateAroundY(Math.PI / -8));
+        loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(Math.PI /  8), side.clone().rotateAroundY(Math.PI /  8));
+        loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(Math.PI / -8), side.clone().rotateAroundY(Math.PI / -8));
     }
 
 
