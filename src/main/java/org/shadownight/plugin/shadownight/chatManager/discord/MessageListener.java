@@ -64,7 +64,7 @@ public final class MessageListener extends ListenerAdapter {
                 if (!player.hasPlayedBefore()) {
                     event.getHook().sendMessage(MessageCreateData.fromEmbeds(new EmbedBuilder()
                         .setColor(embedColor)
-                        .addField("Player not found", "The player \"" + ign + "\" doesn't exist or has never player on Shadow Night.", false)
+                        .addField("Player not found", "The player \"" + ign + "\" doesn't exist or has never played on Shadow Night.", false)
                         .build()
                     )).queue();
                 }
