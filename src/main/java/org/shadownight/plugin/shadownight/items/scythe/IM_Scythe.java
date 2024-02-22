@@ -13,6 +13,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.items.IM;
+import org.shadownight.plugin.shadownight.utils.math.Func;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
@@ -77,8 +79,8 @@ public abstract class IM_Scythe extends IM {
             for (Entity e : entities) {
                 if (
                     e instanceof LivingEntity &&
-                        playerPos.distance(e.getLocation()) < attackRange &&
-                        utils.isInCone(playerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
+                    playerPos.distance(e.getLocation()) < attackRange &&
+                    Func.isInCone(playerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
                 ) {
                     ++damagedEntities;
                     attackQueue.put(playerId, e.getUniqueId());
@@ -89,7 +91,7 @@ public abstract class IM_Scythe extends IM {
             }
 
 
-            if (damagedEntities > 0) utils.damageItem(player, item);
+            if (damagedEntities > 0) ItemUtils.damageItem(player, item);
             player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
             player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, playerPos.clone().add(playerDirection.clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
         }

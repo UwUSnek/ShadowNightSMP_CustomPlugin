@@ -12,7 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 
@@ -29,10 +30,10 @@ public class StarterKit extends UtilityClass {
         final String lore0 = "§cNotice: this item is part of the starter kit.";
         final String lore1 = "§cIt will be deleted if you remove it from your inventory or die";
 
-        inv.setChestplate(utils.createItemStack(Material.IRON_CHESTPLATE, 1,  kit_prefix + "Iron Chestplate", lore0, lore1));
-        inv.addItem      (utils.createItemStack(Material.STONE_AXE,       1,  kit_prefix + "Stone Axe",       lore0, lore1));
-        inv.addItem      (utils.createItemStack(Material.STONE_PICKAXE,   1,  kit_prefix + "Stone Pickaxe",   lore0, lore1));
-        inv.addItem      (utils.createItemStack(Material.BREAD,           32, kit_prefix + "Bread",           lore0, lore1));
+        inv.setChestplate(ItemUtils.createItemStack(Material.IRON_CHESTPLATE, 1, kit_prefix + "Iron Chestplate", lore0, lore1));
+        inv.addItem      (ItemUtils.createItemStack(Material.STONE_AXE,       1,  kit_prefix + "Stone Axe",       lore0, lore1));
+        inv.addItem      (ItemUtils.createItemStack(Material.STONE_PICKAXE,   1,  kit_prefix + "Stone Pickaxe",   lore0, lore1));
+        inv.addItem      (ItemUtils.createItemStack(Material.BREAD,           32, kit_prefix + "Bread",           lore0, lore1));
     }
 
 
@@ -52,7 +53,7 @@ public class StarterKit extends UtilityClass {
     public static boolean isBlacklisted(@Nullable final ItemStack item) {
         if (item != null) {
             final ItemMeta meta = item.getItemMeta();
-            return (meta != null && Chat.stripColor(meta.getDisplayName()).startsWith(Chat.stripColor(kit_prefix)));
+            return (meta != null && ChatUtils.stripColor(meta.getDisplayName()).startsWith(ChatUtils.stripColor(kit_prefix)));
         }
         return false;
     }

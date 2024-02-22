@@ -6,20 +6,16 @@ import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.*;
-import org.bukkit.util.Vector;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.dungeons.debug.SHD_VisualizePerlinNoise2D;
-import org.shadownight.plugin.shadownight.dungeons.debug.SHD_VisualizePerlinNoiseSlice;
 import org.shadownight.plugin.shadownight.dungeons.generators.*;
 import org.shadownight.plugin.shadownight.dungeons.shaders.*;
 import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise;
 import org.shadownight.plugin.shadownight.utils.containers.RegionBlueprint;
 import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -175,7 +171,7 @@ public final class Dungeon {
             PerlinNoise.resetSeed(); GEN_CeilingDeform.start(templateBuffer, wallDistanceGradientHigh, floorThickness, wallHeight);
 
             // Log generation time
-            utils.log(Level.INFO, "Blueprint generated in " + Chat.msToDuration(System.currentTimeMillis() - start, true));
+            utils.log(Level.INFO, "Blueprint generated in " + ChatUtils.msToDuration(System.currentTimeMillis() - start, true));
 
 
 
@@ -194,12 +190,12 @@ public final class Dungeon {
                 ),
                 (outputBuffer) -> {
                     // Log generation time
-                    utils.log(Level.INFO, "Materials computed in " + Chat.msToDuration(System.currentTimeMillis() - materialStart, true));
+                    utils.log(Level.INFO, "Materials computed in " + ChatUtils.msToDuration(System.currentTimeMillis() - materialStart, true));
 
                     // Paste and log pasting time
                     final long pasteStart = System.currentTimeMillis();
                     outputBuffer.paste(world, -total_x / 2, 0, -total_z / 2, false); //No walls, the world is already 100% bedrock
-                    utils.log(Level.INFO, "Dungeon pasted in " + Chat.msToDuration(System.currentTimeMillis() - pasteStart, true));
+                    utils.log(Level.INFO, "Dungeon pasted in " + ChatUtils.msToDuration(System.currentTimeMillis() - pasteStart, true));
                 }
             );
         }

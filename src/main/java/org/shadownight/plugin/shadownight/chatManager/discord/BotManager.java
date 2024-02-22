@@ -8,14 +8,14 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -108,7 +108,7 @@ public final class BotManager extends UtilityClass {
      * @param msg The message string
      */
     public static void sendBridgeMessage(final @NotNull String msg) {
-        bridgeChannel.sendMessage(Chat.stripColor(msg)).queue();
+        bridgeChannel.sendMessage(ChatUtils.stripColor(msg)).queue();
         utils.log(Level.INFO, "logged server message \"" + msg + "\"");
     }
 
@@ -120,8 +120,8 @@ public final class BotManager extends UtilityClass {
      */
     public static void sendBridgeMessage(final @NotNull Player player, final @NotNull String msg) {
         Scheduler.runAsync(() -> {
-            webhookClient.sendMessage(Chat.stripColor(msg))
-                .setUsername("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
+            webhookClient.sendMessage(ChatUtils.stripColor(msg))
+                .setUsername("[" + PlayerUtils.getGroupDisplayName(player) + "] " + player.getName())
                 .setAvatarUrl(SkinRenderer.getRenderUrl(player, SkinRenderer.RenderType.PROPIC))
                 .complete()
             ;

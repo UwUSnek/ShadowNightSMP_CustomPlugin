@@ -2,7 +2,7 @@ package org.shadownight.plugin.shadownight.qol;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,13 +23,13 @@ public class CMD_flyspeed implements CommandExecutor {
 
         Player player = (Player)sender;
         if(spd < 0 || spd > 5) {
-            Chat.sendMessage(player, "§cFlying speed must be between 0 and 5");
+            ChatUtils.sendMessage(player, "§cFlying speed must be between 0 and 5");
             return true;
         }
         float def = 10.92f;
 
         player.setFlySpeed(spd / 10);
-        Chat.sendMessage(player, "§aFlying speed set to " + spd + " (" + spd * def + "m/s)");
+        ChatUtils.sendMessage(player, "§aFlying speed set to " + spd + " (" + spd * def + "m/s)");
         return true;
     }
 }

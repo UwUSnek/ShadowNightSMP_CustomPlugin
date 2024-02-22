@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.chatManager.CMD_msg;
 import org.shadownight.plugin.shadownight.economy.Economy;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.lang.Math;
@@ -56,8 +57,8 @@ public final class ShadowNight_papi extends PlaceholderExpansion {
                     final String ownerName = PlaceholderAPI.setPlaceholders(player, "%griefprevention_currentclaim_ownername%");
                     if (!ownerName.equals("Unclaimed")) {
                         Player owner = Bukkit.getPlayer(ownerName);
-                        if (owner == null) return utils.getFancyNameOffline(Bukkit.getOfflinePlayer(ownerName)) + "§r's Claim §7(Offline)";
-                        else return utils.getFancyName(Bukkit.getPlayer(ownerName)) + "§r's Claim";
+                        if (owner == null) return PlayerUtils.getFancyNameOffline(Bukkit.getOfflinePlayer(ownerName)) + "§r's Claim §7(Offline)";
+                        else return PlayerUtils.getFancyName(Bukkit.getPlayer(ownerName)) + "§r's Claim";
                     }
                     else switch (worldName) {
                         case "Survival": return "§2Wilderness";
@@ -78,7 +79,7 @@ public final class ShadowNight_papi extends PlaceholderExpansion {
                 else return "§dMessaging " + targetName;
             }
             case "playtime": {
-                return "Your playtime: " + Chat.sToDuration(offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true);
+                return "Your playtime: " + ChatUtils.sToDuration(offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true);
             }
             case "player_balance": {
                 return String.valueOf(Economy.getBalance(offlinePlayer));

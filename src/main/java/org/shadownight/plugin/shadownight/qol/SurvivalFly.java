@@ -1,12 +1,10 @@
 package org.shadownight.plugin.shadownight.qol;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 
 
@@ -25,11 +23,11 @@ public class SurvivalFly extends UtilityClass {
                     // Multiverse resets the flying state when changing the player's gamemode on world change.
                     // The only way to change this is give the player the "mv.bypass.gamemode.<world>" permission, which is not something we can do.
                     // This task is used to re-activate flying 2s after the world change (hopefully after Multiverse turns it off).
-                    Chat.sendMessage(player, "§7[Vip] Flight will be available in 2s.");
+                    ChatUtils.sendMessage(player, "§7[Vip] Flight will be available in 2s.");
                     Scheduler.delay(() -> { if(player.getWorld().getName().equals("Spawn")) player.setAllowFlight(true); } , 40);
                 }
                 else if (!player.getWorld().getName().equals("Spawn") && player.getAllowFlight()) {
-                    Chat.sendMessage(player, "§7[Vip] Flight has been disabled.");
+                    ChatUtils.sendMessage(player, "§7[Vip] Flight has been disabled.");
                     player.setAllowFlight(false);
                     player.setFlying(false);
                 }

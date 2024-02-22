@@ -2,9 +2,8 @@ package org.shadownight.plugin.shadownight.qol;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.Rnd;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -34,14 +33,14 @@ public class CMD_rtp implements CommandExecutor, Rnd {
             Long time_diff = System.currentTimeMillis() - last_time;
             if (time_diff < cooldown){
                 long s_left = (cooldown - time_diff) / 1000;
-                Chat.sendMessage(player, "§cThis command is on cooldown! Try again in " + s_left / 60 + "m" + s_left % 60 + "s");
+                ChatUtils.sendMessage(player, "§cThis command is on cooldown! Try again in " + s_left / 60 + "m" + s_left % 60 + "s");
                 if(!player.hasPermission("group.mod")) return true;
-                Chat.sendMessage(player, "§7Skipping cooldown... (Mod rank or higher)");
+                ChatUtils.sendMessage(player, "§7Skipping cooldown... (Mod rank or higher)");
             }
         }
 
-        Chat.sendMessage(player, "§aTeleporting you to a random location...");
-        Chat.sendMessage(player, "§7You gained damage immunity for 15s");
+        ChatUtils.sendMessage(player, "§aTeleporting you to a random location...");
+        ChatUtils.sendMessage(player, "§7You gained damage immunity for 15s");
         prev.put(player.getName(), System.currentTimeMillis());
 
         float r = rnd.nextFloat(0, max);
@@ -53,7 +52,7 @@ public class CMD_rtp implements CommandExecutor, Rnd {
         player.addPotionEffect(effect2);
         player.setInvulnerable(true);
         Scheduler.delay(() -> { // Logout exploit is managed by event listener in onPlayerQuit
-            Chat.sendMessage(player, "§7Your damage immunity ran out");
+            ChatUtils.sendMessage(player, "§7Your damage immunity ran out");
             player.setInvulnerable(false);
         }, 300L);
         return true;

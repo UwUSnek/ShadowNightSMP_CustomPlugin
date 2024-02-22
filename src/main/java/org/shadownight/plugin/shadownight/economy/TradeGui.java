@@ -21,7 +21,9 @@ import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SignInput;
 import org.shadownight.plugin.shadownight.utils.Timer;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.ArrayList;
@@ -60,10 +62,10 @@ public final class TradeGui implements Listener {
     public TradeGui(final @NotNull Player _player, final @NotNull Player target){
         player = _player;
         inv = Bukkit.createInventory(null, 54, "§rYou §l⮀§r " + target.getName());
-        inv.setItem(buttonAddCoins,       utils.createItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1, "§eClick to add coins"));
-        inv.setItem(buttonAddClaimBlocks, utils.createItemStack(Material.GREEN_STAINED_GLASS_PANE,  1, "§2Click to add claim blocks"));
-        inv.setItem(22,                   utils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r"));
-        inv.setItem(31,                   utils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r"));
+        inv.setItem(buttonAddCoins,       ItemUtils.createItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1, "§eClick to add coins"));
+        inv.setItem(buttonAddClaimBlocks, ItemUtils.createItemStack(Material.GREEN_STAINED_GLASS_PANE,  1, "§2Click to add claim blocks"));
+        inv.setItem(22,                   ItemUtils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r"));
+        inv.setItem(31,                   ItemUtils.createItemStack(Material.BLACK_STAINED_GLASS_PANE,  1, "§r"));
     }
 
     /**
@@ -131,9 +133,9 @@ public final class TradeGui implements Listener {
         if(meta != null) {
             ArrayList<String> lore = new ArrayList<>();
 
-            for (ItemStack item : items) lore.add("§c-" + item.getAmount() + "x§f " + utils.getItemName(item));
+            for (ItemStack item : items) lore.add("§c-" + item.getAmount() + "x§f " + ItemUtils.getItemName(item));
             lore.add("");
-            for (ItemStack item : linkedGui.items) lore.add("§a+" + item.getAmount() + "x§f " + utils.getItemName(item));
+            for (ItemStack item : linkedGui.items) lore.add("§a+" + item.getAmount() + "x§f " + ItemUtils.getItemName(item));
 
             meta.setLore(lore);
             Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
@@ -173,7 +175,7 @@ public final class TradeGui implements Listener {
      */
     public void selectItem(final @NotNull ItemStack item){
         if(items.size() == 24) {
-            Chat.sendMessage(player, "§cYou can only trade up to 24 items!");
+            ChatUtils.sendMessage(player, "§cYou can only trade up to 24 items!");
         }
         else {
             items.add(new ItemStack(item));
@@ -238,7 +240,7 @@ public final class TradeGui implements Listener {
         alreadyClosed = true;
         giveItems(player, linkedGui.items);
         player.closeInventory();
-        Chat.sendMessage(player, "§aTrade completed with " + utils.getFancyName(linkedGui.player) + "§a!");
+        ChatUtils.sendMessage(player, "§aTrade completed with " + PlayerUtils.getFancyName(linkedGui.player) + "§a!");
     }
 
 
@@ -265,15 +267,15 @@ public final class TradeGui implements Listener {
             completeTrade();
         }
         else {
-            if (playerHasAccepted) inv.setItem(buttonPlayerAccept, utils.createItemStack(Material.LIME_STAINED_GLASS_PANE, 1, ""));
-            else                   inv.setItem(buttonPlayerAccept, utils.createItemStack(Material.RED_STAINED_GLASS_PANE,  1, ""));
+            if (playerHasAccepted) inv.setItem(buttonPlayerAccept, ItemUtils.createItemStack(Material.LIME_STAINED_GLASS_PANE, 1, ""));
+            else                   inv.setItem(buttonPlayerAccept, ItemUtils.createItemStack(Material.RED_STAINED_GLASS_PANE,  1, ""));
 
             if(timer != null && timer.getTimeLeft() > 0) updateConfirmationNameTimer();
             else updateConfirmationName();
             updateConfirmationLore();
 
-            if (targetHasAccepted) inv.setItem(buttonTargetAccept, utils.createItemStack(Material.LIME_STAINED_GLASS_PANE, 1, "§r" +             linkedGui.player.getName() + "§a accepted the trade."));
-            else                   inv.setItem(buttonTargetAccept, utils.createItemStack(Material.RED_STAINED_GLASS_PANE,  1, "§rWaiting for " + linkedGui.player.getName() + "§r to accept..."));
+            if (targetHasAccepted) inv.setItem(buttonTargetAccept, ItemUtils.createItemStack(Material.LIME_STAINED_GLASS_PANE, 1, "§r" +             linkedGui.player.getName() + "§a accepted the trade."));
+            else                   inv.setItem(buttonTargetAccept, ItemUtils.createItemStack(Material.RED_STAINED_GLASS_PANE,  1, "§rWaiting for " + linkedGui.player.getName() + "§r to accept..."));
         }
     }
 
@@ -308,14 +310,14 @@ public final class TradeGui implements Listener {
                     }
                 }
                 catch(NumberFormatException e) {
-                    player.sendMessage("\"§c" + Chat.stripColor(lines[0]) + "\" is not a number!");
+                    player.sendMessage("\"§c" + ChatUtils.stripColor(lines[0]) + "\" is not a number!");
                     return false;
                 }
             },
             () -> {
                 if(Economy.getBalance(player) >= inputTmp) {
                     // Add item
-                    ItemStack coinItem = utils.createItemStack(Material.GOLD_NUGGET, 1, "§6" + inputTmp + " Coins");
+                    ItemStack coinItem = ItemUtils.createItemStack(Material.GOLD_NUGGET, 1, "§6" + inputTmp + " Coins");
                     ItemMeta meta = coinItem.getItemMeta();
                     Objects.requireNonNull(meta, "Item meta is null").getPersistentDataContainer().set(coin_key, PersistentDataType.LONG, inputTmp);
                     coinItem.setItemMeta(meta);
@@ -329,7 +331,7 @@ public final class TradeGui implements Listener {
                     selectItem(coinItem);
                 }
                 else {
-                    Chat.sendMessage(player, "§cYou don't have that many coins!");
+                    ChatUtils.sendMessage(player, "§cYou don't have that many coins!");
                     // Re-open the trade GUI and add the new item
                     openInventory();
                     readingInput = false;
@@ -352,8 +354,8 @@ public final class TradeGui implements Listener {
     public void onGuiClose(final InventoryCloseEvent event){
         if(!readingInput && !alreadyClosed && event.getInventory() == inv) {
             cancelTrade();
-            Chat.sendMessage(player, "§cYou cancelled the trade with " + utils.getFancyName(linkedGui.player) + "§c.");
-            Chat.sendMessage(linkedGui.player, utils.getFancyName(player) + "§c has cancelled the trade.");
+            ChatUtils.sendMessage(player, "§cYou cancelled the trade with " + PlayerUtils.getFancyName(linkedGui.player) + "§c.");
+            ChatUtils.sendMessage(linkedGui.player, PlayerUtils.getFancyName(player) + "§c has cancelled the trade.");
         }
     }
 

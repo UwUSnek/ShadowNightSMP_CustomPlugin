@@ -17,6 +17,7 @@ import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.math.Easing;
 import org.shadownight.plugin.shadownight.utils.math.Func;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -57,7 +58,7 @@ public final class ScytheThrowDisplay {
             90
         ), EntityType.ITEM_DISPLAY);
         IM data = ItemManager.getValueFromId(CustomItemId.KLAUE_SCYTHE);
-        display.setItemStack(utils.createItemStackCustom(data.getMaterial(), 1, data.getDisplayName(), data.getCustomModelData(), data.getCustomId().getNumericalValue()));
+        display.setItemStack(ItemUtils.createItemStackCustom(data.getMaterial(), 1, data.getDisplayName(), data.getCustomModelData(), data.getCustomId().getNumericalValue()));
         display.setTeleportDuration(stepDuration);
 
 
@@ -118,7 +119,7 @@ public final class ScytheThrowDisplay {
      * @param onComplete A function to run when the animation ends
      */
     public void animateTranslation(final @NotNull Vector target, final @NotNull Function<Double, Double> f, @Nullable final Runnable onComplete) {
-        utils.damageItem(player, item);
+        ItemUtils.damageItem(player, item);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, null, onComplete);
     }
 
@@ -135,7 +136,7 @@ public final class ScytheThrowDisplay {
         final @NotNull Callable<Vector> onTargetUpdate,
         @Nullable final Runnable onComplete
     ) {
-        utils.damageItem(player, item);
+        ItemUtils.damageItem(player, item);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, onTargetUpdate, onComplete);
     }
 
@@ -177,7 +178,7 @@ public final class ScytheThrowDisplay {
             Vector boxSize = new Vector(Math.abs(boxSize_.getX()), Math.abs(boxSize_.getY()), Math.abs(boxSize_.getZ())).divide(new Vector(2, 2, 2)).add(new Vector(2, 2, 2));
             Collection<Entity> entities = world.getNearbyEntities(mid.toLocation(world), Math.abs(boxSize.getX()), Math.abs(boxSize.getY()), Math.abs(boxSize.getZ()));
             for (Entity e : entities) {
-                if (e instanceof LivingEntity && utils.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && !e.getUniqueId().equals(player.getUniqueId())) {
+                if (e instanceof LivingEntity && Func.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && !e.getUniqueId().equals(player.getUniqueId())) {
                     IM_Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
                     ((LivingEntity) e).damage(10, player);
                 }

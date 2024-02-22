@@ -2,7 +2,7 @@ package org.shadownight.plugin.shadownight.qol.info;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,9 +13,9 @@ public final class CMD_help implements CommandExecutor {
     @Override
     public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         final Player player = (Player)sender;
-        Chat.newline(player);
-        Chat.sendMessage(player, "Useful commands:\n");
-        Chat.newline(player);
+        ChatUtils.newline(player);
+        ChatUtils.sendMessage(player, "Useful commands:\n");
+        ChatUtils.newline(player);
         player.sendMessage(
             """
                 §d§lInfo:§r
@@ -27,7 +27,7 @@ public final class CMD_help implements CommandExecutor {
                 §d  §a/discord §7| Join the Shadow Night Community Discord server
             """
         );
-        Chat.newline(player);
+        ChatUtils.newline(player);
         player.sendMessage(
             """
                 §d§lMovement:§r
@@ -41,7 +41,7 @@ public final class CMD_help implements CommandExecutor {
                 §d  §7/warps | List available warp locations
             """
         );
-        Chat.newline(player);
+        ChatUtils.newline(player);
         player.sendMessage(
             """
                 §d§lMenus:§r
@@ -50,7 +50,7 @@ public final class CMD_help implements CommandExecutor {
                 §d  §a/trade §7| Trade with another player
             """
         );
-        Chat.newline(player);
+        ChatUtils.newline(player);
         player.sendMessage(
             """
                 §d§lChat:§r
@@ -58,7 +58,7 @@ public final class CMD_help implements CommandExecutor {
                 §d  §a/r §7| Message the last player that sent you a message
             """
         );
-        Chat.newline(player);
+        ChatUtils.newline(player);
         return true;
     }
 }

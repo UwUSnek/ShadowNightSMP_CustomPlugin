@@ -14,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.chatManager.ChatManager;
 import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
-import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Objects;
@@ -76,8 +77,8 @@ public final class MessageListener extends ListenerAdapter {
                             - Playtime: %s
                             - Status: %s"""
                             .formatted(
-                                utils.getGroupDisplayNameOffline(player),
-                                Chat.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true),
+                                PlayerUtils.getGroupDisplayNameOffline(player),
+                                ChatUtils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true),
                                 player.isOnline() ? "**Online**" : "_Offline_"
                             ), false)
                         .addField("───────────────────────────────────────────────────────", "", false)

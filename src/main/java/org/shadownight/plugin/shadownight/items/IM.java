@@ -14,7 +14,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
-import org.shadownight.plugin.shadownight.utils.utils;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 
 import java.util.Objects;
 
@@ -31,7 +31,7 @@ public abstract class IM implements Listener {
      * Creates a new Item Manager.
      */
     public IM() {
-        defaultItem = utils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
+        defaultItem = ItemUtils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
         setItemAttributes();
         createRecipe();
         Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
