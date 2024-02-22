@@ -23,7 +23,7 @@ public class CMD_rtp implements CommandExecutor, Rnd {
 
 
     @Override
-    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         final Player player = (Player)sender;
         final int max = 10000;
         final Long cooldown = 10L * 60 * 1000;

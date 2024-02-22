@@ -106,7 +106,7 @@ public final class BotManager extends UtilityClass {
      * Sends a system message to the bridge channel.
      * @param msg The message string
      */
-    public static void sendBridgeMessage(@NotNull final String msg) {
+    public static void sendBridgeMessage(final @NotNull String msg) {
         bridgeChannel.sendMessage(Chat.stripColor(msg)).queue();
         utils.log(Level.INFO, "logged server message \"" + msg + "\"");
     }
@@ -117,7 +117,7 @@ public final class BotManager extends UtilityClass {
      * @param player The player that sent the message
      * @param msg The message string
      */
-    public static void sendBridgeMessage(@NotNull final Player player, @NotNull final String msg) {
+    public static void sendBridgeMessage(final @NotNull Player player, final @NotNull String msg) {
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
             webhookClient.sendMessage(Chat.stripColor(msg))
                 .setUsername("[" + utils.getGroupDisplayName(player) + "] " + player.getName())

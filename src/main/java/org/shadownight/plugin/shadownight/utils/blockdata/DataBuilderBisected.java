@@ -18,7 +18,7 @@ public final class DataBuilderBisected {
 
 
 
-    @SuppressWarnings("unused") public DataBuilderBisected setHalf(@NotNull final Bisected.Half n) {
+    @SuppressWarnings("unused") public DataBuilderBisected setHalf(final @NotNull Bisected.Half n) {
         data.setHalf(n);
         return this;
     }

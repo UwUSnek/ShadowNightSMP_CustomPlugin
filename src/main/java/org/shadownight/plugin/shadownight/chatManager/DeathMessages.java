@@ -25,7 +25,7 @@ public final class DeathMessages extends UtilityClass implements Rnd {
         public final String icon;
         public final String[] variants;
 
-        public DeathData(@NotNull final String _icon, @NotNull final String[] _variants){
+        public DeathData(final @NotNull String _icon, final @NotNull String @NotNull [] _variants){
             icon = _icon;
             variants = _variants;
         }
@@ -127,7 +127,7 @@ public final class DeathMessages extends UtilityClass implements Rnd {
 
 
 
-    public static void formatDeathMessage(@NotNull final PlayerDeathEvent event) {
+    public static void formatDeathMessage(final @NotNull PlayerDeathEvent event) {
         final Player player = event.getEntity();
         final Player killer = event.getEntity().getKiller();
         EntityDamageEvent.DamageCause cause;

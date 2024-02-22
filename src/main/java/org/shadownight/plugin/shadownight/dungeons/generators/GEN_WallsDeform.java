@@ -16,7 +16,7 @@ public final class GEN_WallsDeform extends UtilityClass {
      * @param ft The thickness of the floor
      * @param h The height of the walls
      */
-    public static void start(@NotNull final RegionBlueprint buffer, final int ft, final int h){
+    public static void start(final @NotNull RegionBlueprint buffer, final int ft, final int h){
         final boolean[][][] tmp = new boolean[buffer.x][buffer.y][buffer.z]; // Defaults to false
 
         // Create modified copy

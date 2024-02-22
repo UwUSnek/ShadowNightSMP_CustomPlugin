@@ -65,7 +65,7 @@ public final class RegionBlueprint {
      * @param _z The z coordinate of the block
      * @param type The type to set
      */
-    public void setShifted(final int _x, final int _y, final int _z, @NotNull final BlueprintData type) {
+    public void setShifted(final int _x, final int _y, final int _z, final @NotNull BlueprintData type) {
         try {
             d[_x + shift_x][_y + shift_y][_z + shift_z] = type;
         }
@@ -85,7 +85,7 @@ public final class RegionBlueprint {
      * @param _z The z coordinate of the block
      * @param data The data to set
      */
-    public void set(final int _x, final int _y, final int _z, @NotNull final BlueprintData data) {
+    public void set(final int _x, final int _y, final int _z, final @NotNull BlueprintData data) {
         try {
             d[_x][_y][_z] = data;
         }
@@ -221,7 +221,7 @@ public final class RegionBlueprint {
      * @param onComplete The task to run after all the threads have finished computing their shaders.
      *                   This task is ran on the Main Thread and is passed the output buffer as the only parameter
      */
-    public void dispatchShaders(final int threads, @NotNull final List<Pair<BlueprintData, SHD>> shaders, @NotNull final Consumer<RegionBuffer> onComplete) {
+    public void dispatchShaders(final int threads, final @NotNull List<Pair<BlueprintData, SHD>> shaders, final @NotNull Consumer<RegionBuffer> onComplete) {
         Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
             // Create temporary buffer
             final RegionBuffer output = new RegionBuffer(x, y, z, shift_x, shift_y, shift_z);
@@ -252,7 +252,7 @@ public final class RegionBlueprint {
     }
 
 
-    private void computeShaderSection(final int x0, final int x1, @NotNull final HashMultimap<BlueprintData, SHD> shaders) {
+    private void computeShaderSection(final int x0, final int x1, final @NotNull HashMultimap<BlueprintData, SHD> shaders) {
         for(int i = x0; i < x1; ++i) for(int j = 0; j < y; ++j) for(int k = 0; k < z; ++k) {
             for(SHD s : shaders.get(d[i][j][k])) {
                 s.compute(i, j, k);

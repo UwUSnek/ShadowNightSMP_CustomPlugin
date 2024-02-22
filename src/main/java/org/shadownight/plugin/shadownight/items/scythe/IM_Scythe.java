@@ -41,7 +41,7 @@ public abstract class IM_Scythe extends IM {
 
 
 
-    static private void breakBlocks(@NotNull final Player player) {
+    static private void breakBlocks(final @NotNull Player player) {
         Location playerPos = player.getLocation();
         Vector playerDirection = playerPos.getDirection();
 
@@ -58,7 +58,7 @@ public abstract class IM_Scythe extends IM {
     private static final double attackRange = 6;
     private static final long cooldown = 500;
 
-    protected void customAttack(@NotNull final Player player, @NotNull final ItemStack item) {
+    protected void customAttack(final @NotNull Player player, final @NotNull ItemStack item) {
         final Location playerPos = player.getLocation();
         final UUID playerId = player.getUniqueId();
         final long currentTime = System.currentTimeMillis();
@@ -98,7 +98,7 @@ public abstract class IM_Scythe extends IM {
 
 
     @Override
-    protected void onInteract(@NotNull final PlayerInteractEvent event) {
+    protected void onInteract(final @NotNull PlayerInteractEvent event) {
         if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
             customAttack(event.getPlayer(), event.getItem());
@@ -111,7 +111,7 @@ public abstract class IM_Scythe extends IM {
 
 
     @Override
-    protected void onAttack(@NotNull final EntityDamageByEntityEvent event) {
+    protected void onAttack(final @NotNull EntityDamageByEntityEvent event) {
         final Player player = (Player) event.getDamager();
         final Entity target = event.getEntity();
 

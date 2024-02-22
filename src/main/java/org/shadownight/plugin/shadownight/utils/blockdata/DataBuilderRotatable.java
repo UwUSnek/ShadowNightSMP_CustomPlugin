@@ -19,7 +19,7 @@ public final class DataBuilderRotatable {
 
 
 
-    @SuppressWarnings("unused") public DataBuilderRotatable setRotation(@NotNull final BlockFace n) {
+    @SuppressWarnings("unused") public DataBuilderRotatable setRotation(final @NotNull BlockFace n) {
         data.setRotation(n);
         return this;
     }

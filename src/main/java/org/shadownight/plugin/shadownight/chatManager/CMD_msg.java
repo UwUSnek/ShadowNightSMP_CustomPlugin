@@ -20,13 +20,13 @@ public final class CMD_msg implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         processCommand((Player) sender, new Vector<>(Arrays.asList(args)));
         return true;
     }
 
 
-    public static void processCommand(@NotNull final Player player, @NotNull final Vector<String> args) {
+    public static void processCommand(final @NotNull Player player, final @NotNull Vector<String> args) {
         if (args.isEmpty()) {
             openDms.remove(player.getName());
             Chat.sendMessage(player, "§aYou returned to the Public chat channel.");

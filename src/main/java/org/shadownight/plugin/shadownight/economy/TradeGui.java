@@ -57,7 +57,7 @@ public final class TradeGui implements Listener {
      * @param _player The first player
      * @param target The second player
      */
-    public TradeGui(@NotNull final Player _player, @NotNull final Player target){
+    public TradeGui(final @NotNull Player _player, final @NotNull Player target){
         player = _player;
         inv = Bukkit.createInventory(null, 54, "§rYou §l⮀§r " + target.getName());
         inv.setItem(buttonAddCoins,       utils.createItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1, "§eClick to add coins"));
@@ -71,7 +71,7 @@ public final class TradeGui implements Listener {
      * Must be called after creating the instance.
      * @param _linkedGui The GUI instance of the other player
      */
-    public void TradeGuiInit(@NotNull final TradeGui _linkedGui) {
+    public void TradeGuiInit(final @NotNull TradeGui _linkedGui) {
         linkedGui = _linkedGui;
         updateStatus();
         timer = new Timer(
@@ -171,7 +171,7 @@ public final class TradeGui implements Listener {
      * Adds an item to the list of given items.
      * @param item the item to add. Coin  items are allowed and the metadata is set by the SignInput.
      */
-    public void selectItem(@NotNull final ItemStack item){
+    public void selectItem(final @NotNull ItemStack item){
         if(items.size() == 24) {
             Chat.sendMessage(player, "§cYou can only trade up to 24 items!");
         }
@@ -215,7 +215,7 @@ public final class TradeGui implements Listener {
      * @param _player The player to give the items to
      * @param _items The list of items
      */
-    private void giveItems(@NotNull final Player _player, @NotNull final Vector<ItemStack> _items) {
+    private void giveItems(final @NotNull Player _player, final @NotNull Vector<ItemStack> _items) {
         final Inventory playerInv = _player.getInventory();
         final World world = _player.getWorld();
         for(ItemStack item : _items){

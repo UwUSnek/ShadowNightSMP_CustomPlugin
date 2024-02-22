@@ -40,7 +40,7 @@ public final class ScytheThrowDisplay {
      * @param _player The player that owns this object
      * @param _item The item stack to display
      */
-    public ScytheThrowDisplay(@NotNull final Player _player, @NotNull final ItemStack _item) {
+    public ScytheThrowDisplay(final @NotNull Player _player, final @NotNull ItemStack _item) {
         player = _player;
         item = _item;
         final Location playerPos = player.getLocation();
@@ -116,7 +116,7 @@ public final class ScytheThrowDisplay {
      * @param f The easing function to use
      * @param onComplete A function to run when the animation ends
      */
-    public void animateTranslation(@NotNull final Vector target, @NotNull final Function<Double, Double> f, @Nullable final Runnable onComplete) {
+    public void animateTranslation(final @NotNull Vector target, final @NotNull Function<Double, Double> f, @Nullable final Runnable onComplete) {
         utils.damageItem(player, item);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, null, onComplete);
     }
@@ -129,9 +129,9 @@ public final class ScytheThrowDisplay {
      * @param onComplete A function to run when the animation ends
      */
     public void animateTranslationDynamic(
-        @NotNull final Vector target,
-        @NotNull final Function<Double, Double> f,
-        @NotNull final Callable<Vector> onTargetUpdate,
+        final @NotNull Vector target,
+        final @NotNull Function<Double, Double> f,
+        final @NotNull Callable<Vector> onTargetUpdate,
         @Nullable final Runnable onComplete
     ) {
         utils.damageItem(player, item);
@@ -142,9 +142,9 @@ public final class ScytheThrowDisplay {
 
     private void animateTranslationLoop(
         final double progress,
-        @NotNull final Vector start,
+        final @NotNull Vector start,
         @NotNull Vector end,
-        @NotNull final Function<Double, Double> f,
+        final @NotNull Function<Double, Double> f,
         @Nullable final Callable<Vector> onTargetUpdate,
         @Nullable final Runnable onComplete
     ){
@@ -190,7 +190,7 @@ public final class ScytheThrowDisplay {
     }
 
 
-    private Vector progressToCoords(final double progress, @NotNull final Vector start, @NotNull final Vector end){
+    private Vector progressToCoords(final double progress, final @NotNull Vector start, final @NotNull Vector end){
         return start.clone().add((end.clone().subtract(start)).multiply(progress));
     }
 }

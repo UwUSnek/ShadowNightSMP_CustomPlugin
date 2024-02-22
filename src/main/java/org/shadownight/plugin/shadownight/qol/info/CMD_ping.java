@@ -11,7 +11,7 @@ import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 public final class CMD_ping implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         final Player player = (Player)sender;
         Chat.sendMessage(player, "Ping: §a" + player.getPing() + "ms");
         return true;

@@ -22,7 +22,7 @@ public final class BlockPattern implements Rnd {
      * @param blocks A list of Pairs each containing the weight and BlockData of a given block.
      */
     @SafeVarargs
-    public BlockPattern(@NotNull final Pair<Float, BlockData>... blocks) {
+    public BlockPattern(final @NotNull Pair<Float, BlockData>... blocks) {
         float tot = 0f;
         for (Pair<Float, BlockData> block : blocks) {
             tot += block.getValue0();

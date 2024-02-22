@@ -16,7 +16,7 @@ public final class GEN_Walls extends UtilityClass {
         private TreeNode parent = null;
 
         public TreeNode() {}
-        public TreeNode(@NotNull final TreeNode _a, @NotNull final TreeNode _b) {
+        public TreeNode(final @NotNull TreeNode _a, final @NotNull TreeNode _b) {
             _a.parent = this;
             _b.parent = this;
         }
@@ -31,7 +31,7 @@ public final class GEN_Walls extends UtilityClass {
         final Vector2i a;
         final Vector2i b;
         final char type;
-        public Wall(@NotNull final Vector2i _a, @NotNull final Vector2i _b, final char _type) {
+        public Wall(final @NotNull Vector2i _a, final @NotNull Vector2i _b, final char _type) {
             a = _a;
             b = _b;
             type = _type;
@@ -58,7 +58,7 @@ public final class GEN_Walls extends UtilityClass {
      * @param t The thickness of the wall
      * @param h The height of the wall
      */
-    private static void placeWall(@NotNull final RegionBlueprint buffer, @NotNull final Wall wall, final int s, final int t, final int h, final int floorThickness) {
+    private static void placeWall(final @NotNull RegionBlueprint buffer, final @NotNull Wall wall, final int s, final int t, final int h, final int floorThickness) {
         final int st = s + t;
         final Vector2i a = wall.a;
         switch(wall.type) {
@@ -85,7 +85,7 @@ public final class GEN_Walls extends UtilityClass {
      * @param zNum The number of tiles in the Z-axis
      * @param ft The thickness of the floor
      */
-    public static void start(@NotNull final RegionBlueprint buffer, final int tileSize, final int wt, final int h, final int xNum, final int zNum, final int ft){
+    public static void start(final @NotNull RegionBlueprint buffer, final int tileSize, final int wt, final int h, final int xNum, final int zNum, final int ft){
         // Initialize tiles
         final TreeNode[][] tiles = new TreeNode[xNum][zNum]; // Defaults to { parent: null }
         for(int i = 0; i < xNum; ++i) for(int j = 0; j < zNum; ++j) tiles[i][j] = new TreeNode();

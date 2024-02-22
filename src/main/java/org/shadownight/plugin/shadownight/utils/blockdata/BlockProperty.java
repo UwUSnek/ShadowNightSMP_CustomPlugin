@@ -15,7 +15,7 @@ public final class BlockProperty extends UtilityClass {
      * @param material The material of the block
      * @return True if the block can be destroyed, false otherwise
      */
-    public static boolean isDelicate(@NotNull final Material material) {
+    public static boolean isDelicate(final @NotNull Material material) {
         return
             Tag.REPLACEABLE      .isTagged(material) ||
             Tag.CORAL_PLANTS     .isTagged(material) ||
@@ -71,7 +71,7 @@ public final class BlockProperty extends UtilityClass {
      * @param material The material of the block
      * @return True if the block is walkable, false otherwise
      */
-    public static boolean isWalkable(@NotNull final Material material) {
+    public static boolean isWalkable(final @NotNull Material material) {
         return
             Tag.REPLACEABLE      .isTagged(material) ||
             Tag.CORAL_PLANTS     .isTagged(material) ||

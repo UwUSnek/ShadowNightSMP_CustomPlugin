@@ -24,7 +24,7 @@ public final class GEN_WallVines extends UtilityClass implements Rnd {
      * @param normals the normals of each block
      * @param ft The thickness of the floor
      */
-    public static void start(@NotNull final RegionBlueprint buffer, @NotNull final Vector2i[][] normals, final int ft){
+    public static void start(final @NotNull RegionBlueprint buffer, final @NotNull Vector2i @NotNull [] @NotNull [] normals, final int ft){
         final double vineChance = 0.46f;
         // Find suitable block column
         for(int i = 0; i < buffer.x; ++i) for(int k = 0; k < buffer.z; ++k) if(buffer.get(i, ft, k) == BlueprintData.WALL) {

@@ -24,7 +24,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
     @Override
-    protected void setRecipe(@NotNull final ShapedRecipe recipe) {
+    protected void setRecipe(final @NotNull ShapedRecipe recipe) {
         recipe.shape("III", "  S", " S ");
         recipe.setIngredient('I', Material.COMMAND_BLOCK);
         recipe.setIngredient('S', Material.COMMAND_BLOCK);
@@ -38,7 +38,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
     @Override
-    protected void onInteract(@NotNull final PlayerInteractEvent event) {
+    protected void onInteract(final @NotNull PlayerInteractEvent event) {
         final Player player = event.getPlayer();
 
         if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
@@ -77,7 +77,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
     @Override
-    protected void onAttack(@NotNull final EntityDamageByEntityEvent event) {
+    protected void onAttack(final @NotNull EntityDamageByEntityEvent event) {
         final Player player = (Player) event.getDamager();
 
         if(player.isSneaking()) {

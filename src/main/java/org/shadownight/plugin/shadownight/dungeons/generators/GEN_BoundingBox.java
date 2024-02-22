@@ -15,7 +15,7 @@ public final class GEN_BoundingBox extends UtilityClass implements Rnd {
      * @param buffer The data buffer
      * @param t The thickness of the floor to generate
      */
-    public static void startFloor(@NotNull final RegionBlueprint buffer, final int t){
+    public static void startFloor(final @NotNull RegionBlueprint buffer, final int t){
         //      X                                 Z                                 Thickness
         for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.z; ++j) for(int k = 0; k < t; ++k) {
             buffer.set(i, k, j, BlueprintData.FLOOR);
@@ -29,7 +29,7 @@ public final class GEN_BoundingBox extends UtilityClass implements Rnd {
      * @param wh The height of the walls
      * @param ft The thickness of the floor
      */
-    public static void startCeiling(@NotNull final RegionBlueprint buffer, final int t, final int wh, final int ft){
+    public static void startCeiling(final @NotNull RegionBlueprint buffer, final int t, final int wh, final int ft){
         //      X                                 Z                                 Thickness
         for(int i = 0; i < buffer.x; ++i) for(int j = 0; j < buffer.z; ++j) for(int k = wh + ft; k < wh + ft + t; ++k) {
             buffer.set(i, k, j, BlueprintData.CEILING);
@@ -45,7 +45,7 @@ public final class GEN_BoundingBox extends UtilityClass implements Rnd {
      * @param owt The thickness of the outer walls
      * @param wt The thickness of the inner walls
      */
-    public static void startWalls(@NotNull final RegionBlueprint buffer, final int h, final int ft, final int owt, final int wt){
+    public static void startWalls(final @NotNull RegionBlueprint buffer, final int h, final int ft, final int owt, final int wt){
         final int x = buffer.x - owt * 2;
         final int z = buffer.z - owt * 2;
         //      X                               Height                                        Thickness

@@ -19,14 +19,14 @@ public final class _PerlinNoise3D_impl extends _PerlinNoise_impl {
      * @param y y-coordinate to generate noise value for
      * @return double value in range [0.0, 1.0] for that point
      */
-    public double compute(double x, double y, double z, int gridSize) {
+    public double compute(double x, double y, double z, final int gridSize) {
         x /= gridSize;
         y /= gridSize;
         z /= gridSize;
 
         // Find the four corners of the unit square
-        Vector3i[] unitSquare = getSquareCoords(x, y, z);
-        double[] dotProds = new double[8];  // stores each gradiant • distance val
+        final Vector3i[] unitSquare = getSquareCoords(x, y, z);
+        final double[] dotProds = new double[8];  // stores each gradiant • distance val
 
 
 
@@ -73,7 +73,7 @@ public final class _PerlinNoise3D_impl extends _PerlinNoise_impl {
      * @return list of coordinate pairs in the format {{x0, y0}, {x1, y0}, {x0, y1}, {x1, y1}}
      *         (that is, {{top lt}, {top rt}, {bot lt}, {bot rt}})
      */
-    private static Vector3i[] getSquareCoords(double x, double y, double z) {
+    private static Vector3i[] getSquareCoords(final double x, final double y, final double z) {
         int x0, x1, y0, y1, z0, z1;  // (x0,y0) is up-left corner, (x1,y1) is bot-right
         x0 = (int) x;
         y0 = (int) y;
@@ -98,7 +98,7 @@ public final class _PerlinNoise3D_impl extends _PerlinNoise_impl {
      *         the vector is measured with its tail at (0, 0) and its head at
      *         (x, y).
      */
-    public Vector3i selectGradVector(int x, int y, int z) {
+    public Vector3i selectGradVector(final int x, final int y, final int z) {
         final Vector3i[] validGradientVecs = {
             new Vector3i(1, 1,  1), new Vector3i(-1, 1,  1), new Vector3i(1, -1, 1 ), new Vector3i(-1, -1,  1),
             new Vector3i(1, 1, -1), new Vector3i(-1, 1, -1), new Vector3i(1, -1, -1), new Vector3i(-1, -1, -1)

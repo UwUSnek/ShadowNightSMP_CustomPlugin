@@ -25,7 +25,7 @@ import static org.shadownight.plugin.shadownight.chatManager.discord.BotManager.
 
 public final class MessageListener extends ListenerAdapter {
     @Override
-    public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
+    public void onMessageReceived(final @NotNull MessageReceivedEvent event) {
         if(event.getChannel().getId().equals(BotManager.bridgeChannel.getId())) {
             final User author = event.getAuthor();
             if(!author.isBot()) {
@@ -39,7 +39,7 @@ public final class MessageListener extends ListenerAdapter {
 
 
     @Override
-    public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
+    public void onSlashCommandInteraction(final @NotNull SlashCommandInteractionEvent event) {
         utils.log(Level.INFO, "Detected slash command");
 
 

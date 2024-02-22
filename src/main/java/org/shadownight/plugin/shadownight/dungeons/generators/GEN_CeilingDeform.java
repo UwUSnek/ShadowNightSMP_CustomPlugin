@@ -16,7 +16,7 @@ public final class GEN_CeilingDeform extends UtilityClass {
      * @param ft The thickness of the floor
      * @param h The height of the walls
      */
-    public static void start(@NotNull final RegionBlueprint buffer, final float[][] dist, final int ft, final int h) {
+    public static void start(final @NotNull RegionBlueprint buffer, final float @NotNull [] @NotNull [] dist, final int ft, final int h) {
         final int y = ft + h - 1; // First y under the flat ceiling
         for(int i = 1; i < buffer.x - 1; ++i) for(int k = 1; k < buffer.z - 1; ++k) {
             // Create noise values

@@ -17,7 +17,7 @@ public final class SHD_VisualizeNormals extends SHD {
     /**
      * @param _normals The normals of each block
      */
-    public SHD_VisualizeNormals(@NotNull final Vector2i[][] _normals) {
+    public SHD_VisualizeNormals(final @NotNull Vector2i @NotNull [] @NotNull [] _normals) {
         normals = _normals;
     }
 

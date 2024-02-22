@@ -20,7 +20,7 @@ public final class BlockGradient implements Rnd {
      * @param blocks A list of Pairs each containing the weight(Integer) and either a BlockPattern or a BlockData.
      */
     @SafeVarargs
-    public BlockGradient(@NotNull final Pair<Integer, ?>... blocks) {
+    public BlockGradient(final @NotNull Pair<Integer, ?>... blocks) {
         for(Pair<?, ?> b : blocks) {
             if (b.getValue0() instanceof Integer n) {
                 if(     b.getValue1() instanceof BlockPattern p) for (int i = 0; i < n; ++i) w.add(p);

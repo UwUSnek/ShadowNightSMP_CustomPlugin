@@ -44,7 +44,7 @@ public final class ShadowNight_papi extends PlaceholderExpansion {
 
     @Override
     @SuppressWarnings("deprecation") // This is for getOfflinePlayer bc GriefPrevention doesn't have a placeholder to get the UUID
-    public String onRequest(@NotNull final OfflinePlayer offlinePlayer, @NotNull final String placeholder) {
+    public String onRequest(final @NotNull OfflinePlayer offlinePlayer, final @NotNull String placeholder) {
         final Player player = offlinePlayer.getPlayer();
         switch (placeholder.toLowerCase()) {
             case "location": {

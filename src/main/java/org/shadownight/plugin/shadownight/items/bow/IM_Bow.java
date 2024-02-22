@@ -28,7 +28,7 @@ public abstract class IM_Bow extends IM {
      * Determines what custom item the player is holding and executes shoot callbacks accordingly.
      * @param event The shoot event
      */
-    public static void chooseOnShoot(@NotNull final EntityShootBowEvent event) {
+    public static void chooseOnShoot(final @NotNull EntityShootBowEvent event) {
         if(event.getEntity() instanceof Player player) {
             final ItemStack item = player.getInventory().getItemInMainHand();
             Long customItemId = getCustomItemId(item);
@@ -41,10 +41,10 @@ public abstract class IM_Bow extends IM {
             }
         }
     }
-    protected abstract void onShoot(@NotNull final EntityShootBowEvent event);
+    protected abstract void onShoot(final @NotNull EntityShootBowEvent event);
 
 
-    public static void chooseOnProjectileHit(@NotNull final ProjectileHitEvent event) {
+    public static void chooseOnProjectileHit(final @NotNull ProjectileHitEvent event) {
         final Pair<IM_Bow, ItemStack> projectileData = activeProjectiles.get(event.getEntity().getUniqueId());
         if(projectileData != null) {
             activeProjectiles.remove(event.getEntity().getUniqueId());
@@ -52,7 +52,7 @@ public abstract class IM_Bow extends IM {
             projectileData.getValue0().onProjectileHit(event, projectileData.getValue1());
         }
     }
-    protected abstract void onProjectileHit(@NotNull final ProjectileHitEvent event, @NotNull final ItemStack usedBow);
+    protected abstract void onProjectileHit(final @NotNull ProjectileHitEvent event, final @NotNull ItemStack usedBow);
 
 
 

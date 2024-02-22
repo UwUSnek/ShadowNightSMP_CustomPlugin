@@ -47,7 +47,7 @@ public final class SkinRenderer extends UtilityClass {
      * @param renderType The type of render
      * @return The generated URL
      */
-    public static String getRenderUrl(@NotNull final OfflinePlayer player, @NotNull final RenderType renderType){
+    public static String getRenderUrl(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
         final UUID uuid = player.getUniqueId();
         final String type = switch (renderType) {
             case PROPIC -> "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}";
@@ -65,7 +65,7 @@ public final class SkinRenderer extends UtilityClass {
      * @param renderType The type of render
      * @return The URI of the generated render
      */
-    public static String getRenderUri(@NotNull final OfflinePlayer player, @NotNull final RenderType renderType){
+    public static String getRenderUri(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
         final String type = getRenderUrl(player, renderType);
         final UUID uuid = player.getUniqueId();
         final String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
@@ -88,7 +88,7 @@ public final class SkinRenderer extends UtilityClass {
      * @param renderType The type of render
      * @return The generated render image
      */
-    public static BufferedImage getRender(@NotNull final OfflinePlayer player, @NotNull final RenderType renderType){
+    public static BufferedImage getRender(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
         final String type = getRenderUrl(player, renderType);
         final UUID uuid = player.getUniqueId();
         final HashMap<UUID, BufferedImage> typeRuntimeCache = runtimeCache.get(renderType);
@@ -126,7 +126,7 @@ public final class SkinRenderer extends UtilityClass {
 
 
 
-    private static BufferedImage saveImage(@NotNull final String imageUrl, @NotNull final String destinationFile) {
+    private static BufferedImage saveImage(final @NotNull String imageUrl, final @NotNull String destinationFile) {
         try {
             final URL url = new URL(imageUrl);
             final InputStream inputStream = url.openStream();

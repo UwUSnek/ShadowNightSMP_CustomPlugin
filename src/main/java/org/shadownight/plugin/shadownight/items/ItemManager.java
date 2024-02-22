@@ -21,7 +21,7 @@ public enum ItemManager {
 
 
     private final IM value;
-    ItemManager(@NotNull final IM item){
+    ItemManager(final @NotNull IM item){
         value = item;
     }
 
@@ -50,7 +50,7 @@ public enum ItemManager {
      * @param id The id to search for
      * @return The manger instance
      */
-    public static IM getValueFromId(@NotNull final CustomItemId id) {
+    public static IM getValueFromId(final @NotNull CustomItemId id) {
         return lookupTable.get(id.getNumericalValue());
     }
     /**

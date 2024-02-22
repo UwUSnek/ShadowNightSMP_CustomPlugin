@@ -36,10 +36,10 @@ public class StarterKit extends UtilityClass {
     }
 
 
-    public static void onJoin(@NotNull final Player player) {
+    public static void onJoin(final @NotNull Player player) {
         if(!player.hasPlayedBefore()) give(player);
     }
-    public static void onRespawn(@NotNull final Player player, @NotNull final PlayerRespawnEvent.RespawnReason reason) {
+    public static void onRespawn(final @NotNull Player player, final @NotNull PlayerRespawnEvent.RespawnReason reason) {
         if(reason == PlayerRespawnEvent.RespawnReason.DEATH) give(player);
     }
 
@@ -60,12 +60,12 @@ public class StarterKit extends UtilityClass {
 
 
 
-    public static void onItemDrop(@NotNull final Item item) {
+    public static void onItemDrop(final @NotNull Item item) {
         if (isBlacklisted(item.getItemStack())) item.remove();
     }
 
 
-    public static void onDragEvent(@NotNull final InventoryDragEvent event) {
+    public static void onDragEvent(final @NotNull InventoryDragEvent event) {
         final Inventory inventory = event.getInventory();
         if (inventory.getType() != InventoryType.PLAYER) {
             if (isBlacklisted(event.getOldCursor())) event.setCancelled(true);
@@ -73,7 +73,7 @@ public class StarterKit extends UtilityClass {
     }
 
 
-    public static void onClickEvent(@NotNull final InventoryClickEvent event) {
+    public static void onClickEvent(final @NotNull InventoryClickEvent event) {
         final Inventory inventory = event.getClickedInventory();
         if (inventory != null) {
             if (inventory.getType() != InventoryType.PLAYER) {

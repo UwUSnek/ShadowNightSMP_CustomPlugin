@@ -18,7 +18,7 @@ public final class IM_NetheriteScythe extends IM_Scythe {
 
 
     @Override
-    protected void setRecipe(@NotNull final ShapedRecipe recipe) {
+    protected void setRecipe(final @NotNull ShapedRecipe recipe) {
         recipe.shape("III", "  S", " S ");
         recipe.setIngredient('I', Material.NETHERITE_INGOT);
         recipe.setIngredient('S', Material.COMMAND_BLOCK);

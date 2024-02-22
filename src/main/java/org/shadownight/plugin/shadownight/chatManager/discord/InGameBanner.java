@@ -14,7 +14,7 @@ public final class InGameBanner {
      * @param player The player
      * @param plugin The plugin instance
      */
-    public static void startLoop(@NotNull final Player player, @NotNull final Plugin plugin) {
+    public static void startLoop(final @NotNull Player player, final @NotNull Plugin plugin) {
         Bukkit.getScheduler().runTaskTimer(
             plugin,
             () -> {

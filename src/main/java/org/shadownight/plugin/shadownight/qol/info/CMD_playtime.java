@@ -14,7 +14,7 @@ import org.shadownight.plugin.shadownight.utils.spigot.Chat;
 
 public final class CMD_playtime implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, final String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         final Player player = (Player)sender;
         if(args.length == 0) {
             Chat.sendMessage(player, "Your playtime is §a" + Chat.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true) + "§r.");

@@ -22,7 +22,7 @@ public final class DataBuilderSlab {
         data.setWaterlogged(n);
         return this;
     }
-    @SuppressWarnings("unused") public DataBuilderSlab setType(@NotNull final Slab.Type n) {
+    @SuppressWarnings("unused") public DataBuilderSlab setType(final @NotNull Slab.Type n) {
         data.setType(n);
         return this;
     }

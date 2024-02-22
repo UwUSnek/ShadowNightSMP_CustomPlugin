@@ -53,7 +53,7 @@ public final class Economy extends UtilityClass {
      * If the player already exists, the old data will be overridden.
      * @param player The new player
      */
-    public static void addPlayer(@NotNull final Player player){
+    public static void addPlayer(final @NotNull Player player){
         final UUID uuid = player.getUniqueId();
         if(!databaseObject.contains(uuid.toString())){
             database.put(uuid, 1000L);
@@ -83,7 +83,7 @@ public final class Economy extends UtilityClass {
      * @param player The player
      * @return The amount of coins
      */
-    public static long getBalance(@NotNull final Player player) {
+    public static long getBalance(final @NotNull Player player) {
         return database.get(player.getUniqueId());
     }
 
@@ -92,7 +92,7 @@ public final class Economy extends UtilityClass {
      * @param offlinePlayer The player
      * @return The amount of coins
      */
-    public static long getBalance(@NotNull final OfflinePlayer offlinePlayer) {
+    public static long getBalance(final @NotNull OfflinePlayer offlinePlayer) {
         return database.get(offlinePlayer.getUniqueId());
     }
 

@@ -46,7 +46,7 @@ public final class SHD_OuterWallMaterial extends SHD {
         normalWall = new SHD_WallMaterial(_wh, _ft);
     }
     @Override
-    public void setData(@NotNull final RegionBlueprint _i, @NotNull final RegionBuffer _o) {
+    public void setData(final @NotNull RegionBlueprint _i, final @NotNull RegionBuffer _o) {
         super.setData(_i, _o);
         normalWall.setData(i, o);
     }

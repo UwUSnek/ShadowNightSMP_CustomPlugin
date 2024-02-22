@@ -7,6 +7,7 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderBisected;
 import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderSlab;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
@@ -85,7 +86,7 @@ public final class SHD_FloorMaterial extends SHD {
      * @param _wallDist The wall distance gradient
      * @param _ft The thickness of the floor
      */
-    public SHD_FloorMaterial(final float[][] _wallDist, final int _ft) {
+    public SHD_FloorMaterial(final float @NotNull [] @NotNull [] _wallDist, final int _ft) {
         wallDist = _wallDist;
         ft = _ft;
     }

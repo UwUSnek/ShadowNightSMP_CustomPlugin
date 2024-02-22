@@ -18,7 +18,7 @@ public final class GEN_WallMoss extends UtilityClass implements Rnd {
      * @param buffer The data buffer
      * @param ft The thickness of the floor
      */
-    public static void start(@NotNull final RegionBlueprint buffer, final int ft){
+    public static void start(final @NotNull RegionBlueprint buffer, final int ft){
         // Find suitable block column
         for(int i = 0; i < buffer.x; ++i) for(int k = 0; k < buffer.z; ++k) if(buffer.get(i, ft, k) == BlueprintData.WALL) {
 

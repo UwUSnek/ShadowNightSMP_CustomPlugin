@@ -50,7 +50,7 @@ public final class RegionBuffer {
             b[i][j][k] = null;
         }
     }
-    public RegionBuffer(@NotNull final RegionBuffer copy) {
+    public RegionBuffer(final @NotNull RegionBuffer copy) {
         x = copy.x;
         y = copy.y;
         z = copy.z;
@@ -77,7 +77,7 @@ public final class RegionBuffer {
      * @param _z The z coordinate of the block
      * @param biome The biome to set
      */
-    public void setBiome(final int _x, final int _y, final int _z, @NotNull final Biome biome) {
+    public void setBiome(final int _x, final int _y, final int _z, final @NotNull Biome biome) {
         b[_x][_y][_z] = biome;
     }
 
@@ -93,7 +93,7 @@ public final class RegionBuffer {
      * @param _z The z coordinate of the block
      * @param data The data to set
      */
-    public void set(final int _x, final int _y, final int _z, @NotNull final BlockData data) {
+    public void set(final int _x, final int _y, final int _z, final @NotNull BlockData data) {
         try {
             d[_x][_y][_z] = data;
             if(data instanceof Bisected && _y + 1 < y - 1) {
@@ -114,7 +114,7 @@ public final class RegionBuffer {
      * @param _z The z coordinate of the block
      * @param material The material to set
      */
-    public void set(final int _x, final int _y, final int _z, @NotNull final Material material) {
+    public void set(final int _x, final int _y, final int _z, final @NotNull Material material) {
         set(_x, _y, _z, material.createBlockData());
     }
 
@@ -140,7 +140,7 @@ public final class RegionBuffer {
      * @param _z The z coordinate of the origin
      * @param createBox Whether or not to create the bedrock box. This is always created before pasting the actual region
      */
-    public void paste(@NotNull final World world, final int _x, final int _y, final int _z, final boolean createBox) {
+    public void paste(final @NotNull World world, final int _x, final int _y, final int _z, final boolean createBox) {
         // X-Y vertical plane (bedrock box side)
         for(int i = -1; i < x + 1; ++i) for(int j = -1; j < y + 1; ++j) {
             world.getBlockAt(_x + i, _y + j, _z - 1).setType(Material.BEDROCK, false);

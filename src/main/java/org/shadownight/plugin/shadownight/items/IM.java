@@ -58,14 +58,14 @@ public abstract class IM implements Listener {
         setRecipe(shapedRecipe);
         Bukkit.addRecipe(shapedRecipe);
     }
-    protected abstract void setRecipe(@NotNull final ShapedRecipe recipe);
+    protected abstract void setRecipe(final @NotNull ShapedRecipe recipe);
     protected abstract void setItemAttributes();
 
 
 
 
 
-    protected static Long getCustomItemId(@NotNull final ItemStack usedItem) {
+    protected static Long getCustomItemId(final @NotNull ItemStack usedItem) {
         PersistentDataContainer container = Objects.requireNonNull(usedItem.getItemMeta(), "Item meta is null").getPersistentDataContainer();
         return container.get(IM.itemIdKey, PersistentDataType.LONG);
     }
@@ -74,7 +74,7 @@ public abstract class IM implements Listener {
      * Determines what custom item the player is holding and executes interaction callbacks accordingly.
      * @param event The interaction event
      */
-    public static void chooseOnInteract(@NotNull final PlayerInteractEvent event) {
+    public static void chooseOnInteract(final @NotNull PlayerInteractEvent event) {
         final ItemStack item = event.getItem();
         if (item != null && event.getHand() == EquipmentSlot.HAND) {
             Long customItemId = getCustomItemId(item);
@@ -88,7 +88,7 @@ public abstract class IM implements Listener {
      * Determines what custom item the player is holding and executes attack callbacks accordingly.
      * @param event The attack event
      */
-    public static void chooseOnAttack(@NotNull final EntityDamageByEntityEvent event) {
+    public static void chooseOnAttack(final @NotNull EntityDamageByEntityEvent event) {
         if(event.getDamager() instanceof Player player) {
             final ItemStack item = player.getInventory().getItemInMainHand();
             Long customItemId = getCustomItemId(item);
@@ -97,6 +97,6 @@ public abstract class IM implements Listener {
             }
         }
     }
-    protected abstract void onInteract(@NotNull final PlayerInteractEvent event);
-    protected abstract void onAttack(@NotNull final EntityDamageByEntityEvent event);
+    protected abstract void onInteract(final @NotNull PlayerInteractEvent event);
+    protected abstract void onAttack(final @NotNull EntityDamageByEntityEvent event);
 }

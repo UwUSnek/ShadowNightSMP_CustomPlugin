@@ -66,7 +66,7 @@ public final class SignInput {
      * @param inputCallback Called after the player clicks done or closes the GUI. Has to return true if the input is valid
      * @param afterCloseCallback Called after the GUI is closed (or after a valid input if _reopenIfFail is set to true)
      */
-    public SignInput(final boolean reopenIfFail, @Nullable final String[] lines, @NotNull final BiPredicate<Player, @NotNull String[]> inputCallback, @Nullable final Runnable afterCloseCallback) {
+    public SignInput(final boolean reopenIfFail, @Nullable final String @NotNull [] lines, final @NotNull BiPredicate<@NotNull Player, @NotNull String @NotNull []> inputCallback, @Nullable final Runnable afterCloseCallback) {
         this.reopenIfFail = reopenIfFail;
         this.lines = lines;
         this.inputCallback = inputCallback;
@@ -78,7 +78,7 @@ public final class SignInput {
      * Opens the GUI for the player <player>
      * @param player The target player
      */
-    public void open(@NotNull final Player player) {
+    public void open(final @NotNull Player player) {
         if (player.isOnline()) {
             Location location = player.getLocation();
             posWrapper = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());

@@ -23,7 +23,7 @@ public final class CMD_vote implements CommandExecutor {
 
     @SuppressWarnings("SpellCheckingInspection")
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         Player player = (Player)sender;
         String fake_dot = "․";
 
