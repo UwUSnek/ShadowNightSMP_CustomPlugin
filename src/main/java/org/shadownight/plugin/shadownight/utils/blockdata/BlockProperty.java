@@ -3,6 +3,8 @@ package org.shadownight.plugin.shadownight.utils.blockdata;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Waterlogged;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
@@ -34,8 +36,6 @@ public final class BlockProperty extends UtilityClass {
 
             material == Material.CAVE_AIR ||
             material == Material.VOID_AIR ||
-            material == Material.WATER ||
-            material == Material.LAVA ||
             material == Material.SNOW ||
             material == Material.SCULK_VEIN ||
 
@@ -133,6 +133,25 @@ public final class BlockProperty extends UtilityClass {
             material == Material.REPEATER ||
             material == Material.COMPARATOR ||
             material == Material.LIGHT
+        ;
+    }
+
+
+
+
+    /**
+     * Identifies blocks that contain any amount of water in their hitbox.
+     * @param data The block data of the block
+     * @return True if the block contains water, false otherwise
+     */
+    public static boolean isWaterlogged(@NotNull final BlockData data) {
+        return
+            (data instanceof Waterlogged d && d.isWaterlogged()) ||
+            data.getMaterial() == Material.WATER ||
+            data.getMaterial() == Material.KELP ||
+            data.getMaterial() == Material.KELP_PLANT ||
+            data.getMaterial() == Material.TALL_SEAGRASS ||
+            data.getMaterial() == Material.SEAGRASS
         ;
     }
 }

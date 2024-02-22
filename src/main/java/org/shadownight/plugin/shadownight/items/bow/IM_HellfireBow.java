@@ -2,6 +2,8 @@ package org.shadownight.plugin.shadownight.items.bow;
 
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Arrow;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -76,15 +78,17 @@ public final class IM_HellfireBow extends IM_Bow {
 
 
 
-    private boolean isTargetValid(final @NotNull World w, final @NotNull Location target) {
+    private boolean isTargetValid(final @NotNull Location target) {
         return
-             BlockProperty.isDelicate(w.getBlockAt(target                          ).getType()) &&
-            !BlockProperty.isDelicate(w.getBlockAt(target.clone().subtract(0, 1, 0)).getType())
+            !BlockProperty.isWaterlogged(target.getBlock().getBlockData()) &&
+             BlockProperty.isDelicate(target.getBlock().getType()) &&
+            !BlockProperty.isDelicate(target.clone().subtract(0, 1, 0).getBlock().getType())
         ;
     }
 
     private void loop(final double from, final double to, final @NotNull Location startLocation, final int @NotNull [] shift, final boolean @NotNull [] broken, final double length, final int baseWidth, final @NotNull Vector dir, final @NotNull Vector side) {
         final World w = startLocation.getWorld();
+        boolean soundPlayed = false;
         final int width = (int)Math.round(baseWidth * (1 - from));
         for(int k = -width; k <= width; ++k) {
             int stripeIndex = k + width; // Get stripe index
@@ -96,9 +100,14 @@ public final class IM_HellfireBow extends IM_Bow {
                     .add(side.clone().multiply(k))
                 );
                 if(w.getBlockAt(target).getType() == Material.FIRE) continue; // Skip step computation if fire is already present
-                /**/ if(isTargetValid(w, target                  ))   w.getBlockAt(target).setType(Material.FIRE);
-                else if(isTargetValid(w, target.add     (0, 1, 0))) { w.getBlockAt(target).setType(Material.FIRE); shift[stripeIndex] += 1; }
-                else if(isTargetValid(w, target.subtract(0, 2, 0))) { w.getBlockAt(target).setType(Material.FIRE); shift[stripeIndex] -= 1; }
+                if(!soundPlayed) {
+                    target.getWorld().playSound(target.getBlock().getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5f, 1);
+                    soundPlayed = true;
+                }
+
+                /**/ if(isTargetValid(target                  ))   target.getBlock().setType(Material.FIRE);
+                else if(isTargetValid(target.add     (0, 1, 0))) { target.getBlock().setType(Material.FIRE); shift[stripeIndex] += 1; }
+                else if(isTargetValid(target.subtract(0, 2, 0))) { target.getBlock().setType(Material.FIRE); shift[stripeIndex] -= 1; }
                 else { broken[stripeIndex] = true; break;} // If no valid spot is found, stop the current stripe
             }
         }
