@@ -90,27 +90,44 @@ public final class IM_HellfireBow extends IM_Bow {
         final World w = startLocation.getWorld();
         boolean soundPlayed = false;
         final int width = (int)Math.round(baseWidth * (1 - from));
+
+        // For each stripe
         for(int k = -width; k <= width; ++k) {
             int stripeIndex = k + width; // Get stripe index
             if(broken[stripeIndex]) continue; // Skip stripe if broken
+
+            // For each step
             for (double i = Easing.cubicOut(from) * length; i < Easing.cubicOut(to) * length; i += 0.25f) {
+                // Get base target block
                 final Location target = (
                     startLocation.clone().add(0, shift[stripeIndex], 0)
                     .add(dir.clone().multiply(i))
                     .add(side.clone().multiply(k))
                 );
-                if(w.getBlockAt(target).getType() == Material.FIRE) continue; // Skip step computation if fire is already present
+
+                // Skip step computation if fire is already present
+                if(w.getBlockAt(target).getType() == Material.FIRE) continue;
+
+                // Play sounds
                 if(!soundPlayed) {
                     target.getWorld().playSound(target.getBlock().getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5f, 1);
                     soundPlayed = true;
                 }
 
-                /**/ if(isTargetValid(target                  ))   target.getBlock().setType(Material.FIRE);
-                else if(isTargetValid(target.add     (0, 1, 0))) { target.getBlock().setType(Material.FIRE); shift[stripeIndex] += 1; }
-                else if(isTargetValid(target.subtract(0, 2, 0))) { target.getBlock().setType(Material.FIRE); shift[stripeIndex] -= 1; }
+                // Check if block is valid and shift Y level if needed
+                /**/ if(isTargetValid(target                  ));
+                else if(isTargetValid(target.add     (0, 1, 0))) shift[stripeIndex] += 1;
+                else if(isTargetValid(target.subtract(0, 2, 0))) shift[stripeIndex] -= 1;
                 else { broken[stripeIndex] = true; break;} // If no valid spot is found, stop the current stripe
+
+                // If it is, break the old block and place the fire
+                Block block = target.getBlock();
+                block.breakNaturally();
+                block.setType(Material.FIRE);
             }
         }
+
+        // If animation is not finished, schedule a new step
         if(to < 1) {
             Scheduler.delay(() ->
                 loop(to, to + 0.05, startLocation, shift, broken, length, baseWidth, dir, side),
