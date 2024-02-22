@@ -20,6 +20,7 @@ import org.shadownight.plugin.shadownight.utils.graphics.PerlinNoise;
 import org.shadownight.plugin.shadownight.utils.containers.RegionBlueprint;
 import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.io.File;
@@ -44,7 +45,7 @@ public final class Dungeon {
     public Dungeon() {
         if (createWorld()) generateDungeon();
 
-        Bukkit.getScheduler().runTaskTimer(ShadowNight.plugin, () -> {
+        Scheduler.loop(() -> {
             for(Player p : world.getPlayers()) {
                 Location location = p.getLocation();
                 p.spawnParticle(Particle.ASH,               location, 50, 10, 10, 10);

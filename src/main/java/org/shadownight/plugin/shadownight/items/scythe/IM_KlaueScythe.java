@@ -11,6 +11,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
+
+
 
 
 public final class IM_KlaueScythe extends IM_Scythe {
@@ -54,7 +57,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
                     Location targetBlockLocation = targetBlock.getLocation();
                     Location playerLocation = player.getLocation();
                     // Teleport with delay. 0 delay causes the event to be fired twice
-                    Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> {
+                    Scheduler.delay(() -> {
                         player.teleport(new Location(
                             playerLocation.getWorld(),
                             targetBlockLocation.getX() + 0.5,

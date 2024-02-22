@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -36,9 +37,9 @@ public final class SignInput {
 
             if (!menu.inputCallback.test(player, event.getPacket().getStringArrays().read(0)) && menu.reopenIfFail && !menu.forceClose) {
                 // NOTICE: low delays create a loop of closing and opening the sign GUI. 10 should be way more than safe.
-                Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> menu.open(player), 10L);
+                Scheduler.delay(() -> menu.open(player), 10L);
             }
-            else Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> {
+            else Scheduler.delay(() -> {
                 if (player.isOnline()) {
                     Location location = menu.posWrapper.toLocation(player.getWorld());
                     player.sendBlockChange(location, location.getBlock().getBlockData());

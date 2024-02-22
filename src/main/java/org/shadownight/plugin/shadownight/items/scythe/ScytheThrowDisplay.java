@@ -17,6 +17,7 @@ import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.math.Easing;
 import org.shadownight.plugin.shadownight.utils.math.Func;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.Collection;
@@ -96,7 +97,7 @@ public final class ScytheThrowDisplay {
         transformation.getScale().set(2, 2, 1);
         display.setTransformation(transformation);
 
-        rotationTask = Bukkit.getScheduler().runTaskTimer(ShadowNight.plugin, () -> {
+        rotationTask = Scheduler.loop(() -> {
             Quaternionf diff = transformation.getLeftRotation();
             diff.rotateAxis((float) -Math.PI / 3 * 2, 0, 0, 1);
             transformation.getLeftRotation().set(diff);
@@ -185,8 +186,8 @@ public final class ScytheThrowDisplay {
 
 
         // Stop the animation if target has been reached
-        if(progress + stepSize < 1) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> animateTranslationLoop(progress + stepSize, start, _final_end, f, onTargetUpdate, onComplete), stepDuration);
-        else if(onComplete != null) Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, onComplete, stepDuration);
+        if(progress + stepSize < 1) Scheduler.delay(() -> animateTranslationLoop(progress + stepSize, start, _final_end, f, onTargetUpdate, onComplete), stepDuration);
+        else if(onComplete != null) Scheduler.delay(onComplete, stepDuration);
     }
 
 

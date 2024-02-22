@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public final class CMD_trade implements CommandExecutor {
                         player.getName(),
                         new TradeRequest(
                             target.getName(),
-                            Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> {
+                            Scheduler.delay(() -> {
                                 if(tradeRequests.get(player.getName()) != null) {
                                     tradeRequests.remove(player.getName());
                                     Chat.sendMessage(player, "§7Your trade request to " + utils.getFancyName(target) + "§7 has expired.");

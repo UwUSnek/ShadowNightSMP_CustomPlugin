@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 
 import java.util.HashMap;
 
@@ -51,7 +52,7 @@ public class CMD_rtp implements CommandExecutor, Rnd {
         PotionEffect effect2 = new PotionEffect(PotionEffectType.BLINDNESS, 60, 1, false, false);
         player.addPotionEffect(effect2);
         player.setInvulnerable(true);
-        Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () -> { // Logout exploit is managed by event listener in onPlayerQuit
+        Scheduler.delay(() -> { // Logout exploit is managed by event listener in onPlayerQuit
             Chat.sendMessage(player, "§7Your damage immunity ran out");
             player.setInvulnerable(false);
         }, 300L);

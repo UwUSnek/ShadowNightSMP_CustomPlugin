@@ -16,6 +16,7 @@ import org.shadownight.plugin.shadownight.items.CustomItemId;
 import org.shadownight.plugin.shadownight.utils.blockdata.BlockProperty;
 import org.shadownight.plugin.shadownight.utils.math.Easing;
 import org.shadownight.plugin.shadownight.utils.math.Func;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 
 import java.util.Arrays;
 
@@ -81,8 +82,9 @@ public final class IM_HellfireBow extends IM_Bow {
         ;
     }
 
-    private void loop(final double from, final double to, final @NotNull Location startLocation, final int @NotNull [] shift, final boolean @NotNull [] broken, final double length, final int width, final @NotNull Vector dir, final @NotNull Vector side) {
+    private void loop(final double from, final double to, final @NotNull Location startLocation, final int @NotNull [] shift, final boolean @NotNull [] broken, final double length, final int baseWidth, final @NotNull Vector dir, final @NotNull Vector side) {
         final World w = startLocation.getWorld();
+        final int width = (int)Math.round(baseWidth * (1 - from));
         for(int k = -width; k <= width; ++k) {
             int stripeIndex = k + width; // Get stripe index
             if(broken[stripeIndex]) continue; // Skip stripe if broken
@@ -100,8 +102,8 @@ public final class IM_HellfireBow extends IM_Bow {
             }
         }
         if(to < 1) {
-            Bukkit.getScheduler().runTaskLater(ShadowNight.plugin, () ->
-                loop(to, to + 0.05, startLocation, shift, broken, length, width, dir, side),
+            Scheduler.delay(() ->
+                loop(to, to + 0.05, startLocation, shift, broken, length, baseWidth, dir, side),
                 1L
             );
         }

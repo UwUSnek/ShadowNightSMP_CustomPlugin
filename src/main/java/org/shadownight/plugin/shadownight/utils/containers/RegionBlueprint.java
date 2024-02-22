@@ -9,6 +9,7 @@ import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD;
 import org.shadownight.plugin.shadownight.utils.math.Func;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.List;
@@ -222,7 +223,7 @@ public final class RegionBlueprint {
      *                   This task is ran on the Main Thread and is passed the output buffer as the only parameter
      */
     public void dispatchShaders(final int threads, final @NotNull List<Pair<BlueprintData, SHD>> shaders, final @NotNull Consumer<RegionBuffer> onComplete) {
-        Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
+        Scheduler.runAsync(() -> {
             // Create temporary buffer
             final RegionBuffer output = new RegionBuffer(x, y, z, shift_x, shift_y, shift_z);
             final int sectionSize = x / threads + 1;
@@ -239,7 +240,7 @@ public final class RegionBlueprint {
                 // Start shader tasks
                 int x0 = Func.clampMax(sectionSize * i, x);
                 int x1 = Func.clampMax(sectionSize * (i + 1), x);
-                if (x0 != x1) Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
+                if (x0 != x1) Scheduler.runAsync(() -> {
                     computeShaderSection(x0, x1, shaderMap);
                     activeTasks.decrementAndGet();
                 });
@@ -247,7 +248,7 @@ public final class RegionBlueprint {
             waitForTasks();
 
             // Run callback on main thread
-            Bukkit.getScheduler().runTask(ShadowNight.plugin, () -> onComplete.accept(output));
+            Scheduler.run(() -> onComplete.accept(output));
         });
     }
 

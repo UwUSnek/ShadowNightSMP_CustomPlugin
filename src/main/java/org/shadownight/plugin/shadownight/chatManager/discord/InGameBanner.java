@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
+
+
 
 
 public final class InGameBanner {
@@ -15,8 +18,7 @@ public final class InGameBanner {
      * @param plugin The plugin instance
      */
     public static void startLoop(final @NotNull Player player, final @NotNull Plugin plugin) {
-        Bukkit.getScheduler().runTaskTimer(
-            plugin,
+        Scheduler.loop(
             () -> {
                 Chat.newline(player);
                 Chat.separator(player);

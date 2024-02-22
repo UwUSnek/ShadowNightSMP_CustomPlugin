@@ -4,6 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
+
+
+
 
 public final class Timer {
     private final int duration;
@@ -55,6 +59,6 @@ public final class Timer {
         if(task != null) task.cancel();
         s = duration;
         if(onStart != null) onStart.run();
-        task = Bukkit.getScheduler().runTaskTimer(ShadowNight.plugin, this::update, 20, 20);
+        task = Scheduler.loop(this::update, 20, 20);
     }
 }

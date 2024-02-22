@@ -16,6 +16,7 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.SkinRenderer;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.Chat;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.awt.*;
@@ -118,7 +119,7 @@ public final class BotManager extends UtilityClass {
      * @param msg The message string
      */
     public static void sendBridgeMessage(final @NotNull Player player, final @NotNull String msg) {
-        Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, () -> {
+        Scheduler.runAsync(() -> {
             webhookClient.sendMessage(Chat.stripColor(msg))
                 .setUsername("[" + utils.getGroupDisplayName(player) + "] " + player.getName())
                 .setAvatarUrl(SkinRenderer.getRenderUrl(player, SkinRenderer.RenderType.PROPIC))
