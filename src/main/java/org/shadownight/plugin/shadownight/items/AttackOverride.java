@@ -93,17 +93,18 @@ public final class AttackOverride extends UtilityClass {
 
 
 
-    private static @NotNull Vector getBaseVelocity(@Nullable final ItemStack item) {
-        final Vector base = new Vector(1.552f,  0.8125f, 1.552f);
+    private static double getBaseVelocity(@Nullable final ItemStack item) {
+        double base = 1.552f;
         if(item != null && item.getType() != Material.AIR) {
             final Long itemId = ItemUtils.getCustomItemId(item);
-            if(itemId != null) base.multiply(ItemManager.getValueFromId(itemId).getHitKnockback());
+            if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKnockback();
         }
         return base;
     }
 
     private static @NotNull Vector getVelocity(@Nullable final ItemStack item, @NotNull final LivingEntity damager) {
-        Vector velocity = getBaseVelocity(item); // Default attack knockback
+        Vector velocity = damager.getLocation().getDirection().multiply(getBaseVelocity(item)); // Default attack knockback
+        velocity.setY(0.8125f);
 
         // Calculate enchantments
         if(item != null && item.getType() != Material.AIR) {
