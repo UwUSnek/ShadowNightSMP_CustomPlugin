@@ -85,7 +85,7 @@ public final class AttackOverride extends UtilityClass {
             time = _time;
         }
     }
-    public static HashMap<UUID, CircularFifoQueue<AttackData>> attacks;
+    public static HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
 
 
 
