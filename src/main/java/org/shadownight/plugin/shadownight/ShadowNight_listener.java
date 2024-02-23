@@ -1,6 +1,5 @@
 package org.shadownight.plugin.shadownight;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventPriority;
@@ -86,7 +85,7 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAttack(final EntityDamageByEntityEvent event) {
         //IM.chooseOnAttack(event);
-        AttackOverride.onAttack(event);
+        AttackOverride.customAttack(event, true);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
