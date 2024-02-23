@@ -24,8 +24,8 @@ public final class IM_KlaueScythe extends IM_Scythe {
     @Override public int          getCustomModelData() { return 14;                        }
     @Override public CustomItemId getCustomId()        { return CustomItemId.KLAUE_SCYTHE; }
 
-    @Override protected double       getAttackSpeed()     { return -3.0;                      }
-    @Override protected double       getDamage()          { return 14;                        }
+    @Override protected double getAttackSpeed() { return -3.0; }
+    @Override public    double getHitDamage()   { return 18;   }
 
 
     @Override

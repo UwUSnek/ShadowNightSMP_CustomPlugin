@@ -31,6 +31,8 @@ public final class IM_HellfireBow extends IM_Bow {
     @Override public int          getCustomModelData() { return 1;                         }
     @Override public CustomItemId getCustomId()        { return CustomItemId.HELLFIRE_BOW; }
 
+    @Override public double getHitDamage() { return 1; }
+
 
     @Override
     protected void setRecipe(final @NotNull ShapedRecipe recipe) {

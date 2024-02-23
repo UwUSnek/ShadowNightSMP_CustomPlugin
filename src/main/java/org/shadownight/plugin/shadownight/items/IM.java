@@ -26,6 +26,8 @@ public abstract class IM implements Listener {
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
     protected final ItemStack defaultItem;
 
+    public final double hitDamage;
+
 
     /**
      * Creates a new Item Manager.
@@ -34,12 +36,15 @@ public abstract class IM implements Listener {
         defaultItem = ItemUtils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
         setItemAttributes();
         createRecipe();
+        hitDamage = getHitDamage();
         Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
     }
     public abstract Material getMaterial();
     public abstract String getDisplayName();
     public abstract int getCustomModelData();
     public abstract CustomItemId getCustomId();
+
+    public abstract double getHitDamage();
 
 
     /**

@@ -13,8 +13,8 @@ public final class IM_DiamondScythe extends IM_Scythe {
     @Override public int          getCustomModelData() { return 1;                           }
     @Override public CustomItemId getCustomId()        { return CustomItemId.DIAMOND_SCYTHE; }
 
-    @Override protected double       getAttackSpeed()     { return -3.2;                        }
-    @Override protected double       getDamage()          { return 12;                          }
+    @Override protected double getAttackSpeed() { return -3.2; }
+    @Override public    double getHitDamage()   { return 16;   }
 
 
     @Override
