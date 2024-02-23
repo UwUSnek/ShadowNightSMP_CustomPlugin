@@ -5,10 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityCategory;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -19,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 
-import java.time.LocalTime;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,15 +83,21 @@ public final class AttackOverride extends UtilityClass {
             time = _time;
         }
     }
+
+
     public static HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
+    public static HashMap<UUID, Boolean> knockbackSprintBuff = new HashMap<>();
 
 
 
 
 
 
+    public static void resetKnockbackSprintBuff(@NotNull final PlayerToggleSprintEvent event){
+        if(event.isSprinting()) knockbackSprintBuff.put(event.getPlayer().getUniqueId(), true);
+    }
 
-    private static double getBaseVelocity(@Nullable final ItemStack item) {
+    private static double getBaseKnockback(@Nullable final ItemStack item) {
         double base = 1.552f;
         if(item != null && item.getType() != Material.AIR) {
             final Long itemId = ItemUtils.getCustomItemId(item);
@@ -102,21 +106,44 @@ public final class AttackOverride extends UtilityClass {
         return base;
     }
 
-    private static @NotNull Vector getVelocity(@Nullable final ItemStack item, @NotNull final LivingEntity damager) {
-        Vector velocity = damager.getLocation().getDirection().multiply(getBaseVelocity(item)); // Default attack knockback
-        velocity.setY(0.8125f);
+    private static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
+        // Out of water squids, wardens and shulkers are completely immune to knockback
+        final EntityType targetType = target.getType();
+        if(
+            ((targetType == EntityType.SQUID || targetType == EntityType.GLOW_SQUID) && !target.isInWater()) ||
+            targetType == EntityType.WARDEN || targetType == EntityType.SHULKER
+        ) return new Vector(0, 0, 0);
+
+
+        // Calculate base knockback
+        Vector knockback;
+        if(targetType == EntityType.IRON_GOLEM) knockback = new Vector(0, 0, 0); // Iron Golems ignore the base knockback but not enchants
+        else knockback = damager.getLocation().getDirection().multiply(getBaseKnockback(item)); // Set default attack knockback for other entities
+        knockback.setY(0.8125f);
+
+
+        // Vanilla sprint mechanic
+        int knockbackLv = 0;
+        if(damager instanceof Player player && player.isSprinting()) {
+            final Boolean sprintBuff = knockbackSprintBuff.get(player.getUniqueId());
+            if(sprintBuff != null && sprintBuff) {
+                knockbackSprintBuff.put(player.getUniqueId(), false);
+                ++knockbackLv;
+            }
+        }
+
 
         // Calculate enchantments
         if(item != null && item.getType() != Material.AIR) {
-            int knockbackLv = item.getEnchantmentLevel(Enchantment.KNOCKBACK);
+            knockbackLv += item.getEnchantmentLevel(Enchantment.KNOCKBACK);
             if(knockbackLv != 0) {
-                velocity.add(new Vector(2.586, 0, 2.586).multiply(knockbackLv));
-                velocity.setY(1f);
+                knockback.add(new Vector(2.586, 0, 2.586).multiply(knockbackLv));
+                knockback.setY(1f);
             }
             //TODO calculate raveling enchant
         }
 
-        return velocity;
+        return knockback;
     }
 
 
@@ -135,6 +162,10 @@ public final class AttackOverride extends UtilityClass {
 
     private static double getDamage(@Nullable final ItemStack item, boolean canCrit, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
         double damage = getBaseDamage(item);
+        double enchantDamage = 0d;
+        double charge = 20; // The ticks passed since the last attack
+        if(damager instanceof Player player) charge = player.getAttackCooldown();
+
 
         // Calculate critical multiplier //TODO calculate critical enchant
         if(canCrit && isCritical(damager)) {
@@ -142,23 +173,29 @@ public final class AttackOverride extends UtilityClass {
             damager.getWorld().spawnParticle(Particle.CRIT, target.getLocation(), 10);
         }
 
-        // Calculate enchantments
+
+        // Calculate enchantments (Separate charge multiplier)
         if(item != null && item.getType() != Material.AIR) {
             for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
                 Enchantment key = e.getKey();
-                if(key == Enchantment.DAMAGE_ALL)        damage += 0.5 + e.getValue() * 0.5;
-                if(key == Enchantment.DAMAGE_ARTHROPODS) if(target.getCategory() == EntityCategory.ARTHROPOD) damage += 2.5 * e.getValue();
-                if(key == Enchantment.DAMAGE_UNDEAD)     if(target.getCategory() == EntityCategory.UNDEAD)    damage += 2.5 * e.getValue();
-                if(key == Enchantment.IMPALING)          if(target.getCategory() == EntityCategory.WATER)     damage += 2.5 * e.getValue();
+                if(key == Enchantment.DAMAGE_ALL)        enchantDamage += 0.5 + e.getValue() * 0.5;
+                if(key == Enchantment.DAMAGE_ARTHROPODS) if(target.getCategory() == EntityCategory.ARTHROPOD) enchantDamage += 2.5 * e.getValue();
+                if(key == Enchantment.DAMAGE_UNDEAD)     if(target.getCategory() == EntityCategory.UNDEAD)    enchantDamage += 2.5 * e.getValue();
+                if(key == Enchantment.IMPALING)          if(target.getCategory() == EntityCategory.WATER)     enchantDamage += 2.5 * e.getValue();
             }
         }
+
 
         // Calculate potion effects
         PotionEffect str = damager.getPotionEffect(PotionEffectType.INCREASE_DAMAGE);
         if(str != null) damage += 3 * str.getAmplifier();
 
+
         // Return effective damage
-        return damage;
+        return
+            damage *        (0.2 + Math.pow(charge, 2) * 0.8) +
+            enchantDamage * (0.2 +          charge     * 0.8)
+        ;
     }
 
 
@@ -226,7 +263,7 @@ public final class AttackOverride extends UtilityClass {
         //TODO review and simplify custom scythe attacks
 
         // Knockback the target
-        final Vector velocity = getVelocity(item, damager);
+        final Vector velocity = getKnockback(item, damager, target);
         target.setVelocity(target.getVelocity().add(velocity));
 
         target.setVelocity(velocity);
