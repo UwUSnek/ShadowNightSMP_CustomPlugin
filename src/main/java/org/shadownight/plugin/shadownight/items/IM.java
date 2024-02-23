@@ -27,6 +27,7 @@ public abstract class IM implements Listener {
     protected final ItemStack defaultItem;
 
     public final double hitDamage;
+    public final double hitKnockback;
 
 
     /**
@@ -37,6 +38,7 @@ public abstract class IM implements Listener {
         setItemAttributes();
         createRecipe();
         hitDamage = getHitDamage();
+        hitKnockback = getHitKnockback();
         Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
     }
     public abstract Material getMaterial();
@@ -45,6 +47,7 @@ public abstract class IM implements Listener {
     public abstract CustomItemId getCustomId();
 
     public abstract double getHitDamage();
+    public abstract double getHitKnockback();
 
 
     /**

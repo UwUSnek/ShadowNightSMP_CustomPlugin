@@ -36,7 +36,6 @@ public abstract class IM_Scythe extends IM {
         final ItemMeta meta = defaultItem.getItemMeta();
         Objects.requireNonNull(meta, "Object meta is null");
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,  new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed",  getAttackSpeed(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-        //meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", getDamage(),      AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         defaultItem.setItemMeta(meta);
     }
 

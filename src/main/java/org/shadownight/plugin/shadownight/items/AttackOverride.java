@@ -13,6 +13,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
@@ -91,6 +92,35 @@ public final class AttackOverride extends UtilityClass {
 
 
 
+
+    private static @NotNull Vector getBaseVelocity(@Nullable final ItemStack item) {
+        final Vector base = new Vector(1.552f,  0.8125f, 1.552f);
+        if(item != null && item.getType() != Material.AIR) {
+            final Long itemId = ItemUtils.getCustomItemId(item);
+            if(itemId != null) base.multiply(ItemManager.getValueFromId(itemId).getHitKnockback());
+        }
+        return base;
+    }
+
+    private static @NotNull Vector getVelocity(@Nullable final ItemStack item, @NotNull final LivingEntity damager) {
+        Vector velocity = getBaseVelocity(item); // Default attack knockback
+
+        // Calculate enchantments
+        if(item != null && item.getType() != Material.AIR) {
+            int knockbackLv = item.getEnchantmentLevel(Enchantment.KNOCKBACK);
+            if(knockbackLv != 0) {
+                velocity.add(new Vector(2.586, 0, 2.586).multiply(knockbackLv));
+                velocity.setY(1f);
+            }
+            //TODO calculate raveling enchant
+        }
+
+        return velocity;
+    }
+
+
+
+
     private static double getBaseDamage(@Nullable final ItemStack item) {
         if(item == null || item.getType() == Material.AIR) return 1;
         final Long itemId = ItemUtils.getCustomItemId(item);
@@ -101,9 +131,6 @@ public final class AttackOverride extends UtilityClass {
             else return 1;
         }
     }
-
-
-
 
     private static double getDamage(@Nullable final ItemStack item, boolean canCrit, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
         double damage = getBaseDamage(item);
@@ -116,13 +143,12 @@ public final class AttackOverride extends UtilityClass {
 
         // Calculate enchantments
         if(item != null && item.getType() != Material.AIR) {
-            final Map<Enchantment, Integer> enchants = item.getEnchantments();
-            for(Map.Entry<Enchantment, Integer> e : enchants.entrySet()) {
+            for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
                 Enchantment key = e.getKey();
                 if(key == Enchantment.DAMAGE_ALL)        damage += 0.5 + e.getValue() * 0.5;
-                if(key == Enchantment.DAMAGE_ARTHROPODS) if(target.getCategory() == EntityCategory.ARTHROPOD) damage += 2.5 + e.getValue();
-                if(key == Enchantment.DAMAGE_UNDEAD)     if(target.getCategory() == EntityCategory.UNDEAD)    damage += 2.5 + e.getValue();
-                if(key == Enchantment.IMPALING)          if(target.getCategory() == EntityCategory.WATER)     damage += 2.5 + e.getValue();
+                if(key == Enchantment.DAMAGE_ARTHROPODS) if(target.getCategory() == EntityCategory.ARTHROPOD) damage += 2.5 * e.getValue();
+                if(key == Enchantment.DAMAGE_UNDEAD)     if(target.getCategory() == EntityCategory.UNDEAD)    damage += 2.5 * e.getValue();
+                if(key == Enchantment.IMPALING)          if(target.getCategory() == EntityCategory.WATER)     damage += 2.5 * e.getValue();
             }
         }
 
@@ -133,6 +159,8 @@ public final class AttackOverride extends UtilityClass {
         // Return effective damage
         return damage;
     }
+
+
 
 
     /**
@@ -151,6 +179,7 @@ public final class AttackOverride extends UtilityClass {
             !(damager instanceof Player player && player.isSprinting())
         ;
     }
+
 
 
     /**
@@ -188,10 +217,17 @@ public final class AttackOverride extends UtilityClass {
             System.currentTimeMillis()
         ));
 
+
         // Damage the target
         final double damage = getDamage(item, canCrit, damager, target);
         target.damage(damage);
         Bukkit.broadcastMessage("Damaged for " + damage);
         //TODO review and simplify custom scythe attacks
+
+        // Knockback the target
+        final Vector velocity = getVelocity(item, damager);
+        target.setVelocity(target.getVelocity().add(velocity));
+
+        target.setVelocity(velocity);
     }
 }

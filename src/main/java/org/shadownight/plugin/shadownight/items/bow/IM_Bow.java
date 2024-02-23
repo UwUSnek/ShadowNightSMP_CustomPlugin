@@ -25,6 +25,11 @@ import java.util.logging.Level;
 public abstract class IM_Bow extends IM {
     private static HashMap<UUID, Pair<IM_Bow, ItemStack>> activeProjectiles = new HashMap<>();
 
+
+    @Override public double getHitDamage() { return 1; }
+    @Override public double getHitKnockback() { return 1; }
+
+
     /**
      * Determines what custom item the player is holding and executes shoot callbacks accordingly.
      * @param event The shoot event

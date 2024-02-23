@@ -16,6 +16,7 @@ public final class IM_IronScythe extends IM_Scythe {
 
     @Override protected double getAttackSpeed() { return -3.4; }
     @Override public    double getHitDamage()   { return 14;   }
+    @Override public double getHitKnockback() { return 2; }
 
 
     @Override
