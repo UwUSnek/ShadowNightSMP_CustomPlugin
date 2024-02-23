@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.items.IM;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -19,7 +21,7 @@ import static org.shadownight.plugin.shadownight.items.IM.itemIdKey;
 
 
 
-public class ItemUtils {
+public final class ItemUtils extends UtilityClass {
     /**
      * Creates an item with a custom name and lore.
      * @param material The material of the item stack
@@ -113,5 +115,16 @@ public class ItemUtils {
             return r.toString();
         }
         //TODO check potion name from their effect data
+    }
+
+
+    /**
+     * Finds and returns the CustomItemId of an ItemStack.
+     * @param item The item stack
+     * @return The custom ID. null if the item has no custom id
+     */
+    public static Long getCustomItemId(final @NotNull ItemStack item) {
+        PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
+        return container.get(IM.itemIdKey, PersistentDataType.LONG);
     }
 }

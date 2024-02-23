@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.blockdata.BlockProperty;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.function.Function;
 
 
 
-public class PlayerUtils {
+public final class PlayerUtils extends UtilityClass {
     /**
      * Checks if the target player is offline and sends an error message to the player <player> if that's the case
      * @param player The player to send error messages to

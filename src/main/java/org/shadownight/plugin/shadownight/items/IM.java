@@ -65,10 +65,6 @@ public abstract class IM implements Listener {
 
 
 
-    protected static Long getCustomItemId(final @NotNull ItemStack usedItem) {
-        PersistentDataContainer container = Objects.requireNonNull(usedItem.getItemMeta(), "Item meta is null").getPersistentDataContainer();
-        return container.get(IM.itemIdKey, PersistentDataType.LONG);
-    }
 
     /**
      * Determines what custom item the player is holding and executes interaction callbacks accordingly.
@@ -77,7 +73,7 @@ public abstract class IM implements Listener {
     public static void chooseOnInteract(final @NotNull PlayerInteractEvent event) {
         final ItemStack item = event.getItem();
         if (item != null && event.getHand() == EquipmentSlot.HAND) {
-            Long customItemId = getCustomItemId(item);
+            Long customItemId = ItemUtils.getCustomItemId(item);
             if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
                 if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) itemManager.getInstance().onInteract(event);
             }
@@ -91,7 +87,7 @@ public abstract class IM implements Listener {
     public static void chooseOnAttack(final @NotNull EntityDamageByEntityEvent event) {
         if(event.getDamager() instanceof Player player) {
             final ItemStack item = player.getInventory().getItemInMainHand();
-            Long customItemId = getCustomItemId(item);
+            Long customItemId = ItemUtils.getCustomItemId(item);
             if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
                 if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) itemManager.getInstance().onAttack(event);
             }

@@ -13,6 +13,7 @@ import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public abstract class IM_Bow extends IM {
     public static void chooseOnShoot(final @NotNull EntityShootBowEvent event) {
         if(event.getEntity() instanceof Player player) {
             final ItemStack item = player.getInventory().getItemInMainHand();
-            Long customItemId = getCustomItemId(item);
+            Long customItemId = ItemUtils.getCustomItemId(item);
             if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
                 //if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) ((IM_Bow)itemManager.getInstance()).onShoot(event);
                 if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) {

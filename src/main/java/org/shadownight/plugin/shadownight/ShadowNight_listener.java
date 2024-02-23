@@ -1,6 +1,7 @@
 package org.shadownight.plugin.shadownight;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,6 +15,7 @@ import org.shadownight.plugin.shadownight.chatManager.DeathMessages;
 import org.shadownight.plugin.shadownight.chatManager.discord.InGameBanner;
 import org.shadownight.plugin.shadownight.chatManager.JoinLeaveMessages;
 import org.shadownight.plugin.shadownight.economy.Economy;
+import org.shadownight.plugin.shadownight.items.AttackOverride;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.bow.IM_Bow;
 import org.shadownight.plugin.shadownight.qol.SpawnInvincibility;
@@ -83,7 +85,8 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAttack(final EntityDamageByEntityEvent event) {
-        IM.chooseOnAttack(event);
+        //IM.chooseOnAttack(event);
+        AttackOverride.onAttack(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -94,5 +97,11 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onProjectileHit(final ProjectileHitEvent event) {
         if(event.getEntityType() == EntityType.ARROW) IM_Bow.chooseOnProjectileHit(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntitySpawn(final EntitySpawnEvent event) {
+        //TODO use dedicated class
+        if(event.getEntity() instanceof ArmorStand entity) entity.setArms(true);
     }
 }
