@@ -99,32 +99,18 @@ public final class AttackOverride extends UtilityClass {
     }
 
     private static double getBaseKnockbackMultiplier(@Nullable final ItemStack item, @NotNull LivingEntity target) {
-        double base = 0.4;
+        double base = 1;
         if(item != null && item.getType() != Material.AIR) {
             final Long itemId = ItemUtils.getCustomItemId(item);
             if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKnockbackMultiplier();
         }
-
-        // Calculate resistance
-        final AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-        double resistance = attribute == null ? 0 : attribute.getBaseValue(); // 0 to 100
-
-        // Return effective knockback
-        return base * (1 - resistance / 100);
+        return base;
     }
 
     private static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
-        // Out of water squids, wardens and shulkers are completely immune to knockback
-        //final EntityType targetType = target.getType();
-        //if(
-        //    ((targetType == EntityType.SQUID || targetType == EntityType.GLOW_SQUID) && !target.isInWater()) ||
-        //    targetType == EntityType.WARDEN || targetType == EntityType.SHULKER || targetType == EntityType.ENDER_DRAGON || targetType == EntityType.IRON_GOLEM
-        //) return new Vector(0, 0, 0);
-
-
         // Calculate base knockback
         Vector direction = damager.getLocation().getDirection().setY(0).normalize();
-        Vector knockback = direction.clone().multiply(0.4 /* default kb is 0.4 motion */).multiply(getBaseKnockbackMultiplier(item, target)).setY(0.325d);
+        Vector knockback = direction.clone().multiply(0.4 /* default kb is 0.4 length on XZ */).multiply(getBaseKnockbackMultiplier(item, target)).setY(0.325d);
 
 
 
@@ -146,7 +132,14 @@ public final class AttackOverride extends UtilityClass {
         }
 
 
-        return knockback;
+
+        // Calculate resistance
+        final AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
+        double resistance = attribute == null ? 0 : attribute.getBaseValue(); // 0 to 100
+        utils.log(Level.WARNING, "knockback resistance: " + resistance);
+
+        // Return effective knockback
+        return knockback.multiply(1 - resistance);
     }
 
 
@@ -271,6 +264,7 @@ public final class AttackOverride extends UtilityClass {
         // Knockback the target
         final Vector velocity = getKnockback(item, damager, target);
         target.setVelocity(target.getVelocity().add(velocity));
+        Bukkit.broadcastMessage("knockbacked for " + velocity.length());
 
         target.setVelocity(velocity);
     }
