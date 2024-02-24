@@ -181,10 +181,7 @@ public final class AttackOverride extends UtilityClass {
 
 
         // Calculate critical multiplier //TODO calculate critical enchant
-        if(canCrit && isCritical(damager)) {
-            damage *= 1.5;
-            //damager.getWorld().spawnParticle(Particle.CRIT, target.getLocation(), 10);
-        }
+        if(canCrit && isCritical(damager)) damage *= 1.5;
 
 
         // Calculate enchantments (Separate charge multiplier)
@@ -227,14 +224,6 @@ public final class AttackOverride extends UtilityClass {
     }
 
 
-    /**
-     * Catches custom attack damage events and sets the invincibility ticks to 0 to allow the damage helper event to trigger.
-     * @param e The event to check
-     */
-    public static void cancelInvincibility(@NotNull final EntityDamageEvent e) {
-        //if(e instanceof LivingEntity target && e.getCause() == EntityDamageEvent.DamageCause.CUSTOM) target.setMaximumNoDamageTicks(0);
-
-    }
 
     /**
      * Replaces a Vanilla EntityDamageByEntityEvent event with a custom attack.
@@ -243,7 +232,6 @@ public final class AttackOverride extends UtilityClass {
      *                Whether the attack will effectively be critical depends on the current status of the attacking entity
      */
     public static void customAttack(@NotNull final EntityDamageByEntityEvent e, final boolean canCrit) {
-        //if(e.getDamage() == 0d) {utils.log(Level.WARNING, "helper detected"); if(e.getEntity() instanceof LivingEntity target) target.setMaximumNoDamageTicks(0); return; }                             // Let helper events through to restore mob behaviour
         CircularFifoQueue<AttackData> attackQueue = attacks.get(e.getEntity().getUniqueId());
         if(attackQueue != null) {
             AttackData lastAttack = attackQueue.get(0);
@@ -292,50 +280,9 @@ public final class AttackOverride extends UtilityClass {
 
         // Damage the target
         final double damage = getDamage(item, canCrit, damager, target);
-        //target.damage(damage);          // Apply damage
-        //target.setHealth(Func.clampMin(target.getHealth() - damage, 0));
-        //Scheduler.delay(() -> target.damage(0d, damager), 20L);     // Fix mob behaviour
-        {
-            //target.damage(customDamageValue, damager);     // Fix mob behaviour
-            //target.damage(Double.MIN_NORMAL, new DamageSource() {
-            //    @NotNull @Override public DamageType getDamageType() { return DamageType.GENERIC; }
-            //    @Nullable @Override public Entity getCausingEntity() { return damager; }
-            //    @Nullable @Override public Entity getDirectEntity() { return damager; }
-            //    @Nullable @Override public Location getDamageLocation() { return null; }
-            //    @Nullable @Override public Location getSourceLocation() { return null; }
-            //    @Override public boolean isIndirect() { return false; }
-            //    @Override public float getFoodExhaustion() { return 0; }
-            //    @Override public boolean scalesWithDifficulty() { return false; }
-            //});     // Fix mob behaviour
-            Scheduler.delay(() -> target.damage(damage, damager), 1L);
-                //@NotNull @Override public DamageType getDamageType() { return DamageType.GENERIC; }
-                //@Nullable @Override public Entity getCausingEntity() { return damager; }
-                //@Nullable @Override public Entity getDirectEntity() { return damager; }
-                //@Nullable @Override public Location getDamageLocation() { return null; }
-                //@Nullable @Override public Location getSourceLocation() { return null; }
-                //@Override public boolean isIndirect() { return false; }
-                //@Override public float getFoodExhaustion() { return 0; }
-                //@Override public boolean scalesWithDifficulty() { return false; }
-            //});     // Fix mob behaviour
-            utils.log(Level.SEVERE, "Custom damage sent: " + damage);
-        }
-        Bukkit.broadcastMessage("Damaged for " + damage);
+        Scheduler.delay(() -> target.damage(damage, damager), 1L);
+        utils.log(Level.WARNING, "Custom damage sent: " + damage);
         //TODO review and simplify custom scythe attacks
-
-
-        // Fix mob behaviour
-        /*
-        if(target != damager) {
-            if (target instanceof Tameable tameable) { // Don't attack owner
-                AnimalTamer owner = tameable.getOwner();
-                if (owner != damager) tameable.setTarget(damager);
-                else if (tameable instanceof Wolf && owner instanceof Player player) angerWolves(player, target); // Make other wolves in the group of the target attack the damager
-            }
-            else if(target instanceof Golem golem) if(golem.)
-            else if (target instanceof Mob mob) mob.setTarget(damager);
-            else if (damager instanceof Player player) angerWolves(player, target); // Make wolves tamed by the damager attack the target
-        }
-        */
 
 
         // Knockback the target
@@ -344,19 +291,5 @@ public final class AttackOverride extends UtilityClass {
         Bukkit.broadcastMessage("knockbacked for " + velocity.length());
 
         target.setVelocity(velocity);
-    }
-
-
-    private static void angerWolves(@NotNull final Player owner, @NotNull final LivingEntity target) {
-        if(
-            (target instanceof Tameable tameable && tameable.isTamed()) ||
-            target.getType() == EntityType.CREEPER ||
-            target.getType() == EntityType.GHAST
-        ) return;
-
-        for(Entity _wolf : owner.getWorld().getEntitiesByClasses(Wolf.class)) {
-            Wolf wolf = (Wolf)_wolf;
-            if(wolf.isTamed() && !wolf.isSitting() && wolf.getOwner() == owner) wolf.setTarget(target);
-        }
     }
 }
