@@ -103,4 +103,9 @@ public final class ShadowNight_listener implements Listener {
         //TODO use dedicated class
         if(event.getEntity() instanceof ArmorStand entity) entity.setArms(true);
     }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onSprintToggle(final PlayerToggleSprintEvent event) {
+        AttackOverride.resetKnockbackSprintBuff(event);
+    }
 }

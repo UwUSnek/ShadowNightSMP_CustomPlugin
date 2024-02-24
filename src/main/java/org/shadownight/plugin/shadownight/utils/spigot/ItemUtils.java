@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
@@ -121,9 +122,10 @@ public final class ItemUtils extends UtilityClass {
     /**
      * Finds and returns the CustomItemId of an ItemStack.
      * @param item The item stack
-     * @return The custom ID. null if the item has no custom id
+     * @return The custom ID. null if the item is null or air or has no custom id
      */
-    public static Long getCustomItemId(final @NotNull ItemStack item) {
+    public static Long getCustomItemId(final @Nullable ItemStack item) {
+        if(item == null || item.getType() == Material.AIR) return null;
         PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
         return container.get(IM.itemIdKey, PersistentDataType.LONG);
     }

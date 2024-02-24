@@ -15,7 +15,7 @@ public final class IM_DiamondScythe extends IM_Scythe {
 
     @Override protected double getAttackSpeed() { return -3.2; }
     @Override public    double getHitDamage()   { return 16;   }
-    @Override public double getHitKnockback() { return 2; }
+    @Override public double getHitKnockbackMultiplier() { return 2; }
 
 
     @Override

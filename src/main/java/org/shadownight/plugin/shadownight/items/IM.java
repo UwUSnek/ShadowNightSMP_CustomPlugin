@@ -10,14 +10,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
-
-import java.util.Objects;
-
 
 
 
@@ -25,9 +20,6 @@ import java.util.Objects;
 public abstract class IM implements Listener {
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
     protected final ItemStack defaultItem;
-
-    public final double hitDamage;
-    public final double hitKnockback;
 
 
     /**
@@ -37,8 +29,6 @@ public abstract class IM implements Listener {
         defaultItem = ItemUtils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
         setItemAttributes();
         createRecipe();
-        hitDamage = getHitDamage();
-        hitKnockback = getHitKnockback();
         Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
     }
     public abstract Material getMaterial();
@@ -47,7 +37,7 @@ public abstract class IM implements Listener {
     public abstract CustomItemId getCustomId();
 
     public abstract double getHitDamage();
-    public abstract double getHitKnockback();
+    public abstract double getHitKnockbackMultiplier();
 
 
     /**

@@ -27,7 +27,7 @@ public abstract class IM_Bow extends IM {
 
 
     @Override public double getHitDamage() { return 1; }
-    @Override public double getHitKnockback() { return 1; }
+    @Override public double getHitKnockbackMultiplier() { return 1; }
 
 
     /**

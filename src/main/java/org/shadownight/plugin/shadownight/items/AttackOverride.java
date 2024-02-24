@@ -4,6 +4,8 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,11 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
+import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.logging.Level;
 
 
 
@@ -32,7 +33,7 @@ import java.util.UUID;
  * Provides actually useful data for the death message manager.
  */
 public final class AttackOverride extends UtilityClass {
-    private static final Map<Material, Double> defaultDamage = Map.ofEntries(
+    private static final Map<Material, Double> vanillaDamage = Map.ofEntries(
         new AbstractMap.SimpleEntry<>(Material.WOODEN_SWORD,      4d),
         new AbstractMap.SimpleEntry<>(Material.GOLDEN_SWORD,      4d),
         new AbstractMap.SimpleEntry<>(Material.STONE_SWORD,       5d),
@@ -97,51 +98,53 @@ public final class AttackOverride extends UtilityClass {
         if(event.isSprinting()) knockbackSprintBuff.put(event.getPlayer().getUniqueId(), true);
     }
 
-    private static double getBaseKnockback(@Nullable final ItemStack item) {
-        double base = 1.552f;
+    private static double getBaseKnockbackMultiplier(@Nullable final ItemStack item, @NotNull LivingEntity target) {
+        double base = 0.4;
         if(item != null && item.getType() != Material.AIR) {
             final Long itemId = ItemUtils.getCustomItemId(item);
-            if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKnockback();
+            if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKnockbackMultiplier();
         }
-        return base;
+
+        // Calculate resistance
+        final AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
+        double resistance = attribute == null ? 0 : attribute.getBaseValue(); // 0 to 100
+
+        // Return effective knockback
+        return base * (1 - resistance / 100);
     }
 
     private static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
         // Out of water squids, wardens and shulkers are completely immune to knockback
-        final EntityType targetType = target.getType();
-        if(
-            ((targetType == EntityType.SQUID || targetType == EntityType.GLOW_SQUID) && !target.isInWater()) ||
-            targetType == EntityType.WARDEN || targetType == EntityType.SHULKER
-        ) return new Vector(0, 0, 0);
+        //final EntityType targetType = target.getType();
+        //if(
+        //    ((targetType == EntityType.SQUID || targetType == EntityType.GLOW_SQUID) && !target.isInWater()) ||
+        //    targetType == EntityType.WARDEN || targetType == EntityType.SHULKER || targetType == EntityType.ENDER_DRAGON || targetType == EntityType.IRON_GOLEM
+        //) return new Vector(0, 0, 0);
 
 
         // Calculate base knockback
-        Vector knockback;
-        if(targetType == EntityType.IRON_GOLEM) knockback = new Vector(0, 0, 0); // Iron Golems ignore the base knockback but not enchants
-        else knockback = damager.getLocation().getDirection().multiply(getBaseKnockback(item)); // Set default attack knockback for other entities
-        knockback.setY(0.8125f);
+        Vector direction = damager.getLocation().getDirection().setY(0).normalize();
+        Vector knockback = direction.clone().multiply(0.4 /* default kb is 0.4 motion */).multiply(getBaseKnockbackMultiplier(item, target)).setY(0.325d);
+
 
 
         // Vanilla sprint mechanic
-        int knockbackLv = 0;
+        int hasSprintbuff = 0;
         if(damager instanceof Player player && player.isSprinting()) {
             final Boolean sprintBuff = knockbackSprintBuff.get(player.getUniqueId());
             if(sprintBuff != null && sprintBuff) {
                 knockbackSprintBuff.put(player.getUniqueId(), false);
-                ++knockbackLv;
+                ++hasSprintbuff;
             }
         }
-
-
         // Calculate enchantments
         if(item != null && item.getType() != Material.AIR) {
-            knockbackLv += item.getEnchantmentLevel(Enchantment.KNOCKBACK);
-            if(knockbackLv != 0) {
-                knockback.add(new Vector(2.586, 0, 2.586).multiply(knockbackLv));
-                knockback.setY(1f);
-            }
-            //TODO calculate raveling enchant
+            int knockbackLv = item.getEnchantmentLevel(Enchantment.KNOCKBACK);
+            knockback.add(new Vector(0.3f, 0, 0.3f).multiply(knockbackLv + hasSprintbuff).multiply(direction));
+            if(knockbackLv > 0) knockback.setY(0.4f);
+            //TODO calculate reeling enchant
         }
+
 
         return knockback;
     }
@@ -149,22 +152,30 @@ public final class AttackOverride extends UtilityClass {
 
 
 
-    private static double getBaseDamage(@Nullable final ItemStack item) {
-        if(item == null || item.getType() == Material.AIR) return 1;
+    private static double getBaseDamage(@Nullable final ItemStack item, @NotNull final LivingEntity damager) {
+        // Get item base attack damage
         final Long itemId = ItemUtils.getCustomItemId(item);
-        if(itemId != null) return ItemManager.getValueFromId(itemId).hitDamage;
-        else {
-            final Double _damage = defaultDamage.get(item.getType());
-            if(_damage != null) return _damage;
-            else return 1;
+        if(itemId != null) return ItemManager.getValueFromId(itemId).getHitDamage();                    // If item is a custom item, get the base damage from its item manager
+        else if(item != null && item.getType() != Material.AIR) {                                       // If item is a vanilla item
+            final Double _vanillaDamage = vanillaDamage.get(item.getType());                                // If the item has a vanilla hard coded damage value, use that
+            return _vanillaDamage == null ? 1d : _vanillaDamage;                                            // If not, return the default 1 damage
+        }
+        else {                                                                                          // If no item was used (most mobs & players punching)
+            final AttributeInstance attribute = damager.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);      // If the entity can attack (has an attack damage attribute) use that
+            return attribute == null ? 0 : attribute.getBaseValue();                                        // If not, return the default 0 damage
         }
     }
 
     private static double getDamage(@Nullable final ItemStack item, boolean canCrit, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
-        double damage = getBaseDamage(item);
+        double damage = getBaseDamage(item, damager);
         double enchantDamage = 0d;
-        double charge = 20; // The ticks passed since the last attack
+        double charge = 1;
         if(damager instanceof Player player) charge = player.getAttackCooldown();
+
+
+        // Calculate potion effects
+        PotionEffect str = damager.getPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        if(str != null) damage += 3 * str.getAmplifier();
 
 
         // Calculate critical multiplier //TODO calculate critical enchant
@@ -184,11 +195,6 @@ public final class AttackOverride extends UtilityClass {
                 if(key == Enchantment.IMPALING)          if(target.getCategory() == EntityCategory.WATER)     enchantDamage += 2.5 * e.getValue();
             }
         }
-
-
-        // Calculate potion effects
-        PotionEffect str = damager.getPotionEffect(PotionEffectType.INCREASE_DAMAGE);
-        if(str != null) damage += 3 * str.getAmplifier();
 
 
         // Return effective damage

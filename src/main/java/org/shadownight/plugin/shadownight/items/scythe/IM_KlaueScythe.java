@@ -26,7 +26,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
     @Override protected double getAttackSpeed() { return -3.0; }
     @Override public    double getHitDamage()   { return 18;   }
-    @Override public double getHitKnockback() { return 2; }
+    @Override public double getHitKnockbackMultiplier() { return 2; }
 
 
     @Override
