@@ -93,12 +93,18 @@ public final class AttackOverride extends UtilityClass {
             usedItem = _usedItem;
             time = _time;
         }
+        public String toString() {
+            return
+                "\ndamager:  " + damager.getType() +
+                "\nusedItem: " + usedItem.toString() +
+                "\ntime:     " + time.toString() +
+                "\nmirrored: " + mirrored;
+        }
     }
 
 
     public  static final HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
     private static final HashMap<UUID, Boolean> knockbackSprintBuff = new HashMap<>();
-    private static final double customDamageValue = 1.0E-4;
 
 
 
@@ -173,6 +179,7 @@ public final class AttackOverride extends UtilityClass {
         double enchantDamage = 0d;
         double charge = 1;
         if(damager instanceof Player player) charge = player.getAttackCooldown();
+        utils.log(Level.WARNING, "[" + damager.getType() + "] Using charge: " + charge);
 
 
         // Calculate potion effects
@@ -234,20 +241,20 @@ public final class AttackOverride extends UtilityClass {
     public static void customAttack(@NotNull final EntityDamageByEntityEvent e, final boolean canCrit) {
         CircularFifoQueue<AttackData> attackQueue = attacks.get(e.getEntity().getUniqueId());
         if(attackQueue != null) {
-            AttackData lastAttack = attackQueue.get(0);
+            AttackData lastAttack = attackQueue.get(attackQueue.size() == 1 ? 0 : 1);
             if(lastAttack.damager == e.getDamager() && !lastAttack.mirrored) {
-                utils.log(Level.SEVERE, "Letting damage event through: " + e.getDamage());
+                utils.log(Level.WARNING, "[" + e.getDamager().getType() + "] Actual damage let through: " + e.getFinalDamage());
                 lastAttack.mirrored = true;
                 return;
             }
         }
 
-        if(Func.doubleEquals(e.getDamage(), customDamageValue, customDamageValue / 4)) return;                             // Let helper events through to restore mob behaviour
-        if(e.getDamager().getType() == EntityType.CREEPER) return;  // Use Vanilla creeper explosions
+        // Use Vanilla creeper explosions
+        if(e.getDamager().getType() == EntityType.CREEPER) return;
 
         // Cancel event and compute custom attack
         if (e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
-            utils.log(Level.WARNING, "player hit detected: " + e.getDamage());
+            utils.log(Level.SEVERE, "[" + damager.getType() + "] Entity attack detected. Vanilla damage: " + e.getDamage());
             e.setCancelled(true);
             customAttack(damager, target, canCrit);
         }
@@ -268,7 +275,7 @@ public final class AttackOverride extends UtilityClass {
 
         // Save the attack data
         final UUID targetId = target.getUniqueId();
-        attacks.putIfAbsent(targetId, new CircularFifoQueue<>(2));
+        attacks.putIfAbsent(targetId, new CircularFifoQueue<>(2)); //TODO remove when entity is killed or removed
         attacks.get(targetId).add(new AttackData(
             damager,
             item,
@@ -276,19 +283,18 @@ public final class AttackOverride extends UtilityClass {
         ));
 
 
-
-
         // Damage the target
         final double damage = getDamage(item, canCrit, damager, target);
-        Scheduler.delay(() -> target.damage(damage, damager), 1L);
-        utils.log(Level.WARNING, "Custom damage sent: " + damage);
+        //Scheduler.delay(() -> target.damage(damage, damager), 1L);
+        target.damage(damage, damager);
+        utils.log(Level.WARNING, "[" + damager.getType() + "] Custom damage sent: " + damage);
         //TODO review and simplify custom scythe attacks
 
 
         // Knockback the target
         final Vector velocity = getKnockback(item, damager, target);
         target.setVelocity(target.getVelocity().add(velocity));
-        Bukkit.broadcastMessage("knockbacked for " + velocity.length());
+        //Bukkit.broadcastMessage("knockbacked for " + velocity.length());
 
         target.setVelocity(velocity);
     }
