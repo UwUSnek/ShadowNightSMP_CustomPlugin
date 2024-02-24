@@ -283,19 +283,21 @@ public final class AttackOverride extends UtilityClass {
         ));
 
 
+
+
+        // Calculate pre-hit velocity
+        final Vector velocity = target.getVelocity().add(getKnockback(item, damager, target));
+
+
         // Damage the target
         final double damage = getDamage(item, canCrit, damager, target);
-        //Scheduler.delay(() -> target.damage(damage, damager), 1L);
-        target.damage(damage, damager);
         utils.log(Level.WARNING, "[" + damager.getType() + "] Custom damage sent: " + damage);
+        target.damage(damage, damager);
         //TODO review and simplify custom scythe attacks
 
 
-        // Knockback the target
-        final Vector velocity = getKnockback(item, damager, target);
-        target.setVelocity(target.getVelocity().add(velocity));
-        //Bukkit.broadcastMessage("knockbacked for " + velocity.length());
-
+        // Apply new velocity (and override .damage's Vanilla knockback)
         target.setVelocity(velocity);
+        //Bukkit.broadcastMessage("knockbacked for " + velocity.length());
     }
 }
