@@ -89,6 +89,11 @@ public final class ShadowNight_listener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    public void onDamage(final EntityDamageEvent event) {
+        AttackOverride.cancelInvincibility(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onShoot(final EntityShootBowEvent event) {
         IM_Bow.chooseOnShoot(event);
     }

@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 
 public final class utils extends UtilityClass {
-    public static void log(final @NotNull Level level, final @NotNull String message) {
+    public synchronized static void log(final @NotNull Level level, final @NotNull String message) { //TODO remove synchronized
         ShadowNight.plugin.getLogger().log(level, message);
     }
 

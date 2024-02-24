@@ -2,13 +2,17 @@ package org.shadownight.plugin.shadownight.items;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +22,9 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
+import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.*;
@@ -74,9 +80,13 @@ public final class AttackOverride extends UtilityClass {
 
 
     public static class AttackData {
-        public LivingEntity damager;
-        public ItemStack usedItem;
-        public Long time;
+        public final LivingEntity damager;
+        public final ItemStack usedItem;
+        public final Long time;
+
+        // This is used to determine if an event has to actually damage the entity and trigger vanilla mob behaviours.
+        // Set to true after the mirror event is fired (event got mirrored, no need to do that again).
+        public boolean mirrored = false;
 
         public AttackData(LivingEntity _damager, ItemStack _usedItem, Long _time) {
             damager = _damager;
@@ -86,9 +96,9 @@ public final class AttackOverride extends UtilityClass {
     }
 
 
-    public static HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
-    public static HashMap<UUID, Boolean> knockbackSprintBuff = new HashMap<>();
-
+    public  static final HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
+    private static final HashMap<UUID, Boolean> knockbackSprintBuff = new HashMap<>();
+    private static final double customDamageValue = 1.0E-4;
 
 
 
@@ -136,7 +146,6 @@ public final class AttackOverride extends UtilityClass {
         // Calculate resistance
         final AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
         double resistance = attribute == null ? 0 : attribute.getBaseValue(); // 0 to 100
-        utils.log(Level.WARNING, "knockback resistance: " + resistance);
 
         // Return effective knockback
         return knockback.multiply(1 - resistance);
@@ -174,7 +183,7 @@ public final class AttackOverride extends UtilityClass {
         // Calculate critical multiplier //TODO calculate critical enchant
         if(canCrit && isCritical(damager)) {
             damage *= 1.5;
-            damager.getWorld().spawnParticle(Particle.CRIT, target.getLocation(), 10);
+            //damager.getWorld().spawnParticle(Particle.CRIT, target.getLocation(), 10);
         }
 
 
@@ -218,6 +227,14 @@ public final class AttackOverride extends UtilityClass {
     }
 
 
+    /**
+     * Catches custom attack damage events and sets the invincibility ticks to 0 to allow the damage helper event to trigger.
+     * @param e The event to check
+     */
+    public static void cancelInvincibility(@NotNull final EntityDamageEvent e) {
+        //if(e instanceof LivingEntity target && e.getCause() == EntityDamageEvent.DamageCause.CUSTOM) target.setMaximumNoDamageTicks(0);
+
+    }
 
     /**
      * Replaces a Vanilla EntityDamageByEntityEvent event with a custom attack.
@@ -226,7 +243,23 @@ public final class AttackOverride extends UtilityClass {
      *                Whether the attack will effectively be critical depends on the current status of the attacking entity
      */
     public static void customAttack(@NotNull final EntityDamageByEntityEvent e, final boolean canCrit) {
-        if(e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
+        //if(e.getDamage() == 0d) {utils.log(Level.WARNING, "helper detected"); if(e.getEntity() instanceof LivingEntity target) target.setMaximumNoDamageTicks(0); return; }                             // Let helper events through to restore mob behaviour
+        CircularFifoQueue<AttackData> attackQueue = attacks.get(e.getEntity().getUniqueId());
+        if(attackQueue != null) {
+            AttackData lastAttack = attackQueue.get(0);
+            if(lastAttack.damager == e.getDamager() && !lastAttack.mirrored) {
+                utils.log(Level.SEVERE, "Letting damage event through: " + e.getDamage());
+                lastAttack.mirrored = true;
+                return;
+            }
+        }
+
+        if(Func.doubleEquals(e.getDamage(), customDamageValue, customDamageValue / 4)) return;                             // Let helper events through to restore mob behaviour
+        if(e.getDamager().getType() == EntityType.CREEPER) return;  // Use Vanilla creeper explosions
+
+        // Cancel event and compute custom attack
+        if (e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
+            utils.log(Level.WARNING, "player hit detected: " + e.getDamage());
             e.setCancelled(true);
             customAttack(damager, target, canCrit);
         }
@@ -255,11 +288,55 @@ public final class AttackOverride extends UtilityClass {
         ));
 
 
+
+
         // Damage the target
         final double damage = getDamage(item, canCrit, damager, target);
-        target.damage(damage);
+        //target.damage(damage);          // Apply damage
+        //target.setHealth(Func.clampMin(target.getHealth() - damage, 0));
+        //Scheduler.delay(() -> target.damage(0d, damager), 20L);     // Fix mob behaviour
+        {
+            //target.damage(customDamageValue, damager);     // Fix mob behaviour
+            //target.damage(Double.MIN_NORMAL, new DamageSource() {
+            //    @NotNull @Override public DamageType getDamageType() { return DamageType.GENERIC; }
+            //    @Nullable @Override public Entity getCausingEntity() { return damager; }
+            //    @Nullable @Override public Entity getDirectEntity() { return damager; }
+            //    @Nullable @Override public Location getDamageLocation() { return null; }
+            //    @Nullable @Override public Location getSourceLocation() { return null; }
+            //    @Override public boolean isIndirect() { return false; }
+            //    @Override public float getFoodExhaustion() { return 0; }
+            //    @Override public boolean scalesWithDifficulty() { return false; }
+            //});     // Fix mob behaviour
+            Scheduler.delay(() -> target.damage(damage, damager), 1L);
+                //@NotNull @Override public DamageType getDamageType() { return DamageType.GENERIC; }
+                //@Nullable @Override public Entity getCausingEntity() { return damager; }
+                //@Nullable @Override public Entity getDirectEntity() { return damager; }
+                //@Nullable @Override public Location getDamageLocation() { return null; }
+                //@Nullable @Override public Location getSourceLocation() { return null; }
+                //@Override public boolean isIndirect() { return false; }
+                //@Override public float getFoodExhaustion() { return 0; }
+                //@Override public boolean scalesWithDifficulty() { return false; }
+            //});     // Fix mob behaviour
+            utils.log(Level.SEVERE, "Custom damage sent: " + damage);
+        }
         Bukkit.broadcastMessage("Damaged for " + damage);
         //TODO review and simplify custom scythe attacks
+
+
+        // Fix mob behaviour
+        /*
+        if(target != damager) {
+            if (target instanceof Tameable tameable) { // Don't attack owner
+                AnimalTamer owner = tameable.getOwner();
+                if (owner != damager) tameable.setTarget(damager);
+                else if (tameable instanceof Wolf && owner instanceof Player player) angerWolves(player, target); // Make other wolves in the group of the target attack the damager
+            }
+            else if(target instanceof Golem golem) if(golem.)
+            else if (target instanceof Mob mob) mob.setTarget(damager);
+            else if (damager instanceof Player player) angerWolves(player, target); // Make wolves tamed by the damager attack the target
+        }
+        */
+
 
         // Knockback the target
         final Vector velocity = getKnockback(item, damager, target);
@@ -267,5 +344,19 @@ public final class AttackOverride extends UtilityClass {
         Bukkit.broadcastMessage("knockbacked for " + velocity.length());
 
         target.setVelocity(velocity);
+    }
+
+
+    private static void angerWolves(@NotNull final Player owner, @NotNull final LivingEntity target) {
+        if(
+            (target instanceof Tameable tameable && tameable.isTamed()) ||
+            target.getType() == EntityType.CREEPER ||
+            target.getType() == EntityType.GHAST
+        ) return;
+
+        for(Entity _wolf : owner.getWorld().getEntitiesByClasses(Wolf.class)) {
+            Wolf wolf = (Wolf)_wolf;
+            if(wolf.isTamed() && !wolf.isSitting() && wolf.getOwner() == owner) wolf.setTarget(target);
+        }
     }
 }
