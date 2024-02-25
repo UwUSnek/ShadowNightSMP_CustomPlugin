@@ -69,9 +69,8 @@ public final class AttackOverride extends UtilityClass {
      *                Whether the attack will effectively be critical depends on the current status of the attacking entity
      */
     public static void customAttack(@NotNull final EntityDamageByEntityEvent e, final boolean canCrit) {
-        // Ignore attacks on protected entities from players with no permissions
-        if(e.getDamager() instanceof Player player && ClaimUtils.isEntityProtected(e.getEntity(), player)) {
-            Bukkit.broadcastMessage("AAA");return; }
+        // Use Vanilla creeper explosions
+        if(e.getDamager().getType() == EntityType.CREEPER) return;
 
         // Skip mirror events
         CircularFifoQueue<AttackData> attackQueue = attacks.get(e.getEntity().getUniqueId());
@@ -84,16 +83,11 @@ public final class AttackOverride extends UtilityClass {
             }
         }
 
-        // Use Vanilla creeper explosions
-        if(e.getDamager().getType() == EntityType.CREEPER) return;
-
         // Cancel event and compute custom attack
         if (e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
-            if(target.getNoDamageTicks() == 0) {
-                utils.log(Level.SEVERE, "[" + damager.getType() + "] Entity attack detected. Vanilla damage: " + e.getFinalDamage());
-                e.setCancelled(true);
-                customAttack(damager, target, canCrit);
-            }
+            utils.log(Level.SEVERE, "[" + damager.getType() + "] Vanilla Entity attack detected. Vanilla damage: " + e.getFinalDamage());
+            e.setCancelled(true);
+            customAttack(damager, target, canCrit);
         }
     }
 
@@ -109,7 +103,12 @@ public final class AttackOverride extends UtilityClass {
      *                Whether the attack will effectively be critical depends on the current status of the attacking entity
      */
     public static void customAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, final boolean canCrit) {
-        // Cancel the vanilla event and save the used item
+        if(damager instanceof Player player && ClaimUtils.isEntityProtected(target, player)) return;    // Ignore attacks on protected entities from players with no permissions
+        if(target instanceof Wolf wolf && wolf.getOwner() != damager) return;                           // Ignore attacks on other player's dogs
+        if(target.getNoDamageTicks() > 0) return;                                                       // Skip invulnerable entities
+
+
+        // Save the used item
         final EntityEquipment equipment = damager.getEquipment();
         final ItemStack item = equipment == null ? null : equipment.getItemInMainHand();
 

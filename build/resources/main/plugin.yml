@@ -12,7 +12,8 @@ depend: [
   VoidGenerator,
   CleanroomGenerator,
   LuckPerms,
-  AureliumSkills
+  AureliumSkills,
+  GriefPrevention
 ]
 
 
