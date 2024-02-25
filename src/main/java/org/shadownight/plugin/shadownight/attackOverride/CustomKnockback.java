@@ -3,20 +3,26 @@ package org.shadownight.plugin.shadownight.attackOverride;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
+import org.shadownight.plugin.shadownight.utils.utils;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Level;
 
 
 
@@ -40,17 +46,52 @@ public final class CustomKnockback extends UtilityClass {
 
     /**
      * Calculates the knockback multiplier of an item.
-     * This doesn't include the target entity's knockback resistance.
      * @param item The item to use
      * @return The knockback multiplier
      */
-    private static double getBaseKnockbackMultiplier(@Nullable final ItemStack item) {
+    private static double getItemKnockbackMultiplier(@Nullable final ItemStack item) {
         double base = 1;
         if(item != null && item.getType() != Material.AIR) {
             final Long itemId = ItemUtils.getCustomItemId(item);
             if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKnockbackMultiplier();
         }
         return base;
+    }
+
+
+    /**
+     * Calculates the knockback resistance of an entity (0f-1f).
+     * This includes its base knockback resistance and its armor attributes.
+     * @param target The target entity
+     * @return The knockback resistance
+     */
+    private static double getTargetKnockbackResistance(@NotNull final LivingEntity target) {
+        double resistance = 0;
+
+        // Base resistance
+        final AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
+        resistance += attribute == null ? 0 : attribute.getBaseValue();
+
+        // Item attributes
+        EntityEquipment equipment = target.getEquipment();
+        if(equipment != null) {
+            for(ItemStack a : equipment.getArmorContents()) if(a != null) {
+                Material type = a.getType();
+                if(type == Material.NETHERITE_HELMET || type == Material.NETHERITE_CHESTPLATE || type == Material.NETHERITE_LEGGINGS || type == Material.NETHERITE_BOOTS) {
+                    resistance += 0.1; // Netherite's knockback resistance is not an attribute, for some reason. Go figure
+                }
+                ItemMeta meta = a.getItemMeta();
+                if(meta != null) {
+                    Collection<AttributeModifier> modifiers = meta.getAttributeModifiers(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
+                    if(modifiers != null) for(AttributeModifier m : modifiers) {
+                        resistance += m.getAmount();
+                    }
+                }
+            }
+        }
+
+        utils.log(Level.INFO, "Detected knockback resistance " + resistance);
+        return resistance;
     }
 
 
@@ -67,7 +108,7 @@ public final class CustomKnockback extends UtilityClass {
     static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
         // Calculate base knockback
         Vector direction = damager.getLocation().getDirection().setY(0).normalize();
-        Vector knockback = direction.clone().multiply(defaultKnockbackXZ).multiply(getBaseKnockbackMultiplier(item)).setY(defaultKnockbackY);
+        Vector knockback = direction.clone().multiply(defaultKnockbackXZ).multiply(getItemKnockbackMultiplier(item)).setY(defaultKnockbackY);
 
 
 
@@ -89,12 +130,7 @@ public final class CustomKnockback extends UtilityClass {
         }
 
 
-
-        // Calculate resistance
-        final AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-        double resistance = attribute == null ? 0 : attribute.getBaseValue(); // 0 to 100
-
         // Return effective knockback
-        return knockback.multiply(1 - resistance);
+        return knockback.multiply(1 - getTargetKnockbackResistance(target));
     }
 }
