@@ -8,13 +8,13 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
-import org.shadownight.plugin.shadownight.utils.utils;
+
+
 
 
 public class StarterKit extends UtilityClass {
@@ -51,11 +51,7 @@ public class StarterKit extends UtilityClass {
      * @return True if the item is blacklisted, false otherwise
      */
     public static boolean isBlacklisted(@Nullable final ItemStack item) {
-        if (item != null) {
-            final ItemMeta meta = item.getItemMeta();
-            return (meta != null && ChatUtils.stripColor(meta.getDisplayName()).startsWith(ChatUtils.stripColor(kit_prefix)));
-        }
-        return false;
+        return item != null && item.hasItemMeta() && ChatUtils.stripColor(item.getItemMeta().getDisplayName()).startsWith(ChatUtils.stripColor(kit_prefix));
     }
 
 

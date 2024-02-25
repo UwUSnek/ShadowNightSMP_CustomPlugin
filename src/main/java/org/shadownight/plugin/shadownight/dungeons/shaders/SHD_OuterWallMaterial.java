@@ -1,21 +1,15 @@
 package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
-import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.dungeons.generators.GEN_BoundingBox;
-import org.shadownight.plugin.shadownight.utils.blockdata.DataBuilderOrientable;
 import org.shadownight.plugin.shadownight.utils.containers.RegionBlueprint;
 import org.shadownight.plugin.shadownight.utils.containers.RegionBuffer;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockGradient;
-import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
-import org.shadownight.plugin.shadownight.utils.math.Func;
-import org.shadownight.plugin.shadownight.utils.utils;
 
-import java.util.logging.Level;
+
 
 
 public final class SHD_OuterWallMaterial extends SHD {
@@ -26,7 +20,6 @@ public final class SHD_OuterWallMaterial extends SHD {
 
 
 
-    final int wh;
     final int ft;
     final int owt;
     final int wt;
@@ -39,7 +32,6 @@ public final class SHD_OuterWallMaterial extends SHD {
      * @param _wt The thickness of the inner walls
      */
     public SHD_OuterWallMaterial(final int _wh, final int _ft, final int _owt, final int _wt) {
-        wh = _wh;
         ft = _ft;
         owt = _owt;
         wt = _wt;

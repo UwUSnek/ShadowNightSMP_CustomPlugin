@@ -2,13 +2,7 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 
 import org.bukkit.Material;
-import org.bukkit.block.Banner;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Rotatable;
 import org.javatuples.Pair;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;
 

@@ -2,7 +2,6 @@ package org.shadownight.plugin.shadownight.dungeons.generators;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;

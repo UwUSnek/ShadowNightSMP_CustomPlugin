@@ -4,13 +4,14 @@ package org.shadownight.plugin.shadownight.dungeons.debug;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Rotatable;
-import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import org.shadownight.plugin.shadownight.dungeons.shaders.SHD;
-import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 
 
+
+
+@SuppressWarnings("unused")
 public final class SHD_VisualizeNormals extends SHD {
     final Vector2i[][] normals;
 

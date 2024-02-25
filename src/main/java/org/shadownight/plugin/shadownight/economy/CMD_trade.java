@@ -13,7 +13,6 @@ import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
-import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
 

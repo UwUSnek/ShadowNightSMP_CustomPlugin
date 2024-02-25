@@ -3,7 +3,6 @@ package org.shadownight.plugin.shadownight.items.bow;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Arrow;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -13,14 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 import org.shadownight.plugin.shadownight.utils.blockdata.BlockProperty;
 import org.shadownight.plugin.shadownight.utils.math.Easing;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
-
-import java.util.Arrays;
 
 
 
@@ -116,10 +112,12 @@ public final class IM_HellfireBow extends IM_Bow {
                 }
 
                 // Check if block is valid and shift Y level if needed
-                /**/ if(isTargetValid(target                  ));
-                else if(isTargetValid(target.add     (0, 1, 0))) shift[stripeIndex] += 1;
-                else if(isTargetValid(target.subtract(0, 2, 0))) shift[stripeIndex] -= 1;
-                else { broken[stripeIndex] = true; break;} // If no valid spot is found, stop the current stripe
+                if(!isTargetValid(target)) {
+                    /**/ if(isTargetValid(target.add     (0, 1, 0))) shift[stripeIndex] += 1;
+                    else if(isTargetValid(target.subtract(0, 2, 0))) shift[stripeIndex] -= 1;
+                    else { broken[stripeIndex] = true; break;} // If no valid spot is found, stop the current stripe
+                }
+
 
                 // If it is, break the old block and place the fire
                 Block block = target.getBlock();

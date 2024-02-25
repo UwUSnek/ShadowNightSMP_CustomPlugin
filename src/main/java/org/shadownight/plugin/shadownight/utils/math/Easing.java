@@ -1,10 +1,7 @@
 package org.shadownight.plugin.shadownight.utils.math;
 
 
-import org.shadownight.plugin.shadownight.items.scythe.ScytheThrowDisplay;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-
-import java.util.function.Function;
 
 
 
@@ -31,7 +28,8 @@ public final class Easing extends UtilityClass {
         else if (x < 2   / d) { x -=   1.5 / d; return n * x * x + 0.75;     }
         else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
         else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
-    };
+    }
+
     @SuppressWarnings("unused") public static double bounceInOut (final double x) {
         return x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2;
     }
@@ -51,5 +49,5 @@ public final class Easing extends UtilityClass {
                 -(Math.pow(2,  20 * x - 10) * c) / 2 :
                 (Math.pow(2, -20 * x + 10) * c) / 2 + 1
         ));
-    };
+    }
 }

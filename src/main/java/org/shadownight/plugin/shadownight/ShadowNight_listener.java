@@ -10,7 +10,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.attackOverride.CustomDamage;
 import org.shadownight.plugin.shadownight.attackOverride.CustomKnockback;
 import org.shadownight.plugin.shadownight.chatManager.ChatManager;
 import org.shadownight.plugin.shadownight.chatManager.DeathMessages;

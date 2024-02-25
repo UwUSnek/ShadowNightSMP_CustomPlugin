@@ -24,7 +24,6 @@ import org.shadownight.plugin.shadownight.utils.Timer;
 import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
-import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.ArrayList;
 import java.util.Objects;

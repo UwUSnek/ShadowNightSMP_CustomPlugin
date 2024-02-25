@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
-import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
 import java.util.List;

@@ -80,8 +80,8 @@ public final class CustomKnockback extends UtilityClass {
                 if(type == Material.NETHERITE_HELMET || type == Material.NETHERITE_CHESTPLATE || type == Material.NETHERITE_LEGGINGS || type == Material.NETHERITE_BOOTS) {
                     resistance += 0.1; // Netherite's knockback resistance is not an attribute, for some reason. Go figure
                 }
-                ItemMeta meta = a.getItemMeta();
-                if(meta != null) {
+                if(a.hasItemMeta()) {
+                    ItemMeta meta = a.getItemMeta();
                     Collection<AttributeModifier> modifiers = meta.getAttributeModifiers(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
                     if(modifiers != null) for(AttributeModifier m : modifiers) {
                         resistance += m.getAmount();

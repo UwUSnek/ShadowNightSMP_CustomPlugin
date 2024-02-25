@@ -4,7 +4,6 @@ package org.shadownight.plugin.shadownight.qol.tpa;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
-import org.shadownight.plugin.shadownight.utils.utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -59,7 +58,6 @@ public final class CMD_tpa implements CommandExecutor {
         TextComponent c2 = new TextComponent("§a(or click here)");
         c2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
 
-        //noinspection DataFlowIssue (checked in playerOfflineCheck)
         target.spigot().sendMessage(new TextComponent(ChatUtils.serverPrefix + PlayerUtils.getFancyName(player) + "§f is asking you to teleport to your location! Use "), c, new TextComponent("§r to accept "), c2);
         if(requests_from_player == null) tpa_requests.put(player.getName(), new Vector<>());
         tpa_requests.get(player.getName()).add(target.getName());

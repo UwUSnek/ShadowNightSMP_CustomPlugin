@@ -3,9 +3,6 @@ package org.shadownight.plugin.shadownight.dungeons.shaders;
 
 import org.bukkit.Material;
 import org.javatuples.Pair;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2i;
-import org.shadownight.plugin.shadownight.utils.containers.BlueprintData;
 import org.shadownight.plugin.shadownight.utils.graphics.BlockPattern;
 
 

@@ -1,9 +1,7 @@
 package org.shadownight.plugin.shadownight.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
-import org.shadownight.plugin.shadownight.ShadowNight;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 
 

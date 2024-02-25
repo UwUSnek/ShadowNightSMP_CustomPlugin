@@ -107,8 +107,10 @@ public final class ItemUtils extends UtilityClass {
      * @return The display name
      */
     public static String getItemName(final @NotNull ItemStack item){
-        final ItemMeta meta = item.getItemMeta();
-        if(meta != null && meta.hasDisplayName()) return meta.getDisplayName();
+        ItemMeta meta = item.getItemMeta();
+        if(item.hasItemMeta() && meta.hasDisplayName()) {
+            return meta.getDisplayName();
+        }
         else {
             final String[] words = item.getType().name().split("_");
             final StringBuilder r = new StringBuilder();

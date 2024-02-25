@@ -10,6 +10,7 @@ import org.shadownight.plugin.shadownight.utils.UtilityClass;
 
 
 
+@SuppressWarnings("unused")
 public final class Scheduler extends UtilityClass {
     public static BukkitTask   run(@NotNull final Runnable runnable)                                        { return Bukkit.getScheduler().runTaskAsynchronously(ShadowNight.plugin, runnable); }
     public static BukkitTask  loop(@NotNull final Runnable runnable, final long delay, final long duration) { return Bukkit.getScheduler().runTaskTimer         (ShadowNight.plugin, runnable, delay, duration); }

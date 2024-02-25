@@ -1,29 +1,23 @@
 package org.shadownight.plugin.shadownight.items.bow;
 
-import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
-import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.logging.Level;
+
+
 
 
 public abstract class IM_Bow extends IM {
-    private static HashMap<UUID, Pair<IM_Bow, ItemStack>> activeProjectiles = new HashMap<>();
+    private static final HashMap<UUID, Pair<IM_Bow, ItemStack>> activeProjectiles = new HashMap<>();
 
 
     @Override public double getHitDamage() { return 1; }

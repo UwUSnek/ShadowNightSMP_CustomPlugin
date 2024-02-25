@@ -4,7 +4,6 @@ package org.shadownight.plugin.shadownight.qol.tpa;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.utils.spigot.ChatUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.PlayerUtils;
-import org.shadownight.plugin.shadownight.utils.utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
