@@ -86,7 +86,7 @@ public final class CMD_trade implements CommandExecutor {
                             }, timeout * 20L)
                         )
                                      );
-                    ChatUtils.sendMessage(player, "§7Sending a trade request to " + PlayerUtils.getFancyName(target) + "...");
+                    ChatUtils.sendMessage(player, "§7Sending a trade request to " + PlayerUtils.getFancyName(target) + "§f...");
 
                     String _command = "/trade " + player.getName();
                     TextComponent c = new TextComponent("§a" + _command);

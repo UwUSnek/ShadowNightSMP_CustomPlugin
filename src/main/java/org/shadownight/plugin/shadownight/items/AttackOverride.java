@@ -114,7 +114,7 @@ public final class AttackOverride extends UtilityClass {
         if(event.isSprinting()) knockbackSprintBuff.put(event.getPlayer().getUniqueId(), true);
     }
 
-    private static double getBaseKnockbackMultiplier(@Nullable final ItemStack item, @NotNull LivingEntity target) {
+    private static double getBaseKnockbackMultiplier(@Nullable final ItemStack item, @NotNull final LivingEntity target) {
         double base = 1;
         if(item != null && item.getType() != Material.AIR) {
             final Long itemId = ItemUtils.getCustomItemId(item);
@@ -286,18 +286,22 @@ public final class AttackOverride extends UtilityClass {
 
 
         // Calculate pre-hit velocity
-        final Vector velocity = target.getVelocity().add(getKnockback(item, damager, target));
-
+        final Vector velocity = target.getVelocity();       // Starting velocity
+        velocity.setY(velocity.getY() + 0.0784);            // Account for mob's default negative Y velocity
+        velocity.add(getKnockback(item, damager, target));  // Add knockback
 
         // Damage the target
         final double damage = getDamage(item, canCrit, damager, target);
         utils.log(Level.WARNING, "[" + damager.getType() + "] Custom damage sent: " + damage);
         target.damage(damage, damager);
+
+        // Remove from hit map if entity died
+        if(target.getHealth() < damage)
+
         //TODO review and simplify custom scythe attacks
 
 
         // Apply new velocity (and override .damage's Vanilla knockback)
         target.setVelocity(velocity);
-        //Bukkit.broadcastMessage("knockbacked for " + velocity.length());
     }
 }
