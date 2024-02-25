@@ -56,8 +56,9 @@ public final class AttackOverride extends UtilityClass {
             time = _time;
         }
     }
-    public  static final HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
-
+    public static final HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
+    //TODO use this for more detailed death messages
+    //TODO maybe save any damage in the queue
 
 
 
@@ -83,9 +84,11 @@ public final class AttackOverride extends UtilityClass {
 
         // Cancel event and compute custom attack
         if (e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
-            utils.log(Level.SEVERE, "[" + damager.getType() + "] Entity attack detected. Vanilla damage: " + e.getFinalDamage());
-            e.setCancelled(true);
-            customAttack(damager, target, canCrit);
+            if(target.getNoDamageTicks() == 0) {
+                utils.log(Level.SEVERE, "[" + damager.getType() + "] Entity attack detected. Vanilla damage: " + e.getFinalDamage());
+                e.setCancelled(true);
+                customAttack(damager, target, canCrit);
+            }
         }
     }
 
