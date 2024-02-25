@@ -1,6 +1,9 @@
 package org.shadownight.plugin.shadownight.attackOverride;
 
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
+import org.bukkit.Bukkit;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -8,7 +11,9 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
+import org.shadownight.plugin.shadownight.utils.spigot.ClaimUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.*;
@@ -44,6 +49,19 @@ public final class AttackOverride extends UtilityClass {
 
 
 
+
+    private static void applyEffects(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @Nullable ItemStack item) {
+        if(item != null) {
+            int fireAspectLv = item.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
+            if(fireAspectLv > 0) target.setFireTicks(fireAspectLv * 80);
+        }
+        switch (damager.getType()) {
+            //case EntityType.
+        }
+    }
+
+
+
     /**
      * Replaces a Vanilla EntityDamageByEntityEvent event with a custom attack.
      * @param e The event to replace
@@ -51,6 +69,11 @@ public final class AttackOverride extends UtilityClass {
      *                Whether the attack will effectively be critical depends on the current status of the attacking entity
      */
     public static void customAttack(@NotNull final EntityDamageByEntityEvent e, final boolean canCrit) {
+        // Ignore attacks on protected entities from players with no permissions
+        if(e.getDamager() instanceof Player player && ClaimUtils.isEntityProtected(e.getEntity(), player)) {
+            Bukkit.broadcastMessage("AAA");return; }
+
+        // Skip mirror events
         CircularFifoQueue<AttackData> attackQueue = attacks.get(e.getEntity().getUniqueId());
         if(attackQueue != null) {
             AttackData lastAttack = attackQueue.get(attackQueue.size() == 1 ? 0 : 1);
@@ -117,6 +140,9 @@ public final class AttackOverride extends UtilityClass {
 
         // Apply new velocity (and override .damage's Vanilla knockback)
         target.setVelocity(velocity);
+
+        // Apply effects
+        applyEffects(damager, target, item);
     }
 
 
