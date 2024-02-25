@@ -41,15 +41,13 @@ import java.util.logging.Level;
  * Provides actually useful data for the death message manager.
  */
 public final class AttackOverride extends UtilityClass {
-
-
     public static class AttackData {
         public final LivingEntity damager;
         public final ItemStack usedItem;
         public final Long time;
 
         // This is used to determine if an event has to actually damage the entity and trigger vanilla mob behaviours.
-        // Set to true after the mirror event is fired (event got mirrored, no need to do that again).
+        // It's set to true after the mirror event is fired (event got mirrored, no need to do that again).
         public boolean mirrored = false;
 
         public AttackData(LivingEntity _damager, ItemStack _usedItem, Long _time) {
@@ -57,72 +55,8 @@ public final class AttackOverride extends UtilityClass {
             usedItem = _usedItem;
             time = _time;
         }
-        public String toString() {
-            return
-                "\ndamager:  " + damager.getType() +
-                "\nusedItem: " + usedItem.toString() +
-                "\ntime:     " + time.toString() +
-                "\nmirrored: " + mirrored;
-        }
     }
-
-
     public  static final HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
-    private static final HashMap<UUID, Boolean> knockbackSprintBuff = new HashMap<>();
-
-
-
-
-
-    public static void resetKnockbackSprintBuff(@NotNull final PlayerToggleSprintEvent event){
-        if(event.isSprinting()) knockbackSprintBuff.put(event.getPlayer().getUniqueId(), true);
-    }
-
-    private static double getBaseKnockbackMultiplier(@Nullable final ItemStack item, @NotNull final LivingEntity target) {
-        double base = 1;
-        if(item != null && item.getType() != Material.AIR) {
-            final Long itemId = ItemUtils.getCustomItemId(item);
-            if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKnockbackMultiplier();
-        }
-        return base;
-    }
-
-    private static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
-        // Calculate base knockback
-        Vector direction = damager.getLocation().getDirection().setY(0).normalize();
-        Vector knockback = direction.clone().multiply(0.4 /* default kb is 0.4 length on XZ */).multiply(getBaseKnockbackMultiplier(item, target)).setY(0.325d);
-
-
-
-        // Vanilla sprint mechanic
-        int hasSprintbuff = 0;
-        if(damager instanceof Player player && player.isSprinting()) {
-            final Boolean sprintBuff = knockbackSprintBuff.get(player.getUniqueId());
-            if(sprintBuff != null && sprintBuff) {
-                knockbackSprintBuff.put(player.getUniqueId(), false);
-                ++hasSprintbuff;
-            }
-        }
-        // Calculate enchantments
-        if(item != null && item.getType() != Material.AIR) {
-            int knockbackLv = item.getEnchantmentLevel(Enchantment.KNOCKBACK);
-            knockback.add(new Vector(0.3f, 0, 0.3f).multiply(knockbackLv + hasSprintbuff).multiply(direction));
-            if(knockbackLv > 0) knockback.setY(0.4f);
-            //TODO calculate reeling enchant
-        }
-
-
-
-        // Calculate resistance
-        final AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-        double resistance = attribute == null ? 0 : attribute.getBaseValue(); // 0 to 100
-
-        // Return effective knockback
-        return knockback.multiply(1 - resistance);
-    }
-
-
-
 
 
 
@@ -155,6 +89,9 @@ public final class AttackOverride extends UtilityClass {
         }
     }
 
+
+
+
     /**
      * Registers a custom attack.
      * This method is also used to replace Vanilla EntityDamageByEntityEvent events.
@@ -183,10 +120,10 @@ public final class AttackOverride extends UtilityClass {
         // Calculate pre-hit velocity
         final Vector velocity = target.getVelocity();       // Starting velocity
         velocity.setY(velocity.getY() + 0.0784);            // Account for mob's default negative Y velocity
-        velocity.add(getKnockback(item, damager, target));  // Add knockback
+        velocity.add(CustomKnockback.getKnockback(item, damager, target));  // Add knockback
 
         // Damage the target
-        final double damage = getDamage(item, canCrit, damager, target);
+        final double damage = CustomDamage.getDamage(item, canCrit, damager, target);
         utils.log(Level.WARNING, "[" + damager.getType() + "] Custom damage sent: " + damage);
         target.damage(damage, damager);
 
