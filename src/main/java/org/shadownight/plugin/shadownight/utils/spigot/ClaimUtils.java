@@ -1,8 +1,8 @@
 package org.shadownight.plugin.shadownight.utils.spigot;
 
+import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +20,7 @@ public final class ClaimUtils extends UtilityClass {
      * @return True if the entity is inside a claim the player has no permission to build in (and thus hit entities), false otherwise
      */
     public static boolean isEntityProtected(@NotNull final Entity entity, @NotNull final Player player) {
-        return !GriefPrevention.instance.dataStore.getClaimAt(entity.getLocation(), false, null).hasExplicitPermission(player, ClaimPermission.Build);
+        Claim claim = GriefPrevention.instance.dataStore.getClaimAt(entity.getLocation(), false, null);
+        return claim != null && !claim.hasExplicitPermission(player, ClaimPermission.Build);
     }
 }

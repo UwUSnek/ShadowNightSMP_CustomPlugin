@@ -103,9 +103,21 @@ public final class AttackOverride extends UtilityClass {
      *                Whether the attack will effectively be critical depends on the current status of the attacking entity
      */
     public static void customAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, final boolean canCrit) {
-        if(damager instanceof Player player && ClaimUtils.isEntityProtected(target, player)) return;    // Ignore attacks on protected entities from players with no permissions
-        if(target instanceof Wolf wolf && wolf.getOwner() != damager) return;                           // Ignore attacks on other player's dogs
-        if(target.getNoDamageTicks() > 0) return;                                                       // Skip invulnerable entities
+        // Ignore attacks on protected entities from players with no permissions
+        if(
+            damager instanceof Player player && !(target instanceof Player) &&          // If a player attacks a non-player &&
+            !(target instanceof Tameable tameable && tameable.getOwner() == damager) && // target is not owned by the attacker &&
+            ClaimUtils.isEntityProtected(target, player)                                // target is protected from attacker
+        ) return;
+
+        // Ignore attacks on other player's dogs
+        if(
+            target instanceof Wolf wolf && wolf.getOwner() != damager && // If target is a dog and is not owner by the damaged player &&
+            wolf.getTarget() != damager                                  // dog isn't targeting the damager
+        ) return;
+
+        // Skip invulnerable entities
+        if(target.getNoDamageTicks() > 0) return;
 
 
         // Save the used item
