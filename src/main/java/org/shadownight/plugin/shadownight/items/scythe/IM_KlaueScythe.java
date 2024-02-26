@@ -5,7 +5,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
@@ -79,18 +78,4 @@ public final class IM_KlaueScythe extends IM_Scythe {
             }
         }
     }
-
-
-
-
-    //@Override
-    //public void onAttack(final @NotNull EntityDamageByEntityEvent event) {
-    //    final Player player = (Player) event.getDamager();
-//
-    //    if(player.isSneaking()) {
-    //        event.setCancelled(true);
-    //        player.sendMessage("shadow fury knock off");
-    //    }
-    //    else super.onAttack(event);
-    //}
 }

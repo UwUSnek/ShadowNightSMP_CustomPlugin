@@ -1,6 +1,5 @@
 package org.shadownight.plugin.shadownight;
 
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

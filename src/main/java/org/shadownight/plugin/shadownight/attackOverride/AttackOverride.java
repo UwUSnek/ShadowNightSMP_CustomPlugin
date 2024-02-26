@@ -1,32 +1,19 @@
 package org.shadownight.plugin.shadownight.attackOverride;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
-import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityRemoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK_Standard;
 import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
-import org.shadownight.plugin.shadownight.utils.spigot.ClaimUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
-import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
-import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.*;
-import java.util.logging.Level;
 
 
 
@@ -75,7 +62,6 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             AttackData lastAttack = attackQueue.get(attackQueue.size() == 1 ? 0 : 1);
             if (lastAttack.damager == e.getDamager() && !lastAttack.mirrored) {
                 lastAttack.mirrored = true;
-                utils.log(Level.WARNING, "" + e.getDamager().getType() + " attacked " + e.getEntity().getType() + " for " + e.getFinalDamage());
                 return;
             }
         }

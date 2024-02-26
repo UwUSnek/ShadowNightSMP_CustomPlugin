@@ -1,17 +1,13 @@
 package org.shadownight.plugin.shadownight.attackOverride.attacks;
 
 import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.shadownight.plugin.shadownight.attackOverride.AttackOverride;
 import org.shadownight.plugin.shadownight.utils.math.Func;
-import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;

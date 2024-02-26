@@ -4,7 +4,6 @@ package org.shadownight.plugin.shadownight.items.scythe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK_ConeArea;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 
 

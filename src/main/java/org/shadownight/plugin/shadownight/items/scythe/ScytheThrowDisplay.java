@@ -10,7 +10,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
-import org.shadownight.plugin.shadownight.attackOverride.AttackOverride;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;

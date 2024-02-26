@@ -1,25 +1,18 @@
 package org.shadownight.plugin.shadownight.items.scythe;
 
-import com.google.common.collect.HashMultimap;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.shadownight.plugin.shadownight.attackOverride.AttackOverride;
 import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK_ConeArea;
 import org.shadownight.plugin.shadownight.items.IM;
-import org.shadownight.plugin.shadownight.utils.math.Func;
-import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

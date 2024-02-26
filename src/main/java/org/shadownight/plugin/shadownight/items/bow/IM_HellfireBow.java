@@ -4,7 +4,6 @@ package org.shadownight.plugin.shadownight.items.bow;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
