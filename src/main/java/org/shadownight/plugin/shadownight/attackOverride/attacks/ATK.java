@@ -2,8 +2,7 @@ package org.shadownight.plugin.shadownight.attackOverride.attacks;
 
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
-import org.bukkit.Difficulty;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,6 +18,7 @@ import org.shadownight.plugin.shadownight.attackOverride.CustomDamage;
 import org.shadownight.plugin.shadownight.attackOverride.CustomKnockback;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.spigot.ClaimUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -141,6 +141,7 @@ public abstract class ATK implements Rnd {
             System.currentTimeMillis()
         ));
 
+        if(item != null) ItemUtils.damageItem(damager, item);
 
 
 
@@ -160,4 +161,13 @@ public abstract class ATK implements Rnd {
         target.setVelocity(velocity);
     }
 
+
+    /**
+     * Simulates the Vanilla sweeping attack effect and sound in front of the location <pos> based on the pitch and yaw specified in it.
+     * @param pos The target location
+     */
+    protected static void simulateSweepingEffect(@NotNull final Location pos) {
+        pos.getWorld().playSound(pos, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
+        pos.getWorld().spawnParticle(Particle.SWEEP_ATTACK, pos.clone().add(pos.getDirection().clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
+    }
 }

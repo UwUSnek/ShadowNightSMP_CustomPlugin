@@ -12,10 +12,12 @@ import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.attackOverride.AttackOverride;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
+import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 
 
@@ -35,6 +37,7 @@ public final class ATK_ConeArea extends ATK {
 
     @Override
     public void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @Nullable final ItemStack item) {
+        utils.log(Level.SEVERE, "Detected ConeArea attack");
         final Location damagerPos = damager.getLocation();
         final UUID damagerId = damager.getUniqueId();
         final long currentTime = System.currentTimeMillis();
@@ -43,32 +46,21 @@ public final class ATK_ConeArea extends ATK {
         final Long last_time = last_times.get(damagerId);
         if(last_time == null || currentTime - last_time >= cooldown) {
             last_times.put(damagerId, currentTime);
-            final Vector playerDirection = damagerPos.getDirection();
+            final Vector damagerDirection = damagerPos.getDirection();
             final List<Entity> entities = damager.getNearbyEntities(attackRange, attackRange, attackRange);
 
+            // Save initial attack charge and hit each entity individually (attack charge gets reset by basic attacks)
             final double attackCharge = getEntityCharge(damager);
-            //final double damage = vanillaCooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
-
-            int damagedEntities = 0;
             for (Entity entity : entities) {
                 if (
                     entity instanceof LivingEntity e &&
                     damagerPos.distance(e.getLocation()) < attackRange &&
-                    Func.isInCone(damagerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
+                    Func.isInCone(damagerPos.toVector(), damagerDirection, e.getLocation().toVector(), 3)
                 ) {
-                    ++damagedEntities;
-                    //attackQueue.put(playerId, e.getUniqueId());
-                    //((LivingEntity) e).damage(damage, player);
                     executeBasicAttack(damager, e, item, attackCharge, false);
-                    //attackQueue.remove(playerId, e.getUniqueId());
-                    //e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(vanillaCooldown))); // Double the normal kb (Damaging e already gives it normal kb)
                 }
             }
-
-
-            if (damagedEntities > 0) ItemUtils.damageItem(damager, item);
-            damager.getWorld().playSound(damager.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
-            damager.getWorld().spawnParticle(Particle.SWEEP_ATTACK, damagerPos.clone().add(playerDirection.clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
+            simulateSweepingEffect(damagerPos);
         }
     }
 }

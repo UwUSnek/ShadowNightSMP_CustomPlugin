@@ -75,6 +75,7 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             AttackData lastAttack = attackQueue.get(attackQueue.size() == 1 ? 0 : 1);
             if (lastAttack.damager == e.getDamager() && !lastAttack.mirrored) {
                 lastAttack.mirrored = true;
+                utils.log(Level.WARNING, "" + e.getDamager().getType() + " attacked " + e.getEntity().getType() + " for " + e.getFinalDamage());
                 return;
             }
         }
