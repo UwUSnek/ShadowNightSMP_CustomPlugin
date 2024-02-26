@@ -19,6 +19,7 @@ import org.shadownight.plugin.shadownight.economy.Economy;
 import org.shadownight.plugin.shadownight.attackOverride.AttackOverride;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.bow.IM_Bow;
+import org.shadownight.plugin.shadownight.qol.ArmorStandArms;
 import org.shadownight.plugin.shadownight.qol.SpawnInvincibility;
 import org.shadownight.plugin.shadownight.qol.StarterKit;
 import org.shadownight.plugin.shadownight.qol.SurvivalFly;
@@ -107,8 +108,7 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntitySpawn(@NotNull final EntitySpawnEvent event) {
-        //TODO use dedicated class
-        if(event.getEntity() instanceof ArmorStand entity) entity.setArms(true);
+        ArmorStandArms.onSpawn(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

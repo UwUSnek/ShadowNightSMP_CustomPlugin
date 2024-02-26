@@ -8,6 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityRemoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -133,7 +134,6 @@ public final class AttackOverride extends UtilityClass implements Rnd {
         if(attackQueue != null) {
             AttackData lastAttack = attackQueue.get(attackQueue.size() == 1 ? 0 : 1);
             if(lastAttack.damager == e.getDamager() && !lastAttack.mirrored) {
-                utils.log(Level.WARNING, "[" + e.getDamager().getType() + "] Actual damage let through: " + e.getFinalDamage());
                 lastAttack.mirrored = true;
                 return;
             }
@@ -141,7 +141,6 @@ public final class AttackOverride extends UtilityClass implements Rnd {
 
         // Cancel event and compute custom attack
         if (e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
-            utils.log(Level.SEVERE, "[" + damager.getType() + "] Vanilla Entity attack detected. Vanilla damage: " + e.getFinalDamage());
             e.setCancelled(true);
             customAttack(damager, target, canCrit);
         }
@@ -202,7 +201,6 @@ public final class AttackOverride extends UtilityClass implements Rnd {
         target.damage(damage, damager);                 // Damage the target
         applyEnchantEffects(damager, target, item);     // Apply enchantment effects
         applyMobEffects(damager, target, item);         // Apply vanilla mob effects
-        utils.log(Level.WARNING, "[" + damager.getType() + "] Custom damage sent: " + damage);
 
 
         // Apply new velocity (and override .damage's Vanilla knockback)
@@ -210,7 +208,7 @@ public final class AttackOverride extends UtilityClass implements Rnd {
     }
 
 
-    public static void onDeath(EntityDeathEvent e) {
+    public static void onDeath(@NotNull final EntityDeathEvent e) {
         attacks.remove(e.getEntity().getUniqueId());
     }
 }
