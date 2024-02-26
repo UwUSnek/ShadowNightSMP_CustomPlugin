@@ -23,7 +23,7 @@ public final class ClaimUtils extends UtilityClass {
      */
     public static boolean isEntityProtected(@NotNull final Entity entity, @NotNull final Player player) {
         // False if target is a monster
-        // False target is owned by the player
+        // False if target is owned by the player
         if (
             entity instanceof Monster ||
             (entity instanceof Tameable tameable && tameable.getOwner() == entity)

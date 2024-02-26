@@ -74,7 +74,6 @@ public final class AttackOverride extends UtilityClass implements Rnd {
 
     private static void resetPotion(@NotNull final LivingEntity target, @NotNull final PotionEffectType type, final int duration, final int amplifier) {
         if(target.hasPotionEffect(type)) {
-            Bukkit.broadcastMessage("effect reset");
             PotionEffect effect = target.getPotionEffect(type);
             if(effect != null && effect.getDuration() <= duration && amplifier == effect.getAmplifier()) target.removePotionEffect(type);
         }
@@ -171,8 +170,7 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             wolf.getTarget() != damager                                  // dog isn't targeting the damager
         ) return;
 
-        // Skip invulnerable entities
-        if(target.getNoDamageTicks() > 0) { utils.log(Level.INFO,"IMMUNE");return; }
+
 
 
         // Save the used item

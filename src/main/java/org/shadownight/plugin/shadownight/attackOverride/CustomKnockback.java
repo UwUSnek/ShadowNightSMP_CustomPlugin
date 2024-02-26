@@ -125,7 +125,7 @@ public final class CustomKnockback extends UtilityClass {
         if(item != null && item.getType() != Material.AIR) {
             int knockbackLv = item.getEnchantmentLevel(Enchantment.KNOCKBACK);
             knockback.add(new Vector(enchantKnockbackXZ, 0, enchantKnockbackXZ).multiply(knockbackLv + hasSprintbuff).multiply(direction));
-            if(knockbackLv > 0) knockback.setY(enchantKnockbackY);
+            if(knockbackLv + hasSprintbuff > 0) knockback.setY(enchantKnockbackY);
             //TODO calculate reeling enchant
         }
 
