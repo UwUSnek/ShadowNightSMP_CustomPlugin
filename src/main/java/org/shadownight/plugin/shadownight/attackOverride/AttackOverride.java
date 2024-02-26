@@ -1,17 +1,21 @@
 package org.shadownight.plugin.shadownight.attackOverride;
 
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.ClaimUtils;
 import org.shadownight.plugin.shadownight.utils.utils;
@@ -27,7 +31,7 @@ import java.util.logging.Level;
  * Allows for custom attacks and overrides vanilla attacks.
  * Provides actually useful data for the death message manager.
  */
-public final class AttackOverride extends UtilityClass {
+public final class AttackOverride extends UtilityClass implements Rnd {
     public static class AttackData {
         public final LivingEntity damager;
         public final ItemStack usedItem;
@@ -48,15 +52,66 @@ public final class AttackOverride extends UtilityClass {
     //TODO maybe save any damage in the queue
 
 
-
-
-    private static void applyEffects(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @Nullable ItemStack item) {
-        if(item != null) {
+    /**
+     * Applies enchantment effects to the target.
+     * This includes any enchantment on the target's armor.
+     * Protection is handled by Vanilla Minecraft.
+     * Sharpness and variants are handled by the damage calculation system.
+     * @param damager The attacking entity
+     * @param target The attacked entity
+     * @param item The item used to attack
+     */
+    private static void applyEnchantEffects(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @Nullable ItemStack item) {
+        // Fire aspect
+        if (item != null) {
             int fireAspectLv = item.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
-            if(fireAspectLv > 0) target.setFireTicks(fireAspectLv * 80);
+            if (fireAspectLv > 0) {Bukkit.broadcastMessage("fire aspect * " + fireAspectLv * 80);;target.setFireTicks(fireAspectLv * 80);}
         }
+    }
+
+
+
+    private static void resetPotion(@NotNull final LivingEntity target, @NotNull final PotionEffectType type, final int duration, final int amplifier) {
+        if(target.hasPotionEffect(type)) {
+            Bukkit.broadcastMessage("effect reset");
+            PotionEffect effect = target.getPotionEffect(type);
+            if(effect != null && effect.getDuration() <= duration && amplifier == effect.getAmplifier()) target.removePotionEffect(type);
+        }
+        target.addPotionEffect(new PotionEffect(type, duration, amplifier));
+    }
+
+    /**
+     * Applies the Vanilla mob effects to the target.
+     * @param damager The attacking entity
+     * @param target The attacked entity
+     * @param item The item used to attack
+     */
+    private static void applyMobEffects(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @Nullable ItemStack item) {
+        Difficulty difficulty = target.getWorld().getDifficulty();
+        double regionalDifficulty = utils.getRegionalDifficulty(difficulty, target.getLocation());
         switch (damager.getType()) {
-            //case EntityType.
+            case HUSK: {
+                if (item == null || item.getType() == Material.AIR) resetPotion(target, PotionEffectType.HUNGER, 7 * 20 * (int)Math.floor(regionalDifficulty), 0);
+                // Intentional fallthrough
+            }
+            case ZOMBIE, ZOMBIE_VILLAGER: {
+                if (damager.getFireTicks() > 0 && rnd.nextFloat() < 0.3 * regionalDifficulty) target.setFireTicks(20 * 2 * (int)Math.floor(regionalDifficulty));
+                break;
+            }
+            case CAVE_SPIDER: {
+                /**/ if (difficulty == Difficulty.NORMAL) resetPotion(target, PotionEffectType.POISON,  7 * 20, 0);
+                else if (difficulty == Difficulty.HARD)   resetPotion(target, PotionEffectType.POISON, 15 * 20, 0);
+                break;
+            }
+            case BEE: {
+                /**/ if (difficulty == Difficulty.NORMAL) resetPotion(target, PotionEffectType.POISON, 10 * 20, 0);
+                else if (difficulty == Difficulty.HARD)   resetPotion(target, PotionEffectType.POISON, 18 * 20, 0);
+                break;
+            }
+            case WITHER_SKELETON: {
+                resetPotion(target, PotionEffectType.WITHER, 10 * 20, 0);
+                break;
+            }
         }
     }
 
@@ -112,12 +167,12 @@ public final class AttackOverride extends UtilityClass {
 
         // Ignore attacks on other player's dogs
         if(
-            target instanceof Wolf wolf && wolf.getOwner() != damager && // If target is a dog and is not owner by the damaged player &&
+            target instanceof Wolf wolf && (wolf.getOwner() != null && wolf.getOwner() != damager) && // If target is a dog and is not owner by the damaged player &&
             wolf.getTarget() != damager                                  // dog isn't targeting the damager
         ) return;
 
         // Skip invulnerable entities
-        if(target.getNoDamageTicks() > 0) return;
+        if(target.getNoDamageTicks() > 0) { utils.log(Level.INFO,"IMMUNE");return; }
 
 
         // Save the used item
@@ -137,23 +192,21 @@ public final class AttackOverride extends UtilityClass {
 
 
         // Calculate pre-hit velocity
-        final Vector velocity = target.getVelocity();       // Starting velocity
-        velocity.setY(velocity.getY() + 0.0784);            // Account for mob's default negative Y velocity
+        final Vector velocity = target.getVelocity();                       // Set starting velocity
+        if(target.isOnGround()) velocity.setY(velocity.getY() + 0.0784);    // Account for mob's default negative Y velocity if it is on ground
         velocity.add(CustomKnockback.getKnockback(item, damager, target));  // Add knockback
 
-        // Damage the target
-        final double damage = CustomDamage.getDamage(item, canCrit, damager, target);
-        utils.log(Level.WARNING, "[" + damager.getType() + "] Custom damage sent: " + damage);
-        target.damage(damage, damager);
 
         //TODO review and simplify custom scythe attacks
+        final double damage = CustomDamage.getDamage(item, canCrit, damager, target);
+        target.damage(damage, damager);                 // Damage the target
+        applyEnchantEffects(damager, target, item);     // Apply enchantment effects
+        applyMobEffects(damager, target, item);         // Apply vanilla mob effects
+        utils.log(Level.WARNING, "[" + damager.getType() + "] Custom damage sent: " + damage);
 
 
         // Apply new velocity (and override .damage's Vanilla knockback)
         target.setVelocity(velocity);
-
-        // Apply effects
-        applyEffects(damager, target, item);
     }
 
 
