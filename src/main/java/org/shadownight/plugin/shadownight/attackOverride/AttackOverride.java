@@ -48,9 +48,10 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             time = _time;
         }
     }
-    public static final HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
     //TODO use this for more detailed death messages
     //TODO maybe save any damage in the queue
+    public static final HashMap<UUID, CircularFifoQueue<AttackData>> attacks = new HashMap<>();
+    private static final double gravityY = -0.0784d;
 
 
     /**
@@ -191,8 +192,9 @@ public final class AttackOverride extends UtilityClass implements Rnd {
 
         // Calculate pre-hit velocity
         final Vector velocity = target.getVelocity();                       // Set starting velocity
-        if(target.isOnGround()) velocity.setY(velocity.getY() + 0.0784);    // Account for mob's default negative Y velocity if it is on ground
-        velocity.add(CustomKnockback.getKnockback(item, damager, target));  // Add knockback
+        velocity.add(CustomKnockback.getKnockback(item, damager, target));  // Add attack knockback
+        if(!target.isOnGround()) velocity.setY(0);                          // If not on ground, set Y knockback to 0
+        else velocity.setY(velocity.getY() - gravityY);                     // If on ground, account for gravity
 
 
         //TODO review and simplify custom scythe attacks
