@@ -36,7 +36,7 @@ public final class ChatManager extends UtilityClass {
     // Returns the message with the offending part highlighted in red if it contains the word <word>
     // Returns null if it doesn't
     @SuppressWarnings("SpellCheckingInspection")
-    static private String checkWord(@NotNull String msg, final @NotNull String word) {
+    static private String checkWord(@NotNull String msg, @NotNull final String word) {
         msg = ChatUtils.stripColor(msg);
         final String msg_clean = msg.replaceAll("[ _\\-\t]", " ").replaceAll("[|│]", "i").replaceAll("1", "i").replaceAll("0", "o").replaceAll("3", "e").replaceAll("4", "a");
 
@@ -124,7 +124,7 @@ public final class ChatManager extends UtilityClass {
      * @param msg The message string
      * @return True if the string doesn't contain any blocked word, false otherwise
      */
-    public static boolean checkBlockedWords(final @NotNull Player player, final @NotNull String msg) {
+    public static boolean checkBlockedWords(@NotNull final Player player, @NotNull final String msg) {
         for (String word : blockedWords) {
             final String offendingMessage = checkWord(msg, word);
             if(offendingMessage != null) {

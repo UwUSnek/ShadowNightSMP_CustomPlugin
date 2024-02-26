@@ -12,6 +12,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.attackOverride.AttackOverride;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.utils.math.Func;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
@@ -41,7 +42,7 @@ public abstract class IM_Scythe extends IM {
 
 
 
-    static private void breakBlocks(final @NotNull Player player) {
+    static private void breakBlocks(@NotNull final Player player) {
         Location playerPos = player.getLocation();
         Vector playerDirection = playerPos.getDirection();
 
@@ -53,12 +54,12 @@ public abstract class IM_Scythe extends IM {
 
 
 
-    public static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
+    //public static final HashMultimap<UUID, UUID> attackQueue = HashMultimap.create();
     private static final HashMap<UUID, Long> last_times = new HashMap<>();
     private static final double attackRange = 6;
     private static final long cooldown = 500;
 
-    protected void customAttack(final @NotNull Player player, final @NotNull ItemStack item) {
+    protected void customAttack(@NotNull final Player player, @NotNull final ItemStack item) {
         final Location playerPos = player.getLocation();
         final UUID playerId = player.getUniqueId();
         final long currentTime = System.currentTimeMillis();
@@ -71,20 +72,21 @@ public abstract class IM_Scythe extends IM {
             final List<Entity> entities = player.getNearbyEntities(attackRange, attackRange, attackRange);
 
             final double vanillaCooldown = player.getAttackCooldown();
-            final double damage = vanillaCooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
+            //final double damage = vanillaCooldown * Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE), "Attack damage attribute is null").getValue();
 
             int damagedEntities = 0;
-            for (Entity e : entities) {
+            for (Entity entity : entities) {
                 if (
-                    e instanceof LivingEntity &&
+                    entity instanceof LivingEntity e &&
                     playerPos.distance(e.getLocation()) < attackRange &&
                     Func.isInCone(playerPos.toVector(), playerDirection, e.getLocation().toVector(), 3)
                 ) {
                     ++damagedEntities;
-                    attackQueue.put(playerId, e.getUniqueId());
-                    ((LivingEntity) e).damage(damage, player);
-                    attackQueue.remove(playerId, e.getUniqueId());
-                    e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(vanillaCooldown))); // Double the normal kb (Damaging e already gives it normal kb)
+                    //attackQueue.put(playerId, e.getUniqueId());
+                    //((LivingEntity) e).damage(damage, player);
+                    AttackOverride.customAttack(player, e, false);
+                    //attackQueue.remove(playerId, e.getUniqueId());
+                    //e.setVelocity(e.getVelocity().add(playerDirection.clone().multiply(new Vector(1, 0, 1)).multiply(vanillaCooldown))); // Double the normal kb (Damaging e already gives it normal kb)
                 }
             }
 
@@ -111,20 +113,20 @@ public abstract class IM_Scythe extends IM {
 
 
     @Override
-    protected void onAttack(final @NotNull EntityDamageByEntityEvent event) {
+    public void onAttack(final @NotNull EntityDamageByEntityEvent event) {
         final Player player = (Player) event.getDamager();
-        final Entity target = event.getEntity();
+        //final Entity target = event.getEntity();
 
-        final UUID playerId = player.getUniqueId();
-        final UUID targetId = target.getUniqueId();
+        //final UUID playerId = player.getUniqueId();
+        //final UUID targetId = target.getUniqueId();
 
 
-        if(attackQueue.containsEntry(playerId, targetId)) {
-            attackQueue.remove(playerId, targetId);
-        }
-        else {
+        //if(attackQueue.containsEntry(playerId, targetId)) {
+        //    attackQueue.remove(playerId, targetId);
+        //}
+        //else {
             event.setCancelled(true);
             customAttack(player, player.getInventory().getItemInMainHand());
-        }
+        //}
     }
 }

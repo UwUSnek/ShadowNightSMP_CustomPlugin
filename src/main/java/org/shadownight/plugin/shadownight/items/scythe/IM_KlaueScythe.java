@@ -83,7 +83,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
     @Override
-    protected void onAttack(final @NotNull EntityDamageByEntityEvent event) {
+    public void onAttack(final @NotNull EntityDamageByEntityEvent event) {
         final Player player = (Player) event.getDamager();
 
         if(player.isSneaking()) {

@@ -90,7 +90,6 @@ public final class CustomKnockback extends UtilityClass {
             }
         }
 
-        utils.log(Level.INFO, "Detected knockback resistance " + resistance);
         return resistance;
     }
 

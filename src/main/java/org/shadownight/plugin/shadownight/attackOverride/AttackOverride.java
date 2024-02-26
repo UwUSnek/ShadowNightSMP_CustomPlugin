@@ -16,9 +16,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.ClaimUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
@@ -139,10 +141,21 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             }
         }
 
-        // Cancel event and compute custom attack
-        if (e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
-            e.setCancelled(true);
-            customAttack(damager, target, canCrit);
+        // If damager is a living entity
+        if(e.getDamager() instanceof LivingEntity damager) {
+            // Use custom attacks if attacker is using custom item
+            final EntityEquipment equipment = damager.getEquipment();
+            final ItemStack item = equipment == null ? null : equipment.getItemInMainHand();
+            Long customItemId = ItemUtils.getCustomItemId(item);
+            if(customItemId != null) {
+                ItemManager.getValueFromId(customItemId).onAttack(e);
+            }
+
+            // If not, cancel event and compute custom attack on the vanilla item
+            else if (e.getEntity() instanceof LivingEntity target) {
+                e.setCancelled(true);
+                customAttack(damager, target, canCrit);
+            }
         }
     }
 

@@ -82,15 +82,15 @@ public abstract class IM implements Listener {
      * Determines what custom item the player is holding and executes attack callbacks accordingly.
      * @param event The attack event
      */
-    public static void chooseOnAttack(final @NotNull EntityDamageByEntityEvent event) {
-        if(event.getDamager() instanceof Player player) {
-            final ItemStack item = player.getInventory().getItemInMainHand();
-            Long customItemId = ItemUtils.getCustomItemId(item);
-            if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
-                if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) itemManager.getInstance().onAttack(event);
-            }
-        }
-    }
+    //public static void chooseOnAttack(final @NotNull EntityDamageByEntityEvent event) {
+    //    if(event.getDamager() instanceof Player player) {
+    //        final ItemStack item = player.getInventory().getItemInMainHand();
+    //        Long customItemId = ItemUtils.getCustomItemId(item);
+    //        if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
+    //            if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) itemManager.getInstance().onAttack(event);
+    //        }
+    //    }
+    //}
     protected abstract void onInteract(final @NotNull PlayerInteractEvent event);
-    protected abstract void onAttack(final @NotNull EntityDamageByEntityEvent event);
+    public abstract void onAttack(final @NotNull EntityDamageByEntityEvent event);
 }

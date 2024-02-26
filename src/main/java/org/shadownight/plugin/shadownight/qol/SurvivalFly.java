@@ -15,7 +15,7 @@ public class SurvivalFly extends UtilityClass {
      * Updates the allowFlight value of the player <player> based on their rank and current world.
      * @param player The player to check
      */
-    public static void updateState(final @NotNull Player player) {
+    public static void updateState(@NotNull final Player player) {
         if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
             if (player.hasPermission("group.vip")) {
                 if (player.getWorld().getName().equals("Spawn") && !player.getAllowFlight()) {

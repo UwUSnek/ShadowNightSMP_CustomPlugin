@@ -129,10 +129,13 @@ public final class CustomDamage extends UtilityClass {
 
 
         // Return effective damage
+        utils.log(Level.WARNING, "Damaging " + target.getType() + " for " + (
+            damage *        (0.2 + Math.pow(charge, 2) * 0.8) +
+            enchantDamage * (0.2 +          charge     * 0.8)));
         return
             damage *        (0.2 + Math.pow(charge, 2) * 0.8) +
             enchantDamage * (0.2 +          charge     * 0.8)
-            ;
+        ;
     }
 
 
