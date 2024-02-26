@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.shadownight.plugin.shadownight.utils.Rnd;
 import org.shadownight.plugin.shadownight.utils.UtilityClass;
 import org.shadownight.plugin.shadownight.utils.spigot.ClaimUtils;
+import org.shadownight.plugin.shadownight.utils.spigot.Scheduler;
 import org.shadownight.plugin.shadownight.utils.utils;
 
 import java.util.*;
@@ -65,7 +66,7 @@ public final class AttackOverride extends UtilityClass implements Rnd {
         // Fire aspect
         if (item != null) {
             int fireAspectLv = item.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
-            if (fireAspectLv > 0) {Bukkit.broadcastMessage("fire aspect * " + fireAspectLv * 80);;target.setFireTicks(fireAspectLv * 80);}
+            if (fireAspectLv > 0) Scheduler.delay(() -> target.setFireTicks(fireAspectLv * 80), 1L);
         }
     }
 
@@ -95,7 +96,7 @@ public final class AttackOverride extends UtilityClass implements Rnd {
                 // Intentional fallthrough
             }
             case ZOMBIE, ZOMBIE_VILLAGER: {
-                if (damager.getFireTicks() > 0 && rnd.nextFloat() < 0.3 * regionalDifficulty) target.setFireTicks(20 * 2 * (int)Math.floor(regionalDifficulty));
+                if (damager.getFireTicks() > 0 && rnd.nextFloat() < 0.3 * regionalDifficulty) Scheduler.delay(() -> target.setFireTicks(20 * 2 * (int)Math.floor(regionalDifficulty)), 1L);
                 break;
             }
             case CAVE_SPIDER: {
@@ -161,7 +162,6 @@ public final class AttackOverride extends UtilityClass implements Rnd {
         // Ignore attacks on protected entities from players with no permissions
         if(
             damager instanceof Player player && !(target instanceof Player) &&          // If a player attacks a non-player &&
-            !(target instanceof Tameable tameable && tameable.getOwner() == damager) && // target is not owned by the attacker &&
             ClaimUtils.isEntityProtected(target, player)                                // target is protected from attacker
         ) return;
 
