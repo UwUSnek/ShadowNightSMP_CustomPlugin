@@ -179,7 +179,8 @@ public final class ScytheThrowDisplay {
                 if (entity instanceof LivingEntity e && Func.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && !e.getUniqueId().equals(player.getUniqueId())) {
                     //IM_Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
                     //((LivingEntity) e).damage(10, player);
-                    AttackOverride.customAttack(player, e, false);
+                    //AttackOverride.customAttack(player, e,  false);
+                    //TODO use reach area
                 }
             }
         }

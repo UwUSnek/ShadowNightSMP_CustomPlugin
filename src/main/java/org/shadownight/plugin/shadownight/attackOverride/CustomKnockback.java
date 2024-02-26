@@ -33,6 +33,7 @@ public final class CustomKnockback extends UtilityClass {
     private static final double defaultKnockbackY = 0.325d; // The default knockback that is dealt on the Y  Axis  using no enchantments or vanilla knockback buff mechanics.
     private static final double enchantKnockbackXZ = 0.3d;  // The additional knockback deal on the XZ Plane by the Vanilla Knockback Enchantment
     private static final double enchantKnockbackY = 0.4d;   // The total      knockback deal on the Y  axis  by the Vanilla Knockback Enchantment
+    private static final double gravityY = -0.0784d;        //The default vertical velocity of non-onGround() entities
 
 
     /**
@@ -104,7 +105,7 @@ public final class CustomKnockback extends UtilityClass {
      * @param target The attacked entity
      * @return The final knockback vector
      */
-    static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
+    public static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
         // Calculate base knockback
         Vector direction = damager.getLocation().getDirection().setY(0).normalize();
         Vector knockback = direction.clone().multiply(defaultKnockbackXZ).multiply(getItemKnockbackMultiplier(item)).setY(defaultKnockbackY);
@@ -129,7 +130,14 @@ public final class CustomKnockback extends UtilityClass {
         }
 
 
+        // Apply resistance
+        knockback.multiply(1 - getTargetKnockbackResistance(target));
+
+        // Calculate gravity or Vanilla no-vertical-knockback-if-no-on-ground mechanic which i don't know the name of
+        if(!target.isOnGround()) knockback.setY(0);           // If not on ground, set Y knockback to 0
+        else knockback.setY(knockback.getY() - gravityY);     // If on ground, account for gravity
+
         // Return effective knockback
-        return knockback.multiply(1 - getTargetKnockbackResistance(target));
+        return knockback;
     }
 }

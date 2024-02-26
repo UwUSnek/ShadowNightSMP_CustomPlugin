@@ -6,6 +6,8 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK;
+import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK_Standard;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
@@ -18,6 +20,10 @@ import java.util.UUID;
 
 public abstract class IM_Bow extends IM {
     private static final HashMap<UUID, Pair<IM_Bow, ItemStack>> activeProjectiles = new HashMap<>();
+
+    public IM_Bow() {
+        super(new ATK_Standard());
+    }
 
 
     @Override public double getHitDamage() { return 1; }

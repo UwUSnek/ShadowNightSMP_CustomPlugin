@@ -87,8 +87,7 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAttack(@NotNull final EntityDamageByEntityEvent event) {
-        //IM.chooseOnAttack(event);
-        AttackOverride.customAttack(event, true);
+        AttackOverride.customAttack(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

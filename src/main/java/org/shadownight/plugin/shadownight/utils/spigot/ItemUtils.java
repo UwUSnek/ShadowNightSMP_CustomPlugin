@@ -3,6 +3,7 @@ package org.shadownight.plugin.shadownight.utils.spigot;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -80,16 +81,16 @@ public final class ItemUtils extends UtilityClass {
 
     /**
      * Damages an item and deletes it if it's durability reaches 0.
-     * @param player The player that owns the item
+     * @param entity The entity that owns the item
      * @param item The item to damage
      */
-    public static void damageItem(final @NotNull Player player, final @NotNull ItemStack item) {
-        if(player.getGameMode() != GameMode.CREATIVE && item.getAmount() > 0) { // amount <= 0 means that a different thread broke the item. No need to damage it further
+    public static void damageItem(final @NotNull LivingEntity entity, final @NotNull ItemStack item) {
+        if(!(entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE) && item.getAmount() > 0) { // amount <= 0 means that a different thread broke the item. No need to damage it further
             ItemMeta meta = item.getItemMeta();
             if (meta instanceof Damageable _meta) {
                 if(_meta.getDamage() >= item.getType().getMaxDurability()) {
                     item.setAmount(0);
-                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                    entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                 }
                 else {
                     _meta.setDamage(_meta.getDamage() + 1);

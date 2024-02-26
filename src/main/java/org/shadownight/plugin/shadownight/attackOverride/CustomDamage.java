@@ -99,12 +99,9 @@ public final class CustomDamage extends UtilityClass {
      * @param target The attacked entity
      * @return The total damage
      */
-    static double getDamage(@Nullable final ItemStack item, boolean canCrit, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
+    public static double getDamage(@Nullable final ItemStack item, boolean canCrit, @NotNull final LivingEntity damager, @NotNull final LivingEntity target, final double charge) {
         double damage = getBaseDamage(item, damager);
         double enchantDamage = 0d;
-        double charge = 1;
-        if(damager instanceof Player player) charge = player.getAttackCooldown();
-        utils.log(Level.WARNING, "[" + damager.getType() + "] Using charge: " + charge);
 
 
         // Calculate potion effects
@@ -113,7 +110,7 @@ public final class CustomDamage extends UtilityClass {
 
 
         // Calculate critical multiplier //TODO calculate critical enchant
-        if(canCrit && isCritical(damager)) damage *= 1.5;
+        if(canCrit && entityCanCrit(damager)) damage *= 1.5;
 
 
         // Calculate enchantments (Separate charge multiplier)
@@ -129,9 +126,6 @@ public final class CustomDamage extends UtilityClass {
 
 
         // Return effective damage
-        utils.log(Level.WARNING, "Damaging " + target.getType() + " for " + (
-            damage *        (0.2 + Math.pow(charge, 2) * 0.8) +
-            enchantDamage * (0.2 +          charge     * 0.8)));
         return
             damage *        (0.2 + Math.pow(charge, 2) * 0.8) +
             enchantDamage * (0.2 +          charge     * 0.8)
@@ -143,18 +137,18 @@ public final class CustomDamage extends UtilityClass {
 
     /**
      * Checks if an entity can deal critical hits in its current state.
-     * @param damager The damager entity
+     * @param e The damager entity
      * @return True if it can deal critical hits, false otherwise
      */
-    private static boolean isCritical(@NotNull final LivingEntity damager) {
+    private static boolean entityCanCrit(@NotNull final LivingEntity e) {
         return
-            damager.getFallDistance() > 0f &&
-            !damager.isOnGround() &&
-            !damager.isClimbing() &&
-            !damager.isInWater() &&
-            damager.getVehicle() == null &&
-            damager.getPotionEffect(PotionEffectType.BLINDNESS) == null &&
-            !(damager instanceof Player player && player.isSprinting())
+            !e.isOnGround() &&
+            e.getFallDistance() > 0f &&
+            !e.isClimbing() &&
+            !e.isInWater() &&
+            e.getVehicle() == null &&
+            e.getPotionEffect(PotionEffectType.BLINDNESS) == null &&
+            !(e instanceof Player player && player.isSprinting())
         ;
     }
 }

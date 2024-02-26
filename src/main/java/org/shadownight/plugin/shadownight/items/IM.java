@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.shadownight.plugin.shadownight.ShadowNight;
+import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK;
 import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 
 
@@ -20,16 +21,18 @@ import org.shadownight.plugin.shadownight.utils.spigot.ItemUtils;
 public abstract class IM implements Listener {
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
     protected final ItemStack defaultItem;
+    public final ATK attack;
 
 
     /**
      * Creates a new Item Manager.
      */
-    public IM() {
+    public IM(@NotNull final ATK _attack) { //TODO pass parameters to super constructor instead of using get functions for everything
         defaultItem = ItemUtils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
         setItemAttributes();
         createRecipe();
         Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
+        attack = _attack;
     }
     public abstract Material getMaterial();
     public abstract String getDisplayName();
@@ -92,5 +95,5 @@ public abstract class IM implements Listener {
     //    }
     //}
     protected abstract void onInteract(final @NotNull PlayerInteractEvent event);
-    public abstract void onAttack(final @NotNull EntityDamageByEntityEvent event);
+    //public abstract void onAttack(final @NotNull EntityDamageByEntityEvent event);
 }

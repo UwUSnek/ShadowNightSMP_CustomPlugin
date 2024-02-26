@@ -49,7 +49,8 @@ public final class IM_KlaueScythe extends IM_Scythe {
         if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
             event.setCancelled(true);
             if(player.isSneaking()) player.sendMessage("shadow fury knock off");
-            else customAttack(player, event.getItem());
+            //else customAttack(player, event.getItem());
+            else attack.execute(player, null, event.getItem());
         }
         else if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
             event.setCancelled(true);
@@ -82,14 +83,14 @@ public final class IM_KlaueScythe extends IM_Scythe {
 
 
 
-    @Override
-    public void onAttack(final @NotNull EntityDamageByEntityEvent event) {
-        final Player player = (Player) event.getDamager();
-
-        if(player.isSneaking()) {
-            event.setCancelled(true);
-            player.sendMessage("shadow fury knock off");
-        }
-        else super.onAttack(event);
-    }
+    //@Override
+    //public void onAttack(final @NotNull EntityDamageByEntityEvent event) {
+    //    final Player player = (Player) event.getDamager();
+//
+    //    if(player.isSneaking()) {
+    //        event.setCancelled(true);
+    //        player.sendMessage("shadow fury knock off");
+    //    }
+    //    else super.onAttack(event);
+    //}
 }

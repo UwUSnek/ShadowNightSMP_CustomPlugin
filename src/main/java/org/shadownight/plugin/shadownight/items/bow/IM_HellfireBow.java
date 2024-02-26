@@ -36,7 +36,7 @@ public final class IM_HellfireBow extends IM_Bow {
     }
 
     @Override protected void onInteract(@NotNull PlayerInteractEvent event) {}
-    @Override public void onAttack(@NotNull EntityDamageByEntityEvent event) {}
+    //@Override public void onAttack(@NotNull EntityDamageByEntityEvent event) {}
 
     @Override
     protected void onShoot(@NotNull EntityShootBowEvent event) {
