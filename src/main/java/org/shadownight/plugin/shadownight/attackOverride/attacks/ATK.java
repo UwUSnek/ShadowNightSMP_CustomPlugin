@@ -28,7 +28,7 @@ import java.util.UUID;
 
 
 public abstract class ATK implements Rnd {
-    public abstract void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @Nullable final ItemStack item);
+    public abstract void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @NotNull final Location origin, @Nullable final ItemStack item);
 
 
 

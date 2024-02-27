@@ -10,6 +10,8 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
+import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK_LineArea;
+import org.shadownight.plugin.shadownight.attackOverride.attacks.ATK_ReachArea;
 import org.shadownight.plugin.shadownight.items.CustomItemId;
 import org.shadownight.plugin.shadownight.items.IM;
 import org.shadownight.plugin.shadownight.items.ItemManager;
@@ -31,6 +33,8 @@ public final class ScytheThrowDisplay {
     private BukkitTask rotationTask;
     private final Player player;
     private final ItemStack item;
+
+    private final ATK_LineArea attack = new ATK_LineArea(0, 2);
 
 
     //TODO make specific class for this type of objects
@@ -167,21 +171,11 @@ public final class ScytheThrowDisplay {
 
 
         // Damage entities
+        Location oldPos = progressToCoords(f.apply(progress - stepSize), start, _final_end).toLocation(display.getWorld());
         if(progress > 0.0f) {
-            World world = display.getWorld();
-            Vector oldPos = progressToCoords(f.apply(progress - stepSize), start, _final_end);
-            Vector mid = pos.getMidpoint(oldPos);
-            Vector boxSize_ = oldPos.clone().subtract(mid);
-            Vector boxSize = new Vector(Math.abs(boxSize_.getX()), Math.abs(boxSize_.getY()), Math.abs(boxSize_.getZ())).divide(new Vector(2, 2, 2)).add(new Vector(2, 2, 2));
-            Collection<Entity> entities = world.getNearbyEntities(mid.toLocation(world), Math.abs(boxSize.getX()), Math.abs(boxSize.getY()), Math.abs(boxSize.getZ()));
-            for (Entity entity : entities) {
-                if (entity instanceof LivingEntity e && Func.distToLine(oldPos, pos, e.getLocation().toVector()) <= 2 && !e.getUniqueId().equals(player.getUniqueId())) {
-                    //IM_Scythe.attackQueue.put(player.getUniqueId(), e.getUniqueId());
-                    //((LivingEntity) e).damage(10, player);
-                    //AttackOverride.customAttack(player, e,  false);
-                    //TODO use reach area
-                }
-            }
+            attack.len = oldPos.toVector().distance(pos);
+            Location origin = oldPos.clone().setDirection(pos.clone().subtract(oldPos.toVector()).normalize());
+            attack.execute(player, null, origin, item);
         }
 
 

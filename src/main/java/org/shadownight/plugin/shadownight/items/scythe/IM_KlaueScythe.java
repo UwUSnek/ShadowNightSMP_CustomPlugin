@@ -49,7 +49,7 @@ public final class IM_KlaueScythe extends IM_Scythe {
             event.setCancelled(true);
             if(player.isSneaking()) player.sendMessage("shadow fury knock off");
             //else customAttack(player, event.getItem());
-            else attack.execute(player, null, event.getItem());
+            else attack.execute(player, null, player.getLocation(), event.getItem());
         }
         else if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
             event.setCancelled(true);

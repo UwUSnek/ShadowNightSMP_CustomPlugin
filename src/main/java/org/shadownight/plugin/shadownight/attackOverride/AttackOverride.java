@@ -77,8 +77,8 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             Long customItemId = ItemUtils.getCustomItemId(item);
 
             // Use specified custom attacks if attacker is using custom item. If not, compute standard attack on the vanilla item
-            if (customItemId != null) ItemManager.getValueFromId(customItemId).attack.execute(damager, target, item);
-            else vanillaAttack.execute(damager, target, item);
+            if (customItemId != null) ItemManager.getValueFromId(customItemId).attack.execute(damager, target, damager.getLocation(), item);
+            else vanillaAttack.execute(damager, target, damager.getLocation(), item);
         }
     }
 

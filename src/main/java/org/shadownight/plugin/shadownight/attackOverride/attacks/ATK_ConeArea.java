@@ -32,9 +32,8 @@ public final class ATK_ConeArea extends ATK {
 
 
     @Override
-    public void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @Nullable final ItemStack item) {
+    public void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @NotNull final Location origin, @Nullable final ItemStack item) {
         utils.log(Level.SEVERE, "Detected ConeArea attack");
-        final Location damagerPos = damager.getLocation();
         final UUID damagerId = damager.getUniqueId();
         final long currentTime = System.currentTimeMillis();
 
@@ -42,7 +41,7 @@ public final class ATK_ConeArea extends ATK {
         final Long last_time = last_times.get(damagerId);
         if(last_time == null || currentTime - last_time >= cooldown) {
             last_times.put(damagerId, currentTime);
-            final Vector damagerDirection = damagerPos.getDirection();
+            final Vector damagerDirection = origin.getDirection();
             final List<Entity> entities = damager.getNearbyEntities(attackRange, attackRange, attackRange);
 
             // Save initial attack charge and hit each entity individually (attack charge gets reset by basic attacks)
@@ -50,13 +49,13 @@ public final class ATK_ConeArea extends ATK {
             for (Entity entity : entities) {
                 if (
                     entity instanceof LivingEntity e &&
-                    damagerPos.distance(e.getLocation()) < attackRange &&
-                    Func.isInCone(damagerPos.toVector(), damagerDirection, e.getLocation().toVector(), 3)
+                    origin.distance(e.getLocation()) < attackRange &&
+                    Func.isInCone(origin.toVector(), damagerDirection, e.getLocation().toVector(), 3)
                 ) {
                     executeBasicAttack(damager, e, item, attackCharge, false);
                 }
             }
-            simulateSweepingEffect(damagerPos);
+            simulateSweepingEffect(origin);
         }
     }
 }

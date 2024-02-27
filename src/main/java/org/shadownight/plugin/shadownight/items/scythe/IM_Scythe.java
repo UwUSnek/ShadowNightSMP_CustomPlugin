@@ -51,7 +51,7 @@ public abstract class IM_Scythe extends IM {
     protected void onInteract(final @NotNull PlayerInteractEvent event) {
         if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
-            attack.execute(event.getPlayer(), null, event.getItem());
+            attack.execute(event.getPlayer(), null, event.getPlayer().getLocation(), event.getItem());
         }
         else if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             event.setCancelled(true);
