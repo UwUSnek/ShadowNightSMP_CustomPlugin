@@ -1,6 +1,6 @@
 name: ShadowNightSMP
 version: '${version}'
-main: org.shadownight.plugin.shadownight.ShadowNight
+main: org.uwu_snek.shadownight.ShadowNight
 api-version: '1.20'
 load: STARTUP
 authors: [UwU_Snek]
