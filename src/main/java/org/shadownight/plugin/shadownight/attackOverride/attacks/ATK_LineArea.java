@@ -34,7 +34,7 @@ public final class ATK_LineArea extends ATK {
         Collection<Entity> entities = damager.getWorld().getNearbyEntities(box);
         for (Entity entity : entities) {
             if (entity instanceof LivingEntity e && Func.distToLine(o, p2, e.getLocation().toVector()) <= width && e != damager) {
-                executeBasicAttack(damager, e, item, 1, false);
+                executeBasicAttack(damager, e, origin, item, 1, false);
             }
         }
     }

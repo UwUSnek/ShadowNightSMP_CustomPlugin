@@ -1,5 +1,6 @@
 package org.shadownight.plugin.shadownight.attackOverride;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -98,14 +99,15 @@ public final class CustomKnockback extends UtilityClass {
     /**
      * Calculates the final knockback the entity <target> should receive after being hit by <damager> using the item <item>.
      * This doesn't include the current velocity of the target nor the default gravity value.
-     * @param item The item used to hit the target
+     *
      * @param damager The attacking entity
-     * @param target The attacked entity
+     * @param target  The attacked entity
+     * @param item    The item used to hit the target
      * @return The final knockback vector
      */
-    public static @NotNull Vector getKnockback(@Nullable final ItemStack item, @NotNull final LivingEntity damager, @NotNull final LivingEntity target) {
+    public static @NotNull Vector getKnockback(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, @Nullable final ItemStack item) {
         // Calculate base knockback
-        Vector direction = damager.getLocation().getDirection().setY(0).normalize();
+        Vector direction = origin.getDirection().setY(0).normalize();
         Vector knockback = direction.clone().multiply(defaultKnockbackXZ).multiply(getItemKnockbackMultiplier(item)).setY(defaultKnockbackY);
 
 

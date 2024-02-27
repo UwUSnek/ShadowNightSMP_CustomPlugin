@@ -118,7 +118,7 @@ public abstract class ATK implements Rnd {
      * @param charge The attack charge
      * @param canCrit True if the attack can trigger a critical hit
      */
-    public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @Nullable final ItemStack item, final double charge, final boolean canCrit) {
+    public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, @Nullable final ItemStack item, final double charge, final boolean canCrit) {
         // Ignore attacks on protected entities from players with no permissions
         if(
             damager instanceof Player player && !(target instanceof Player) &&          // If a player attacks a non-player &&
@@ -147,7 +147,7 @@ public abstract class ATK implements Rnd {
 
         // Calculate pre-hit velocity
         final Vector velocity = target.getVelocity();                       // Set starting velocity
-        velocity.add(CustomKnockback.getKnockback(item, damager, target));  // Add attack knockback
+        velocity.add(CustomKnockback.getKnockback(damager, target, origin, item));  // Add attack knockback
 
 
         //TODO review and simplify custom scythe attacks

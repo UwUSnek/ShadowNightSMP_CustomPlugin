@@ -12,6 +12,6 @@ import org.jetbrains.annotations.Nullable;
 public final class ATK_Standard extends ATK {
     @Override
     public void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @NotNull final Location origin, @Nullable final ItemStack item) {
-        if(directTarget != null) executeBasicAttack(damager, directTarget, item, getEntityCharge(damager), true);
+        if(directTarget != null) executeBasicAttack(damager, directTarget, origin, item, getEntityCharge(damager), true);
     }
 }
