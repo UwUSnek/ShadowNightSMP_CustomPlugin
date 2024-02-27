@@ -33,7 +33,6 @@ public final class ATK_ConeArea extends ATK {
 
     @Override
     public void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @NotNull final Location origin, @Nullable final ItemStack item) {
-        utils.log(Level.SEVERE, "Detected ConeArea attack");
         final UUID damagerId = damager.getUniqueId();
         final long currentTime = System.currentTimeMillis();
 

@@ -120,6 +120,9 @@ public abstract class ATK implements Rnd {
      * @param damageOverride If not null, the damage calculation is skipped and this value is used instead
      */
     public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, @Nullable final ItemStack item, final double charge, final boolean canCrit, final Double damageOverride) {
+        // Stop damager from hitting itself
+        if(damager == target) return;
+
         // Ignore attacks on protected entities from players with no permissions
         if(
             damager instanceof Player player && !(target instanceof Player) &&          // If a player attacks a non-player &&
