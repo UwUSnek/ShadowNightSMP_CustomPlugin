@@ -117,8 +117,9 @@ public abstract class ATK implements Rnd {
      * @param target The attacked entity
      * @param charge The attack charge
      * @param canCrit True if the attack can trigger a critical hit
+     * @param damageOverride If not null, the damage calculation is skipped and this value is used instead
      */
-    public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, @Nullable final ItemStack item, final double charge, final boolean canCrit) {
+    public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, @Nullable final ItemStack item, final double charge, final boolean canCrit, final Double damageOverride) {
         // Ignore attacks on protected entities from players with no permissions
         if(
             damager instanceof Player player && !(target instanceof Player) &&          // If a player attacks a non-player &&
@@ -151,13 +152,13 @@ public abstract class ATK implements Rnd {
 
 
         //TODO review and simplify custom scythe attacks
-        final double damage = CustomDamage.getDamage(item, canCrit, damager, target, charge);
+        final double damage = damageOverride == null ? CustomDamage.getDamage(item, canCrit, damager, target, charge) : damageOverride;
         applyMobEffects(damager, target, item);         // Apply vanilla mob effects
         applyEnchantEffects(damager, target, item);     // Apply enchantment effects
         target.damage(damage, damager);                 // Damage the target
 
 
-        // Apply new velocity (and override .damage's Vanilla knockback)
+        // Apply new velocity (and override .damage()'s Vanilla knockback)
         target.setVelocity(velocity);
     }
 
@@ -170,6 +171,8 @@ public abstract class ATK implements Rnd {
         World world = pos.getWorld();
         if(world == null) throw new RuntimeException("Failed to simulate sweeping effect: World is null");
         pos.getWorld().playSound(pos, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
-        pos.getWorld().spawnParticle(Particle.SWEEP_ATTACK, pos.clone().add(pos.getDirection().clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
+
+        // Using spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, extra (speed) (value 0 on sweep particle makes it of constant size)
+        pos.getWorld().spawnParticle(Particle.SWEEP_ATTACK, pos.clone().add(pos.getDirection().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0, 0);
     }
 }
