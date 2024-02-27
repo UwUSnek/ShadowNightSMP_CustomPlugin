@@ -46,7 +46,7 @@ public abstract class ATK implements Rnd {
         // Fire aspect
         if (item != null) {
             int fireAspectLv = item.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
-            if (fireAspectLv > 0) Scheduler.delay(() -> target.setFireTicks(fireAspectLv * 80), 1L);
+            if (fireAspectLv > 0) target.setFireTicks(fireAspectLv * 80);
         }
     }
 
@@ -152,9 +152,9 @@ public abstract class ATK implements Rnd {
 
         //TODO review and simplify custom scythe attacks
         final double damage = CustomDamage.getDamage(item, canCrit, damager, target, charge);
-        target.damage(damage, damager);                 // Damage the target
-        applyEnchantEffects(damager, target, item);     // Apply enchantment effects
         applyMobEffects(damager, target, item);         // Apply vanilla mob effects
+        applyEnchantEffects(damager, target, item);     // Apply enchantment effects
+        target.damage(damage, damager);                 // Damage the target
 
 
         // Apply new velocity (and override .damage's Vanilla knockback)
@@ -167,6 +167,8 @@ public abstract class ATK implements Rnd {
      * @param pos The target location
      */
     protected static void simulateSweepingEffect(@NotNull final Location pos) {
+        World world = pos.getWorld();
+        if(world == null) throw new RuntimeException("Failed to simulate sweeping effect: World is null");
         pos.getWorld().playSound(pos, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);
         pos.getWorld().spawnParticle(Particle.SWEEP_ATTACK, pos.clone().add(pos.getDirection().clone().multiply(new Vector(2, 0, 2))).add(new Vector(0, 1, 0)), 1, 0, 0, 0);
     }
