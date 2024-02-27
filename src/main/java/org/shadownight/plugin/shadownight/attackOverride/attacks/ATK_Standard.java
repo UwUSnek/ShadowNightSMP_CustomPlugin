@@ -42,7 +42,9 @@ public final class ATK_Standard extends ATK {
                 simulateSweepingEffect(origin);
                 BoundingBox box = directTarget.getBoundingBox().expand(sweepingTargetBox);
                 for(Entity entity : directTarget.getWorld().getNearbyEntities(box)){
-                    if(entity instanceof LivingEntity e && e.getLocation().distance(damager.getLocation()) <= sweepingMaxDist) executeBasicAttack(damager, e, origin, item, charge, false, null);
+                    if(entity instanceof LivingEntity e && e != directTarget && e.getLocation().distance(damager.getLocation()) <= sweepingMaxDist) {
+                        executeBasicAttack(damager, e, origin, item, charge, false, null);
+                    }
                 }
             }
         }
