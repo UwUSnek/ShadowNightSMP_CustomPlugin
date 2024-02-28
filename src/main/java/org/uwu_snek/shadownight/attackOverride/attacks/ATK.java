@@ -3,11 +3,15 @@ package org.uwu_snek.shadownight.attackOverride.attacks;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -17,11 +21,15 @@ import org.uwu_snek.shadownight.attackOverride.AttackOverride;
 import org.uwu_snek.shadownight.attackOverride.CustomDamage;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
 import org.uwu_snek.shadownight.utils.Rnd;
+import org.uwu_snek.shadownight.utils.math.Func;
 import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 import org.uwu_snek.shadownight.utils.utils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -47,6 +55,26 @@ public abstract class ATK implements Rnd {
         if (item != null) {
             int fireAspectLv = item.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
             if (fireAspectLv > 0) target.setFireTicks(fireAspectLv * 80);
+        }
+
+        // Target's armor enchants
+        EntityEquipment equipment = target.getEquipment();
+        if(equipment != null) {
+            ArrayList<ItemStack> thornsArmorPieces = new ArrayList<>();
+            int totalThornDamage = 0;
+            for(ItemStack a : equipment.getArmorContents()) if(a != null) {
+                for(Map.Entry<Enchantment, Integer> e : a.getEnchantments().entrySet()) {
+                    Enchantment key = e.getKey();
+                    if(key == Enchantment.THORNS) {
+                        thornsArmorPieces.add(a);
+                        if(rnd.nextFloat() < e.getValue() * 0.15d) totalThornDamage += rnd.nextInt(4) + 1;
+                    }
+                }
+            }
+            if(totalThornDamage > 0) {
+                executeBasicAttack(target, damager, target.getLocation(), null, 1, false, (double)Func.clampMax(totalThornDamage, 4));
+                ItemUtils.damageItem(target, thornsArmorPieces.get(rnd.nextInt(thornsArmorPieces.size())), 2);
+            }
         }
     }
 
@@ -145,7 +173,7 @@ public abstract class ATK implements Rnd {
             System.currentTimeMillis()
         ));
 
-        if(item != null) ItemUtils.damageItem(damager, item);
+        if(item != null) ItemUtils.damageItem(damager, item, 1);
 
 
 

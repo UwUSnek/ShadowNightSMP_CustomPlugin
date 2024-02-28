@@ -1,6 +1,7 @@
 package org.uwu_snek.shadownight.attackOverride.attacks;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,8 +27,16 @@ public final class ATK_Standard extends ATK {
             executeBasicAttack(damager, directTarget, origin, item, charge, true, null);
 
             // Sweeping attack (follow Vanilla's requirements and area, but use custom damage and effects)
+            if(item == null) return;
+            Material type = item.getType();
             if(
-                damager instanceof Player player &&
+                damager instanceof Player player && (
+                    type == Material.WOODEN_SWORD ||
+                    type == Material.STONE_SWORD ||
+                    type == Material.IRON_SWORD ||
+                    type == Material.DIAMOND_SWORD ||
+                    type == Material.NETHERITE_SWORD
+                ) &&
                 charge > sweepingMinCharge &&
                 damager.isOnGround() &&
                 !player.isSprinting() &&

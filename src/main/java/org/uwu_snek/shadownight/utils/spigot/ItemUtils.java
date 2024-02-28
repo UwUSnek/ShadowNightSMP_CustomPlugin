@@ -84,7 +84,7 @@ public final class ItemUtils extends UtilityClass {
      * @param entity The entity that owns the item
      * @param item The item to damage
      */
-    public static void damageItem(final @NotNull LivingEntity entity, final @NotNull ItemStack item) {
+    public static void damageItem(final @NotNull LivingEntity entity, final @NotNull ItemStack item, final int amount) {
         if(!(entity instanceof Player player && player.getGameMode() == GameMode.CREATIVE) && item.getAmount() > 0) { // amount <= 0 means that a different thread broke the item. No need to damage it further
             ItemMeta meta = item.getItemMeta();
             if (meta instanceof Damageable _meta) {
@@ -93,7 +93,7 @@ public final class ItemUtils extends UtilityClass {
                     entity.getWorld().playSound(entity.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                 }
                 else {
-                    _meta.setDamage(_meta.getDamage() + 1);
+                    _meta.setDamage(_meta.getDamage() + amount);
                     item.setItemMeta(_meta);
                 }
             }

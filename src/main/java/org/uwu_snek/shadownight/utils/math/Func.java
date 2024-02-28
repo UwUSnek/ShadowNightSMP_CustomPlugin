@@ -108,7 +108,7 @@ public final class Func extends UtilityClass {
     @SuppressWarnings("unused")
     public static int clampMax(final int n, final int max) {
         return Math.min(n, max);
-    }
+    };
 
 
 

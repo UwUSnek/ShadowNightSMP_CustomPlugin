@@ -117,7 +117,7 @@ public final class ScytheThrowDisplay {
      * @param onComplete A function to run when the animation ends
      */
     public void animateTranslation(final @NotNull Vector target, final @NotNull Function<Double, Double> f, @Nullable final Runnable onComplete) {
-        ItemUtils.damageItem(player, item);
+        ItemUtils.damageItem(player, item, 1);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, null, onComplete);
     }
 
@@ -134,7 +134,7 @@ public final class ScytheThrowDisplay {
         final @NotNull Callable<Vector> onTargetUpdate,
         @Nullable final Runnable onComplete
     ) {
-        ItemUtils.damageItem(player, item);
+        ItemUtils.damageItem(player, item, 1);
         animateTranslationLoop(0, display.getLocation().toVector(), target, f, onTargetUpdate, onComplete);
     }
 
