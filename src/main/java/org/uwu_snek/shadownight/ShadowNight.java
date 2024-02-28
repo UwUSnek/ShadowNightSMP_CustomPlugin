@@ -11,6 +11,7 @@ import org.uwu_snek.shadownight.dungeons.CMD_recreatedungeon;
 import org.uwu_snek.shadownight.dungeons.Dungeon;
 import org.uwu_snek.shadownight.economy.CMD_trade;
 import org.uwu_snek.shadownight.economy.Economy;
+import org.uwu_snek.shadownight.enchantments.CustomEnchantManager;
 import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
 import org.uwu_snek.shadownight.items.CMD_sngive;
 import org.uwu_snek.shadownight.items.CustomItemId;
@@ -44,9 +45,7 @@ public final class ShadowNight extends JavaPlugin {
         plugin = this;
 
 
-        EnchantBlacklist.unfreezeRegistry();
-        EnchantBlacklist.registerEnchantment();
-        EnchantBlacklist.freezeRegistry();
+        CustomEnchantManager.registerEnchantments();
 
 
 

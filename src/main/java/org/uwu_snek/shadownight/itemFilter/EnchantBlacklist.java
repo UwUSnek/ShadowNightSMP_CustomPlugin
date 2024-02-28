@@ -2,13 +2,17 @@ package org.uwu_snek.shadownight.itemFilter;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
 import kotlin.jvm.internal.Reflection;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -18,8 +22,8 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.EntityCategory;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
@@ -98,38 +102,6 @@ public final class EnchantBlacklist extends UtilityClass {/*
                 //e.getOffers()[0] = new EnchantmentOffer(test, 3, 1);
                 break;
             }
-        }
-    }
-
-    public static void unfreezeRegistry() {
-        try {
-            Field fieldL = BuiltInRegistries.ENCHANTMENT.getClass().getDeclaredField("l");
-            Field fieldM = BuiltInRegistries.ENCHANTMENT.getClass().getDeclaredField("m");
-            fieldL.setAccessible(true);
-            fieldM.setAccessible(true);
-            fieldL.set(BuiltInRegistries.ENCHANTMENT, false);
-            fieldM.set(BuiltInRegistries.ENCHANTMENT, new IdentityHashMap<>());
-            fieldL.setAccessible(false);
-            fieldM.setAccessible(false);
-        }
-        catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void freezeRegistry() {
-        BuiltInRegistries.ENCHANTMENT.freeze();
-    }
-
-    public static void registerEnchantment() {
-        XEnchantment xEnchantment = new XEnchantment();
-        Registry.register(BuiltInRegistries.ENCHANTMENT, "testenchantid", xEnchantment);
-    }
-
-
-    static class XEnchantment extends net.minecraft.world.item.enchantment.Enchantment {
-        protected XEnchantment() {
-            super(Rarity.COMMON, EnchantmentCategory.WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         }
     }
 }

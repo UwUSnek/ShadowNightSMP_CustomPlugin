@@ -15,6 +15,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.uwu_snek.shadownight.enchantments.CustomEnchantManager;
+import org.uwu_snek.shadownight.enchantments.custom.Reeling;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
@@ -27,12 +29,12 @@ import java.util.UUID;
 
 
 public final class CustomKnockback extends UtilityClass {
-    private static final HashMap<UUID, Boolean> knockbackSprintBuff = new HashMap<>();
-    private static final double defaultKnockbackXZ = 0.4d;  // The default knockback that is dealt on the XZ Plane using no enchantments or vanilla knockback buff mechanics.
-    private static final double defaultKnockbackY = 0.325d; // The default knockback that is dealt on the Y  Axis  using no enchantments or vanilla knockback buff mechanics.
-    private static final double enchantKnockbackXZ = 0.3d;  // The additional knockback deal on the XZ Plane by the Vanilla Knockback Enchantment
-    private static final double enchantKnockbackY = 0.4d;   // The total      knockback deal on the Y  axis  by the Vanilla Knockback Enchantment
-    private static final double gravityY = -0.0784d;        //The default vertical velocity of non-onGround() entities
+    public static final HashMap<UUID, Boolean> knockbackSprintBuff = new HashMap<>();
+    public static final double defaultKnockbackXZ = 0.4d;  // The default knockback that is dealt on the XZ Plane using no enchantments or vanilla knockback buff mechanics.
+    public static final double defaultKnockbackY = 0.325d; // The default knockback that is dealt on the Y  Axis  using no enchantments or vanilla knockback buff mechanics.
+    public static final double enchantKnockbackXZ = 0.3d;  // The additional knockback deal on the XZ Plane by the Vanilla Knockback Enchantment
+    public static final double enchantKnockbackY = 0.4d;   // The total      knockback deal on the Y  axis  by the Vanilla Knockback Enchantment
+    public static final double gravityY = -0.0784d;        //The default vertical velocity of non-onGround() entities
 
 
     /**
@@ -123,10 +125,18 @@ public final class CustomKnockback extends UtilityClass {
         }
         // Calculate enchantments
         if(item != null && item.getType() != Material.AIR) {
+            // Knockback
             int knockbackLv = item.getEnchantmentLevel(Enchantment.KNOCKBACK);
             knockback.add(new Vector(enchantKnockbackXZ, 0, enchantKnockbackXZ).multiply(knockbackLv + hasSprintbuff).multiply(direction));
-            if(knockbackLv + hasSprintbuff > 0) knockback.setY(enchantKnockbackY);
-            //TODO calculate reeling enchant
+            if(knockbackLv + hasSprintbuff > 0) {
+                knockback.setY(enchantKnockbackY);
+            }
+
+            // Reeling
+            int reelingLv = item.getEnchantmentLevel(CustomEnchantManager.CustomEnchantment.REELING);
+            if(reelingLv > 0) {
+                knockback.add(Reeling.getVelocity(reelingLv).multiply(direction));
+            }
         }
 
 
