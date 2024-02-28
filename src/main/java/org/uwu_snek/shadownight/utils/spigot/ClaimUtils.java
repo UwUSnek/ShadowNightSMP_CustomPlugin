@@ -3,6 +3,7 @@ package org.uwu_snek.shadownight.utils.spigot;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -36,5 +37,27 @@ public final class ClaimUtils extends UtilityClass {
             Claim claim = GriefPrevention.instance.dataStore.getClaimAt(entity.getLocation(), false, null);
             return claim != null && !claim.hasExplicitPermission(player, ClaimPermission.Build);
         }
+    }
+
+
+
+    /**
+     * Checks if a block is inside a claim.
+     * @param block The block to check
+     * @return True if the block is inside a claim, false otherwise
+     */
+    public static boolean isBlockClaimed(@NotNull final Block block) {
+        Claim claim = GriefPrevention.instance.dataStore.getClaimAt(block.getLocation(), false, null);
+        return claim != null;
+    }
+
+
+    /**
+     * Provides the claim a block is part of
+     * @param block The block to check
+     * @return True claim, or null if the block is not claimed
+     */
+    public static Claim getClaimAt(@NotNull final Block block) {
+        return GriefPrevention.instance.dataStore.getClaimAt(block.getLocation(), false, null);
     }
 }

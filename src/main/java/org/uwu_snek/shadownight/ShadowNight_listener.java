@@ -1,13 +1,21 @@
 package org.uwu_snek.shadownight;
 
+import me.ryanhamshire.GriefPrevention.Claim;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockFormEvent;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.world.StructureGrowEvent;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
 import org.uwu_snek.shadownight.chatManager.ChatManager;
@@ -23,6 +31,11 @@ import org.uwu_snek.shadownight.qol.SpawnInvincibility;
 import org.uwu_snek.shadownight.qol.StarterKit;
 import org.uwu_snek.shadownight.qol.SurvivalFly;
 import org.uwu_snek.shadownight.qol.tpa.CMD_tpa;
+import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
+
+import java.util.Objects;
+
+
 
 
 public final class ShadowNight_listener implements Listener {
@@ -112,5 +125,18 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSprintToggle(@NotNull final PlayerToggleSprintEvent event) {
         CustomKnockback.resetKnockbackSprintBuff(event);
+    }
+
+
+    /**
+     * GriefPrevention fix.
+     * For some reason, GriefPrevention doesn't stop sculk from spreading into claims. This method fixes it.
+     */
+    @EventHandler(priority = EventPriority.LOWEST) public void onBlockSpread(@NotNull final BlockSpreadEvent event) {
+        if(event.getSource().getType() == Material.SCULK_CATALYST){
+            final Claim from = ClaimUtils.getClaimAt(event.getSource());
+            final Claim to   = ClaimUtils.getClaimAt(event.getBlock());
+            if(to != null && (from == null || from.getOwnerID() != to.getOwnerID())) event.setCancelled(true);
+        }
     }
 }
