@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -24,6 +25,7 @@ import org.uwu_snek.shadownight.chatManager.discord.InGameBanner;
 import org.uwu_snek.shadownight.chatManager.JoinLeaveMessages;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
+import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.bow.IM_Bow;
 import org.uwu_snek.shadownight.qol.ArmorStandArms;
@@ -91,7 +93,6 @@ public final class ShadowNight_listener implements Listener {
         StarterKit.onDragEvent(event);
     }
 
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(@NotNull final PlayerInteractEvent event) {
         IM.chooseOnInteract(event);
@@ -138,5 +139,12 @@ public final class ShadowNight_listener implements Listener {
             final Claim to   = ClaimUtils.getClaimAt(event.getBlock());
             if(to != null && (from == null || from.getOwnerID() != to.getOwnerID())) event.setCancelled(true);
         }
+    }
+
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onSprintToggle(@NotNull final PrepareItemEnchantEvent event) {
+        EnchantBlacklist.onPrepareEnchant(event);
     }
 }

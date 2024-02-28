@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ShadowNightSMP.iml" filepath="$PROJECT_DIR$/.idea/modules/ShadowNightSMP.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ShadowNightSMP.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ShadowNightSMP.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ShadowNightSMP.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ShadowNightSMP.test.iml" />
     </modules>
   </component>
 </project>
