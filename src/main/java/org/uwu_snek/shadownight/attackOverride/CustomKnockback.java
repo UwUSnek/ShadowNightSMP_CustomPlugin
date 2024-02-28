@@ -105,9 +105,9 @@ public final class CustomKnockback extends UtilityClass {
      * @param item    The item used to hit the target
      * @return The final knockback vector
      */
-    public static @NotNull Vector getKnockback(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, @Nullable final ItemStack item) {
+    public static @NotNull Vector getKnockback(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, boolean follorOriginDirection, @Nullable final ItemStack item) {
         // Calculate base knockback
-        Vector direction = origin.getDirection().setY(0).normalize();
+        Vector direction = follorOriginDirection ? origin.getDirection() : origin.toVector().subtract(target.getLocation().toVector()).setY(0).normalize().multiply(-1);
         Vector knockback = direction.clone().multiply(defaultKnockbackXZ).multiply(getItemKnockbackMultiplier(item)).setY(defaultKnockbackY);
 
 

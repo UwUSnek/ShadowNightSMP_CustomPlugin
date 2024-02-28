@@ -24,7 +24,7 @@ public final class ATK_Standard extends ATK {
         if(directTarget != null) {
             // Main attack
             double charge = getEntityCharge(damager);
-            executeBasicAttack(damager, directTarget, origin, item, charge, true, null);
+            executeBasicAttack(damager, directTarget, origin, false, item, charge, true, null);
 
             // Sweeping attack (follow Vanilla's requirements and area, but use custom damage and effects)
             if(item == null) return;
@@ -46,7 +46,7 @@ public final class ATK_Standard extends ATK {
                 BoundingBox box = directTarget.getBoundingBox().expand(sweepingTargetBox);
                 for(Entity entity : directTarget.getWorld().getNearbyEntities(box)){
                     if(entity instanceof LivingEntity e && e != directTarget && e.getLocation().distance(damager.getLocation()) <= sweepingMaxDist) {
-                        executeBasicAttack(damager, e, origin, item, charge, false, null);
+                        executeBasicAttack(damager, e, origin, false, item, charge, false, null);
                     }
                 }
             }

@@ -49,7 +49,7 @@ public final class ATK_ConeArea extends ATK {
                     origin.distance(e.getLocation()) < attackRange &&
                     Func.isInCone(origin.toVector(), damagerDirection, e.getLocation().toVector(), 3)
                 ) {
-                    executeBasicAttack(damager, e, origin, item, attackCharge, false, null);
+                    executeBasicAttack(damager, e, origin, false, item, attackCharge, false, null);
                 }
             }
             simulateSweepingEffect(origin);
