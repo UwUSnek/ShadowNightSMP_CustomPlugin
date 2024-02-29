@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.chatManager;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -163,7 +164,7 @@ public final class ChatManager extends UtilityClass {
      */
     public static void processPlayerMessage(final @NotNull AsyncChatEvent event) {
         event.setCancelled(true);
-        final String msg = event.message().toString();
+        final String msg = ((TextComponent)event.message()).content();
 
         final Player player = event.getPlayer();
         final String targetName = CMD_msg.openDms.get(player.getName());
