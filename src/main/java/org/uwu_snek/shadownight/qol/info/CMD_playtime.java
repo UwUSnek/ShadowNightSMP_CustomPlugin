@@ -20,7 +20,7 @@ public final class CMD_playtime implements CommandExecutor {
             ChatUtils.sendMessage(player, "Your playtime is §a" + ChatUtils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true) + "§r.");
         }
         else {
-            @SuppressWarnings("deprecation") // Using getOfflinePlayer the way it's meant to be used, no need to warn
+            // Using getOfflinePlayer the way it's meant to be used, no need to warn
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
             if(target.hasPlayedBefore()) {
                 ChatUtils.sendMessage(player, target.getName() + "'s playtime is §a" + ChatUtils.sToDuration(target.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true) + "§.");

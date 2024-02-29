@@ -47,7 +47,7 @@ public final class SkinRenderer extends UtilityClass {
      * @param renderType The type of render
      * @return The generated URL
      */
-    public static String getRenderUrl(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
+    @SuppressWarnings("unused") public static String getRenderUrl(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
         final UUID uuid = player.getUniqueId();
         final String type = switch (renderType) {
             case PROPIC -> "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}";
@@ -65,7 +65,7 @@ public final class SkinRenderer extends UtilityClass {
      * @param renderType The type of render
      * @return The URI of the generated render
      */
-    public static String getRenderUri(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
+    @SuppressWarnings("unused") public static String getRenderUri(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
         final String type = getRenderUrl(player, renderType);
         final UUID uuid = player.getUniqueId();
         final String filePath = cachePath + renderType.name() + "/" + uuid + ".png";
@@ -88,7 +88,7 @@ public final class SkinRenderer extends UtilityClass {
      * @param renderType The type of render
      * @return The generated render image
      */
-    public static BufferedImage getRender(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
+    @SuppressWarnings("unused") public static BufferedImage getRender(final @NotNull OfflinePlayer player, final @NotNull RenderType renderType){
         final String type = getRenderUrl(player, renderType);
         final UUID uuid = player.getUniqueId();
         final HashMap<UUID, BufferedImage> typeRuntimeCache = runtimeCache.get(renderType);

@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 public final class DataBuilderRotatable {
     private final Rotatable data;
-    public DataBuilderRotatable(Material type) {
+    @SuppressWarnings("unused") public DataBuilderRotatable(Material type) {
         data = (Rotatable)type.createBlockData();
     }
-    public Rotatable build() {
+
+    @SuppressWarnings("unused") public Rotatable build() {
         return data;
     }
 

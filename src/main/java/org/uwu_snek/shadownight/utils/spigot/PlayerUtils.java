@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,7 @@ public final class PlayerUtils extends UtilityClass {
      * @param targetName The name of the player to check
      * @return true if target is offline, false otherwise
      */
-    public static boolean playerOfflineCheck(final @NotNull org.bukkit.entity.Player player, @Nullable final org.bukkit.entity.Player target, final @NotNull String targetName) {
+    public static boolean playerOfflineCheck(final @NotNull Player player, @Nullable final Player target, final @NotNull String targetName) {
         if (target == null) {
             ChatUtils.sendMessage(player, "§cThe player \"" + targetName + "\" is offline or doesn't exist. Did you spell their name correctly?");
             return true;
@@ -49,7 +50,7 @@ public final class PlayerUtils extends UtilityClass {
     }
 
     // Returns the formatted player name with the Server rank as prefix
-    public static String getFancyName(final @NotNull org.bukkit.entity.Player player) {
+    public static String getFancyName(final @NotNull Player player) {
         User user = ShadowNight.lpApi.getPlayerAdapter(org.bukkit.entity.Player.class).getUser(player);
         return user.getCachedData().getMetaData().getPrefix() + " " + player.getName();
     }

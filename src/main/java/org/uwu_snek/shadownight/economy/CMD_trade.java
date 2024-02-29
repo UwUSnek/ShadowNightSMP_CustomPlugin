@@ -1,8 +1,8 @@
 package org.uwu_snek.shadownight.economy;
 
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -84,16 +84,16 @@ public final class CMD_trade implements CommandExecutor {
                                 }
                             }, timeout * 20L)
                         )
-                                     );
+                    );
                     ChatUtils.sendMessage(player, "§7Sending a trade request to " + PlayerUtils.getFancyName(target) + "§f...");
 
                     String _command = "/trade " + player.getName();
-                    TextComponent c = new TextComponent("§a" + _command);
-                    c.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
-                    TextComponent c2 = new TextComponent("§a(or click here)");
-                    c2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
-                    target.spigot().sendMessage(new TextComponent(ChatUtils.serverPrefix + PlayerUtils.getFancyName(player) + "§f sent you a trade request! Use "), c, new TextComponent("§r to accept "), c2);
-
+                    target.sendMessage(
+                        Component.text(ChatUtils.serverPrefix + PlayerUtils.getFancyName(player) + "§f sent you a trade request! Use ").append(
+                            Component.text("§a" + _command).clickEvent(ClickEvent.runCommand(_command))).append(
+                            Component.text("§r to accept ")).append(
+                            Component.text("§a(or click here)").clickEvent(ClickEvent.runCommand(_command)))
+                    );
                 }
             }
         }

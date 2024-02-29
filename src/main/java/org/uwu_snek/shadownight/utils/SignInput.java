@@ -7,8 +7,13 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import net.kyori.adventure.text.Component;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +56,7 @@ public final class SignInput {
 
 
     private final boolean reopenIfFail;
-    private final String[] lines;
+    private final Component[] lines;
     private final BiPredicate<Player, String[]> inputCallback;
     private final Runnable afterCloseCallback;
 
@@ -66,7 +71,7 @@ public final class SignInput {
      * @param inputCallback Called after the player clicks done or closes the GUI. Has to return true if the input is valid
      * @param afterCloseCallback Called after the GUI is closed (or after a valid input if _reopenIfFail is set to true)
      */
-    public SignInput(final boolean reopenIfFail, @Nullable final String @NotNull [] lines, final @NotNull BiPredicate<@NotNull Player, @NotNull String @NotNull []> inputCallback, @Nullable final Runnable afterCloseCallback) {
+    public SignInput(final boolean reopenIfFail, @Nullable final Component @NotNull [] lines, final @NotNull BiPredicate<@NotNull Player, @NotNull String @NotNull []> inputCallback, @Nullable final Runnable afterCloseCallback) {
         this.reopenIfFail = reopenIfFail;
         this.lines = lines;
         this.inputCallback = inputCallback;
@@ -78,13 +83,23 @@ public final class SignInput {
      * Opens the GUI for the player <player>
      * @param player The target player
      */
+    @SuppressWarnings("UnstableApiUsage") // Paper's sendBlockUpdate and blockstate stuff is marked with unstable
     public void open(final @NotNull Player player) {
         if (player.isOnline()) {
             Location location = player.getLocation();
             posWrapper = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-            player.sendBlockChange(location, Material.BIRCH_SIGN.createBlockData());
-            player.sendSignChange(location, lines);                     //NOTICE: This only sets the front side of the sign
+            BlockData signData = Material.DARK_OAK_SIGN.createBlockData();
+            Sign blockstate = (Sign)signData.createBlockState();
+            blockstate.getSide(Side.FRONT).setColor(DyeColor.WHITE); // Use white for the input color
+            blockstate.getSide(Side.FRONT).setGlowingText(true);     // Make white whiter (default white is gray)
+            blockstate.getSide(Side.FRONT).line(0, lines[0]);
+            blockstate.getSide(Side.FRONT).line(1, lines[1]);
+            blockstate.getSide(Side.FRONT).line(2, lines[2]);
+            blockstate.getSide(Side.FRONT).line(3, lines[3]);
+
+            player.sendBlockChange(location, signData);
+            player.sendBlockUpdate(location, blockstate);                     //NOTICE: This only sets the front side of the sign
 
             PacketContainer openSign = ShadowNight.protocolManager.createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
             openSign.getBlockPositionModifier().write(0, posWrapper);   // Set block position
@@ -104,7 +119,7 @@ public final class SignInput {
      * @param player The target player
      * @param force True to forcibly close the GUI and ignore the reopenIfFail option specified in the constructor, false to respect it
      */
-    public void close(@NotNull Player player, final boolean force) {
+    @SuppressWarnings("unused") public void close(@NotNull Player player, final boolean force) {
         forceClose = force;
         if (player.isOnline()) player.closeInventory();
     }

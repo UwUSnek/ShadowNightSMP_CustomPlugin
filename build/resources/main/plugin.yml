@@ -4,7 +4,7 @@ main: org.uwu_snek.shadownight.ShadowNight
 api-version: '1.20'
 load: STARTUP
 authors: [UwU_Snek]
-description: A simple plugin that provides useful features for the Shadow Night SMP
+description: A not so simple plugin that provides features for the Shadow Night SMP
 
 depend: [
   ProtocolLib,

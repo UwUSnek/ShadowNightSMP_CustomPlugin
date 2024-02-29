@@ -2,7 +2,6 @@ package org.uwu_snek.shadownight.enchantments;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -12,19 +11,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.uwu_snek.shadownight.utils.utils;
-
-import java.lang.reflect.Field;
-import java.util.IdentityHashMap;
-import java.util.logging.Level;
 
 
 
 
 public abstract class CustomEnchant extends net.minecraft.world.item.enchantment.Enchantment {
-    protected int max;
-    protected String name;
-    protected String id;
+    protected final int max;
+    protected final String name;
+    protected final String id;
 
     protected CustomEnchant(@NotNull final Rarity rarity, @NotNull final String _name, @NotNull final String _id, final int maxLv) {
         super(rarity, EnchantmentCategory.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});

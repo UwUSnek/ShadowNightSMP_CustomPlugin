@@ -1,22 +1,18 @@
 package org.uwu_snek.shadownight;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import me.ryanhamshire.GriefPrevention.Claim;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.event.world.StructureGrowEvent;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
 import org.uwu_snek.shadownight.chatManager.ChatManager;
@@ -35,8 +31,6 @@ import org.uwu_snek.shadownight.qol.SurvivalFly;
 import org.uwu_snek.shadownight.qol.tpa.CMD_tpa;
 import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
 
-import java.util.Objects;
-
 
 
 
@@ -44,7 +38,7 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(@NotNull final PlayerJoinEvent event) {
         JoinLeaveMessages.formatJoin(event);
-        InGameBanner.startLoop(event.getPlayer(), ShadowNight.plugin);
+        InGameBanner.startLoop(event.getPlayer());
         StarterKit.onJoin(event.getPlayer());
         SurvivalFly.updateState(event.getPlayer());
         Economy.addPlayer(event.getPlayer());
@@ -79,7 +73,7 @@ public final class ShadowNight_listener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onChatEvent(@NotNull final AsyncPlayerChatEvent event) {
+    public void onChatEvent(@NotNull final AsyncChatEvent event) {
         ChatManager.processPlayerMessage(event);
     }
 

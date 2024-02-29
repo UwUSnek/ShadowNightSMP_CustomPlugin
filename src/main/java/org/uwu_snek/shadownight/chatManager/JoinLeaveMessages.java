@@ -1,5 +1,6 @@
 package org.uwu_snek.shadownight.chatManager;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -15,7 +16,7 @@ public final class JoinLeaveMessages extends UtilityClass {
      */
     public static void formatJoin(final @NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        event.setJoinMessage("§8[§a§l+§8]§7 " + player.getName());
+        event.joinMessage(Component.text("§8[§a§l+§8]§7 " + player.getName()));
         BotManager.sendBridgeMessage(player, "☑️ " + player.getName() + " joined the game" + (player.hasPlayedBefore() ? "" : " for the first time!"));
     }
 
@@ -25,7 +26,7 @@ public final class JoinLeaveMessages extends UtilityClass {
      */
     public static void formatQuit(final @NotNull PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        event.setQuitMessage("§8[§c§l-§8]§7 " + player.getName());
+        event.quitMessage(Component.text("§8[§c§l-§8]§7 " + player.getName()));
         BotManager.sendBridgeMessage(player, "🇽 " + player.getName() + " left the game");
     }
 }

@@ -14,9 +14,8 @@ public final class InGameBanner {
     /**
      * Starts the banner message loop for the specified player.
      * @param player The player
-     * @param plugin The plugin instance
      */
-    public static void startLoop(final @NotNull Player player, final @NotNull Plugin plugin) {
+    public static void startLoop(final @NotNull Player player) {
         Scheduler.loop(
             () -> {
                 ChatUtils.newline(player);

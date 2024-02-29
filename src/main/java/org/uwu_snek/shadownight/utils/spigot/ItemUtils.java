@@ -1,5 +1,6 @@
 package org.uwu_snek.shadownight.utils.spigot;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,12 +33,12 @@ public final class ItemUtils extends UtilityClass {
      * @param lore The item lore
      * @return The created ItemStack
      */
-    public static ItemStack createItemStack(final @NotNull Material material, final int number, final @NotNull String name, final @NotNull String... lore) {
+    public static ItemStack createItemStack(final @NotNull Material material, final int number, final @NotNull String name, final @NotNull Component... lore) {
         final ItemStack item = new ItemStack(material, number);
         final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
 
-        meta.setDisplayName("§f" + name);
-        if(lore.length > 0) meta.setLore(Arrays.asList(lore));
+        meta.displayName(Component.text("§f" + name));
+        if(lore.length > 0) meta.lore(Arrays.asList(lore));
 
         item.setItemMeta(meta);
         return item;
@@ -61,13 +62,13 @@ public final class ItemUtils extends UtilityClass {
         final @NotNull String name,
         final int customModelData,
         final long customItemId,
-        final @NotNull String... lore
+        final @NotNull Component... lore
     ) {
         final ItemStack item = new ItemStack(material, number);
         final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
 
-        meta.setDisplayName("§f" + name);
-        if(lore.length > 0) meta.setLore(Arrays.asList(lore));
+        meta.displayName(Component.text("§f" + name));
+        if(lore.length > 0) meta.lore(Arrays.asList(lore));
         meta.setCustomModelData(customModelData);
 
         final PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -110,7 +111,7 @@ public final class ItemUtils extends UtilityClass {
     public static String getItemName(final @NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
         if(item.hasItemMeta() && meta.hasDisplayName()) {
-            return meta.getDisplayName();
+            return Objects.requireNonNull(meta.displayName()).toString();
         }
         else {
             final String[] words = item.getType().name().split("_");

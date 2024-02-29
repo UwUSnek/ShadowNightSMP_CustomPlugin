@@ -1,6 +1,7 @@
 package org.uwu_snek.shadownight.economy;
 
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -60,6 +61,7 @@ public final class TradeGui implements Listener {
      */
     public TradeGui(final @NotNull Player _player, final @NotNull Player target){
         player = _player;
+        //noinspection deprecation
         inv = Bukkit.createInventory(null, 54, "§rYou §l⮀§r " + target.getName());
         inv.setItem(buttonAddCoins,       ItemUtils.createItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1, "§eClick to add coins"));
         inv.setItem(buttonAddClaimBlocks, ItemUtils.createItemStack(Material.GREEN_STAINED_GLASS_PANE,  1, "§2Click to add claim blocks"));
@@ -111,7 +113,7 @@ public final class TradeGui implements Listener {
      */
     public void updateConfirmationNameTimer() {
         final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
-        if(meta != null) meta.setDisplayName("§7Click to accept the trade! (" + timer.getTimeLeft() + "s)");
+        if(meta != null) meta.displayName(Component.text("§7Click to accept the trade! (" + timer.getTimeLeft() + "s)"));
         Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
     }
 
@@ -120,7 +122,7 @@ public final class TradeGui implements Listener {
      */
     public void updateConfirmationName() {
         final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
-        if(meta != null) meta.setDisplayName(playerHasAccepted ? "§aYou accepted the trade. Click to cancel." : "§dClick to accept the trade!");
+        if(meta != null) meta.displayName(Component.text(playerHasAccepted ? "§aYou accepted the trade. Click to cancel." : "§dClick to accept the trade!"));
         Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
     }
 
@@ -130,13 +132,13 @@ public final class TradeGui implements Listener {
     public void updateConfirmationLore() {
         final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
         if(meta != null) {
-            ArrayList<String> lore = new ArrayList<>();
+            ArrayList<Component> lore = new ArrayList<>();
 
-            for (ItemStack item : items) lore.add("§c-" + item.getAmount() + "x§f " + ItemUtils.getItemName(item));
-            lore.add("");
-            for (ItemStack item : linkedGui.items) lore.add("§a+" + item.getAmount() + "x§f " + ItemUtils.getItemName(item));
+            for (ItemStack item : items) lore.add(Component.text("§c-" + item.getAmount() + "x§f " + ItemUtils.getItemName(item)));
+            lore.add(Component.empty());
+            for (ItemStack item : linkedGui.items) lore.add(Component.text("§a+" + item.getAmount() + "x§f " + ItemUtils.getItemName(item)));
 
-            meta.setLore(lore);
+            meta.lore(lore);
             Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
         }
     }
@@ -295,7 +297,12 @@ public final class TradeGui implements Listener {
 
         SignInput menu = new SignInput(
             true,
-            new String[]{ "", "§6§l^", "§6Insert the number", "§6of coins" },
+            new Component[]{
+                Component.text(""),
+                Component.text("§6§l^"),
+                Component.text("§6Insert the number"),
+                Component.text("§6of coins")
+            },
             (player, lines) -> {
                 try {
                     long value = (long) Double.parseDouble(lines[0]);

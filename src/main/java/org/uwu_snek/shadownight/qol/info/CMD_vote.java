@@ -1,8 +1,8 @@
 package org.uwu_snek.shadownight.qol.info;
 
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,10 +13,7 @@ import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 
 public final class CMD_vote implements CommandExecutor {
     private static void sendLink(Player player, String msg, String url) {
-        @SuppressWarnings("deprecation")
-        TextComponent component = new TextComponent(TextComponent.fromLegacyText("§r§l>§r " + msg));
-        component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
-        player.spigot().sendMessage(component);
+        player.sendMessage(Component.text("§r§l>§r " + msg).clickEvent(ClickEvent.openUrl(url)));
     }
 
 

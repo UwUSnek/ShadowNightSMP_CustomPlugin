@@ -1,6 +1,5 @@
 package org.uwu_snek.shadownight.chatManager;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -147,7 +146,7 @@ public final class DeathMessages extends UtilityClass implements Rnd {
         if (cause == DamageCause.ENTITY_SWEEP_ATTACK || cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE || cause == DamageCause.THORNS || cause == DamageCause.ENTITY_EXPLOSION) {
             final DeathData data = activeData.get(cause);
             if (data == null) {
-                event.setDeathMessage(null);
+                event.deathMessage(null);
                 return;
             }
             String killerName;
@@ -185,7 +184,7 @@ public final class DeathMessages extends UtilityClass implements Rnd {
         else {
             final DeathData data = environmentData.get(cause);
             if (data == null) {
-                event.setDeathMessage(null);
+                event.deathMessage(null);
                 return;
             }
             msg = data.icon + b + player.getName() + "§r§7 ";
@@ -210,9 +209,9 @@ public final class DeathMessages extends UtilityClass implements Rnd {
         }
 
 
-        event.setDeathMessage(null);
+        event.deathMessage(null);
         final String output = a + msg + ".";
-        Bukkit.broadcastMessage(output);
+        ChatManager.broadcast(output);
         BotManager.sendBridgeMessage(output);
     }
 }

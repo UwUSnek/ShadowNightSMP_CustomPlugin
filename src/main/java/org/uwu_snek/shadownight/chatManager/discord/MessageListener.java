@@ -30,7 +30,7 @@ public final class MessageListener extends ListenerAdapter {
         if(event.getChannel().getId().equals(BotManager.bridgeChannel.getId())) {
             final User author = event.getAuthor();
             if(!author.isBot()) {
-                Bukkit.broadcastMessage("§9§l[Discord]§9 " + author.getEffectiveName() + ChatManager.playerMessageConnector + event.getMessage().getContentStripped());
+                ChatManager.broadcast("§9§l[Discord]§9 " + author.getEffectiveName() + ChatManager.playerMessageConnector + event.getMessage().getContentStripped());
             }
         }
     }
@@ -58,7 +58,7 @@ public final class MessageListener extends ListenerAdapter {
             utils.log(Level.INFO, "Managing profile slash command...");
             if (event.getName().equals("profile")) {
                 String ign = Objects.requireNonNull(event.getOption("ign"), "ign option is null").getAsString();
-                @SuppressWarnings("deprecation") // Using getOfflinePlayer the way it's meant to be used, no need to warn
+                // Using getOfflinePlayer the way it's meant to be used, no need to warn
                 OfflinePlayer player = Bukkit.getOfflinePlayer(ign);
 
 

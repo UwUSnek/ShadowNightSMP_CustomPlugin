@@ -1,8 +1,9 @@
 package org.uwu_snek.shadownight.chatManager;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.chatManager.discord.BotManager;
@@ -160,20 +161,37 @@ public final class ChatManager extends UtilityClass {
      * Manages a player's message and either blocks it or sends it to a chat channel depending on its contents and on the player's state.
      * @param event The chat event
      */
-    public static void processPlayerMessage(final @NotNull AsyncPlayerChatEvent event) {
+    public static void processPlayerMessage(final @NotNull AsyncChatEvent event) {
         event.setCancelled(true);
-        final String msg = event.getMessage();
+        final String msg = event.message().toString();
 
         final Player player = event.getPlayer();
         final String targetName = CMD_msg.openDms.get(player.getName());
         if (targetName == null) {
             final String strippedMsg = ChatUtils.stripPrivateCharacters(event.getPlayer().hasPermission("group.vip") ? ChatUtils.translateColor(msg) : ChatUtils.stripColor(msg));
             if (checkBlockedWords(player, strippedMsg)) {
-                Bukkit.broadcastMessage(PlayerUtils.getFancyName(event.getPlayer()) + playerMessageConnector + strippedMsg);
+                broadcast(PlayerUtils.getFancyName(event.getPlayer()) + playerMessageConnector + strippedMsg);
                 BotManager.sendBridgeMessage(event.getPlayer(), strippedMsg);
             }
         }
         // Blocked words and null target are checked by sendDm
         else sendDm(player, Bukkit.getPlayer(targetName), ChatUtils.stripColor(msg));
+    }
+
+
+    /**
+     * Sends a message to every player on the server.
+     * @param msg The message to send
+     */
+    @SuppressWarnings("unused") public static void broadcast(String msg){
+        Bukkit.getServer().broadcast(Component.text(msg));
+    }
+
+    /**
+     * Sends a message to every player on the server.
+     * @param msg The message to send
+     */
+    @SuppressWarnings("unused") public static void broadcast(Component msg){
+        Bukkit.getServer().broadcast(msg);
     }
 }

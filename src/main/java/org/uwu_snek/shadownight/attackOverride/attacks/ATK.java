@@ -3,15 +3,12 @@ package org.uwu_snek.shadownight.attackOverride.attacks;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -28,7 +25,6 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 

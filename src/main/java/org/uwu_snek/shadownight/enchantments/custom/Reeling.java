@@ -1,9 +1,7 @@
 package org.uwu_snek.shadownight.enchantments.custom;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +33,7 @@ public final class Reeling extends CustomEnchant {
     @Override public boolean isDiscoverable() { return true; }
 
     public static Vector getVelocity(int level) {
-        double n = -CustomKnockback.defaultKnockbackXZ + enchantReelingXZ;
+        double n = -CustomKnockback.defaultKnockbackXZ + enchantReelingXZ * level;
         return new Vector(n, 0, n);
     }
 }

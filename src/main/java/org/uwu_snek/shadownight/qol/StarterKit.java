@@ -1,5 +1,6 @@
 package org.uwu_snek.shadownight.qol;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -13,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
+
+import java.util.Objects;
 
 
 
@@ -30,10 +33,10 @@ public class StarterKit extends UtilityClass {
         final String lore0 = "§cNotice: this item is part of the starter kit.";
         final String lore1 = "§cIt will be deleted if you remove it from your inventory or die";
 
-        inv.setChestplate(ItemUtils.createItemStack(Material.IRON_CHESTPLATE, 1, kit_prefix + "Iron Chestplate", lore0, lore1));
-        inv.addItem      (ItemUtils.createItemStack(Material.STONE_AXE,       1,  kit_prefix + "Stone Axe",       lore0, lore1));
-        inv.addItem      (ItemUtils.createItemStack(Material.STONE_PICKAXE,   1,  kit_prefix + "Stone Pickaxe",   lore0, lore1));
-        inv.addItem      (ItemUtils.createItemStack(Material.BREAD,           32, kit_prefix + "Bread",           lore0, lore1));
+        inv.setChestplate(ItemUtils.createItemStack(Material.IRON_CHESTPLATE, 1, kit_prefix + "Iron Chestplate",  Component.text(lore0), Component.text(lore1)));
+        inv.addItem      (ItemUtils.createItemStack(Material.STONE_AXE,       1,  kit_prefix + "Stone Axe",       Component.text(lore0), Component.text(lore1)));
+        inv.addItem      (ItemUtils.createItemStack(Material.STONE_PICKAXE,   1,  kit_prefix + "Stone Pickaxe",   Component.text(lore0), Component.text(lore1)));
+        inv.addItem      (ItemUtils.createItemStack(Material.BREAD,           32, kit_prefix + "Bread",           Component.text(lore0), Component.text(lore1)));
     }
 
 
@@ -51,7 +54,7 @@ public class StarterKit extends UtilityClass {
      * @return True if the item is blacklisted, false otherwise
      */
     public static boolean isBlacklisted(@Nullable final ItemStack item) {
-        return item != null && item.hasItemMeta() && ChatUtils.stripColor(item.getItemMeta().getDisplayName()).startsWith(ChatUtils.stripColor(kit_prefix));
+        return item != null && item.hasItemMeta() && ChatUtils.stripColor(Objects.requireNonNull(item.getItemMeta().displayName()).toString()).startsWith(ChatUtils.stripColor(kit_prefix));
     }
 
 

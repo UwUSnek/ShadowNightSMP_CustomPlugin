@@ -1,16 +1,15 @@
 package org.uwu_snek.shadownight.qol.tpa;
 
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 import org.uwu_snek.shadownight.utils.spigot.PlayerUtils;
-import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -53,12 +52,12 @@ public final class CMD_tpa implements CommandExecutor {
         ChatUtils.sendMessage(player, "§7Sending a teleport request to " + PlayerUtils.getFancyName(target) + "...");
 
         String _command = "/tpaccept " + player.getName();
-        TextComponent c = new TextComponent("§a" + _command);
-        c.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
-        TextComponent c2 = new TextComponent("§a(or click here)");
-        c2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, _command));
-
-        target.spigot().sendMessage(new TextComponent(ChatUtils.serverPrefix + PlayerUtils.getFancyName(player) + "§f is asking you to teleport to your location! Use "), c, new TextComponent("§r to accept "), c2);
+        target.sendMessage(
+            Component.text(ChatUtils.serverPrefix + PlayerUtils.getFancyName(player) + "§f is asking you to teleport to your location! Use ").append(
+            Component.text("§a" + _command).clickEvent(ClickEvent.runCommand(_command))).append(
+            Component.text("§r to accept ")).append(
+            Component.text("§a(or click here)").clickEvent(ClickEvent.runCommand(_command)))
+        );
         if(requests_from_player == null) tpa_requests.put(player.getName(), new Vector<>());
         tpa_requests.get(player.getName()).add(target.getName());
         return true;
