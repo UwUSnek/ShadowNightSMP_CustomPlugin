@@ -2,11 +2,17 @@ package org.uwu_snek.shadownight.enchantments;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.KnockbackEnchantment;
 import org.uwu_snek.shadownight.enchantments.custom.Reeling;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
+import java.util.Objects;
+import java.util.logging.Level;
 
 
 

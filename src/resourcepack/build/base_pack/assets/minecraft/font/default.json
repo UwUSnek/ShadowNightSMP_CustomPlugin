@@ -1,0 +1,35 @@
+{
+    "providers":[
+        {"type": "space","advances": {" ": 4,"\uF8FF": -1}},
+
+
+
+
+        {"file":"shadow_night:ranks/owner.png",        "chars":["\ue000"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/co_owner.png",     "chars":["\ue001"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/mod.png",          "chars":["\ue002"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/supporter.png",    "chars":["\ue003"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/builder.png",      "chars":["\ue004"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/streamer.png",     "chars":["\ue005"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/game_breaker.png", "chars":["\ue006"], "height":9, "ascent":8, "type":"bitmap"},
+
+        {"file":"shadow_night:ranks/mvp.png",          "chars":["\ue010"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/vip.png",          "chars":["\ue011"], "height":9, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:ranks/member.png",       "chars":["\ue012"], "height":9, "ascent":8, "type":"bitmap"},
+
+
+
+
+        {"file":"shadow_night:icons/logo_tab_0.png",    "chars":["\uF000"], "height":64, "ascent":64, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_1.png",    "chars":["\uF001"], "height":64, "ascent":64, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_2.png",    "chars":["\uF002"], "height":64, "ascent":64, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_3.png",    "chars":["\uF003"], "height":64, "ascent":64, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_4.png",    "chars":["\uF004"], "height":64, "ascent":64, "type":"bitmap"},
+
+        {"file":"shadow_night:icons/logo_tab_0.png",    "chars":["\uF005"], "height":32, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_1.png",    "chars":["\uF006"], "height":32, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_2.png",    "chars":["\uF007"], "height":32, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_3.png",    "chars":["\uF008"], "height":32, "ascent":8, "type":"bitmap"},
+        {"file":"shadow_night:icons/logo_tab_4.png",    "chars":["\uF009"], "height":32, "ascent":8, "type":"bitmap"}
+    ]
+}

@@ -99,7 +99,7 @@ public final class SignInput {
             blockstate.getSide(Side.FRONT).line(3, lines[3]);
 
             player.sendBlockChange(location, signData);
-            player.sendBlockUpdate(location, blockstate);                     //NOTICE: This only sets the front side of the sign
+            player.sendBlockUpdate(location, blockstate); //NOTICE: This only sets the front side of the sign
 
             PacketContainer openSign = ShadowNight.protocolManager.createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
             openSign.getBlockPositionModifier().write(0, posWrapper);   // Set block position

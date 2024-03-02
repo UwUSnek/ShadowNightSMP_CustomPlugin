@@ -374,12 +374,11 @@ public final class TradeGui implements Listener {
         int clickedSlot = event.getRawSlot();
 
 
-
         final ItemStack clickedItem = event.getCurrentItem();
-        if(clickedItem != null && !clickedItem.getType().isAir()) {
+        if (clickedItem != null && !clickedItem.getType().isAir()) {
             // Manage item selection
             if (clickedSlot >= inv.getSize()) {
-                if(StarterKit.isBlacklisted(clickedItem)) clickedItem.setAmount(0);
+                if (StarterKit.isBlacklisted(clickedItem)) clickedItem.setAmount(0);
                 else selectItem(clickedItem);
             }
 
@@ -390,22 +389,22 @@ public final class TradeGui implements Listener {
 
             // Manage button clicks
             else switch (clickedSlot) {
-                    case buttonAddCoins:  {
-                        readCoinInput();
-                        break;
-                    }
-                    case buttonAddClaimBlocks: {
-                        player.sendMessage("§cThis feature has not been implemented yet!");
-                        break;
-                    }
-                    case buttonPlayerAccept: {
-                        if(timer.getTimeLeft() == 0) {
-                            linkedGui.toggleTarget();
-                            togglePlayer();
-                        }
-                        break;
-                    }
+                case buttonAddCoins: {
+                    readCoinInput();
+                    break;
                 }
+                case buttonAddClaimBlocks: {
+                    player.sendMessage("§cThis feature has not been implemented yet!");
+                    break;
+                }
+                case buttonPlayerAccept: {
+                    if (timer.getTimeLeft() == 0) {
+                        linkedGui.toggleTarget();
+                        togglePlayer();
+                    }
+                    break;
+                }
+            }
         }
     }
 

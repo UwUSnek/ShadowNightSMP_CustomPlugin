@@ -1,0 +1,29 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:item/handheld",
+	"textures": {
+		"layer0": "shadow_night:item/diamond_scythe"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, -90, -22.5],
+			"translation": [0, 4, 3.25],
+			"scale": [2, 2, 1]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [90, 90, -67.5],
+			"translation": [0, 4, 3.25],
+			"scale": [2, 2, 1]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -109, 45],
+			"translation": [1.13, 4.75, 1.13],
+			"scale": [1.36, 1.36, 0.68]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 71, -45],
+			"translation": [1, 4.75, 1.13],
+			"scale": [1.36, 1.36, 0.68]
+		}
+	}
+}

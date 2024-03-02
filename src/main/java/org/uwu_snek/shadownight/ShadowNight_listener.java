@@ -30,6 +30,9 @@ import org.uwu_snek.shadownight.qol.StarterKit;
 import org.uwu_snek.shadownight.qol.SurvivalFly;
 import org.uwu_snek.shadownight.qol.tpa.CMD_tpa;
 import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
+import org.uwu_snek.shadownight.utils.utils;
+
+import java.util.logging.Level;
 
 
 
@@ -138,7 +141,8 @@ public final class ShadowNight_listener implements Listener {
 
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onSprintToggle(@NotNull final PrepareItemEnchantEvent event) {
-        EnchantBlacklist.onPrepareEnchant(event);
+    public void onPrepareItemEnchant(@NotNull final PrepareItemEnchantEvent event) {
+        utils.log(Level.SEVERE, "test");
+        EnchantBlacklist.onPrepareItemEnchant(event);
     }
 }

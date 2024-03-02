@@ -12,6 +12,7 @@ import org.uwu_snek.shadownight.dungeons.Dungeon;
 import org.uwu_snek.shadownight.economy.CMD_trade;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.enchantments.CustomEnchantManager;
+import org.uwu_snek.shadownight.itemFilter.ETablePacketReplacer;
 import org.uwu_snek.shadownight.items.CMD_sngive;
 import org.uwu_snek.shadownight.items.CustomItemId;
 import org.uwu_snek.shadownight.items.ItemManager;
@@ -43,7 +44,14 @@ public final class ShadowNight extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
+        // Initialize protocol manager
+        protocolManager = ProtocolLibrary.getProtocolManager();
 
+
+
+
+        // Add custom enchantments to the Vanilla registry
+        //ShadowNight.protocolManager.addPacketListener(new ETablePacketReplacer());
         CustomEnchantManager.registerEnchantments();
 
 
@@ -60,9 +68,7 @@ public final class ShadowNight extends JavaPlugin {
         if (provider != null) lpApi = provider.getProvider();
 
 
-        // Initialize protocol manager
-        protocolManager = ProtocolLibrary.getProtocolManager();
-        //signInput = new SignInput();
+        // Add Sign Input packet listener
         ShadowNight.protocolManager.addPacketListener(SignInput.packetListener);
 
 
