@@ -8,6 +8,9 @@ import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.inventory.ItemStack;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight._generated._enchantment_overrides;
+import org.uwu_snek.shadownight.chatManager.ChatManager;
+import org.uwu_snek.shadownight.enchantments.CustomEnchant;
 import org.uwu_snek.shadownight.enchantments.Enchantment_BukkitExtension;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
@@ -46,6 +49,11 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
 
     public static void onPrepareItemEnchant(@NotNull final PrepareItemEnchantEvent e){
         if(e.isCancelled()) return;
+        ChatManager.broadcast("");
+        ChatManager.broadcast("");
+        ChatManager.broadcast("");
+        ChatManager.broadcast("");
+
 
 
         // For each offer
@@ -65,12 +73,14 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
 
             // Save data in the override map and change the offers on the client's screen (changing them doesn't do anything on the server)
             _overrides.put(offer.getCost(), Pair.with(newEnchant, lvl));
-            offer.setEnchantment(newEnchant);
+            //offer.setEnchantment(newEnchant instanceof CustomEnchant newCustom ? _enchantment_overrides.getOverride(newCustom.translationKey()) : newEnchant);
+            //ChatManager.broadcast("" + (newEnchant instanceof CustomEnchant) + ": " + newEnchant.translationKey() + " to " + (newEnchant instanceof CustomEnchant newCustom ? _enchantment_overrides.getOverride(newCustom.translationKey()) : newEnchant).toString());
+            offer.setEnchantment(_enchantment_overrides.getOverride(newEnchant.translationKey()));
+            ChatManager.broadcast("" + _enchantment_overrides.getOverride(newEnchant.translationKey()));
             offer.setEnchantmentLevel(lvl);
         }
         overrides.put(e.getEnchanter().getUniqueId(), _overrides);
     }
-
 
 
 
