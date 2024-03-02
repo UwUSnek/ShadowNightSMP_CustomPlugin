@@ -3,13 +3,7 @@ package org.uwu_snek.shadownight.itemFilter;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
 import org.uwu_snek.shadownight.ShadowNight;
-import org.uwu_snek.shadownight._generated.EnchantmentOverrideCodes;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 
 

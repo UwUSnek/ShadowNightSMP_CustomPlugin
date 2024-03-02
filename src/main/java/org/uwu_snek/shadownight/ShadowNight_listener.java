@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -30,9 +31,6 @@ import org.uwu_snek.shadownight.qol.StarterKit;
 import org.uwu_snek.shadownight.qol.SurvivalFly;
 import org.uwu_snek.shadownight.qol.tpa.CMD_tpa;
 import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
-import org.uwu_snek.shadownight.utils.utils;
-
-import java.util.logging.Level;
 
 
 
@@ -142,7 +140,11 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPrepareItemEnchant(@NotNull final PrepareItemEnchantEvent event) {
-        utils.log(Level.SEVERE, "test");
         EnchantBlacklist.onPrepareItemEnchant(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEnchantItem(@NotNull final EnchantItemEvent event){
+        EnchantBlacklist.onEnchantItem(event);
     }
 }

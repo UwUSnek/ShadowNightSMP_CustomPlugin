@@ -2,7 +2,6 @@ package org.uwu_snek.shadownight.chatManager.discord;
 
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
