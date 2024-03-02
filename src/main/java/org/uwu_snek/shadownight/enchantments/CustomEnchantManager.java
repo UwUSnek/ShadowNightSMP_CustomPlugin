@@ -32,8 +32,6 @@ public final class CustomEnchantManager extends UtilityClass {
         BuiltInRegistries.ENCHANTMENT.freeze();
     }
 
-
-
     private static void registerEnchantment(CustomEnchant e) {
         Registry.register(BuiltInRegistries.ENCHANTMENT, e.id, e);
     }

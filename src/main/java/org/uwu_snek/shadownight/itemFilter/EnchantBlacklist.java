@@ -10,8 +10,7 @@ import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight._generated._enchantment_overrides;
 import org.uwu_snek.shadownight.chatManager.ChatManager;
-import org.uwu_snek.shadownight.enchantments.CustomEnchant;
-import org.uwu_snek.shadownight.enchantments.Enchantment_BukkitExtension;
+import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 
@@ -24,7 +23,7 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
     private static final List<Enchantment> blockedEnchants = Arrays.asList(Enchantment.SWEEPING_EDGE);
     private static final ArrayList<Enchantment> allowedEnchants = new ArrayList<>();
     static {
-        Arrays.stream(Enchantment_BukkitExtension.values()).iterator().forEachRemaining(e -> {
+        Arrays.stream(CustomEnchant_Spigot.values()).iterator().forEachRemaining(e -> {
             if(!e.isTreasure() && !blockedEnchants.contains(e)) allowedEnchants.add(e);
         });
     }
@@ -49,12 +48,6 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
 
     public static void onPrepareItemEnchant(@NotNull final PrepareItemEnchantEvent e){
         if(e.isCancelled()) return;
-        ChatManager.broadcast("");
-        ChatManager.broadcast("");
-        ChatManager.broadcast("");
-        ChatManager.broadcast("");
-
-
 
         // For each offer
         HashMap<Integer, Pair<Enchantment, Integer>> _overrides = new HashMap<>();
@@ -73,8 +66,6 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
 
             // Save data in the override map and change the offers on the client's screen (changing them doesn't do anything on the server)
             _overrides.put(offer.getCost(), Pair.with(newEnchant, lvl));
-            //offer.setEnchantment(newEnchant instanceof CustomEnchant newCustom ? _enchantment_overrides.getOverride(newCustom.translationKey()) : newEnchant);
-            //ChatManager.broadcast("" + (newEnchant instanceof CustomEnchant) + ": " + newEnchant.translationKey() + " to " + (newEnchant instanceof CustomEnchant newCustom ? _enchantment_overrides.getOverride(newCustom.translationKey()) : newEnchant).toString());
             offer.setEnchantment(_enchantment_overrides.getOverride(newEnchant.translationKey()));
             ChatManager.broadcast("" + _enchantment_overrides.getOverride(newEnchant.translationKey()));
             offer.setEnchantmentLevel(lvl);

@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.uwu_snek.shadownight.enchantments.Enchantment_BukkitExtension;
+import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
 import org.uwu_snek.shadownight.enchantments.custom.Reeling;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.UtilityClass;
@@ -133,7 +133,7 @@ public final class CustomKnockback extends UtilityClass {
             }
 
             // Reeling
-            int reelingLv = item.getEnchantmentLevel(Enchantment_BukkitExtension.REELING);
+            int reelingLv = item.getEnchantmentLevel(CustomEnchant_Spigot.REELING);
             if(reelingLv > 0) {
                 knockback.add(Reeling.getVelocity(reelingLv).multiply(direction));
             }

@@ -143,7 +143,7 @@ public abstract class ATK implements Rnd {
      * @param canCrit True if the attack can trigger a critical hit
      * @param damageOverride If not null, the damage calculation is skipped and this value is used instead
      */
-    public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, boolean follorOriginDirection, @Nullable final ItemStack item, final double charge, final boolean canCrit, final Double damageOverride) {
+    public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, boolean useOriginDirection, @Nullable final ItemStack item, final double charge, final boolean canCrit, final Double damageOverride) {
         // Stop damager from hitting itself
         if(damager == target) return;
 
@@ -175,7 +175,7 @@ public abstract class ATK implements Rnd {
 
         // Calculate pre-hit velocity
         final Vector velocity = target.getVelocity();                       // Set starting velocity
-        velocity.add(CustomKnockback.getKnockback(damager, target, origin, follorOriginDirection, item));  // Add attack knockback
+        velocity.add(CustomKnockback.getKnockback(damager, target, origin, useOriginDirection, item));  // Add attack knockback
 
 
         //TODO review and simplify custom scythe attacks

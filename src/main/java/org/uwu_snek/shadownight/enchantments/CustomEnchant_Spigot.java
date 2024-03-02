@@ -4,14 +4,11 @@ import com.google.common.base.Preconditions;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
-import org.uwu_snek.shadownight.utils.utils;
-
-import java.util.logging.Level;
 
 
 
 
-public abstract class Enchantment_BukkitExtension extends Enchantment {
+public abstract class CustomEnchant_Spigot extends Enchantment {
     public static final Enchantment REELING = getEnchantment("reeling");
 
 

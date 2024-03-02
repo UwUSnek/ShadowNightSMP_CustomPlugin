@@ -10,6 +10,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.uwu_snek.shadownight.attackOverride.CustomDamage;
 
 
 
@@ -42,11 +43,11 @@ public final class ATK_Standard extends ATK {
                 !player.isSprinting() &&
                 player.getVehicle() == null
             ) {
-                simulateSweepingEffect(origin);
+                simulateSweepingEffect(damager.getLocation());
                 BoundingBox box = directTarget.getBoundingBox().expand(sweepingTargetBox);
                 for(Entity entity : directTarget.getWorld().getNearbyEntities(box)){
                     if(entity instanceof LivingEntity e && e != directTarget && e.getLocation().distance(damager.getLocation()) <= sweepingMaxDist) {
-                        executeBasicAttack(damager, e, origin, false, item, charge, false, null);
+                        executeBasicAttack(damager, e, origin, false, item, charge, false, CustomDamage.getDamage(item, false, damager, e, charge) * 0.8);
                     }
                 }
             }
