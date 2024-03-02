@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.utils.UtilityClass;
@@ -22,6 +23,7 @@ import java.util.Objects;
 
 public class StarterKit extends UtilityClass {
     private static final String kit_prefix = "§c[Starter Kit] §r";
+    private static final String stripped_kit_prefix = ChatUtils.stripColor(kit_prefix);
 
 
     /**
@@ -54,7 +56,14 @@ public class StarterKit extends UtilityClass {
      * @return True if the item is blacklisted, false otherwise
      */
     public static boolean isBlacklisted(@Nullable final ItemStack item) {
-        return item != null && item.hasItemMeta() && ChatUtils.stripColor(Objects.requireNonNull(item.getItemMeta().displayName()).toString()).startsWith(ChatUtils.stripColor(kit_prefix));
+        if(item != null) {
+            ItemMeta meta = item.getItemMeta();
+            if(meta != null) {
+                Component displayName = meta.displayName();
+                return displayName != null && ChatUtils.stripColor(displayName.toString()).startsWith(stripped_kit_prefix);
+            }
+        }
+        return false;
     }
 
 

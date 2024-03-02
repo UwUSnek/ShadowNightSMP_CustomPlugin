@@ -13,6 +13,8 @@ import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.inventory.PrepareGrindstoneEvent;
 import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
@@ -23,6 +25,8 @@ import org.uwu_snek.shadownight.chatManager.JoinLeaveMessages;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
 import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
+import org.uwu_snek.shadownight.items.AnvilFilter;
+import org.uwu_snek.shadownight.items.GrindstoneFilter;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.bow.IM_Bow;
 import org.uwu_snek.shadownight.qol.ArmorStandArms;
@@ -146,5 +150,15 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEnchantItem(@NotNull final EnchantItemEvent event){
         EnchantBlacklist.onEnchantItem(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPrepareAnvil(@NotNull final PrepareAnvilEvent event){
+        AnvilFilter.onPrepareAnvil(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPrepareGrindstone(@NotNull final PrepareGrindstoneEvent event){
+        GrindstoneFilter.onPrepareGrindstone(event);
     }
 }
