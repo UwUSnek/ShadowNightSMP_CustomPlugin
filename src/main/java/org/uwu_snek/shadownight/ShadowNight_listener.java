@@ -28,12 +28,8 @@ import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
 import org.uwu_snek.shadownight.items.AnvilFilter;
 import org.uwu_snek.shadownight.items.GrindstoneFilter;
 import org.uwu_snek.shadownight.items.IM;
-import org.uwu_snek.shadownight.items.MvpAnvilFormatting;
+import org.uwu_snek.shadownight.qol.*;
 import org.uwu_snek.shadownight.items.bow.IM_Bow;
-import org.uwu_snek.shadownight.qol.ArmorStandArms;
-import org.uwu_snek.shadownight.qol.SpawnInvincibility;
-import org.uwu_snek.shadownight.qol.StarterKit;
-import org.uwu_snek.shadownight.qol.SurvivalFly;
 import org.uwu_snek.shadownight.qol.tpa.CMD_tpa;
 import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
 
@@ -155,6 +151,7 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPrepareAnvil(final @NotNull PrepareAnvilEvent event){
+        NoAnvilLimit.onPrepareAnvil(event);
         AnvilFilter.onPrepareAnvil(event);
         MvpAnvilFormatting.onPrepareAnvil(event);
     }

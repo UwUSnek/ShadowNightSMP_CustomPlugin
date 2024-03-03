@@ -12,6 +12,9 @@ mkdir ./build/language
 # Generate files
 python3 ./language/enchantments.py
 
+# Paste non-generator files
+cp ./language/*.json ./build/language/
+
 
 
 
