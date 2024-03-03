@@ -37,5 +37,6 @@
   "enchantment.minecraft.silk_touch": "Silk Touch",
   "enchantment.minecraft.smite": "Smite",
   "enchantment.minecraft.thorns": "Thorns",
-  "enchantment.minecraft.unbreaking": "Unbreaking"
+  "enchantment.minecraft.unbreaking": "Unbreaking",
+  "container.repair.expensive": "§aEnchantment Cost: 40+"
 }
