@@ -21,9 +21,7 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public final class IM_HellfireBow extends IM_Bow {
-    @Override public Material getMaterial()            { return Material.BOW;              }
     @Override public String       getDisplayName()     { return "§6Hellfire Bow";          }
-    @Override public int          getCustomModelData() { return 1;                         }
     @Override public CustomItemId getCustomId()        { return CustomItemId.HELLFIRE_BOW; }
 
 

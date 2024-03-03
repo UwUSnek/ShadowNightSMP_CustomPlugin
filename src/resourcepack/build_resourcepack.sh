@@ -18,9 +18,9 @@ cp ./language/*.json ./build/language/
 
 
 
-# Zip resource pack ignoring krita files and temporary files
-# Don't save extra data in the zip (-X) to avoid unnecessary git changes
+# Copy resource pack ignoring krita files and temporary files
 rsync -q -av --exclude='*.kra' --exclude '*~' ./base_pack/ ./build/base_pack
+mkdir ./build/base_pack/assets/minecraft/lang
 
 
 # Merge language files
@@ -32,7 +32,13 @@ do
 done
 
 
+# Generate models and textures
+python3 ./custom_items/custom_items.py
+
+
+
 # Zip pack
+# Don't save extra data in the zip (-X) to avoid unnecessary git changes
 cd build/base_pack && zip -q -X -r ../output.zip ./*
 cd ../../../../ && rm ./venv -rf
 

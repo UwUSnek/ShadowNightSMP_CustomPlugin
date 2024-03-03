@@ -53,12 +53,12 @@ unchanged = [
 with open("./build/language/enchantments.json", "w+") as json, open("../main/java/org/uwu_snek/shadownight/_generated/_enchantment_overrides.java", "w+") as java:
     json.write("{\n")
     java.write(
-        'package org.uwu_snek.shadownight._generated;\n' +
-        'import org.bukkit.enchantments.Enchantment;\n' +
-        'import org.jetbrains.annotations.NotNull;\n' +
-        'import java.util.AbstractMap;\n' +
-        'import java.util.Map;\n' +
-        'public final class _enchantment_overrides extends org.uwu_snek.shadownight.utils.UtilityClass {\n' +
+        'package org.uwu_snek.shadownight._generated;\n'
+        'import org.bukkit.enchantments.Enchantment;\n'
+        'import org.jetbrains.annotations.NotNull;\n'
+        'import java.util.AbstractMap;\n'
+        'import java.util.Map;\n'
+        'public final class _enchantment_overrides extends org.uwu_snek.shadownight.utils.UtilityClass {\n'
         '    private static final Map<String, Enchantment> overrides = Map.ofEntries(\n'
     )
 
@@ -79,8 +79,8 @@ with open("./build/language/enchantments.json", "w+") as json, open("../main/jav
 
     json.write('}')
     java.write(
-        '    );\n\n' +
-        '    public static Enchantment getOverride(final @NotNull String e){ return overrides.get(e); }\n' +
+        '    );\n\n'
+        '    public static Enchantment getOverride(final @NotNull String e){ return overrides.get(e); }\n'
         '}'
     )
 

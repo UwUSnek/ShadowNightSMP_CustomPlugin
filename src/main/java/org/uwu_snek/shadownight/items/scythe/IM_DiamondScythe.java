@@ -8,9 +8,7 @@ import org.uwu_snek.shadownight.items.CustomItemId;
 
 
 public final class IM_DiamondScythe extends IM_Scythe {
-    @Override public Material     getMaterial()        { return Material.DIAMOND_SWORD;      }
     @Override public String       getDisplayName()     { return "Diamond Scythe";            }
-    @Override public int          getCustomModelData() { return 1;                           }
     @Override public CustomItemId getCustomId()        { return CustomItemId.DIAMOND_SCYTHE; }
 
     @Override protected double getAttackSpeed() { return -3.2; }

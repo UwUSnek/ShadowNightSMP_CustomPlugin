@@ -8,9 +8,7 @@ import org.uwu_snek.shadownight.items.CustomItemId;
 
 
 public final class IM_NetheriteScythe extends IM_Scythe {
-    @Override public Material     getMaterial()        { return Material.NETHERITE_SWORD;      }
     @Override public String       getDisplayName()     { return "Netherite Scythe";            }
-    @Override public int          getCustomModelData() { return 1;                             }
     @Override public CustomItemId getCustomId()        { return CustomItemId.NETHERITE_SCYTHE; }
 
     @Override protected double getAttackSpeed() { return -3.0; }
