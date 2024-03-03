@@ -22,7 +22,7 @@ public final class ClaimUtils extends UtilityClass {
      * @param player The player
      * @return True if the entity is inside a claim the player has no permission to build in (and thus hit entities), false otherwise
      */
-    public static boolean isEntityProtected(@NotNull final Entity entity, @NotNull final Player player) {
+    public static boolean isEntityProtected(final @NotNull Entity entity, final @NotNull Player player) {
         // False if target is a monster
         // False if target is owned by the player
         if (
@@ -46,7 +46,7 @@ public final class ClaimUtils extends UtilityClass {
      * @param block The block to check
      * @return True claim, or null if the block is not claimed
      */
-    public static Claim getClaimAt(@NotNull final Block block) {
+    public static Claim getClaimAt(final @NotNull Block block) {
         return GriefPrevention.instance.dataStore.getClaimAt(block.getLocation(), false, null);
     }
 }

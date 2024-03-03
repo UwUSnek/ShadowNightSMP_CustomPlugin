@@ -1,9 +1,16 @@
 package org.uwu_snek.shadownight.utils.spigot;
 
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+
+import java.util.LinkedHashSet;
+
 
 
 
@@ -112,5 +119,92 @@ public final class ChatUtils extends UtilityClass {
     @SuppressWarnings("unused")
     public static String translateColor(final @NotNull String s) {
         return s.replaceAll("&([0-9a-fk-or])", "§$1");
+    }
+
+
+
+
+
+
+
+    /**
+     * Translates color codes (& and §) to a TextComponent that doesn't contain any legacy formatting code.
+     * @param s The string to translate
+     * @return The translated string as a TextComponent
+     */
+    @SuppressWarnings("unused")
+    public static TextComponent translateColorToComponent(final @NotNull String s) {
+        TextComponent output = Component.text("").decoration(TextDecoration.ITALIC, false);
+
+
+        // For each part of the message
+        final LinkedHashSet<TextDecoration> modifiers = new LinkedHashSet<>();
+        TextColor color = TextColor.color(0xFFFFFF);
+        for(String part : s.split("((?=[&§][0-9a-fk-or]))")){
+
+            // Handle first part (no formatting code) separately
+            if(!part.matches("[&§][0-9a-fk-or].*")) {
+                output = output.append(Component.text(part).color(color));
+                continue;
+            }
+
+            // Save code and string value
+            char code = part.charAt(1);
+            String value = part.substring(2);
+            TextComponent r = Component.text(value);
+
+            // Remove all modifiers if r code is used
+            if(code == 'r') {
+                modifiers.clear();
+                color = TextColor.color(0xFFFFFF);
+            }
+
+            // Add new modifiers if specified
+            else if(part.matches("[&§][k-o].*")) modifiers.add(switch (code) {
+                case 'k' -> TextDecoration.OBFUSCATED;
+                case 'l' -> TextDecoration.BOLD;
+                case 'm' -> TextDecoration.STRIKETHROUGH;
+                case 'n' -> TextDecoration.UNDERLINED;
+                case 'o' -> TextDecoration.ITALIC;
+                default  -> throw new RuntimeException("idk what happened");
+            });
+
+            // Set color if specified
+            else if(part.matches("[&§][0-9a-f].*")) {
+                modifiers.clear();
+                color = TextColor.color(switch (code) {
+                    case '0' -> 0x000000;
+                    case '1' -> 0x0000AA;
+                    case '2' -> 0x00AA00;
+                    case '3' -> 0x00AAAA;
+                    case '4' -> 0xAA0000;
+                    case '5' -> 0xAA00AA;
+                    case '6' -> 0xFFAA00;
+                    case '7' -> 0xAAAAAA;
+                    case '8' -> 0x555555;
+                    case '9' -> 0x5555FF;
+                    case 'a' -> 0x55FF55;
+                    case 'b' -> 0x55FFFF;
+                    case 'c' -> 0xFF5555;
+                    case 'd' -> 0xFF55FF;
+                    case 'e' -> 0xFFFF55;
+                    case 'f' -> 0xFFFFFF;
+                    default  -> throw new RuntimeException("idk what happened");
+                });
+            }
+
+
+            // Add colo and all saved modifiers
+            r = r.color(color);
+            for(TextDecoration m : modifiers) {
+                r = r.decorate(m);
+            }
+
+            // Append formatted part to output
+            output = output.append(r);
+        }
+
+
+        return output;
     }
 }

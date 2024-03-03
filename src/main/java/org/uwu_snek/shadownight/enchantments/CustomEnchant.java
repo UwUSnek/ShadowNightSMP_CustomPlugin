@@ -20,7 +20,7 @@ public abstract class CustomEnchant extends net.minecraft.world.item.enchantment
     protected final String name;
     protected final String id;
 
-    protected CustomEnchant(@NotNull final Rarity rarity, @NotNull final String _name, @NotNull final String _id, final int maxLv) {
+    protected CustomEnchant(final @NotNull Rarity rarity, final @NotNull String _name, final @NotNull String _id, final int maxLv) {
         super(rarity, EnchantmentCategory.BREAKABLE, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
         name = _name;
         id = _id;
@@ -66,7 +66,7 @@ public abstract class CustomEnchant extends net.minecraft.world.item.enchantment
         return this.descriptionId;
     }
 
-    @Override protected abstract boolean checkCompatibility(@NotNull final net.minecraft.world.item.enchantment.Enchantment other);
+    @Override protected abstract boolean checkCompatibility(final @NotNull net.minecraft.world.item.enchantment.Enchantment other);
     @Override public abstract boolean canEnchant(@Nullable final ItemStack stack);
     @Override public abstract boolean isTreasureOnly();
     @Override public abstract boolean isTradeable();

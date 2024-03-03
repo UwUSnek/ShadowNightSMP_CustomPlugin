@@ -37,7 +37,7 @@ public abstract class IM_Scythe extends IM {
 
 
 
-    static private void breakBlocks(@NotNull final Player player) {
+    static private void breakBlocks(final @NotNull Player player) {
         Location playerPos = player.getLocation();
         Vector playerDirection = playerPos.getDirection();
 

@@ -80,7 +80,7 @@ with open("./build/language/enchantments.json", "w+") as json, open("../main/jav
     json.write('}')
     java.write(
         '    );\n\n' +
-        '    public static Enchantment getOverride(@NotNull final String e){ return overrides.get(e); }\n' +
+        '    public static Enchantment getOverride(final @NotNull String e){ return overrides.get(e); }\n' +
         '}'
     )
 

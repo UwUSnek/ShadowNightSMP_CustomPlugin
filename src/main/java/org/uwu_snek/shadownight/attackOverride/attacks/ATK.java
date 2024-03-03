@@ -32,7 +32,7 @@ import java.util.UUID;
 
 
 public abstract class ATK implements Rnd {
-    public abstract void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @NotNull final Location origin, @Nullable final ItemStack item);
+    public abstract void execute(final @NotNull LivingEntity damager, @Nullable final LivingEntity directTarget, final @NotNull Location origin, @Nullable final ItemStack item);
 
 
 
@@ -46,7 +46,7 @@ public abstract class ATK implements Rnd {
      * @param target The attacked entity
      * @param item The item used to attack
      */
-    private static void applyEnchantEffects(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @Nullable ItemStack item) {
+    private static void applyEnchantEffects(final @NotNull LivingEntity damager, final @NotNull LivingEntity target, @Nullable ItemStack item) {
         // Fire aspect
         if (item != null) {
             int fireAspectLv = item.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
@@ -76,7 +76,7 @@ public abstract class ATK implements Rnd {
 
 
 
-    private static void resetPotion(@NotNull final LivingEntity target, @NotNull final PotionEffectType type, final int duration, final int amplifier) {
+    private static void resetPotion(final @NotNull LivingEntity target, final @NotNull PotionEffectType type, final int duration, final int amplifier) {
         if(target.hasPotionEffect(type)) {
             PotionEffect effect = target.getPotionEffect(type);
             if(effect != null && effect.getDuration() <= duration && amplifier == effect.getAmplifier()) target.removePotionEffect(type);
@@ -90,7 +90,7 @@ public abstract class ATK implements Rnd {
      * @param target The attacked entity
      * @param item The item used to attack
      */
-    private static void applyMobEffects(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @Nullable ItemStack item) {
+    private static void applyMobEffects(final @NotNull LivingEntity damager, final @NotNull LivingEntity target, @Nullable ItemStack item) {
         Difficulty difficulty = target.getWorld().getDifficulty();
         double regionalDifficulty = utils.getRegionalDifficulty(difficulty, target.getLocation());
         switch (damager.getType()) {
@@ -125,7 +125,7 @@ public abstract class ATK implements Rnd {
      * @param damager The entity
      * @return The attack charge. 0 to 1, with 1 = fully charged
      */
-    protected static double getEntityCharge(@NotNull final LivingEntity damager) {
+    protected static double getEntityCharge(final @NotNull LivingEntity damager) {
         return (damager instanceof Player player) ? player.getAttackCooldown() : 1;
         //utils.log(Level.WARNING,"[" + damager.getType() + "] Using charge: " + charge);
     }
@@ -143,7 +143,7 @@ public abstract class ATK implements Rnd {
      * @param canCrit True if the attack can trigger a critical hit
      * @param damageOverride If not null, the damage calculation is skipped and this value is used instead
      */
-    public static void executeBasicAttack(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, boolean useOriginDirection, @Nullable final ItemStack item, final double charge, final boolean canCrit, final Double damageOverride) {
+    public static void executeBasicAttack(final @NotNull LivingEntity damager, final @NotNull LivingEntity target, final @NotNull Location origin, boolean useOriginDirection, @Nullable final ItemStack item, final double charge, final boolean canCrit, final Double damageOverride) {
         // Stop damager from hitting itself
         if(damager == target) return;
 
@@ -194,7 +194,7 @@ public abstract class ATK implements Rnd {
      * Simulates the Vanilla sweeping attack effect and sound in front of the location <pos> based on the pitch and yaw specified in it.
      * @param pos The target location
      */
-    protected static void simulateSweepingEffect(@NotNull final Location pos) {
+    protected static void simulateSweepingEffect(final @NotNull Location pos) {
         World world = pos.getWorld();
         if(world == null) throw new RuntimeException("Failed to simulate sweeping effect: World is null");
         pos.getWorld().playSound(pos, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);

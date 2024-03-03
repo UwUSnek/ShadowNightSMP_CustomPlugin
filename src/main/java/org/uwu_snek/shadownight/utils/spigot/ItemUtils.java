@@ -1,6 +1,7 @@
 package org.uwu_snek.shadownight.utils.spigot;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -110,15 +111,15 @@ public final class ItemUtils extends UtilityClass {
      */
     public static String getItemName(final @NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
-        if(item.hasItemMeta() && meta.hasDisplayName()) {
-            return Objects.requireNonNull(meta.displayName()).toString();
+        if(meta != null) {
+            TextComponent displayName = (TextComponent)meta.displayName();
+            if(displayName != null) return displayName.content();
         }
-        else {
-            final String[] words = item.getType().name().split("_");
-            final StringBuilder r = new StringBuilder();
-            for(String w : words) r.append(w.substring(0, 1).toUpperCase()).append(w.substring(1).toLowerCase()).append(" ");
-            return r.toString();
-        }
+
+        final String[] words = item.getType().name().split("_");
+        final StringBuilder r = new StringBuilder();
+        for(String w : words) r.append(w.substring(0, 1).toUpperCase()).append(w.substring(1).toLowerCase()).append(" ");
+        return r.toString();
         //TODO check potion name from their effect data
     }
 

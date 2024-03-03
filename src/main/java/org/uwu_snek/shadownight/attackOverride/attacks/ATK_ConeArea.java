@@ -30,7 +30,7 @@ public final class ATK_ConeArea extends ATK {
 
 
     @Override
-    public void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @NotNull final Location origin, @Nullable final ItemStack item) {
+    public void execute(final @NotNull LivingEntity damager, @Nullable final LivingEntity directTarget, final @NotNull Location origin, @Nullable final ItemStack item) {
         final UUID damagerId = damager.getUniqueId();
         final long currentTime = System.currentTimeMillis();
 

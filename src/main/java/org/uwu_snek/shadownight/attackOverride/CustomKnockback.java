@@ -41,7 +41,7 @@ public final class CustomKnockback extends UtilityClass {
      * Resets the knockback buffed that a player gains after they start sprinting.
      * @param event The sprint toggle event
      */
-    public static void resetKnockbackSprintBuff(@NotNull final PlayerToggleSprintEvent event){
+    public static void resetKnockbackSprintBuff(final @NotNull PlayerToggleSprintEvent event){
         if(event.isSprinting()) knockbackSprintBuff.put(event.getPlayer().getUniqueId(), true);
     }
 
@@ -67,7 +67,7 @@ public final class CustomKnockback extends UtilityClass {
      * @param target The target entity
      * @return The knockback resistance
      */
-    private static double getTargetKnockbackResistance(@NotNull final LivingEntity target) {
+    private static double getTargetKnockbackResistance(final @NotNull LivingEntity target) {
         double resistance = 0;
 
         // Base resistance
@@ -107,7 +107,7 @@ public final class CustomKnockback extends UtilityClass {
      * @param item    The item used to hit the target
      * @return The final knockback vector
      */
-    public static @NotNull Vector getKnockback(@NotNull final LivingEntity damager, @NotNull final LivingEntity target, @NotNull final Location origin, boolean follorOriginDirection, @Nullable final ItemStack item) {
+    public static @NotNull Vector getKnockback(final @NotNull LivingEntity damager, final @NotNull LivingEntity target, final @NotNull Location origin, boolean follorOriginDirection, @Nullable final ItemStack item) {
         // Calculate base knockback
         Vector direction = follorOriginDirection ? origin.getDirection() : origin.toVector().subtract(target.getLocation().toVector()).setY(0).normalize().multiply(-1);
         Vector knockback = direction.clone().multiply(defaultKnockbackXZ).multiply(getItemKnockbackMultiplier(item)).setY(defaultKnockbackY);

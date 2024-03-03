@@ -46,7 +46,7 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
 
 
 
-    public static void onPrepareItemEnchant(@NotNull final PrepareItemEnchantEvent e){
+    public static void onPrepareItemEnchant(final @NotNull PrepareItemEnchantEvent e){
         if(e.isCancelled()) return;
 
         // For each offer
@@ -75,7 +75,7 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
 
 
 
-    public static void onEnchantItem(@NotNull final EnchantItemEvent event) {
+    public static void onEnchantItem(final @NotNull EnchantItemEvent event) {
         // Get offer overrides
         HashMap<Integer, Pair<Enchantment, Integer>> override = overrides.remove(event.getEnchanter().getUniqueId());
         if(override != null) {

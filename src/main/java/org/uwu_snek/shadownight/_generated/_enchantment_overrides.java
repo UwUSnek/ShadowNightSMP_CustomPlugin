@@ -47,5 +47,5 @@ public final class _enchantment_overrides extends org.uwu_snek.shadownight.utils
         new AbstractMap.SimpleEntry<>("enchantment.minecraft.unbreaking", Enchantment.DURABILITY)
     );
 
-    public static Enchantment getOverride(@NotNull final String e){ return overrides.get(e); }
+    public static Enchantment getOverride(final @NotNull String e){ return overrides.get(e); }
 }

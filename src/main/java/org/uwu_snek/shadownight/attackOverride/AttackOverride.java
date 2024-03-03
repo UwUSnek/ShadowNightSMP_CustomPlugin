@@ -52,7 +52,7 @@ public final class AttackOverride extends UtilityClass implements Rnd {
      * Replaces a Vanilla EntityDamageByEntityEvent event with a custom attack.
      * @param e The event to replace
      */
-    public static void customAttack(@NotNull final EntityDamageByEntityEvent e) {
+    public static void customAttack(final @NotNull EntityDamageByEntityEvent e) {
         // Use Vanilla creeper explosions
         if (e.getDamager().getType() == EntityType.CREEPER) return;
 
@@ -86,7 +86,7 @@ public final class AttackOverride extends UtilityClass implements Rnd {
 
 
 
-    public static void onDeath(@NotNull final EntityDeathEvent e) {
+    public static void onDeath(final @NotNull EntityDeathEvent e) {
         attacks.remove(e.getEntity().getUniqueId());
     }
 }

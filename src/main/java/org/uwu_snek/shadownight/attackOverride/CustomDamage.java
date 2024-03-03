@@ -73,7 +73,7 @@ public final class CustomDamage extends UtilityClass {
      * @param damager The attacking entity
      * @return The base damage
      */
-    private static double getBaseDamage(@Nullable final ItemStack item, @NotNull final LivingEntity damager) {
+    private static double getBaseDamage(@Nullable final ItemStack item, final @NotNull LivingEntity damager) {
         // Get item base attack damage
         final Long itemId = ItemUtils.getCustomItemId(item);
         if(itemId != null) return ItemManager.getValueFromId(itemId).getHitDamage();                    // If item is a custom item, get the base damage from its item manager
@@ -97,7 +97,7 @@ public final class CustomDamage extends UtilityClass {
      * @param target The attacked entity
      * @return The total damage
      */
-    public static double getDamage(@Nullable final ItemStack item, boolean canCrit, @NotNull final LivingEntity damager, @NotNull final LivingEntity target, final double charge) {
+    public static double getDamage(@Nullable final ItemStack item, boolean canCrit, final @NotNull LivingEntity damager, final @NotNull LivingEntity target, final double charge) {
         double damage = getBaseDamage(item, damager);
         double enchantDamage = 0d;
 
@@ -138,7 +138,7 @@ public final class CustomDamage extends UtilityClass {
      * @param e The damager entity
      * @return True if it can deal critical hits, false otherwise
      */
-    private static boolean entityCanCrit(@NotNull final LivingEntity e) {
+    private static boolean entityCanCrit(final @NotNull LivingEntity e) {
         return
             !e.isOnGround() &&
             e.getFallDistance() > 0f &&

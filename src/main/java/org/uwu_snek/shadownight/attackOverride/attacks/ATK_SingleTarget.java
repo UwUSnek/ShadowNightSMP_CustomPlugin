@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class ATK_SingleTarget extends ATK {
     @Override
-    public void execute(@NotNull final LivingEntity damager, @Nullable final LivingEntity directTarget, @NotNull final Location origin, @Nullable final ItemStack item) {
+    public void execute(final @NotNull LivingEntity damager, @Nullable final LivingEntity directTarget, final @NotNull Location origin, @Nullable final ItemStack item) {
 
     }
 }

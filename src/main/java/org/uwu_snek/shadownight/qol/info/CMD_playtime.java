@@ -14,7 +14,7 @@ import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 
 public final class CMD_playtime implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, @NotNull final String @NotNull [] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         final Player player = (Player)sender;
         if(args.length == 0) {
             ChatUtils.sendMessage(player, "Your playtime is §a" + ChatUtils.sToDuration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L, true) + "§r.");

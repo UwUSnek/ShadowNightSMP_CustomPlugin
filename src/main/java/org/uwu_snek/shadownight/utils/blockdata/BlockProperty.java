@@ -144,7 +144,7 @@ public final class BlockProperty extends UtilityClass {
      * @param data The block data of the block
      * @return True if the block contains water, false otherwise
      */
-    public static boolean isWaterlogged(@NotNull final BlockData data) {
+    public static boolean isWaterlogged(final @NotNull BlockData data) {
         return
             (data instanceof Waterlogged d && d.isWaterlogged()) ||
             data.getMaterial() == Material.WATER ||

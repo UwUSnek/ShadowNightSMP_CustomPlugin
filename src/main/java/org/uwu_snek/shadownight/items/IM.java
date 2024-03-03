@@ -25,7 +25,7 @@ public abstract class IM implements Listener {
     /**
      * Creates a new Item Manager.
      */
-    public IM(@NotNull final ATK _attack) { //TODO pass parameters to super constructor instead of using get functions for everything
+    public IM(final @NotNull ATK _attack) { //TODO pass parameters to super constructor instead of using get functions for everything
         defaultItem = ItemUtils.createItemStackCustom(getMaterial(), 1, getDisplayName(), getCustomModelData(), getCustomId().getNumericalValue());
         setItemAttributes();
         createRecipe();

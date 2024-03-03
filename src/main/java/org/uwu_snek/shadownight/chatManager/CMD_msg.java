@@ -20,7 +20,7 @@ public final class CMD_msg implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, @NotNull final String @NotNull [] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         processCommand((Player) sender, new Vector<>(Arrays.asList(args)));
         return true;
     }

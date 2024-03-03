@@ -28,6 +28,7 @@ import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
 import org.uwu_snek.shadownight.items.AnvilFilter;
 import org.uwu_snek.shadownight.items.GrindstoneFilter;
 import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.items.MvpAnvilFormatting;
 import org.uwu_snek.shadownight.items.bow.IM_Bow;
 import org.uwu_snek.shadownight.qol.ArmorStandArms;
 import org.uwu_snek.shadownight.qol.SpawnInvincibility;
@@ -41,7 +42,7 @@ import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
 
 public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(@NotNull final PlayerJoinEvent event) {
+    public void onPlayerJoin(final @NotNull PlayerJoinEvent event) {
         JoinLeaveMessages.formatJoin(event);
         InGameBanner.startLoop(event.getPlayer());
         StarterKit.onJoin(event.getPlayer());
@@ -50,25 +51,25 @@ public final class ShadowNight_listener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerQuit(@NotNull final PlayerQuitEvent event) {
+    public void onPlayerQuit(final @NotNull PlayerQuitEvent event) {
         JoinLeaveMessages.formatQuit(event);
         CMD_tpa.removeTargetFromAllRequesters(event.getPlayer().getName());
         event.getPlayer().setInvulnerable(false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerDeath(@NotNull final PlayerDeathEvent event) {
+    public void onPlayerDeath(final @NotNull PlayerDeathEvent event) {
         DeathMessages.formatDeathMessage(event);
     }
 
     @EventHandler
-    public void onPlayerRespawn(@NotNull final PlayerRespawnEvent event) {
+    public void onPlayerRespawn(final @NotNull PlayerRespawnEvent event) {
         StarterKit.onRespawn(event.getPlayer(), event.getRespawnReason());
         SpawnInvincibility.onRespawn(event.getPlayer(), event.getRespawnReason());
     }
 
     @EventHandler
-    public void onItemSpawn(@NotNull final ItemSpawnEvent event) {
+    public void onItemSpawn(final @NotNull ItemSpawnEvent event) {
         StarterKit.onItemDrop(event.getEntity());
     }
 
@@ -78,52 +79,52 @@ public final class ShadowNight_listener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onChatEvent(@NotNull final AsyncChatEvent event) {
+    public void onChatEvent(final @NotNull AsyncChatEvent event) {
         ChatManager.processPlayerMessage(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInventoryClick(@NotNull final InventoryClickEvent event) {
+    public void onInventoryClick(final @NotNull InventoryClickEvent event) {
         StarterKit.onClickEvent(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInventoryDrag(@NotNull final InventoryDragEvent event) {
+    public void onInventoryDrag(final @NotNull InventoryDragEvent event) {
         StarterKit.onDragEvent(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInteract(@NotNull final PlayerInteractEvent event) {
+    public void onInteract(final @NotNull PlayerInteractEvent event) {
         IM.chooseOnInteract(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAttack(@NotNull final EntityDamageByEntityEvent event) {
+    public void onAttack(final @NotNull EntityDamageByEntityEvent event) {
         AttackOverride.customAttack(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onDeath(@NotNull final EntityDeathEvent event) {
+    public void onDeath(final @NotNull EntityDeathEvent event) {
         AttackOverride.onDeath(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onShoot(@NotNull final EntityShootBowEvent event) {
+    public void onShoot(final @NotNull EntityShootBowEvent event) {
         IM_Bow.chooseOnShoot(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onProjectileHit(@NotNull final ProjectileHitEvent event) {
+    public void onProjectileHit(final @NotNull ProjectileHitEvent event) {
         if(event.getEntityType() == EntityType.ARROW) IM_Bow.chooseOnProjectileHit(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onEntitySpawn(@NotNull final EntitySpawnEvent event) {
+    public void onEntitySpawn(final @NotNull EntitySpawnEvent event) {
         ArmorStandArms.onSpawn(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onSprintToggle(@NotNull final PlayerToggleSprintEvent event) {
+    public void onSprintToggle(final @NotNull PlayerToggleSprintEvent event) {
         CustomKnockback.resetKnockbackSprintBuff(event);
     }
 
@@ -132,7 +133,7 @@ public final class ShadowNight_listener implements Listener {
      * GriefPrevention fix.
      * For some reason, GriefPrevention doesn't stop sculk from spreading into claims. This method fixes it.
      */
-    @EventHandler(priority = EventPriority.LOWEST) public void onBlockSpread(@NotNull final BlockSpreadEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST) public void onBlockSpread(final @NotNull BlockSpreadEvent event) {
         if(event.getSource().getType() == Material.SCULK_CATALYST){
             final Claim from = ClaimUtils.getClaimAt(event.getSource());
             final Claim to   = ClaimUtils.getClaimAt(event.getBlock());
@@ -143,22 +144,23 @@ public final class ShadowNight_listener implements Listener {
 
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPrepareItemEnchant(@NotNull final PrepareItemEnchantEvent event) {
+    public void onPrepareItemEnchant(final @NotNull PrepareItemEnchantEvent event) {
         EnchantBlacklist.onPrepareItemEnchant(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onEnchantItem(@NotNull final EnchantItemEvent event){
+    public void onEnchantItem(final @NotNull EnchantItemEvent event){
         EnchantBlacklist.onEnchantItem(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPrepareAnvil(@NotNull final PrepareAnvilEvent event){
+    public void onPrepareAnvil(final @NotNull PrepareAnvilEvent event){
         AnvilFilter.onPrepareAnvil(event);
+        MvpAnvilFormatting.onPrepareAnvil(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPrepareGrindstone(@NotNull final PrepareGrindstoneEvent event){
+    public void onPrepareGrindstone(final @NotNull PrepareGrindstoneEvent event){
         GrindstoneFilter.onPrepareGrindstone(event);
     }
 }

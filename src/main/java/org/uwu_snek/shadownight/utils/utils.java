@@ -73,11 +73,11 @@ public final class utils extends UtilityClass {
         CRESCENT,
         NEW
     }
-    public static int getMoonPhaseValue(@NotNull final World world) {
+    public static int getMoonPhaseValue(final @NotNull World world) {
         int days = (int)world.getFullTime() / 24000;
         return days % 8;
     }
-    public static MoonPhase getMoonPhase(@NotNull final World world) {
+    public static MoonPhase getMoonPhase(final @NotNull World world) {
         int phase = getMoonPhaseValue(world);
         return switch (phase) {
             case 0 -> MoonPhase.FULL;
@@ -89,7 +89,7 @@ public final class utils extends UtilityClass {
         };
     }
 
-    public static double getRegionalDifficulty(@NotNull final Difficulty difficulty, @NotNull final Location location) {
+    public static double getRegionalDifficulty(final @NotNull Difficulty difficulty, final @NotNull Location location) {
         if (difficulty == Difficulty.PEACEFUL) return 0;
         World world = location.getWorld();
         if(world == null) throw new RuntimeException("Location's world is null");

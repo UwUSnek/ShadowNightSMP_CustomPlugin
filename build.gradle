@@ -10,7 +10,7 @@ repositories {
     mavenCentral()
     maven { url 'https://www.jitpack.io' }
 
-    maven {
+    maven { //TODO remove
         name = "spigotmc-repo"
         url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }

@@ -9,7 +9,7 @@ import org.uwu_snek.shadownight.utils.UtilityClass;
 
 
 public final class ArmorStandArms extends UtilityClass {
-    public static void onSpawn(@NotNull final EntitySpawnEvent event) {
+    public static void onSpawn(final @NotNull EntitySpawnEvent event) {
         if(event.getEntity() instanceof ArmorStand entity) entity.setArms(true);
     }
 }
