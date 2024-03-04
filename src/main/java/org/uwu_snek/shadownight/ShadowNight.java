@@ -2,6 +2,8 @@ package org.uwu_snek.shadownight;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -35,13 +37,18 @@ public final class ShadowNight extends JavaPlugin {
     public static JavaPlugin plugin;
     public static LuckPerms lpApi;
     public static ProtocolManager protocolManager;
-
+    public static MultiverseCore mvCoreApi;
+    public static MVWorldManager mvWorldManager;
 
 
 
     @Override
     public void onEnable() {
         plugin = this;
+
+        // Get Multiverse-Core API instance
+        mvCoreApi = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
+        mvWorldManager = Objects.requireNonNull(mvCoreApi, "MultiverseCore API is null").getMVWorldManager();
 
         // Initialize protocol manager
         protocolManager = ProtocolLibrary.getProtocolManager();
