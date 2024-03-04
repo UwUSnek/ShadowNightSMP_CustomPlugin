@@ -1,6 +1,8 @@
 package org.uwu_snek.shadownight.qol;
 
 
+import net.minecraft.tags.BiomeTags;
+import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
@@ -13,12 +15,35 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+
+
 
 
 public class CMD_rtp implements CommandExecutor, Rnd {
     private final HashMap<String, Long> prev = new HashMap<>();
+
+
+    private boolean isRtpBiomeInvalid(final @NotNull Biome biome){
+        return
+            biome == Biome.OCEAN ||
+            biome == Biome.COLD_OCEAN ||
+            biome == Biome.FROZEN_OCEAN ||
+            biome == Biome.LUKEWARM_OCEAN ||
+
+            biome == Biome.DEEP_OCEAN ||
+            biome == Biome.DEEP_COLD_OCEAN ||
+            biome == Biome.DEEP_FROZEN_OCEAN ||
+            biome == Biome.DEEP_LUKEWARM_OCEAN ||
+
+            biome == Biome.RIVER ||
+            biome == Biome.FROZEN_RIVER
+        ;
+    }
+
 
 
 
@@ -28,6 +53,8 @@ public class CMD_rtp implements CommandExecutor, Rnd {
         final int max = 10000;
         final Long cooldown = 10L * 60 * 1000;
 
+
+        // Check cooldown
         Long last_time = prev.get(player.getName());
         if(last_time != null) {
             Long time_diff = System.currentTimeMillis() - last_time;
@@ -39,15 +66,24 @@ public class CMD_rtp implements CommandExecutor, Rnd {
             }
         }
 
+
+        // Send feedback to player
         ChatUtils.sendMessage(player, "§aTeleporting you to a random location...");
         ChatUtils.sendMessage(player, "§7You gained damage immunity for 15s");
         prev.put(player.getName(), System.currentTimeMillis());
 
-        float r = rnd.nextFloat(0, max);
-        float a = rnd.nextFloat();
-        Location loc = new Location(Bukkit.getWorld("Survival"), r * Math.cos(a), 320, r * Math.sin(a), 0, 90);
+
+        // Find new suitable location and teleport player there
+        Location loc;
+        do {
+            float r = rnd.nextFloat(0, max);
+            float a = rnd.nextFloat();
+            loc = new Location(Bukkit.getWorld("world"), r * Math.cos(a), 320, r * Math.sin(a), 0, 90);
+        } while(isRtpBiomeInvalid(loc.getBlock().getBiome()));
         player.teleport(loc);
 
+
+        // Apply blindness and damage immunity
         PotionEffect effect2 = new PotionEffect(PotionEffectType.BLINDNESS, 60, 1, false, false);
         player.addPotionEffect(effect2);
         player.setInvulnerable(true);
@@ -55,6 +91,8 @@ public class CMD_rtp implements CommandExecutor, Rnd {
             ChatUtils.sendMessage(player, "§7Your damage immunity ran out");
             player.setInvulnerable(false);
         }, 300L);
+
+
         return true;
     }
 }
