@@ -8,12 +8,14 @@ import org.uwu_snek.shadownight.items.CustomItemId;
 
 
 public final class IM_NetheriteScythe extends IM_Scythe {
-    @Override public String       getDisplayName()     { return "Netherite Scythe";            }
-    @Override public CustomItemId getCustomId()        { return CustomItemId.NETHERITE_SCYTHE; }
-
-    @Override protected double getAttackSpeed() { return -3.0; }
-    @Override public    double getHitDamage()   { return 18;   }
-    @Override public double getHitKnockbackMultiplier() { return 1.5d; }
+    public IM_NetheriteScythe(){
+        super(
+            "Netherite Scythe",
+            CustomItemId.NETHERITE_SCYTHE,
+            18,
+            1
+        );
+    }
 
 
     @Override

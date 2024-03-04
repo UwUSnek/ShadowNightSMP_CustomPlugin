@@ -16,6 +16,7 @@ public enum ItemManager {
     DiamondScythe  (new IM_DiamondScythe()),
     NetheriteScythe(new IM_NetheriteScythe()),
     KlaueScythe    (new IM_KlaueScythe()),
+
     HellfireBow    (new IM_HellfireBow()),
     ;
 
@@ -39,7 +40,7 @@ public enum ItemManager {
     static {
         final HashMap<Long, IM> lookupTableTmp = new HashMap<>();
         for(ItemManager item : values()) {
-            lookupTableTmp.put(item.value.getCustomId().getNumericalValue(), item.value);
+            lookupTableTmp.put(item.value.getCustomItemId().getNumericalValue(), item.value);
         }
         lookupTable = Collections.unmodifiableMap(lookupTableTmp);
     }

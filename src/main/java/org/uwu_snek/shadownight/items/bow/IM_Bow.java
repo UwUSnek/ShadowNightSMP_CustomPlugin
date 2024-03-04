@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_Standard;
+import org.uwu_snek.shadownight.items.CustomItemId;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
@@ -20,13 +21,17 @@ import java.util.UUID;
 public abstract class IM_Bow extends IM {
     private static final HashMap<UUID, Pair<IM_Bow, ItemStack>> activeProjectiles = new HashMap<>();
 
-    public IM_Bow() {
-        super(new ATK_Standard());
+
+    public IM_Bow(final @NotNull String _displayName, final @NotNull CustomItemId _customItemId) {
+        super(
+            _displayName,
+            _customItemId,
+            new ATK_Standard(),
+            1,
+            0.5,
+            0.5
+        );
     }
-
-
-    @Override public double getHitDamage() { return 1; }
-    @Override public double getHitKnockbackMultiplier() { return 1; }
 
 
     /**
@@ -38,8 +43,7 @@ public abstract class IM_Bow extends IM {
             final ItemStack item = player.getInventory().getItemInMainHand();
             Long customItemId = ItemUtils.getCustomItemId(item);
             if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
-                //if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) ((IM_Bow)itemManager.getInstance()).onShoot(event);
-                if(customItemId == itemManager.getInstance().getCustomId().getNumericalValue()) {
+                if(customItemId == itemManager.getInstance().getCustomItemId().getNumericalValue()) {
                     ((IM_Bow)itemManager.getInstance()).onShoot(event);
                     activeProjectiles.put(event.getProjectile().getUniqueId(), Pair.with((IM_Bow)itemManager.getInstance(), event.getBow()));
                 }
@@ -58,10 +62,4 @@ public abstract class IM_Bow extends IM {
         }
     }
     protected abstract void onProjectileHit(final @NotNull ProjectileHitEvent event, final @NotNull ItemStack usedBow);
-
-
-
-
-    @Override
-    protected void setItemAttributes() { }
 }

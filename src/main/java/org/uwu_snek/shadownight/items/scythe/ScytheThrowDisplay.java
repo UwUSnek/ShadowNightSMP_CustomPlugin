@@ -56,7 +56,7 @@ public final class ScytheThrowDisplay {
             90
         ), EntityType.ITEM_DISPLAY);
         IM data = ItemManager.getValueFromId(CustomItemId.KLAUE_SCYTHE);
-        display.setItemStack(ItemUtils.createItemStackCustom(data.getMaterial(), 1, data.getDisplayName(), data.getCustomModelData(), data.getCustomId().getNumericalValue()));
+        display.setItemStack(ItemUtils.createItemStackCustom(data.getMaterial(), 1, data.getDisplayName(), data.getCustomModelData(), data.getCustomItemId().getNumericalValue()));
         display.setTeleportDuration(stepDuration);
 
 

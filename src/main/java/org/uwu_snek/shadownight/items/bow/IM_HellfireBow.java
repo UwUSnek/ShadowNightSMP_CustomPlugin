@@ -21,8 +21,12 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public final class IM_HellfireBow extends IM_Bow {
-    @Override public String       getDisplayName()     { return "§6Hellfire Bow";          }
-    @Override public CustomItemId getCustomId()        { return CustomItemId.HELLFIRE_BOW; }
+    public IM_HellfireBow(){
+        super(
+            "§6Hellfire Bow",
+            CustomItemId.HELLFIRE_BOW
+        );
+    }
 
 
 
@@ -33,7 +37,7 @@ public final class IM_HellfireBow extends IM_Bow {
     }
 
     @Override protected void onInteract(@NotNull PlayerInteractEvent event) {}
-    //@Override public void onAttack(@NotNull EntityDamageByEntityEvent event) {}
+
 
     @Override
     protected void onShoot(@NotNull EntityShootBowEvent event) {

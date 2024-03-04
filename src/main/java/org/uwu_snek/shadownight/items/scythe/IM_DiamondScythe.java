@@ -8,12 +8,14 @@ import org.uwu_snek.shadownight.items.CustomItemId;
 
 
 public final class IM_DiamondScythe extends IM_Scythe {
-    @Override public String       getDisplayName()     { return "Diamond Scythe";            }
-    @Override public CustomItemId getCustomId()        { return CustomItemId.DIAMOND_SCYTHE; }
-
-    @Override protected double getAttackSpeed() { return -3.2; }
-    @Override public    double getHitDamage()   { return 16;   }
-    @Override public double getHitKnockbackMultiplier() { return 1.5d; }
+    public IM_DiamondScythe(){
+        super(
+            "Diamond Scythe",
+            CustomItemId.DIAMOND_SCYTHE,
+            16,
+            1.25
+        );
+    }
 
 
     @Override

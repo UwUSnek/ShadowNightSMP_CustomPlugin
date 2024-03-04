@@ -17,12 +17,14 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public final class IM_KlaueScythe extends IM_Scythe {
-    @Override public String       getDisplayName()     { return "§6Edgy Scythe";           }
-    @Override public CustomItemId getCustomId()        { return CustomItemId.KLAUE_SCYTHE; }
-
-    @Override protected double getAttackSpeed() { return -3.0; }
-    @Override public    double getHitDamage()   { return 18;   }
-    @Override public double getHitKnockbackMultiplier() { return 1.5d; }
+    public IM_KlaueScythe(){
+        super(
+            "§6Edgy Scythe",
+            CustomItemId.KLAUE_SCYTHE,
+            18,
+            1
+        );
+    }
 
 
     @Override
