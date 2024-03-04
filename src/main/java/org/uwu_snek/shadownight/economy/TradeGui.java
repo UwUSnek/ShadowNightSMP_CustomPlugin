@@ -134,9 +134,9 @@ public final class TradeGui implements Listener {
         if(meta != null) {
             ArrayList<Component> lore = new ArrayList<>();
 
-            for (ItemStack item : items) lore.add(Component.text("§c-" + item.getAmount() + "x§f " + ItemUtils.getItemName(item)));
+            for (ItemStack item : items) lore.add(Component.text("§c-" + item.getAmount() + "x§f " + ItemUtils.getPlainItemName(item)));
             lore.add(Component.empty());
-            for (ItemStack item : linkedGui.items) lore.add(Component.text("§a+" + item.getAmount() + "x§f " + ItemUtils.getItemName(item)));
+            for (ItemStack item : linkedGui.items) lore.add(Component.text("§a+" + item.getAmount() + "x§f " + ItemUtils.getPlainItemName(item)));
 
             meta.lore(lore);
             Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);

@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -160,13 +161,27 @@ public final class ChatManager extends UtilityClass {
     }
 
 
+
+    public static void sendPublicMessage(final @NotNull Player player, final @NotNull TextComponent msg) {
+        TextComponent playerNameComponent = Component.text(PlayerUtils.getFancyName(player));
+        TextComponent hoverComponent = Component.text(
+            "§dName:§f " + player.getName() + "\n" +
+            "§dRank:§f " + PlayerUtils.getGroupDisplayName(player) + "\n" +
+            "§dWorld:§f " + ShadowNight.mvWorldManager.getMVWorld(player.getWorld()).getAlias() //TODO parse dungeon names (don't use multiverse alias as multiverse doesn't manage dungeon worlds)
+        );
+
+        broadcast(playerNameComponent.hoverEvent(hoverComponent).append(msg));
+        BotManager.sendBridgeMessage(player, msg.content());
+    }
+
+
     /**
      * Manages a player's message and either blocks it or sends it to a chat channel depending on its contents and on the player's state.
      * @param event The chat event
      */
     public static void processPlayerMessage(final @NotNull AsyncChatEvent event) {
         event.setCancelled(true);
-        final String msg = ((TextComponent)event.message()).content();
+        final String msg = PlainTextComponentSerializer.plainText().serialize(event.message());
         if(ChatUtils.stripColor(msg).isEmpty()) return; // Skip empty messages
 
         final Player player = event.getPlayer();
@@ -174,15 +189,7 @@ public final class ChatManager extends UtilityClass {
         if (targetName == null) {
             final String strippedMsg = ChatUtils.stripPrivateCharacters(event.getPlayer().hasPermission("group.vip") ? ChatUtils.translateColor(msg) : ChatUtils.stripColor(msg));
             if (checkBlockedWords(player, strippedMsg)) {
-                TextComponent playerNameComponent = Component.text(PlayerUtils.getFancyName(event.getPlayer()));
-                TextComponent hoverComponent = Component.text(
-                    "§dName:§f " + player.getName() + "\n" +
-                    "§dRank:§f " + PlayerUtils.getGroupDisplayName(player) + "\n" +
-                    "§dWorld:§f " + ShadowNight.mvWorldManager.getMVWorld(player.getWorld()).getAlias() //TODO parse dungeon names (don't use multiverse alias as multiverse doesn't manage dungeon worlds)
-                );
-
-                broadcast(playerNameComponent.hoverEvent(hoverComponent).append(Component.text(playerMessageConnector + strippedMsg)));
-                BotManager.sendBridgeMessage(event.getPlayer(), strippedMsg);
+                sendPublicMessage(player, Component.text(playerMessageConnector + strippedMsg).hoverEvent(null));
             }
         }
         // Blocked words and null target are checked by sendDm

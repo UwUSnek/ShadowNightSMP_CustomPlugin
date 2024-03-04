@@ -19,6 +19,7 @@ import org.uwu_snek.shadownight.items.CustomItemId;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.qol.CMD_flyspeed;
 import org.uwu_snek.shadownight.qol.CMD_rtp;
+import org.uwu_snek.shadownight.qol.CMD_show;
 import org.uwu_snek.shadownight.qol.info.*;
 import org.uwu_snek.shadownight.chatManager.CMD_msg;
 import org.uwu_snek.shadownight.chatManager.CMD_r;
@@ -103,6 +104,7 @@ public final class ShadowNight extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("msg"),      "getCommand returned null").setExecutor(new CMD_msg());
         Objects.requireNonNull(this.getCommand("tell"),     "getCommand returned null").setExecutor(new CMD_msg());
         Objects.requireNonNull(this.getCommand("r"),        "getCommand returned null").setExecutor(new CMD_r());
+        Objects.requireNonNull(this.getCommand("show"),     "getCommand returned null").setExecutor(new CMD_show());
 
         //Info
         Objects.requireNonNull(this.getCommand("help"),     "getCommand returned null").setExecutor(new CMD_help());
@@ -114,9 +116,9 @@ public final class ShadowNight extends JavaPlugin {
 
 
         // Other
-        Objects.requireNonNull(this.getCommand("dungeontest"),  "getCommand returned null").setExecutor(new CMD_dungeontest());
-        Objects.requireNonNull(this.getCommand("recreatedungeon"),  "getCommand returned null").setExecutor(new CMD_recreatedungeon());
-        Objects.requireNonNull(this.getCommand("sngive"),       "getCommand returned null").setExecutor(new CMD_sngive());
+        Objects.requireNonNull(this.getCommand("dungeontest"),     "getCommand returned null").setExecutor(new CMD_dungeontest());
+        Objects.requireNonNull(this.getCommand("recreatedungeon"), "getCommand returned null").setExecutor(new CMD_recreatedungeon());
+        Objects.requireNonNull(this.getCommand("sngive"),          "getCommand returned null").setExecutor(new CMD_sngive());
 
 
 

@@ -54,6 +54,10 @@ commands:
         description: Allows you to message the last player that sent you a private message
         usage: /r
         permission: ShadowNightSMP.command.member
+    show:
+        description: Shows the item you are currently holding to anyone in the public chat
+        usage: /show
+        permission: ShadowNightSMP.command.member
 
 
     # Info

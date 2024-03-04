@@ -3,17 +3,18 @@ version: '1.1'
 main: org.uwu_snek.shadownight.ShadowNight
 api-version: '1.20'
 load: STARTUP
-authors: [UwU_Snek]
+authors: [ UwU_Snek ]
 description: A not so simple plugin that provides features for the Shadow Night SMP
 
 depend: [
-  ProtocolLib,
-  PlaceholderAPI,
-  VoidGenerator,
-  CleanroomGenerator,
-  LuckPerms,
-  AureliumSkills,
-  GriefPrevention
+    ProtocolLib,
+    PlaceholderAPI,
+    VoidGenerator,
+    CleanroomGenerator,
+    LuckPerms,
+    AureliumSkills,
+    GriefPrevention,
+    Multiverse-Core
 ]
 
 
@@ -21,87 +22,91 @@ depend: [
 
 
 commands:
-  # Teleports
-  rtp:
-    description: Teleports you in a random location in the Survival world
-    usage: /rtp
-    permission: ShadowNightSMP.command.member
-  tpa:
-    description: Allows you to teleport to another player
-    usage: /tpa <player>
-    permission: ShadowNightSMP.command.member
-  tpaccept:
-    description: Allows you to accept another player's teleport request
-    usage: /tpaccept <player>
-    permission: ShadowNightSMP.command.member
+    # Teleports
+    rtp:
+        description: Teleports you in a random location in the Survival world
+        usage: /rtp
+        permission: ShadowNightSMP.command.member
+    tpa:
+        description: Allows you to teleport to another player
+        usage: /tpa <player>
+        permission: ShadowNightSMP.command.member
+    tpaccept:
+        description: Allows you to accept another player's teleport request
+        usage: /tpaccept <player>
+        permission: ShadowNightSMP.command.member
 
 
-  # Misc
-  flyspeed:
-    description: Allows you to set a custom flying speed
-    usage: /flyspeed <speed>
-    permission: ShadowNightSMP.command.flyspeed
-  msg:
-    description: Allows you to message a specific player or return to the Public chat channel
-    usage: /msg [player] [message]
-    permission: ShadowNightSMP.command.member
-  tell:
-    description: Allows you to message a specific player or return to the Public chat channel
-    usage: /tell [player] [message]
-    permission: ShadowNightSMP.command.member
-  r:
-    description: Allows you to message the last player that sent you a private message
-    usage: /r
-    permission: ShadowNightSMP.command.member
+    # Misc
+    flyspeed:
+        description: Allows you to set a custom flying speed
+        usage: /flyspeed <speed>
+        permission: ShadowNightSMP.command.flyspeed
+    msg:
+        description: Allows you to message a specific player or return to the Public chat channel
+        usage: /msg [player] [message]
+        permission: ShadowNightSMP.command.member
+    tell:
+        description: Allows you to message a specific player or return to the Public chat channel
+        usage: /tell [player] [message]
+        permission: ShadowNightSMP.command.member
+    r:
+        description: Allows you to message the last player that sent you a private message
+        usage: /r
+        permission: ShadowNightSMP.command.member
+    show:
+        description: Shows the item you are currently holding to anyone in the public chat
+        usage: /show
+        permission: ShadowNightSMP.command.member
 
 
-  # Info
-  help:
-    description: Shows useful commands
-    usage: /help
-    permission: ShadowNightSMP.command.member
-  vote:
-    description: Lets you vote for the server
-    usage: /vote
-    permission: ShadowNightSMP.command.member
-  ping:
-    description: Shows your ping
-    usage: /ping
-    permission: ShadowNightSMP.command.member
-  playtime:
-    description: Shows a player's total playtime
-    usage: /playtime [player]
-    permission: ShadowNightSMP.command.member
-  colors:
-    description: Shows the list of minecraft's formatting codes
-    usage: /colors
-    permission: ShadowNightSMP.command.member
-  discord:
-    description: Shadow Night's Discord server
-    usage: /discord
-    permission: ShadowNightSMP.command.member
+    # Info
+    help:
+        description: Shows useful commands
+        usage: /help
+        permission: ShadowNightSMP.command.member
+    vote:
+        description: Lets you vote for the server
+        usage: /vote
+        permission: ShadowNightSMP.command.member
+    ping:
+        description: Shows your ping
+        usage: /ping
+        permission: ShadowNightSMP.command.member
+    playtime:
+        description: Shows a player's total playtime
+        usage: /playtime [player]
+        permission: ShadowNightSMP.command.member
+    colors:
+        description: Shows the list of minecraft's formatting codes
+        usage: /colors
+        permission: ShadowNightSMP.command.member
+    discord:
+        description: Shadow Night's Discord server
+        usage: /discord
+        permission: ShadowNightSMP.command.member
 
 
-# Economy
-  trade:
-    description: Lets you trade with another player
-    usage: /trade <player>
-    permission: ShadowNightSMP.command.member
+    # Economy
+    trade:
+        description: Lets you trade with another player
+        usage: /trade <player>
+        permission: ShadowNightSMP.command.member
 
 
 
 
 
-# Other
-  recreatedungeon:
-    description: test command
-    usage: /recreatedungeon
-    permission: op
-  dungeontest:
-    description: test command
-    usage: /dungeontest
-    permission: op
-  sngive:
-    description: admin command
-    usage: /sngive <id> <amount>
-    permission: op
+    # Other
+    recreatedungeon:
+        description: test command
+        usage: /recreatedungeon
+        permission: op
+    dungeontest:
+        description: test command
+        usage: /dungeontest
+        permission: op
+    sngive:
+        description: admin command
+        usage: /sngive <id> <amount>
+        permission: op

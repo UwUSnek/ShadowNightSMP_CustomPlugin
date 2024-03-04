@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.utils.spigot;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -104,24 +105,49 @@ public final class ItemUtils extends UtilityClass {
 
 
     /**
-     * Returns the display name if the item has one.
-     * If not, a name is created based on its material and potion effects. This might not match the Vanilla name.
+     * Returns the display name without any formatting if the item has one.
+     * If not, a name is created based on its material and potion effects. This might not perfectly match the Vanilla name and is not translated to the player's selected language.
      * @param item The ItemStack to get the name of
      * @return The display name
      */
-    public static String getItemName(final @NotNull ItemStack item){
+    public static String getPlainItemName(final @NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {
-            TextComponent displayName = (TextComponent)meta.displayName();
-            if(displayName != null) return displayName.content();
+            Component displayName = meta.displayName();
+            if(displayName != null) {
+                String plaindDisplayName = PlainTextComponentSerializer.plainText().serialize(displayName);
+                if (!plaindDisplayName.isEmpty()) return plaindDisplayName;
+            }
         }
+        return getVanillaName(item);
+    }
 
+
+    /**
+     * Returns the display name as a component if the item has one.
+     * If not, a name is created based on its material and potion effects. This might not perfectly match the Vanilla name and is not translated to the player's selected language.
+     * @param item The ItemStack to get the name of
+     * @return The display name
+     */
+    public static Component getFancyItemName(final @NotNull ItemStack item){
+        ItemMeta meta = item.getItemMeta();
+        if(meta != null) {
+            Component displayName = meta.displayName();
+            if(displayName != null) return displayName;
+        }
+        return Component.text(getVanillaName(item));
+    }
+
+
+    //TODO cache generated names
+    private static @NotNull String getVanillaName(final @NotNull ItemStack item) {
         final String[] words = item.getType().name().split("_");
         final StringBuilder r = new StringBuilder();
         for(String w : words) r.append(w.substring(0, 1).toUpperCase()).append(w.substring(1).toLowerCase()).append(" ");
-        return r.toString();
+        return r.toString().strip();
         //TODO check potion name from their effect data
     }
+
 
 
     /**

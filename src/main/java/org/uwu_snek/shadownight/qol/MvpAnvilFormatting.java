@@ -25,13 +25,12 @@ public final class MvpAnvilFormatting extends UtilityClass {
         if(r != null) {
             // Get Vanilla display name output and format it
             final ItemMeta meta = r.getItemMeta();
-            final String itemName = ItemUtils.getItemName(r);
+            final String itemName = ItemUtils.getPlainItemName(r);
 
             // Paste a new copy of the item with the modified name (block output if it doesn't contain visible characters)
             if(!ChatUtils.stripColor(itemName).isEmpty()) {
                 meta.displayName(ChatUtils.translateColorToComponent(itemName));
                 r.setItemMeta(meta);
-                //event.setResult(ChatUtils.stripColor(((TextComponent)displayName).content()).isEmpty() ? null : r);
                 event.setResult(r);
             }
 
