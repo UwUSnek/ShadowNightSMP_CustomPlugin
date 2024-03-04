@@ -9,6 +9,18 @@
                 "custom_model_data": 10000
             },
             "model": "shadow_night:item/diamond_scythe"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 10001
+            },
+            "model": "shadow_night:item/diamond_dagger"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 10002
+            },
+            "model": "shadow_night:item/diamond_spear"
         }
     ]
 }

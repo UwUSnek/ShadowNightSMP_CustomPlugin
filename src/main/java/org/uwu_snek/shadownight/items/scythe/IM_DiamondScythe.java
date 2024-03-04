@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.items.CustomItemId;
 
 
-public final class IM_DiamondScythe extends IM_Scythe {
+public final class IM_DiamondScythe extends IM_Scythe_NormalRecipe {
     public IM_DiamondScythe(){
         super(
             "Diamond Scythe",
@@ -17,11 +17,13 @@ public final class IM_DiamondScythe extends IM_Scythe {
         );
     }
 
+    @Override
+    protected Material getRecipeMaterial() {
+        return Material.DIAMOND;
+    }
 
     @Override
-    protected void setRecipe(final @NotNull ShapedRecipe recipe) {
-        recipe.shape("III", "  S", " S ");
-        recipe.setIngredient('I', Material.DIAMOND);
-        recipe.setIngredient('S', Material.COMMAND_BLOCK);
+    protected Material getRecipeBlock() {
+        return Material.DIAMOND_BLOCK;
     }
 }

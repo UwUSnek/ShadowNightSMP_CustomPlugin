@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -31,10 +32,14 @@ public final class IM_HellfireBow extends IM_Bow {
 
 
     @Override
-    protected void setRecipe(final @NotNull ShapedRecipe recipe) {
-        recipe.shape("II ", "I I", "II ");
-        recipe.setIngredient('I', Material.COMMAND_BLOCK);
+    protected Recipe createRecipe(@NotNull NamespacedKey key) {
+        final ShapedRecipe recipe = new ShapedRecipe(key, defaultItem);
+        recipe.shape("SF ", "S F", "SF ");
+        recipe.setIngredient('S', Material.NETHER_STAR);
+        recipe.setIngredient('F', Material.BLAZE_ROD);
+        return recipe;
     }
+
 
     @Override protected void onInteract(@NotNull PlayerInteractEvent event) {}
 

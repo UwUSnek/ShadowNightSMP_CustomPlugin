@@ -2,13 +2,15 @@ package org.uwu_snek.shadownight.items.scythe;
 
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.items.CustomItemId;
 
 
 
-public final class IM_IronScythe extends IM_Scythe {
+public final class IM_IronScythe extends IM_Scythe_NormalRecipe {
     public IM_IronScythe(){
         super(
             "Iron Scythe",
@@ -18,11 +20,13 @@ public final class IM_IronScythe extends IM_Scythe {
         );
     }
 
+    @Override
+    protected Material getRecipeMaterial() {
+        return Material.IRON_INGOT;
+    }
 
     @Override
-    protected void setRecipe(final @NotNull ShapedRecipe recipe) {
-        recipe.shape("III", "  S", " S ");
-        recipe.setIngredient('I', Material.IRON_INGOT);
-        recipe.setIngredient('S', Material.COMMAND_BLOCK);
+    protected Material getRecipeBlock() {
+        return Material.IRON_BLOCK;
     }
 }

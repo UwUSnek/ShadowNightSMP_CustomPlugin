@@ -1,6 +1,7 @@
 package org.uwu_snek.shadownight.qol;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -43,8 +44,8 @@ public class StarterKit extends UtilityClass {
     public static void onJoin(final @NotNull Player player) {
         if(!player.hasPlayedBefore()) give(player);
     }
-    public static void onRespawn(final @NotNull Player player, final @NotNull PlayerRespawnEvent.RespawnReason reason) {
-        if(reason == PlayerRespawnEvent.RespawnReason.DEATH) give(player);
+    public static void onRespawn(final @NotNull PlayerRespawnEvent event) {
+        if(event.getPlayer().getInventory().isEmpty() && event.getRespawnReason() == PlayerRespawnEvent.RespawnReason.DEATH) give(event.getPlayer());
     }
 
 
@@ -58,7 +59,7 @@ public class StarterKit extends UtilityClass {
             ItemMeta meta = item.getItemMeta();
             if(meta != null) {
                 Component displayName = meta.displayName();
-                return displayName != null && ChatUtils.stripColor(displayName.toString()).startsWith(stripped_kit_prefix);
+                return displayName != null && PlainTextComponentSerializer.plainText().serialize(displayName).startsWith(stripped_kit_prefix);
             }
         }
         return false;

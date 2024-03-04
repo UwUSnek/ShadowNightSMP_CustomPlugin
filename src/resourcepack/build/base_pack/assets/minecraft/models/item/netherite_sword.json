@@ -8,13 +8,25 @@
             "predicate": {
                 "custom_model_data": 10000
             },
-            "model": "shadow_night:item/netherite_scythe"
+            "model": "shadow_night:item/klaue_scythe"
         },
         {
             "predicate": {
                 "custom_model_data": 10001
             },
-            "model": "shadow_night:item/klaue_scythe"
+            "model": "shadow_night:item/netherite_scythe"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 10002
+            },
+            "model": "shadow_night:item/netherite_dagger"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 10003
+            },
+            "model": "shadow_night:item/netherite_spear"
         }
     ]
 }

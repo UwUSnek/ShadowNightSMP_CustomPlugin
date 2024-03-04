@@ -11,6 +11,18 @@ public enum CustomItemId {
     NETHERITE_SCYTHE(),
     KLAUE_SCYTHE(),
 
+    GOLDEN_DAGGER(),
+    STONE_DAGGER(),
+    IRON_DAGGER(),
+    DIAMOND_DAGGER(),
+    NETHERITE_DAGGER(),
+
+    GOLDEN_SPEAR(),
+    STONE_SPEAR(),
+    IRON_SPEAR(),
+    DIAMOND_SPEAR(),
+    NETHERITE_SPEAR(),
+
     HELLFIRE_BOW(),
     ;
 

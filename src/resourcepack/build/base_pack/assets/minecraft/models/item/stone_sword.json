@@ -1,0 +1,20 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "minecraft:item/stone_sword"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "custom_model_data": 10000
+            },
+            "model": "shadow_night:item/stone_dagger"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 10001
+            },
+            "model": "shadow_night:item/stone_spear"
+        }
+    ]
+}

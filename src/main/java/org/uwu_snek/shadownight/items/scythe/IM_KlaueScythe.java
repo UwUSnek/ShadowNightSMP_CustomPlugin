@@ -6,9 +6,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.SmithingTransformRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.items.CustomItemId;
+import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
 import org.uwu_snek.shadownight.utils.spigot.PlayerUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
@@ -16,7 +20,7 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 
-public final class IM_KlaueScythe extends IM_Scythe {
+public final class IM_KlaueScythe extends IM_Scythe_NormalRecipe {
     public IM_KlaueScythe(){
         super(
             "§6Edgy Scythe",
@@ -26,19 +30,15 @@ public final class IM_KlaueScythe extends IM_Scythe {
         );
     }
 
-
     @Override
-    protected void setRecipe(final @NotNull ShapedRecipe recipe) {
-        recipe.shape("III", "  S", " S ");
-        recipe.setIngredient('I', Material.COMMAND_BLOCK);
-        recipe.setIngredient('S', Material.COMMAND_BLOCK);
+    protected Material getRecipeMaterial() {
+        return Material.COMMAND_BLOCK;
     }
 
-
-
-
-
-
+    @Override
+    protected Material getRecipeBlock() {
+        return Material.COMMAND_BLOCK;
+    }
 
 
     @Override

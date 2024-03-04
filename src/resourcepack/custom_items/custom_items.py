@@ -4,13 +4,29 @@ import json
 from shutil import copyfile
 
 
-#IMPORTANT: Don't change the order of the items. It will break old ItemStack s
-#IMPORTANT: Only add new elements at the end of the list
+#! IMPORTANT: Don't change the order of children of a base item. It will break old ItemStacks
+#! IMPORTANT: Only add new elements at the end of the list
 items = [
+
+    { "id": "golden_dagger",    "parent": "dagger", "base": "golden_sword" },
+    { "id": "golden_spear",     "parent": "spear",  "base": "golden_sword" },
+
+    { "id": "stone_dagger",     "parent": "dagger", "base": "stone_sword" },
+    { "id": "stone_spear",      "parent": "spear",  "base": "stone_sword" },
+
     { "id": "iron_scythe",      "parent": "scythe", "base": "iron_sword" },
+    { "id": "iron_dagger",      "parent": "dagger", "base": "iron_sword" },
+    { "id": "iron_spear",       "parent": "spear",  "base": "iron_sword" },
+
     { "id": "diamond_scythe",   "parent": "scythe", "base": "diamond_sword" },
-    { "id": "netherite_scythe", "parent": "scythe", "base": "netherite_sword" },
+    { "id": "diamond_dagger",   "parent": "dagger", "base": "diamond_sword" },
+    { "id": "diamond_spear",    "parent": "spear",  "base": "diamond_sword" },
+
     { "id": "klaue_scythe",     "parent": "scythe", "base": "netherite_sword" },
+    { "id": "netherite_scythe", "parent": "scythe", "base": "netherite_sword" },
+    { "id": "netherite_dagger", "parent": "dagger", "base": "netherite_sword" },
+    { "id": "netherite_spear",  "parent": "spear",  "base": "netherite_sword" },
+
     { "id": "hellfire_bow",     "parent": "bow",    "base": "bow" },
 ]
 

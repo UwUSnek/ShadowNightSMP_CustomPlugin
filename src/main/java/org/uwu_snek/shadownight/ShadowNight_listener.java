@@ -39,6 +39,7 @@ import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
 public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(final @NotNull PlayerJoinEvent event) {
+        event.getPlayer().setWalkSpeed(1f);
         JoinLeaveMessages.formatJoin(event);
         InGameBanner.startLoop(event.getPlayer());
         StarterKit.onJoin(event.getPlayer());
@@ -60,7 +61,7 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler
     public void onPlayerRespawn(final @NotNull PlayerRespawnEvent event) {
-        StarterKit.onRespawn(event.getPlayer(), event.getRespawnReason());
+        StarterKit.onRespawn(event);
         SpawnInvincibility.onRespawn(event.getPlayer(), event.getRespawnReason());
     }
 

@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
 import org.uwu_snek.shadownight.attackOverride.CustomDamage;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
+import org.uwu_snek.shadownight.utils.ResetPotionEffect;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.math.Func;
 import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
@@ -74,16 +75,6 @@ public abstract class ATK implements Rnd {
         }
     }
 
-
-
-    private static void resetPotion(final @NotNull LivingEntity target, final @NotNull PotionEffectType type, final int duration, final int amplifier) {
-        if(target.hasPotionEffect(type)) {
-            PotionEffect effect = target.getPotionEffect(type);
-            if(effect != null && effect.getDuration() <= duration && amplifier == effect.getAmplifier()) target.removePotionEffect(type);
-        }
-        target.addPotionEffect(new PotionEffect(type, duration, amplifier));
-    }
-
     /**
      * Applies the Vanilla mob effects to the target.
      * @param damager The attacking entity
@@ -95,7 +86,7 @@ public abstract class ATK implements Rnd {
         double regionalDifficulty = utils.getRegionalDifficulty(difficulty, target.getLocation());
         switch (damager.getType()) {
             case HUSK: {
-                if (item == null || item.getType() == Material.AIR) resetPotion(target, PotionEffectType.HUNGER, 7 * 20 * (int)Math.floor(regionalDifficulty), 0);
+                if (item == null || item.getType() == Material.AIR) ResetPotionEffect.reset(target, PotionEffectType.HUNGER, 7 * 20 * (int)Math.floor(regionalDifficulty), 0);
                 // Intentional fallthrough
             }
             case ZOMBIE, ZOMBIE_VILLAGER: {
@@ -103,17 +94,17 @@ public abstract class ATK implements Rnd {
                 break;
             }
             case CAVE_SPIDER: {
-                /**/ if (difficulty == Difficulty.NORMAL) resetPotion(target, PotionEffectType.POISON,  7 * 20, 0);
-                else if (difficulty == Difficulty.HARD)   resetPotion(target, PotionEffectType.POISON, 15 * 20, 0);
+                /**/ if (difficulty == Difficulty.NORMAL) ResetPotionEffect.reset(target, PotionEffectType.POISON,  7 * 20, 0);
+                else if (difficulty == Difficulty.HARD)   ResetPotionEffect.reset(target, PotionEffectType.POISON, 15 * 20, 0);
                 break;
             }
             case BEE: {
-                /**/ if (difficulty == Difficulty.NORMAL) resetPotion(target, PotionEffectType.POISON, 10 * 20, 0);
-                else if (difficulty == Difficulty.HARD)   resetPotion(target, PotionEffectType.POISON, 18 * 20, 0);
+                /**/ if (difficulty == Difficulty.NORMAL) ResetPotionEffect.reset(target, PotionEffectType.POISON, 10 * 20, 0);
+                else if (difficulty == Difficulty.HARD)   ResetPotionEffect.reset(target, PotionEffectType.POISON, 18 * 20, 0);
                 break;
             }
             case WITHER_SKELETON: {
-                resetPotion(target, PotionEffectType.WITHER, 10 * 20, 0);
+                ResetPotionEffect.reset(target, PotionEffectType.WITHER, 10 * 20, 0);
                 break;
             }
         }

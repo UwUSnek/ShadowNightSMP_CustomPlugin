@@ -1,13 +1,18 @@
 package org.uwu_snek.shadownight.items.dagger;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
@@ -15,6 +20,7 @@ import org.uwu_snek.shadownight.attackOverride.attacks.ATK_LineArea;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_Standard;
 import org.uwu_snek.shadownight.items.CustomItemId;
 import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.utils.ResetPotionEffect;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -35,11 +41,16 @@ public abstract class IM_Dagger extends IM {
     }
 
 
-    static private void rclickAbility(final @NotNull Player player) {
-        Location playerPos = player.getLocation();
-        Vector playerDirection = playerPos.getDirection();
 
-        player.sendMessage("debug: used rclick ability");
+
+    private static long last_time = 0; //TODO automate cool downs and ability calls
+    private static final long cooldown = 1000 * 5;
+    static private void rclickAbility(final @NotNull Player player) {
+        long cur_time = System.currentTimeMillis();
+        if (cur_time - last_time < cooldown) {
+            last_time = cur_time;
+            ResetPotionEffect.reset(player, PotionEffectType.SPEED, 2 * 20, 2);
+        }
     }
 
 

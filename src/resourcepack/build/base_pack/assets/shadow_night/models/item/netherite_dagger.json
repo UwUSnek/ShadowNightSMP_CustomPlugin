@@ -1,0 +1,6 @@
+{
+    "parent": "shadow_night:item/dagger",
+    "textures": {
+        "layer0": "shadow_night:item/netherite_dagger"
+    }
+}

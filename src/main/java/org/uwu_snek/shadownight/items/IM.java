@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ import java.util.UUID;
 
 
 
-public abstract class IM implements Listener {
+public abstract class IM {
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
     protected final ItemStack defaultItem;
     public final ATK attack;
@@ -61,8 +61,7 @@ public abstract class IM implements Listener {
 
         defaultItem = ItemUtils.createItemStackCustom(_generated_material, 1, getDisplayName(), _generated_customModelData, customItemId.getNumericalValue());
         initDefaultItemStack();
-        createRecipe();
-        Bukkit.getServer().getPluginManager().registerEvents(this, ShadowNight.plugin);
+        _createRecipe();
         attack = _attack;
     }
 
@@ -87,18 +86,15 @@ public abstract class IM implements Listener {
      * @return The item stack copy
      */
     public @NotNull ItemStack createDefaultItemStack() {
-        return new ItemStack(defaultItem);
+        return defaultItem.clone();
     }
 
 
-    private void createRecipe() {
+    private void _createRecipe() {
         final NamespacedKey recipeKey = new NamespacedKey(ShadowNight.plugin, customItemId.name());
-        final ShapedRecipe shapedRecipe = new ShapedRecipe(recipeKey, defaultItem);
-        setRecipe(shapedRecipe);
-
-        Bukkit.addRecipe(shapedRecipe);
+        Bukkit.addRecipe(createRecipe(recipeKey));
     }
-    protected abstract void setRecipe(final @NotNull ShapedRecipe recipe);
+    protected abstract Recipe createRecipe(final @NotNull NamespacedKey key);
 
 
 
