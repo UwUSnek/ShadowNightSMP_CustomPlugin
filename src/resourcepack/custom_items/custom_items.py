@@ -71,7 +71,7 @@ with open(target_java + "/" + "_custom_model_ids.java", "w+") as java:
 
         # Save vanilla overrides and output copy
         base = json.load(open(source_base + "/" + b + ".json", "r"))
-        base["overrides"] = [{ "predicate": {} }] + (base["overrides"] if "overrides" in base else [])
+        base["overrides"] = (base["overrides"] if "overrides" in base else [])
         new_base = copy.deepcopy(base)
 
 
@@ -84,7 +84,7 @@ with open(target_java + "/" + "_custom_model_ids.java", "w+") as java:
 
 
             # For the base model and each of the vanilla overrides
-            for j, override in enumerate(base["overrides"]):
+            for j, override in enumerate([{ "predicate": {} }] + base["overrides"]):
                 model_name = c["id"] + ("_" + str(j - 1) if j > 0 else "")
 
                 # Generate the model
@@ -111,7 +111,6 @@ with open(target_java + "/" + "_custom_model_ids.java", "w+") as java:
 
 
         # Print new vanilla model
-        new_base["overrides"] = new_base["overrides"][1:]
         json.dump(new_base, open(target_base + "/" + b + ".json", "w+"), indent=4)
 
 
