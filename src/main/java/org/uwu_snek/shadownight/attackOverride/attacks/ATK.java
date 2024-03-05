@@ -134,7 +134,16 @@ public abstract class ATK implements Rnd {
      * @param canCrit True if the attack can trigger a critical hit
      * @param damageOverride If not null, the damage calculation is skipped and this value is used instead
      */
-    public static void executeBasicAttack(final @NotNull LivingEntity damager, final @NotNull LivingEntity target, final @NotNull Location origin, boolean useOriginDirection, @Nullable final ItemStack item, final double charge, final boolean canCrit, final Double damageOverride) {
+    public static void executeBasicAttack(
+        final @NotNull LivingEntity damager,
+        final @NotNull LivingEntity target,
+        final @NotNull Location origin,
+        boolean useOriginDirection,
+        final @Nullable ItemStack item,
+        final double charge,
+        final boolean canCrit,
+        final Double damageOverride
+    ) {
         // Stop damager from hitting itself
         if(damager == target) return;
 

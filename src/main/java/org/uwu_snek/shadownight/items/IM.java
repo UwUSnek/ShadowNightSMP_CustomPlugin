@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -13,9 +12,11 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight._generated._custom_model_ids;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
+import org.uwu_snek.shadownight.items.recipeManagers.CustomUpgradeSmithingRecipe;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 import java.util.Objects;
@@ -38,6 +39,8 @@ public abstract class IM {
     private final double kbMultiplier;       @SuppressWarnings("unused") public final double getHitKnockbackMultiplier()      { return kbMultiplier; }
     private final double atkSpeed;           @SuppressWarnings("unused") public final double getAttackSpeed()                 { return atkSpeed; }
 
+    protected CustomUpgradeSmithingRecipe upgradeRecipe = null; public final @Nullable CustomUpgradeSmithingRecipe getUpgradeRecipe(){ return upgradeRecipe; }
+
 
     /**
      * Creates a new Item Manager.
@@ -54,7 +57,7 @@ public abstract class IM {
         _generated_material =        _generated_data.getValue0();
         _generated_customModelData = _generated_data.getValue1();
 
-        displayName = _displayName;
+        displayName = "§f" + _displayName;
         hitDamage = _hitDamage;
         kbMultiplier = _kbMultiplier;
         atkSpeed = _atkSpeed;
@@ -92,7 +95,8 @@ public abstract class IM {
 
     private void _createRecipe() {
         final NamespacedKey recipeKey = new NamespacedKey(ShadowNight.plugin, customItemId.name());
-        Bukkit.addRecipe(createRecipe(recipeKey));
+        Recipe recipe = createRecipe(recipeKey);
+        if(recipe != null) Bukkit.addRecipe(recipe); //FIXME use a better method to add custom smithing recipes
     }
     protected abstract Recipe createRecipe(final @NotNull NamespacedKey key);
 

@@ -11,10 +11,7 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.bukkit.event.inventory.PrepareGrindstoneEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
@@ -28,6 +25,7 @@ import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
 import org.uwu_snek.shadownight.items.AnvilFilter;
 import org.uwu_snek.shadownight.items.GrindstoneFilter;
 import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.items.recipeManagers.CustomUpgradeSmithingRecipe;
 import org.uwu_snek.shadownight.qol.*;
 import org.uwu_snek.shadownight.items.bow.IM_Bow;
 import org.uwu_snek.shadownight.qol.tpa.CMD_tpa;
@@ -39,7 +37,7 @@ import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
 public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(final @NotNull PlayerJoinEvent event) {
-        event.getPlayer().setWalkSpeed(1f);
+        event.getPlayer().setWalkSpeed(0.2f); //TODO move this to dungeons and call it when leaving one as well
         JoinLeaveMessages.formatJoin(event);
         InGameBanner.startLoop(event.getPlayer());
         StarterKit.onJoin(event.getPlayer());
@@ -160,5 +158,12 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPrepareGrindstone(final @NotNull PrepareGrindstoneEvent event){
         GrindstoneFilter.onPrepareGrindstone(event);
+    }
+
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPrepareSmithing(final @NotNull PrepareSmithingEvent event){
+        CustomUpgradeSmithingRecipe.onPrepareSmithing(event);
     }
 }

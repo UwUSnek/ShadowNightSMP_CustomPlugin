@@ -69,7 +69,7 @@ public final class ItemUtils extends UtilityClass {
         final ItemStack item = new ItemStack(material, number);
         final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
 
-        meta.displayName(Component.text("§f" + name));
+        meta.displayName(Component.text(name));
         if(lore.length > 0) meta.lore(Arrays.asList(lore));
         meta.setCustomModelData(customModelData);
 

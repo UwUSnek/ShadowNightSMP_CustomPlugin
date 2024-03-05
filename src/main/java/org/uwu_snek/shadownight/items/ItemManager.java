@@ -16,22 +16,22 @@ import java.util.Map;
 public enum ItemManager {
     // No stone version
     // No golden version
-    IronScythe     (new IM_IronScythe()),
-    DiamondScythe  (new IM_DiamondScythe()),
-    NetheriteScythe(new IM_NetheriteScythe()),
     KlaueScythe    (new IM_KlaueScythe()),
+    NetheriteScythe(new IM_NetheriteScythe()),
+    DiamondScythe  (new IM_DiamondScythe()),
+    IronScythe     (new IM_IronScythe()),
 
-    GoldenDagger   (new IM_GoldenDagger()),
-    StoneDagger    (new IM_StoneDagger()),
-    IronDagger     (new IM_IronDagger()),
-    DiamondDagger  (new IM_DiamondDagger()),
     NetheriteDagger(new IM_NetheriteDagger()),
+    DiamondDagger  (new IM_DiamondDagger()),
+    IronDagger     (new IM_IronDagger()),
+    StoneDagger    (new IM_StoneDagger()),
+    GoldenDagger   (new IM_GoldenDagger()),
 
-    GoldenSpear   (new IM_GoldenSpear()),
-    StoneSpear    (new IM_StoneSpear()),
-    IronSpear     (new IM_IronSpear()),
-    DiamondSpear  (new IM_DiamondSpear()),
     NetheriteSpear(new IM_NetheriteSpear()),
+    DiamondSpear  (new IM_DiamondSpear()),
+    IronSpear     (new IM_IronSpear()),
+    StoneSpear    (new IM_StoneSpear()),
+    GoldenSpear   (new IM_GoldenSpear()),
 
     HellfireBow    (new IM_HellfireBow()),
     ;

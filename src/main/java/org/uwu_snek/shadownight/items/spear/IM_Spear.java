@@ -22,7 +22,7 @@ public abstract class IM_Spear extends IM {
         super(
             _displayName,
             _customItemId,
-            new ATK_LineArea(6, 1),
+            new ATK_LineArea(8, 1, false, 500),
             _hitDamage,
             1,
             _atkSpeed
@@ -43,7 +43,11 @@ public abstract class IM_Spear extends IM {
 
     @Override
     protected void onInteract(final @NotNull PlayerInteractEvent event) {
-         if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            event.setCancelled(true);
+            attack.execute(event.getPlayer(), null, event.getPlayer().getLocation(), event.getItem());
+        }
+        else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             event.setCancelled(true);
             rclickAbility(event.getPlayer());
         }
