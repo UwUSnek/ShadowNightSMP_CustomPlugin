@@ -27,9 +27,10 @@ public abstract class IM_Bow extends IM {
             _displayName,
             _customItemId,
             new ATK_Standard(),
-            1,
-            0.5,
-            0.5
+            1d,
+            0.5d,
+            0.5d,
+            0.05d
         );
     }
 

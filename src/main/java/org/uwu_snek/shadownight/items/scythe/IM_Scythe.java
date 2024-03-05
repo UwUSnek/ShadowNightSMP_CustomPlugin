@@ -24,10 +24,11 @@ public abstract class IM_Scythe extends IM {
         super(
             _displayName,
             _customItemId,
-            new ATK_ConeArea(6, 500),
+            new ATK_ConeArea(6),
             _hitDamage,
-            1.5,
-            _atkSpeed
+            1.5d,
+            _atkSpeed,
+            0.5d
         );
     }
 

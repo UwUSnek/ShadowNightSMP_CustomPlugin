@@ -8,6 +8,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_Standard;
+import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
@@ -50,26 +51,26 @@ public final class AttackOverride extends UtilityClass implements Rnd {
 
     /**
      * Replaces a Vanilla EntityDamageByEntityEvent event with a custom attack.
-     * @param e The event to replace
+     * @param event The event to replace
      */
-    public static void customAttack(final @NotNull EntityDamageByEntityEvent e) {
+    public static void customAttack(final @NotNull EntityDamageByEntityEvent event) {
         // Use Vanilla creeper explosions
-        if (e.getDamager().getType() == EntityType.CREEPER) return;
+        if (event.getDamager().getType() == EntityType.CREEPER) return;
 
         // Skip mirror events
-        CircularFifoQueue<AttackData> attackQueue = attacks.get(e.getEntity().getUniqueId());
+        CircularFifoQueue<AttackData> attackQueue = attacks.get(event.getEntity().getUniqueId());
         if (attackQueue != null) {
             AttackData lastAttack = attackQueue.get(attackQueue.size() == 1 ? 0 : 1);
-            if (lastAttack.damager == e.getDamager() && !lastAttack.mirrored) {
+            if (lastAttack.damager == event.getDamager() && !lastAttack.mirrored) {
                 lastAttack.mirrored = true;
                 return;
             }
         }
 
         // If damager is a living entity
-        if (e.getDamager() instanceof LivingEntity damager && e.getEntity() instanceof LivingEntity target) {
+        if (event.getDamager() instanceof LivingEntity damager && event.getEntity() instanceof LivingEntity target) {
             // Cancel Vanilla event
-            e.setCancelled(true);
+            event.setCancelled(true);
 
             // Get used item and eventual CustomItemID
             final EntityEquipment equipment = damager.getEquipment();
@@ -77,7 +78,11 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             Long customItemId = ItemUtils.getCustomItemId(item);
 
             // Use specified custom attacks if attacker is using custom item. If not, compute standard attack on the vanilla item
-            if (customItemId != null) ItemManager.getValueFromId(customItemId).attack.execute(damager, target, damager.getLocation(), item);
+            if (customItemId != null) {
+                IM itemManager = ItemManager.getValueFromId(customItemId);
+                if(itemManager.checkCooldown(damager.getUniqueId(), customItemId)) itemManager.attack.execute(damager, target, damager.getLocation(), item);
+                else event.setCancelled(true);
+            }
             else vanillaAttack.execute(damager, target, damager.getLocation(), item);
         }
     }

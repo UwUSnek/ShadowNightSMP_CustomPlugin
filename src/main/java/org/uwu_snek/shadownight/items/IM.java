@@ -1,5 +1,7 @@
 package org.uwu_snek.shadownight.items;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -10,6 +12,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,28 +22,44 @@ import org.uwu_snek.shadownight._generated._custom_model_ids;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
 import org.uwu_snek.shadownight.items.recipeManagers.CustomUpgradeSmithingRecipe;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
+import org.uwu_snek.shadownight.utils.utils;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
 
 
 
 
 public abstract class IM {
+    // Basic data
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
     protected final ItemStack defaultItem;
     public final ATK attack;
 
+    // Cooldown value + static cooldown table that keeps track of the cooldown of each Custom item for every player
+    private final long atkCooldown;
+    private static final Table<UUID, Long, Long> last_times = HashBasedTable.create();
+
+
+    // Generated data
     private final Material _generated_material;
     private final int _generated_customModelData;
 
+
+    // Custom Item properties
     private final CustomItemId customItemId; @SuppressWarnings("unused") public final @NotNull CustomItemId getCustomItemId() { return customItemId; }
     private final String displayName;        @SuppressWarnings("unused") public final @NotNull String getDisplayName()        { return displayName; }
     private final double hitDamage;          @SuppressWarnings("unused") public final double getHitDamage()                   { return hitDamage; }
     private final double kbMultiplier;       @SuppressWarnings("unused") public final double getHitKnockbackMultiplier()      { return kbMultiplier; }
     private final double atkSpeed;           @SuppressWarnings("unused") public final double getAttackSpeed()                 { return atkSpeed; }
 
+
+    // Upgrade recipe. Null if item is not upgradeable
     protected CustomUpgradeSmithingRecipe upgradeRecipe = null; public final @Nullable CustomUpgradeSmithingRecipe getUpgradeRecipe(){ return upgradeRecipe; }
+
+
 
 
     /**
@@ -50,8 +70,17 @@ public abstract class IM {
      * @param _hitDamage The base damage of the item. This is only for melee hits
      * @param _kbMultiplier The knockback multiplier to apply on melee hits
      * @param _atkSpeed The attack speed. This indicates the time between 2 fully charged hits, measured in seconds
+     * @param _atkCooldown The minimum time between 2 hits, measured in seconds
      */
-    public IM(final @NotNull String _displayName, final @NotNull CustomItemId _customItemId, final @NotNull ATK _attack, final double _hitDamage, final double _kbMultiplier, final double _atkSpeed) {
+    public IM(
+        final @NotNull String _displayName,
+        final @NotNull CustomItemId _customItemId,
+        final @NotNull ATK _attack,
+        final double _hitDamage,
+        final double _kbMultiplier,
+        final double _atkSpeed,
+        final double _atkCooldown
+    ) {
         customItemId = _customItemId;
         Pair<Material, Integer> _generated_data = _custom_model_ids.getMaterialAndModel(customItemId);
         _generated_material =        _generated_data.getValue0();
@@ -61,6 +90,7 @@ public abstract class IM {
         hitDamage = _hitDamage;
         kbMultiplier = _kbMultiplier;
         atkSpeed = _atkSpeed;
+        atkCooldown = (long)(1000 * _atkCooldown);
 
         defaultItem = ItemUtils.createItemStackCustom(_generated_material, 1, getDisplayName(), _generated_customModelData, customItemId.getNumericalValue());
         initDefaultItemStack();
@@ -95,7 +125,7 @@ public abstract class IM {
 
     private void _createRecipe() {
         final NamespacedKey recipeKey = new NamespacedKey(ShadowNight.plugin, customItemId.name());
-        Recipe recipe = createRecipe(recipeKey);
+        final Recipe recipe = createRecipe(recipeKey);
         if(recipe != null) Bukkit.addRecipe(recipe); //FIXME use a better method to add custom smithing recipes
     }
     protected abstract Recipe createRecipe(final @NotNull NamespacedKey key);
@@ -103,7 +133,15 @@ public abstract class IM {
 
 
 
-
+    public boolean checkCooldown(final @NotNull UUID playerId, final long id) {
+        long cur_time = System.currentTimeMillis();
+        final Long last_time = last_times.get(playerId, id);
+        if (last_time == null || cur_time - last_time > atkCooldown) {
+            last_times.put(playerId, id, cur_time);
+            return true;
+        }
+        else return false;
+    }
 
     /**
      * Determines what custom item the player is holding and executes interaction callbacks accordingly.
@@ -114,7 +152,10 @@ public abstract class IM {
         if (item != null && event.getHand() == EquipmentSlot.HAND) {
             Long customItemId = ItemUtils.getCustomItemId(item);
             if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
-                if(customItemId == itemManager.getInstance().customItemId.getNumericalValue()) itemManager.getInstance().onInteract(event);
+                if(customItemId == itemManager.getInstance().customItemId.getNumericalValue()) {
+                    if(itemManager.getInstance().checkCooldown(event.getPlayer().getUniqueId(), customItemId)) itemManager.getInstance().onInteract(event);
+                    else event.setCancelled(true);
+                }
             }
         }
     }

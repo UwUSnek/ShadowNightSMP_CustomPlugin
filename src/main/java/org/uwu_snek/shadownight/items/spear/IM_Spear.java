@@ -22,10 +22,11 @@ public abstract class IM_Spear extends IM {
         super(
             _displayName,
             _customItemId,
-            new ATK_LineArea(8, 1, false, 500),
+            new ATK_LineArea(8, 1, false),
             _hitDamage,
-            1,
-            _atkSpeed
+            1d,
+            _atkSpeed,
+            0.25d
         );
     }
 

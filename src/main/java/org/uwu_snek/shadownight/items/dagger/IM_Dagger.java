@@ -38,8 +38,9 @@ public abstract class IM_Dagger extends IM {
             _customItemId,
             new ATK_Standard(),
             _hitDamage,
-            0.5,
-            _atkSpeed
+            0.5d,
+            _atkSpeed,
+            0.1d
         );
     }
 

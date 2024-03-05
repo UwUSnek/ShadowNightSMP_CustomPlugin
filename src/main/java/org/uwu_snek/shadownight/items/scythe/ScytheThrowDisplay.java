@@ -31,7 +31,7 @@ public final class ScytheThrowDisplay {
     private final Player player;
     private final ItemStack item;
 
-    private final ATK_LineArea attack = new ATK_LineArea(0, 2, true, 0);
+    private final ATK_LineArea attack = new ATK_LineArea(0, 2, true);
 
 
     //TODO make specific class for this type of objects
