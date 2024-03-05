@@ -6,7 +6,7 @@ import org.uwu_snek.shadownight.items.CustomItemId;
 
 
 
-public final class IM_IronSpear extends IM_Spear_NormalRecipe {
+public final class IM_IronSpear extends IM_Spear_Craftable {
     public IM_IronSpear() {
         super(
             "Iron Spear",

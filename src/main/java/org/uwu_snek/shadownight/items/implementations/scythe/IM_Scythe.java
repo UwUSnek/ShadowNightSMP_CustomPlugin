@@ -29,14 +29,14 @@ public abstract class IM_Scythe extends IM {
             _hitDamage,
             1.5d,
             _atkSpeed,
-            0.5d
+            0.5d,
+            true
         );
 
-        Ability abilityAttack = new Ability(true, 0d, (player, item) -> attack.execute(player, null, player.getLocation(), item));
-        Ability abilityBreak  = new Ability(true, 1d, IM_Scythe::breakBlocks);
+        Ability abilityBreak = new Ability(true, 1d, IM_Scythe::breakBlocks);
         setAbilities(
-            abilityAttack,
-            abilityAttack,
+            null,
+            null,
             abilityBreak,
             abilityBreak
         );

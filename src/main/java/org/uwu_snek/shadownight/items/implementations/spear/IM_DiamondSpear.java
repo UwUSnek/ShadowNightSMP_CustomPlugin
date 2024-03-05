@@ -8,7 +8,7 @@ import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
 
 
 
-public final class IM_DiamondSpear extends IM_Spear_NormalRecipe {
+public final class IM_DiamondSpear extends IM_Spear_Craftable {
     public IM_DiamondSpear() {
         super(
             "Diamond Spear",

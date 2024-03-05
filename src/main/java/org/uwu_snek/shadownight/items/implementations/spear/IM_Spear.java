@@ -28,14 +28,14 @@ public abstract class IM_Spear extends IM {
             _hitDamage,
             1d,
             _atkSpeed,
-            0.25d
+            0.25d,
+            true
         );
 
-        Ability abilityAttack = new Ability(true, 0d, (player, item) -> attack.execute(player, null, player.getLocation(), item));
-        Ability abilityHit    = new Ability(true, 0d, IM_Spear::hitAbility);
+        Ability abilityHit = new Ability(true, 0d, IM_Spear::hitAbility);
         setAbilities(
-            abilityAttack,
-            abilityAttack,
+            null,
+            null,
             abilityHit,
             abilityHit
         );

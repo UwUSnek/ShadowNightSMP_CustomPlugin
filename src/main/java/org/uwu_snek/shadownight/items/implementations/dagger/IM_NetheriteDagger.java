@@ -14,7 +14,7 @@ public final class IM_NetheriteDagger extends IM_Dagger {
             "Netherite Dagger",
             CustomItemId.NETHERITE_DAGGER,
             5,
-            0.25
+            0.15
         );
     }
 

@@ -33,11 +33,12 @@ public abstract class IM {
     // Basic data
     public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
     protected final ItemStack defaultItem;
-    public final ATK attack;
 
-    // Cooldown value + static cooldown table that keeps track of the cooldown of each Custom item for every player
+    // Attack data and infrastructure
     private final long atkCooldown;
+    public final ATK attack;
     private static final Table<UUID, Long, Long> last_times = HashBasedTable.create();
+    private final boolean replaceVanillaLInteractions;
 
 
     // Generated data
@@ -74,6 +75,7 @@ public abstract class IM {
      * @param _kbMultiplier The knockback multiplier to apply on melee hits
      * @param _atkSpeed The attack speed. This indicates the time between 2 fully charged hits, measured in seconds
      * @param _atkCooldown The minimum time between 2 hits, measured in seconds
+     * @param _replaceVanillaLInteractions Whether the item's custom attack should replace the Vanilla LeftClick block and air interactions
      */
     public IM(
         final @NotNull String _displayName,
@@ -82,7 +84,8 @@ public abstract class IM {
         final double _hitDamage,
         final double _kbMultiplier,
         final double _atkSpeed,
-        final double _atkCooldown
+        final double _atkCooldown,
+        final boolean _replaceVanillaLInteractions
     ) {
         customItemId = _customItemId;
         Pair<Material, Integer> _generated_data = _custom_model_ids.getMaterialAndModel(customItemId);
@@ -99,6 +102,7 @@ public abstract class IM {
         initDefaultItemStack();
         _createRecipe();
         attack = _attack;
+        replaceVanillaLInteractions = _replaceVanillaLInteractions;
     }
     protected final void setAbilities(
         final @Nullable Ability abilityL_,
@@ -171,6 +175,10 @@ public abstract class IM {
                 IM manager = ItemManager.getValueFromId(customItemId);
                 Player player = event.getPlayer();
                 if (event.getAction() == Action.LEFT_CLICK_BLOCK  || event.getAction() == Action.LEFT_CLICK_AIR)  {
+                    if(manager.replaceVanillaLInteractions) {
+                        event.setCancelled(true);
+                        if(manager.checkCooldown(player.getUniqueId(), customItemId)) manager.attack.execute(player, null, player.getLocation(), item);
+                    }
                     Ability targetAbility = (player.isSneaking() ? manager.abilityLS : manager.abilityL); if(targetAbility != null) targetAbility.activate(player, item, event);
                 }
                 else if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {

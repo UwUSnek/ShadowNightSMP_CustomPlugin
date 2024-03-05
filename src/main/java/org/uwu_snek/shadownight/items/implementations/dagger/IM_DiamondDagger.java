@@ -8,13 +8,13 @@ import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
 
 
 
-public final class IM_DiamondDagger extends IM_Dagger_NormalRecipe {
+public final class IM_DiamondDagger extends IM_Dagger_Craftable {
     public IM_DiamondDagger() {
         super(
             "Diamond Dagger",
             CustomItemId.DIAMOND_DAGGER,
             4,
-            0.2
+            0.1
         );
         upgradeRecipe = new CustomUpgradeSmithingRecipe(
             this,

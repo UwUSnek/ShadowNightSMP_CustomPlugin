@@ -4,16 +4,9 @@ package org.uwu_snek.shadownight.items.implementations.scythe;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.SmithingTransformRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight.items.CustomItemId;
-import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
 import org.uwu_snek.shadownight.utils.spigot.PlayerUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
@@ -21,7 +14,7 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 
-public final class IM_KlaueScythe extends IM_Scythe_NormalRecipe {
+public final class IM_KlaueScythe extends IM_Scythe_Craftable {
     public IM_KlaueScythe(){
         super(
             "§6Edgy Scythe",
@@ -31,7 +24,7 @@ public final class IM_KlaueScythe extends IM_Scythe_NormalRecipe {
         );
 
         setAbilities(
-            new Ability(true, 0d, (player, item) -> attack.execute(player, null, player.getLocation(), item)),
+            null,
             new Ability(true, 0d, (player, item) -> shadowFuryKnockoff(player)),
             new Ability(true, 0.5d, ScytheThrowDisplay::new),
             new Ability(true, 0d, (player, item) -> teleportPlayer(player))

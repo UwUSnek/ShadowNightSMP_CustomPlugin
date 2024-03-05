@@ -30,7 +30,8 @@ public abstract class IM_Bow extends IM {
             1d,
             0.5d,
             0.5d,
-            0.05d
+            0.05d,
+            false
         );
     }
 

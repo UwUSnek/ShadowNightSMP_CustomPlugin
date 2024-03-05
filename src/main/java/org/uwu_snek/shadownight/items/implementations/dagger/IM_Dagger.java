@@ -42,7 +42,8 @@ public abstract class IM_Dagger extends IM {
             _hitDamage,
             0.5d,
             _atkSpeed,
-            0.1d
+            0.05d,
+            false
         );
 
         Ability abilitySpeed = new Ability(true, 0.6d, (player, item) -> speedAbility(player));

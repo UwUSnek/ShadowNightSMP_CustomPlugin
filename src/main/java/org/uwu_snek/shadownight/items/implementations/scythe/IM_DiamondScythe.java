@@ -9,7 +9,7 @@ import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
 
 
 
-public final class IM_DiamondScythe extends IM_Scythe_NormalRecipe {
+public final class IM_DiamondScythe extends IM_Scythe_Craftable {
     public IM_DiamondScythe(){
         super(
             "Diamond Scythe",
