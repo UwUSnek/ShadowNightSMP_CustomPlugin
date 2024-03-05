@@ -22,12 +22,12 @@ import org.uwu_snek.shadownight.chatManager.JoinLeaveMessages;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
 import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
-import org.uwu_snek.shadownight.items.AnvilFilter;
-import org.uwu_snek.shadownight.items.GrindstoneFilter;
+import org.uwu_snek.shadownight.items.guiManagers.AnvilFilter;
+import org.uwu_snek.shadownight.items.guiManagers.GrindstoneFilter;
 import org.uwu_snek.shadownight.items.IM;
-import org.uwu_snek.shadownight.items.recipeManagers.CustomUpgradeSmithingRecipe;
+import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
 import org.uwu_snek.shadownight.qol.*;
-import org.uwu_snek.shadownight.items.bow.IM_Bow;
+import org.uwu_snek.shadownight.items.implementations.bow.IM_Bow;
 import org.uwu_snek.shadownight.qol.tpa.CMD_tpa;
 import org.uwu_snek.shadownight.utils.spigot.ClaimUtils;
 
@@ -90,7 +90,7 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(final @NotNull PlayerInteractEvent event) {
-        IM.chooseOnInteract(event);
+        IM.triggerAbilities(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

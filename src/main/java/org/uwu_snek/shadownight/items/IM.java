@@ -7,27 +7,24 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight._generated._custom_model_ids;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
-import org.uwu_snek.shadownight.items.recipeManagers.CustomUpgradeSmithingRecipe;
+import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
-import org.uwu_snek.shadownight.utils.utils;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.logging.Level;
 
 
 
@@ -59,6 +56,12 @@ public abstract class IM {
     // Upgrade recipe. Null if item is not upgradeable
     protected CustomUpgradeSmithingRecipe upgradeRecipe = null; public final @Nullable CustomUpgradeSmithingRecipe getUpgradeRecipe(){ return upgradeRecipe; }
 
+
+    // Item abilities
+    private Ability abilityL  = null;
+    private Ability abilityLS = null;
+    private Ability abilityR  = null;
+    private Ability abilityRS = null;
 
 
 
@@ -97,6 +100,19 @@ public abstract class IM {
         _createRecipe();
         attack = _attack;
     }
+    protected final void setAbilities(
+        final @Nullable Ability abilityL_,
+        final @Nullable Ability abilityLS,
+        final @Nullable Ability abilityR_,
+        final @Nullable Ability abilityRS
+    ){
+        this.abilityL = abilityL_;
+        this.abilityLS = abilityLS;
+        this.abilityR = abilityR_;
+        this.abilityRS = abilityRS;
+    }
+
+
 
     public final @NotNull Material getMaterial() { return _generated_material; }
     public final int getCustomModelData() { return _generated_customModelData; }
@@ -147,17 +163,20 @@ public abstract class IM {
      * Determines what custom item the player is holding and executes interaction callbacks accordingly.
      * @param event The interaction event
      */
-    public static void chooseOnInteract(final @NotNull PlayerInteractEvent event) {
+    public static void triggerAbilities(final @NotNull PlayerInteractEvent event) {
         final ItemStack item = event.getItem();
         if (item != null && event.getHand() == EquipmentSlot.HAND) {
             Long customItemId = ItemUtils.getCustomItemId(item);
-            if (customItemId != null) for (ItemManager itemManager : ItemManager.values()) {
-                if(customItemId == itemManager.getInstance().customItemId.getNumericalValue()) {
-                    if(itemManager.getInstance().checkCooldown(event.getPlayer().getUniqueId(), customItemId)) itemManager.getInstance().onInteract(event);
-                    else event.setCancelled(true);
+            if (customItemId != null) {
+                IM manager = ItemManager.getValueFromId(customItemId);
+                Player player = event.getPlayer();
+                if (event.getAction() == Action.LEFT_CLICK_BLOCK  || event.getAction() == Action.LEFT_CLICK_AIR)  {
+                    Ability targetAbility = (player.isSneaking() ? manager.abilityLS : manager.abilityL); if(targetAbility != null) targetAbility.activate(player, item, event);
+                }
+                else if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+                    Ability targetAbility = (player.isSneaking() ? manager.abilityRS : manager.abilityR); if(targetAbility != null) targetAbility.activate(player, item, event);
                 }
             }
         }
     }
-    protected abstract void onInteract(final @NotNull PlayerInteractEvent event);
 }

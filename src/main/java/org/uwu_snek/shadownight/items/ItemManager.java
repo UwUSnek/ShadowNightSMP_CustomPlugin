@@ -2,10 +2,10 @@ package org.uwu_snek.shadownight.items;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.uwu_snek.shadownight.items.bow.IM_HellfireBow;
-import org.uwu_snek.shadownight.items.dagger.*;
-import org.uwu_snek.shadownight.items.scythe.*;
-import org.uwu_snek.shadownight.items.spear.*;
+import org.uwu_snek.shadownight.items.implementations.bow.IM_HellfireBow;
+import org.uwu_snek.shadownight.items.implementations.dagger.*;
+import org.uwu_snek.shadownight.items.implementations.scythe.*;
+import org.uwu_snek.shadownight.items.implementations.spear.*;
 
 import java.util.Collections;
 import java.util.HashMap;
