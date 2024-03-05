@@ -78,7 +78,7 @@ public class CMD_rtp implements CommandExecutor, Rnd {
         do {
             float r = rnd.nextFloat(0, max);
             float a = rnd.nextFloat();
-            loc = new Location(Bukkit.getWorld("world"), r * Math.cos(a), 320, r * Math.sin(a), 0, 90);
+            loc = new Location(Bukkit.getWorld("survival"), r * Math.cos(a), 320, r * Math.sin(a), 0, 90);
         } while(isRtpBiomeInvalid(loc.getBlock().getBiome()));
         player.teleport(loc);
 
