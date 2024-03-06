@@ -1,6 +1,6 @@
 {
     "parent": "shadow_night:item/scythe",
     "textures": {
-        "layer0": "shadow_night:item/diamond_scythe"
+        "layer0": "shadow_night:item/scythediamond_scythe"
     }
 }

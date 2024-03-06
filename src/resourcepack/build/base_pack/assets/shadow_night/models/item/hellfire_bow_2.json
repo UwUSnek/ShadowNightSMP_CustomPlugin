@@ -1,6 +1,6 @@
 {
     "parent": "shadow_night:item/bow",
     "textures": {
-        "layer0": "shadow_night:item/hellfire_bow"
+        "layer0": "shadow_night:item/bowhellfire_bow"
     }
 }
