@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
@@ -92,6 +93,17 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(final @NotNull PlayerInteractEvent event) {
         IM.triggerAbilities(event);
+        EnchantBlacklist.onPlayerInteract(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBlockBreak(final @NotNull BlockBreakEvent event) {
+        EnchantBlacklist.onBlockBreak(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerFish(final @NotNull PlayerFishEvent event) {
+        EnchantBlacklist.onPlayerFish(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

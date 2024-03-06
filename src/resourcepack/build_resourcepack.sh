@@ -3,8 +3,8 @@ set -e
 
 
 # Create build directory
-rm -rf ./build
-mkdir ./build
+mkdir -p ./build
+rm -rf ./build/*
 mkdir ./build/language
 
 
