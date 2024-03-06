@@ -21,6 +21,7 @@ import org.uwu_snek.shadownight.chatManager.discord.InGameBanner;
 import org.uwu_snek.shadownight.chatManager.JoinLeaveMessages;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
+import org.uwu_snek.shadownight.enchantments.EnchantingTableOverride;
 import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
 import org.uwu_snek.shadownight.items.guiManagers.AnvilFilter;
 import org.uwu_snek.shadownight.items.guiManagers.GrindstoneFilter;
@@ -141,12 +142,12 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPrepareItemEnchant(final @NotNull PrepareItemEnchantEvent event) {
-        EnchantBlacklist.onPrepareItemEnchant(event);
+        EnchantingTableOverride.onPrepareItemEnchant(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEnchantItem(final @NotNull EnchantItemEvent event){
-        EnchantBlacklist.onEnchantItem(event);
+        EnchantingTableOverride.onEnchantItem(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

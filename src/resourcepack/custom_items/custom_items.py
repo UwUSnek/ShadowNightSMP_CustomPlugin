@@ -112,10 +112,10 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
 
                 # Generate the model
                 json.dump(
-                {
+                    {
                         "parent": "shadow_night:item/" + c["parent"],
                         "textures": {
-                            "layer0": "shadow_night:item/" + c["id"]
+                            "layer0": "shadow_night:item/" + c["parent"] + c["id"]
                         }
                     },
                     open(target_models + "/" + model_name + ".json", "w+"), indent=4
@@ -130,7 +130,7 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
                 }]
 
                 # Paste its hard coded texture
-                copyfile(source_textures + "/" + model_name + ".png", target_textures + "/" + model_name + ".png")
+                copyfile(source_textures + "/" + c["parent"] + "/" + model_name + ".png", target_textures + "/" + model_name + ".png")
 
 
         # Print new vanilla model

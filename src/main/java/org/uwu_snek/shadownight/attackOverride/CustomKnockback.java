@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
-import org.uwu_snek.shadownight.enchantments.custom.Reeling;
+import org.uwu_snek.shadownight.enchantments.implementations.Reeling;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
