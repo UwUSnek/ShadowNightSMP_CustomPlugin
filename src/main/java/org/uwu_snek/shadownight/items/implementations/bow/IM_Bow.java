@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_Standard;
-import org.uwu_snek.shadownight.items.CustomItemId;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
@@ -22,7 +22,7 @@ public abstract class IM_Bow extends IM {
     private static final HashMap<UUID, Pair<IM_Bow, ItemStack>> activeProjectiles = new HashMap<>();
 
 
-    public IM_Bow(final @NotNull String _displayName, final @NotNull CustomItemId _customItemId) {
+    public IM_Bow(final @NotNull String _displayName, final @NotNull _custom_item_id _customItemId) {
         super(
             _displayName,
             _customItemId,

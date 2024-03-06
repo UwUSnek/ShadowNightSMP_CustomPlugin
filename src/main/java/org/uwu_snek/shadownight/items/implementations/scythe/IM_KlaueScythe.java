@@ -5,8 +5,9 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.Ability;
-import org.uwu_snek.shadownight.items.CustomItemId;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
 import org.uwu_snek.shadownight.utils.spigot.PlayerUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
@@ -18,7 +19,7 @@ public final class IM_KlaueScythe extends IM_Scythe_Craftable {
     public IM_KlaueScythe(){
         super(
             "§6Edgy Scythe",
-            CustomItemId.KLAUE_SCYTHE,
+            _custom_item_id.KLAUE_SCYTHE,
             18,
             1
         );

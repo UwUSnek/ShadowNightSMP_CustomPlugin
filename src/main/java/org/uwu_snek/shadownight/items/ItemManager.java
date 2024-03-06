@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.items;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.implementations.bow.IM_HellfireBow;
 import org.uwu_snek.shadownight.items.implementations.dagger.*;
 import org.uwu_snek.shadownight.items.implementations.scythe.*;
@@ -27,11 +28,11 @@ public enum ItemManager {
     StoneDagger    (new IM_StoneDagger()),
     GoldenDagger   (new IM_GoldenDagger()),
 
-    NetheriteSpear(new IM_NetheriteSpear()),
-    DiamondSpear  (new IM_DiamondSpear()),
-    IronSpear     (new IM_IronSpear()),
-    StoneSpear    (new IM_StoneSpear()),
-    GoldenSpear   (new IM_GoldenSpear()),
+    NetheriteSpear (new IM_NetheriteSpear()),
+    DiamondSpear   (new IM_DiamondSpear()),
+    IronSpear      (new IM_IronSpear()),
+    StoneSpear     (new IM_StoneSpear()),
+    GoldenSpear    (new IM_GoldenSpear()),
 
     HellfireBow    (new IM_HellfireBow()),
     ;
@@ -67,7 +68,7 @@ public enum ItemManager {
      * @param id The id to search for
      * @return The manger instance
      */
-    public static IM getValueFromId(final @NotNull CustomItemId id) {
+    public static IM getValueFromId(final @NotNull _custom_item_id id) {
         return lookupTable.get(id.getNumericalValue());
     }
     /**

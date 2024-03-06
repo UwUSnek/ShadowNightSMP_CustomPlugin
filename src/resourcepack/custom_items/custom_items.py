@@ -48,17 +48,24 @@ data_zero = 10_000
 
 
 
-with open(target_java + "/" + "_custom_model_ids.java", "w+") as java:
+with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open(target_java + "/" + "_custom_item_id.java", "w+") as java_id:
     # Generate java getter
-    java.write(
+    java_data.write(
         'package org.uwu_snek.shadownight._generated;\n'
         'import org.jetbrains.annotations.NotNull;\n'
-        'import org.uwu_snek.shadownight.items.CustomItemId;\n'
+        'import org.uwu_snek.shadownight._generated._custom_item_id;\n'
         'import org.javatuples.Pair;\n'
         'import org.bukkit.Material;\n'
-        'public final class _custom_model_ids extends org.uwu_snek.shadownight.utils.UtilityClass {\n'
-        '    public static Pair<Material, Integer> getMaterialAndModel(@NotNull final CustomItemId id) {\n'
+        'public final class _custom_item_data extends org.uwu_snek.shadownight.utils.UtilityClass {\n'
+        '    public static Pair<Material, Integer> getMaterialAndModel(@NotNull final _custom_item_id id) {\n'
     )
+    java_id.write(
+        'package org.uwu_snek.shadownight._generated;\n'
+        'import org.uwu_snek.shadownight.utils.utils;\n'
+        'import java.nio.charset.StandardCharsets;\n'
+        'public enum _custom_item_id {\n'
+    )
+
 
     # For each custom item
     for i in items:
@@ -83,20 +90,21 @@ with open(target_java + "/" + "_custom_model_ids.java", "w+") as java:
 
 
     # For each base vanilla item
-    for b, children in bases.items():
+    for k, b in enumerate(bases.items()):
 
         # Save vanilla overrides and output copy
-        base = json.load(open(source_base + "/" + b + ".json", "r"))
+        base = json.load(open(source_base + "/" + b[0] + ".json", "r"))
         base["overrides"] = (base["overrides"] if "overrides" in base else [])
         new_base = copy.deepcopy(base)
 
 
         # For each of its children
-        for i, c in enumerate(children):
+        for i, c in enumerate(b[1]):
 
             # Generate custom model data ID and add it to the java plugin hook
             custom_model_data = data_zero + i
-            java.write(f'        if(id == CustomItemId.{ c["id"].upper() }) return Pair.with(Material.{ c["base"].upper() }, { custom_model_data });\n')
+            java_data.write(f'        if(id == _custom_item_id.{ c["id"].upper() }) return Pair.with(Material.{ c["base"].upper() }, { custom_model_data });\n')
+            java_id.write(f'    { c["id"].upper() }(){ "," if k < len(bases) - 1 or i < len(b[1]) - 1 else ";" }\n')
 
 
             # For the base model and each of the vanilla overrides
@@ -127,11 +135,21 @@ with open(target_java + "/" + "_custom_model_ids.java", "w+") as java:
 
 
         # Print new vanilla model
-        json.dump(new_base, open(target_base + "/" + b + ".json", "w+"), indent=4)
+        json.dump(new_base, open(target_base + "/" + b[0] + ".json", "w+"), indent=4)
 
 
-    java.write(
-        '        throw new RuntimeException("Invalid CustomItemId \\"" + id + "\\"");\n'
+    java_data.write(
+        '        throw new RuntimeException("Invalid _custom_item_id \\"" + id + "\\"");\n'
+        '    }\n'
+        '}'
+    )
+    java_id.write(
+        '    private final long value;\n'
+        '    _custom_item_id() {\n'
+        '        this.value = utils.createHash64(this.name().getBytes(StandardCharsets.UTF_8));\n'
+        '    }\n'
+        '    public long getNumericalValue() {\n'
+        '        return value;\n'
         '    }\n'
         '}'
     )

@@ -18,7 +18,8 @@ import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.ShadowNight;
-import org.uwu_snek.shadownight._generated._custom_model_ids;
+import org.uwu_snek.shadownight._generated._custom_item_data;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
 import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
@@ -47,7 +48,7 @@ public abstract class IM {
 
 
     // Custom Item properties
-    private final CustomItemId customItemId; @SuppressWarnings("unused") public final @NotNull CustomItemId getCustomItemId() { return customItemId; }
+    private final _custom_item_id customItemId; @SuppressWarnings("unused") public final @NotNull _custom_item_id getCustomItemId() { return customItemId; }
     private final String displayName;        @SuppressWarnings("unused") public final @NotNull String getDisplayName()        { return displayName; }
     private final double hitDamage;          @SuppressWarnings("unused") public final double getHitDamage()                   { return hitDamage; }
     private final double kbMultiplier;       @SuppressWarnings("unused") public final double getHitKnockbackMultiplier()      { return kbMultiplier; }
@@ -79,7 +80,7 @@ public abstract class IM {
      */
     public IM(
         final @NotNull String _displayName,
-        final @NotNull CustomItemId _customItemId,
+        final @NotNull _custom_item_id _customItemId,
         final @NotNull ATK _attack,
         final double _hitDamage,
         final double _kbMultiplier,
@@ -88,7 +89,7 @@ public abstract class IM {
         final boolean _replaceVanillaLInteractions
     ) {
         customItemId = _customItemId;
-        Pair<Material, Integer> _generated_data = _custom_model_ids.getMaterialAndModel(customItemId);
+        Pair<Material, Integer> _generated_data = _custom_item_data.getMaterialAndModel(customItemId);
         _generated_material =        _generated_data.getValue0();
         _generated_customModelData = _generated_data.getValue1();
 

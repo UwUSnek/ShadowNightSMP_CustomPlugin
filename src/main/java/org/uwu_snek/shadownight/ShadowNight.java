@@ -15,7 +15,7 @@ import org.uwu_snek.shadownight.economy.CMD_trade;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.enchantments.CustomEnchantManager;
 import org.uwu_snek.shadownight.items.CMD_sngive;
-import org.uwu_snek.shadownight.items.CustomItemId;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.qol.CMD_flyspeed;
 import org.uwu_snek.shadownight.qol.CMD_rtp;
@@ -65,7 +65,7 @@ public final class ShadowNight extends JavaPlugin {
 
         // Print custom items for debug and to make the IDs known to ops
         for(ItemManager itemManager : ItemManager.values()) {
-            CustomItemId itemId = itemManager.getInstance().getCustomItemId();
+            _custom_item_id itemId = itemManager.getInstance().getCustomItemId();
             utils.log(Level.INFO, "Loaded CustomItem \"" + itemId.name() + "\" with ID " + itemId.getNumericalValue());
         }
 

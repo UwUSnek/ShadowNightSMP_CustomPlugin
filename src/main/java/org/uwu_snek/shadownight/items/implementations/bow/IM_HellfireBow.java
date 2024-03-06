@@ -12,7 +12,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.uwu_snek.shadownight.items.CustomItemId;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
 import org.uwu_snek.shadownight.utils.math.Easing;
 import org.uwu_snek.shadownight.utils.math.Func;
@@ -25,7 +25,7 @@ public final class IM_HellfireBow extends IM_Bow {
     public IM_HellfireBow(){
         super(
             "§6Hellfire Bow",
-            CustomItemId.HELLFIRE_BOW
+            _custom_item_id.HELLFIRE_BOW
         );
     }
 

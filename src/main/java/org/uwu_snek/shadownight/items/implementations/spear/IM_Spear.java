@@ -13,14 +13,14 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_LineArea;
 import org.uwu_snek.shadownight.items.Ability;
-import org.uwu_snek.shadownight.items.CustomItemId;
+import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM;
 
 
 
 
 public abstract class IM_Spear extends IM {
-    public IM_Spear(final @NotNull String _displayName, final @NotNull CustomItemId _customItemId, final double _hitDamage, final double _atkSpeed) {
+    public IM_Spear(final @NotNull String _displayName, final @NotNull _custom_item_id _customItemId, final double _hitDamage, final double _atkSpeed) {
         super(
             _displayName,
             _customItemId,
