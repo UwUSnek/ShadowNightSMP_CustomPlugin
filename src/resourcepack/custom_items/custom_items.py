@@ -7,7 +7,6 @@ from shutil import copyfile
 #! IMPORTANT: Don't change the order of children of a base item. It will break old ItemStacks
 #! IMPORTANT: Only add new elements at the end of the list
 items = [
-
     { "id": "golden_dagger",    "parent": "dagger", "base": "golden_sword" },
     { "id": "golden_spear",     "parent": "spear",  "base": "golden_sword" },
 
