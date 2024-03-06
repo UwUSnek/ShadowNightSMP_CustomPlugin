@@ -1,6 +1,6 @@
 {
     "parent": "shadow_night:item/spear",
     "textures": {
-        "layer0": "shadow_night:item/speariron_spear"
+        "layer0": "shadow_night:item/spear/iron_spear"
     }
 }

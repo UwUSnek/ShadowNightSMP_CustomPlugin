@@ -1,6 +1,6 @@
 {
     "parent": "shadow_night:item/dagger",
     "textures": {
-        "layer0": "shadow_night:item/daggergolden_dagger"
+        "layer0": "shadow_night:item/dagger/golden_dagger"
     }
 }

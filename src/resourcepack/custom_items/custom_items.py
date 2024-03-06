@@ -115,7 +115,7 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
                     {
                         "parent": "shadow_night:item/" + c["parent"],
                         "textures": {
-                            "layer0": "shadow_night:item/" + c["parent"] + c["id"]
+                            "layer0": "shadow_night:item/" + c["parent"] + "/" + c["id"]
                         }
                     },
                     open(target_models + "/" + model_name + ".json", "w+"), indent=4
@@ -130,7 +130,8 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
                 }]
 
                 # Paste its hard coded texture
-                copyfile(source_textures + "/" + c["parent"] + "/" + model_name + ".png", target_textures + "/" + model_name + ".png")
+                os.makedirs(target_textures + "/" + c["parent"], exist_ok=True)
+                copyfile(source_textures + "/" + c["parent"] + "/" + model_name + ".png", target_textures + "/" + c["parent"] + "/" + model_name + ".png")
 
 
         # Print new vanilla model
