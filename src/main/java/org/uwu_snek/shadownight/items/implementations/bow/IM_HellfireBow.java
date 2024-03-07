@@ -123,7 +123,7 @@ public final class IM_HellfireBow extends IM_Bow {
 
                 // If it is, break the old block and place the fire
                 Block block = target.getBlock();
-                block.breakNaturally();
+                block.breakNaturally(true);
                 block.setType(Material.FIRE);
             }
         }

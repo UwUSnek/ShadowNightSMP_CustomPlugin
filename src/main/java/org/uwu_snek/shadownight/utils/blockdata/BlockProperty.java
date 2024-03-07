@@ -12,6 +12,41 @@ import org.uwu_snek.shadownight.utils.UtilityClass;
 
 
 public final class BlockProperty extends UtilityClass {
+
+    /**
+     * Identifies transparent-block plants.
+     * @param material The material of the block
+     * @return True if the block is a plant, false otherwise
+     */
+    public static boolean isVegetation(final @NotNull Material material) {
+        return material != Material.AIR &&
+            Tag.REPLACEABLE.isTagged(material) ||
+            Tag.LEAVES     .isTagged(material) ||
+            Tag.FLOWERS    .isTagged(material) ||
+            Tag.SAPLINGS   .isTagged(material) ||
+            Tag.CROPS      .isTagged(material) ||
+
+            material == Material.SCULK_VEIN ||
+
+            material == Material.WEEPING_VINES ||
+            material == Material.TWISTING_VINES ||
+            material == Material.KELP ||
+            material == Material.WEEPING_VINES_PLANT ||
+            material == Material.TWISTING_VINES_PLANT ||
+            material == Material.KELP_PLANT ||
+            material == Material.BROWN_MUSHROOM ||
+            material == Material.RED_MUSHROOM ||
+            material == Material.CRIMSON_FUNGUS ||
+            material == Material.WARPED_FUNGUS ||
+            material == Material.SMALL_DRIPLEAF ||
+            material == Material.BIG_DRIPLEAF ||
+            material == Material.SWEET_BERRY_BUSH ||
+            material == Material.LILY_PAD
+        ;
+    }
+
+
+
     /**
      * Identifies blocks that can be broken and/or replaced by destructive abilities.
      * @param material The material of the block

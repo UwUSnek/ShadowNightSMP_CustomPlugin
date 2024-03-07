@@ -1,6 +1,7 @@
 package org.uwu_snek.shadownight.items.implementations.scythe;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.*;
 import org.bukkit.util.Vector;
@@ -9,6 +10,12 @@ import org.uwu_snek.shadownight.attackOverride.attacks.ATK_ConeArea;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
+import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
+import org.uwu_snek.shadownight.utils.spigot.Scheduler;
+import org.uwu_snek.shadownight.utils.utils;
+
+import java.util.logging.Level;
 
 
 
@@ -35,12 +42,35 @@ public abstract class IM_Scythe extends IM {
         );
     }
 
+    static final double breakWidth = 4;
+    static final double breakLen = 10;
 
     static private void breakBlocks(final @NotNull Player player, final @NotNull ItemStack item) {
-        Location playerPos = player.getLocation();
-        Vector playerDirection = playerPos.getDirection();
+        Location eyePos = player.getEyeLocation();
+        Vector dir = eyePos.getDirection();
 
-        player.sendMessage("debug: used rclick ability");
-        //for()
+
+        //TODO REPLACE WITH SCHEDULER METHOD
+        for (double l = 0; l < breakLen; l += 0.5) {
+            final double lFinal = l;
+            Scheduler.delay(() -> {
+                for (int h = -1; h <= 1; ++h) {
+                    boolean blocksBroken = false;
+                    for (double w = -breakWidth; w < breakWidth; w += 0.5) {
+                        final Block target = eyePos.clone()
+                            .add(new Vector(dir.getX(), 0, dir.getZ()).rotateAroundY(Math.PI / 2).multiply(w))
+                            .add(dir.clone().multiply(lFinal)
+                            .add(new Vector(0, h, 0))
+                        ).getBlock();
+
+                        if (BlockProperty.isVegetation(target.getType())) {
+                            target.breakNaturally(true);
+                            blocksBroken = true;
+                        }
+                    }
+                    if (blocksBroken) ItemUtils.damageItem(player, item, 1);
+                }
+            }, (long)(l * 2));
+        }
     }
 }
