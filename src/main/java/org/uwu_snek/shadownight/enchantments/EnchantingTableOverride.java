@@ -8,7 +8,7 @@ import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight._generated._enchantment_overrides;
 import org.uwu_snek.shadownight.chatManager.ChatManager;
-import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
+import org.uwu_snek.shadownight.itemFilter.blacklists.EnchantBlacklist;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 

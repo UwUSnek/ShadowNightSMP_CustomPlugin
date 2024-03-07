@@ -1,4 +1,4 @@
-package org.uwu_snek.shadownight.itemFilter;
+package org.uwu_snek.shadownight.itemFilter.blacklists;
 
 import org.bukkit.entity.Item;
 import org.bukkit.event.entity.ItemSpawnEvent;
@@ -13,14 +13,14 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 
-public final class VolatileItemManager extends UtilityClass {
+public final class ItemVolatileList extends UtilityClass {
     public static void onItemSpawn(final @NotNull ItemSpawnEvent event) {
         final Item itemEntity = event.getEntity();
         if (ItemUtils.isVolatile(itemEntity.getItemStack())) itemEntity.remove();
     }
 
 
-    public static void onDragEvent(final @NotNull InventoryDragEvent event) {
+    public static void onInventoryDrag(final @NotNull InventoryDragEvent event) {
         final Inventory inv = event.getInventory();
         if (inv.getType() != InventoryType.PLAYER) {
             if (ItemUtils.isVolatile(event.getOldCursor())) {
@@ -32,7 +32,7 @@ public final class VolatileItemManager extends UtilityClass {
     }
 
 
-    public static void onClickEvent(final @NotNull InventoryClickEvent event) {
+    public static void onInventiryClick(final @NotNull InventoryClickEvent event) {
         final Inventory inv = event.getClickedInventory();
         if (inv != null) {
             if (inv.getType() != InventoryType.PLAYER) {

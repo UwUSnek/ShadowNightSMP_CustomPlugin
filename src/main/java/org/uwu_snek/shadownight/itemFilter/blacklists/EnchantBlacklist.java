@@ -1,4 +1,4 @@
-package org.uwu_snek.shadownight.itemFilter;
+package org.uwu_snek.shadownight.itemFilter.blacklists;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -9,10 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
-import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.*;
-import java.util.logging.Level;
 
 
 

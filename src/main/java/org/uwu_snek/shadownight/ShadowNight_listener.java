@@ -23,8 +23,7 @@ import org.uwu_snek.shadownight.chatManager.JoinLeaveMessages;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
 import org.uwu_snek.shadownight.enchantments.EnchantingTableOverride;
-import org.uwu_snek.shadownight.itemFilter.ItemBlacklist;
-import org.uwu_snek.shadownight.itemFilter.VolatileItemManager;
+import org.uwu_snek.shadownight.itemFilter.ItemFilter;
 import org.uwu_snek.shadownight.items.guiManagers.AnvilFilter;
 import org.uwu_snek.shadownight.items.guiManagers.GrindstoneFilter;
 import org.uwu_snek.shadownight.items.IM;
@@ -68,13 +67,12 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler
     public void onItemSpawn(final @NotNull ItemSpawnEvent event) {
-        ItemBlacklist.onItemSpawn(event);
-        VolatileItemManager.onItemSpawn(event);
+        ItemFilter.onItemSpawn(event);
     }
 
     @EventHandler
     public void onPlaayerDropItem(final @NotNull PlayerDropItemEvent event) {
-        ItemBlacklist.onPlayerDropItem(event);
+        ItemFilter.onPlayerDropItem(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -89,29 +87,28 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryClick(final @NotNull InventoryClickEvent event) {
-        ItemBlacklist.onClickEvent(event);
-        VolatileItemManager.onClickEvent(event);
+        ItemFilter.onInventiryClick(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryDrag(final @NotNull InventoryDragEvent event) {
-        VolatileItemManager.onDragEvent(event);
+        ItemFilter.onInventoryDrag(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(final @NotNull PlayerInteractEvent event) {
+        ItemFilter.onPlayerInteract(event);
         IM.triggerAbilities(event);
-        ItemBlacklist.onPlayerInteract(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(final @NotNull BlockBreakEvent event) {
-        ItemBlacklist.onBlockBreak(event);
+        ItemFilter.onBlockBreak(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerFish(final @NotNull PlayerFishEvent event) {
-        ItemBlacklist.onPlayerFish(event);
+        ItemFilter.onPlayerFish(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -172,7 +169,7 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onVillagerAquireTrade(final @NotNull VillagerAcquireTradeEvent event){
-        ItemBlacklist.onVillagerAquireTrade(event);
+        ItemFilter.onVillagerAquireTrade(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
