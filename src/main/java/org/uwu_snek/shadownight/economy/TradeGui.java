@@ -378,7 +378,7 @@ public final class TradeGui implements Listener {
         if (clickedItem != null && !clickedItem.getType().isAir()) {
             // Manage item selection
             if (clickedSlot >= inv.getSize()) {
-                if (StarterKit.isBlacklisted(clickedItem)) clickedItem.setAmount(0);
+                if (ItemUtils.isVolatile(clickedItem)) clickedItem.setAmount(0);
                 else selectItem(clickedItem);
             }
 

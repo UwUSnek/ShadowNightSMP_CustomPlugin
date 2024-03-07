@@ -5,6 +5,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,6 +16,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.uwu_snek.shadownight.ShadowNight;
+import org.uwu_snek.shadownight.itemFilter.VolatileItemManager;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 
@@ -45,6 +48,39 @@ public final class ItemUtils extends UtilityClass {
         item.setItemMeta(meta);
         return item;
     }
+
+
+
+
+    public static final NamespacedKey volatileKey = new NamespacedKey(ShadowNight.plugin, "volatile");
+
+    /**
+     * Marks an ItemStack as volatile (disappears if it leaves a player's inventory)
+     * @param item The item to mark
+     */
+    public static void makeVolatile(final @NotNull ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if(meta != null) {
+            meta.getPersistentDataContainer().set(volatileKey, PersistentDataType.BOOLEAN, true);
+            item.setItemMeta(meta);
+        }
+    }
+
+    /**
+     * Checks if an item is volatile (disappears if it leaves a player's inventory).
+     * @param item The item to check
+     * @return True if the item is volatile, false otherwise
+     */
+    public static boolean isVolatile(@Nullable final ItemStack item) {
+        if(item != null) {
+            ItemMeta meta = item.getItemMeta();
+            if(meta != null) {
+                return meta.getPersistentDataContainer().has(volatileKey);
+            }
+        }
+        return false;
+    }
+
 
 
 

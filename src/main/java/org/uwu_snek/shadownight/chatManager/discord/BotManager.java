@@ -8,8 +8,12 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.apache.logging.log4j.core.pattern.AnsiEscape;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import org.fusesource.jansi.AnsiColors;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight.utils.SkinRenderer;
@@ -103,13 +107,17 @@ public final class BotManager extends UtilityClass {
     }
 
 
+    private static final String ANSI_GRAY = "\033[38;2;170;170;170m";
+    private static final String ANSI_RESET = "\033[0m";
+
+
     /**
      * Sends a system message to the bridge channel.
      * @param msg The message string
      */
     public static void sendBridgeMessage(final @NotNull String msg) {
         bridgeChannel.sendMessage(ChatUtils.stripColor(msg)).queue();
-        utils.log(Level.INFO, "logged server message \"" + msg + "\"");
+        utils.log(Level.INFO, ANSI_GRAY + "logged server message \"" + msg + "\"" + ANSI_RESET);
     }
 
 
@@ -125,7 +133,7 @@ public final class BotManager extends UtilityClass {
                 .setAvatarUrl(SkinRenderer.getRenderUrl(player, SkinRenderer.RenderType.PROPIC))
                 .complete()
             ;
-            utils.log(Level.INFO, "logged \"" + msg + "\"");
+            utils.log(Level.INFO, ANSI_GRAY + "logged \"" + msg + "\"" + ANSI_RESET);
         });
     }
 }

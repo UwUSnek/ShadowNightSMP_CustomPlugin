@@ -24,6 +24,7 @@ import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
 import org.uwu_snek.shadownight.enchantments.EnchantingTableOverride;
 import org.uwu_snek.shadownight.itemFilter.EnchantBlacklist;
+import org.uwu_snek.shadownight.itemFilter.VolatileItemManager;
 import org.uwu_snek.shadownight.items.guiManagers.AnvilFilter;
 import org.uwu_snek.shadownight.items.guiManagers.GrindstoneFilter;
 import org.uwu_snek.shadownight.items.IM;
@@ -67,7 +68,7 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler
     public void onItemSpawn(final @NotNull ItemSpawnEvent event) {
-        StarterKit.onItemDrop(event.getEntity());
+        VolatileItemManager.onItemDrop(event.getEntity());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -82,12 +83,12 @@ public final class ShadowNight_listener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryClick(final @NotNull InventoryClickEvent event) {
-        StarterKit.onClickEvent(event);
+        VolatileItemManager.onClickEvent(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryDrag(final @NotNull InventoryDragEvent event) {
-        StarterKit.onDragEvent(event);
+        VolatileItemManager.onDragEvent(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
