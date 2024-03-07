@@ -190,4 +190,9 @@ public final class ShadowNight_listener implements Listener {
     public void onPrepareSmithing(final @NotNull PrepareSmithingEvent event){
         CustomUpgradeSmithingRecipe.onPrepareSmithing(event);
     }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public static void onPrepareItemCraft(final @NotNull PrepareItemCraftEvent event) {
+        ItemFilter.onPrepareItemCraft(event);
+    }
 }

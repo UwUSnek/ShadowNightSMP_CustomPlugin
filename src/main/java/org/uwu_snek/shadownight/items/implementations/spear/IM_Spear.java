@@ -10,11 +10,12 @@ import org.uwu_snek.shadownight.attackOverride.attacks.ATK_ReachArea;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
 
 
 
 
-public abstract class IM_Spear extends IM {
+public abstract class IM_Spear extends IM_MeleeWeapon {
     private static final ATK_ReachArea abilityAttack = new ATK_ReachArea(5);
 
     public IM_Spear(final @NotNull String _displayName, final @NotNull _custom_item_id _customItemId, final double _hitDamage, final double _atkSpeed) {

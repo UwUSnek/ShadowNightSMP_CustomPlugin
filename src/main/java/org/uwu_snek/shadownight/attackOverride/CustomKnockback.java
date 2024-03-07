@@ -55,7 +55,7 @@ public final class CustomKnockback extends UtilityClass {
         double base = 1;
         if(item != null && item.getType() != Material.AIR) {
             final Long itemId = ItemUtils.getCustomItemId(item);
-            if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKnockbackMultiplier();
+            if(itemId != null) base *= ItemManager.getValueFromId(itemId).getHitKbMultiplier();
         }
         return base;
     }

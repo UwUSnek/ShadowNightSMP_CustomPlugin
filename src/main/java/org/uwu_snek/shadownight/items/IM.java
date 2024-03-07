@@ -48,34 +48,35 @@ public abstract class IM {
 
 
     // Custom Item properties
-    private final _custom_item_id customItemId; @SuppressWarnings("unused") public final @NotNull _custom_item_id getCustomItemId() { return customItemId; }
-    private final String displayName;        @SuppressWarnings("unused") public final @NotNull String getDisplayName()        { return displayName; }
-    private final double hitDamage;          @SuppressWarnings("unused") public final double getHitDamage()                   { return hitDamage; }
-    private final double kbMultiplier;       @SuppressWarnings("unused") public final double getHitKnockbackMultiplier()      { return kbMultiplier; }
-    private final double atkSpeed;           @SuppressWarnings("unused") public final double getAttackSpeed()                 { return atkSpeed; }
+    private final _custom_item_id customItemId; @SuppressWarnings("unused") public final @NotNull _custom_item_id getCustomItemId()   { return customItemId; }
+    private final String          displayName;  @SuppressWarnings("unused") public final @NotNull String          getDisplayName()    { return displayName; }
+    private final double          hitDamage;    @SuppressWarnings("unused") public final double                   getHitDamage()      { return hitDamage; }
+    private final double          kbMultiplier; @SuppressWarnings("unused") public final double                   getHitKbMultiplier(){ return kbMultiplier; }
+    private final double          atkSpeed;     @SuppressWarnings("unused") public final double                   getAttackSpeed()    { return atkSpeed; }
 
 
     // Upgrade recipe. Null if item is not upgradeable
-    protected CustomUpgradeSmithingRecipe upgradeRecipe = null; public final @Nullable CustomUpgradeSmithingRecipe getUpgradeRecipe(){ return upgradeRecipe; }
+    protected CustomUpgradeSmithingRecipe upgradeRecipe = null;
+    public final @Nullable CustomUpgradeSmithingRecipe getUpgradeRecipe() { return upgradeRecipe; }
 
 
     // Item abilities
-    private Ability abilityL  = null;
+    private Ability abilityL = null;
     private Ability abilityLS = null;
-    private Ability abilityR  = null;
+    private Ability abilityR = null;
     private Ability abilityRS = null;
-
 
 
     /**
      * Creates a new Item Manager.
-     * @param _displayName The display name of the custom item
-     * @param _customItemId The CustomItemId to use for this item. This is used to recognize custom items and is saved in the in-game ItemStack
-     * @param _attack The attack preset of this item
-     * @param _hitDamage The base damage of the item. This is only for melee hits
-     * @param _kbMultiplier The knockback multiplier to apply on melee hits
-     * @param _atkSpeed The attack speed. This indicates the time between 2 fully charged hits, measured in seconds
-     * @param _atkCooldown The minimum time between 2 hits, measured in seconds
+     *
+     * @param _displayName                 The display name of the custom item
+     * @param _customItemId                The CustomItemId to use for this item. This is used to recognize custom items and is saved in the in-game ItemStack
+     * @param _attack                      The attack preset of this item
+     * @param _hitDamage                   The base damage of the item. This is only for melee hits
+     * @param _kbMultiplier                The knockback multiplier to apply on melee hits
+     * @param _atkSpeed                    The attack speed. This indicates the time between 2 fully charged hits, measured in seconds
+     * @param _atkCooldown                 The minimum time between 2 hits, measured in seconds
      * @param _replaceVanillaLInteractions Whether the item's custom attack should replace the Vanilla LeftClick block and air interactions
      */
     public IM(
@@ -90,7 +91,7 @@ public abstract class IM {
     ) {
         customItemId = _customItemId;
         Pair<Material, Integer> _generated_data = _custom_item_data.getMaterialAndModel(customItemId);
-        _generated_material =        _generated_data.getValue0();
+        _generated_material = _generated_data.getValue0();
         _generated_customModelData = _generated_data.getValue1();
 
         displayName = "§f" + _displayName;
@@ -105,12 +106,13 @@ public abstract class IM {
         attack = _attack;
         replaceVanillaLInteractions = _replaceVanillaLInteractions;
     }
+
     protected final void setAbilities(
         final @Nullable Ability abilityL_,
         final @Nullable Ability abilityLS,
         final @Nullable Ability abilityR_,
         final @Nullable Ability abilityRS
-    ){
+    ) {
         this.abilityL = abilityL_;
         this.abilityLS = abilityLS;
         this.abilityR = abilityR_;
@@ -118,9 +120,9 @@ public abstract class IM {
     }
 
 
+    public final @NotNull Material getMaterial() {return _generated_material;}
 
-    public final @NotNull Material getMaterial() { return _generated_material; }
-    public final int getCustomModelData() { return _generated_customModelData; }
+    public final int getCustomModelData() {return _generated_customModelData;}
 
 
     private void initDefaultItemStack() {
@@ -128,15 +130,14 @@ public abstract class IM {
         final ItemMeta meta = defaultItem.getItemMeta();
 
         Objects.requireNonNull(meta, "Object meta is null");
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,  new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", (1 / atkSpeed) - playerDefaultAtkSpeed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", (1 / atkSpeed) - playerDefaultAtkSpeed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         defaultItem.setItemMeta(meta);
     }
 
 
-
-
     /**
      * Creates a copy of the default ItemStack this CustomItem uses.
+     *
      * @return The item stack copy
      */
     public @NotNull ItemStack createDefaultItemStack() {
@@ -147,11 +148,10 @@ public abstract class IM {
     private void _createRecipe() {
         final NamespacedKey recipeKey = new NamespacedKey(ShadowNight.plugin, customItemId.name());
         final Recipe recipe = createRecipe(recipeKey);
-        if(recipe != null) Bukkit.addRecipe(recipe); //FIXME use a better method to add custom smithing recipes
+        if (recipe != null) Bukkit.addRecipe(recipe); //FIXME use a better method to add custom smithing recipes
     }
+
     protected abstract Recipe createRecipe(final @NotNull NamespacedKey key);
-
-
 
 
     public boolean checkCooldown(final @NotNull UUID playerId, final long id) {
@@ -166,6 +166,7 @@ public abstract class IM {
 
     /**
      * Determines what custom item the player is holding and executes interaction callbacks accordingly.
+     *
      * @param event The interaction event
      */
     public static void triggerAbilities(final @NotNull PlayerInteractEvent event) {
@@ -175,15 +176,17 @@ public abstract class IM {
             if (customItemId != null) {
                 IM manager = ItemManager.getValueFromId(customItemId);
                 Player player = event.getPlayer();
-                if (event.getAction() == Action.LEFT_CLICK_BLOCK  || event.getAction() == Action.LEFT_CLICK_AIR)  {
-                    if(manager.replaceVanillaLInteractions) {
+                if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
+                    if (manager.replaceVanillaLInteractions) {
                         event.setCancelled(true);
-                        if(manager.checkCooldown(player.getUniqueId(), customItemId)) manager.attack.execute(player, null, player.getLocation(), item);
+                        if (manager.checkCooldown(player.getUniqueId(), customItemId)) manager.attack.execute(player, null, player.getLocation(), item);
                     }
-                    Ability targetAbility = (player.isSneaking() ? manager.abilityLS : manager.abilityL); if(targetAbility != null) targetAbility.activate(player, item, event);
+                    Ability targetAbility = (player.isSneaking() ? manager.abilityLS : manager.abilityL);
+                    if (targetAbility != null) targetAbility.activate(player, item, event);
                 }
                 else if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-                    Ability targetAbility = (player.isSneaking() ? manager.abilityRS : manager.abilityR); if(targetAbility != null) targetAbility.activate(player, item, event);
+                    Ability targetAbility = (player.isSneaking() ? manager.abilityRS : manager.abilityR);
+                    if (targetAbility != null) targetAbility.activate(player, item, event);
                 }
             }
         }

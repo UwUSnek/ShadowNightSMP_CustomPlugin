@@ -10,6 +10,7 @@ import org.uwu_snek.shadownight.attackOverride.attacks.ATK_ConeArea;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
@@ -20,7 +21,7 @@ import java.util.logging.Level;
 
 
 
-public abstract class IM_Scythe extends IM {
+public abstract class IM_Scythe extends IM_MeleeWeapon {
     public IM_Scythe(final @NotNull String _displayName, final @NotNull _custom_item_id _customItemId, final double _hitDamage, final double _atkSpeed) {
         super(
             _displayName,

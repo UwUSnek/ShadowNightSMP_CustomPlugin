@@ -14,9 +14,13 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public final class ItemVolatileList extends UtilityClass {
-    public static void onItemSpawn(final @NotNull ItemSpawnEvent event) {
+    public static boolean onItemSpawn(final @NotNull ItemSpawnEvent event) {
         final Item itemEntity = event.getEntity();
-        if (ItemUtils.isVolatile(itemEntity.getItemStack())) itemEntity.remove();
+        if (ItemUtils.isVolatile(itemEntity.getItemStack())) {
+            itemEntity.remove();
+            return true;
+        }
+        return false;
     }
 
 

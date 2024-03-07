@@ -7,6 +7,7 @@ import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
+import org.uwu_snek.shadownight.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 
@@ -84,6 +85,7 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
         final Enchantment newEnchant = villagerWhitelist.get(rnd.nextInt(villagerWhitelist.size()));
         meta.addStoredEnchant(newEnchant, rnd.nextInt(newEnchant.getMaxLevel()) + 1, true);
         newResult.setItemMeta(meta);
+        Decorator.decorate(newResult);
 
         // Return modified copy of the recipe
         final MerchantRecipe newRecipe = new MerchantRecipe(
