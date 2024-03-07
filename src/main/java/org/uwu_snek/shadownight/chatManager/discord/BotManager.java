@@ -8,12 +8,8 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.apache.logging.log4j.core.pattern.AnsiEscape;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import org.fusesource.jansi.AnsiColors;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight.utils.SkinRenderer;

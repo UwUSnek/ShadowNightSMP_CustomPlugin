@@ -122,7 +122,7 @@ public final class RegionBlueprint {
      * @param y The Y level to use when performing calculations
      * @param tileSize The size of each tile
      * @param wt The thickness of the walls
-     * @param calculateNegative Whether or not negative distances should be calculated for blocks inside walls.
+     * @param calculateNegative Whether negative distances should be calculated for blocks inside walls.
      *                          If false, internal blocks will have a distance value of 0
      */
     public float[][] createWallDistanceGradient(final int y, final int tileSize, final int wt, final boolean calculateNegative) { //TODO start loops from 1

@@ -143,7 +143,7 @@ public final class CustomKnockback extends UtilityClass {
         // Apply resistance
         knockback.multiply(1 - getTargetKnockbackResistance(target));
 
-        // Calculate gravity or Vanilla no-vertical-knockback-if-no-on-ground mechanic which i don't know the name of
+        // Calculate gravity or Vanilla no-vertical-knockback-if-no-on-ground mechanic which I don't know the name of
         if(!target.isOnGround()) knockback.setY(0);           // If not on ground, set Y knockback to 0
         else knockback.setY(knockback.getY() - gravityY);     // If on ground, account for gravity
 

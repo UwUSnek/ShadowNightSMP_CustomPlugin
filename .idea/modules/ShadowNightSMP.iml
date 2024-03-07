@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
   <component name="AdditionalModuleElements">
-    <content url="file:///usr/lib64/python3.11" />
     <content url="file://$MODULE_DIR$/../.." dumb="true">
       <excludeFolder url="file://$MODULE_DIR$/../../src/resourcepack/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../venv" />

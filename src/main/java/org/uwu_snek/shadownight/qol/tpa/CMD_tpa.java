@@ -49,6 +49,7 @@ public final class CMD_tpa implements CommandExecutor {
             return true;
         }
 
+        //noinspection DataFlowIssue (checked in playerOfflineCheck)
         ChatUtils.sendMessage(player, "§7Sending a teleport request to " + PlayerUtils.getFancyName(target) + "...");
 
         String _command = "/tpaccept " + player.getName();

@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,6 @@ import org.uwu_snek.shadownight.utils.utils;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 
 

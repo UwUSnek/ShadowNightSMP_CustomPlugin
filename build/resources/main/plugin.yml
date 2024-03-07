@@ -1,5 +1,5 @@
 name: ShadowNightSMP
-version: '1.1'
+version: '1.2.0'
 main: org.uwu_snek.shadownight.ShadowNight
 api-version: '1.20'
 load: STARTUP

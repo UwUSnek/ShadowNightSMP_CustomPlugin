@@ -1,7 +1,6 @@
 package org.uwu_snek.shadownight.utils.spigot;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -17,7 +16,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.ShadowNight;
-import org.uwu_snek.shadownight.itemFilter.VolatileItemManager;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 

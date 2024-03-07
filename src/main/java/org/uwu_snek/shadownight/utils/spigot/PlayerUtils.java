@@ -100,7 +100,7 @@ public final class PlayerUtils extends UtilityClass {
      * @param dist The maximum distance from the initial position
      * @return The target block, or null if none was found
      */
-    public static @Nullable Block getTargetBlock(final @NotNull Location initialPos, @Nullable final Function<@NotNull Material, @NotNull Boolean> property, final int dist) {
+    public static @Nullable Block getTargetBlock(final @NotNull Location initialPos, final @NotNull Function<@NotNull Material, @NotNull Boolean> property, final int dist) {
         final Vector dir = initialPos.getDirection();
         for(double i = 0d; i < dist; i += 0.25d) {
             Block block = initialPos.getWorld().getBlockAt(initialPos.clone().add(dir.clone().multiply(i)));

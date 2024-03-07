@@ -138,7 +138,7 @@ public final class RegionBuffer {
      * @param _x The x coordinate of the origin
      * @param _y The y coordinate of the origin
      * @param _z The z coordinate of the origin
-     * @param createBox Whether or not to create the bedrock box. This is always created before pasting the actual region
+     * @param createBox Whether to create the bedrock box. This is always created before pasting the actual region
      */
     public void paste(final @NotNull World world, final int _x, final int _y, final int _z, final boolean createBox) {
         if(createBox) {

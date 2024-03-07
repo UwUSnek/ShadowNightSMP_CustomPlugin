@@ -18,7 +18,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.uwu_snek.shadownight.qol.StarterKit;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight.utils.SignInput;
 import org.uwu_snek.shadownight.utils.Timer;
@@ -199,8 +198,9 @@ public final class TradeGui implements Listener {
 
         // Give item back to the player
         final PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
-        if(container.has(coin_key, PersistentDataType.LONG)) {
-            Economy.addToBalance(player, container.get(coin_key, PersistentDataType.LONG));
+        final Long n = container.get(coin_key, PersistentDataType.LONG);
+        if(n != null) {
+            Economy.addToBalance(player, n);
         }
         else player.getInventory().addItem(item);
 
@@ -223,8 +223,9 @@ public final class TradeGui implements Listener {
         final World world = _player.getWorld();
         for(ItemStack item : _items){
             PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
-            if(container.has(coin_key, PersistentDataType.LONG)) {
-                Economy.addToBalance(_player, container.get(coin_key, PersistentDataType.LONG));
+            Long n = container.get(coin_key, PersistentDataType.LONG);
+            if(n != null) {
+                Economy.addToBalance(_player, n);
             }
             else {
                 if (playerInv.firstEmpty() == -1) world.dropItem(_player.getLocation(), item);

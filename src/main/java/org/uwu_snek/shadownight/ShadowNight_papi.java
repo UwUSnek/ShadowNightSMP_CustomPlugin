@@ -57,7 +57,7 @@ public final class ShadowNight_papi extends PlaceholderExpansion {
                     if (!ownerName.equals("Unclaimed")) {
                         Player owner = Bukkit.getPlayer(ownerName);
                         if (owner == null) return PlayerUtils.getFancyNameOffline(Bukkit.getOfflinePlayer(ownerName)) + "§r's Claim §7(Offline)";
-                        else return PlayerUtils.getFancyName(Bukkit.getPlayer(ownerName)) + "§r's Claim";
+                        else return PlayerUtils.getFancyName(owner) + "§r's Claim";
                     }
                     else switch (worldName) {
                         case "Survival": return "§2Wilderness";

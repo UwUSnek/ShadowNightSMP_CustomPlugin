@@ -1,7 +1,5 @@
 package org.uwu_snek.shadownight.itemFilter;
 
-import org.bukkit.Material;
-import org.bukkit.Warning;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
@@ -17,10 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
-import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.*;
-import java.util.logging.Level;
 
 
 
@@ -47,14 +43,14 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
         if (item.getItemMeta() instanceof EnchantmentStorageMeta m) {
             for (Enchantment e : blockedEnchants) m.removeStoredEnchant(e);
             item.setItemMeta(m);
-            if (!m.hasStoredEnchants()) return true;
+            return !m.hasStoredEnchants();
         }
 
         // Remove blocked enchants from normal items
         else {
             for (Enchantment e : blockedEnchants) item.removeEnchantment(e);
+            return false;
         }
-        return false;
     }
 
 

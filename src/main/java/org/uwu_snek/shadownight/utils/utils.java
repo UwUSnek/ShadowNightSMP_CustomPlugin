@@ -65,28 +65,9 @@ public final class utils extends UtilityClass {
 
 
 
-
-    public enum MoonPhase {
-        FULL,
-        GIBBOUS,
-        QUARTER,
-        CRESCENT,
-        NEW
-    }
     public static int getMoonPhaseValue(final @NotNull World world) {
         int days = (int)world.getFullTime() / 24000;
         return days % 8;
-    }
-    public static MoonPhase getMoonPhase(final @NotNull World world) {
-        int phase = getMoonPhaseValue(world);
-        return switch (phase) {
-            case 0 -> MoonPhase.FULL;
-            case 1, 7 -> MoonPhase.GIBBOUS;
-            case 2, 6 -> MoonPhase.QUARTER;
-            case 3, 5 -> MoonPhase.CRESCENT;
-            case 4 -> MoonPhase.NEW;
-            default -> throw new IllegalStateException("Unexpected value: " + phase);
-        };
     }
 
     public static double getRegionalDifficulty(final @NotNull Difficulty difficulty, final @NotNull Location location) {

@@ -3,7 +3,6 @@ package org.uwu_snek.shadownight.attackOverride.attacks;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -12,8 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.utils.math.Func;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.UUID;
 
 
 
@@ -31,7 +28,7 @@ public final class ATK_LineArea extends ATK {
 
 
     @Override
-    public void execute(final @NotNull LivingEntity damager, @Nullable final LivingEntity directTarget, final @NotNull Location origin, @Nullable final ItemStack item) {        final UUID damagerId = damager.getUniqueId();
+    public void execute(final @NotNull LivingEntity damager, @Nullable final LivingEntity directTarget, final @NotNull Location origin, @Nullable final ItemStack item) {
         final Vector o = origin.toVector();
         final Vector p2 = o.clone().add(origin.getDirection().multiply(len));
 

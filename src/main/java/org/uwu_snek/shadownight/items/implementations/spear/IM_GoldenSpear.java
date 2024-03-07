@@ -2,7 +2,6 @@ package org.uwu_snek.shadownight.items.implementations.spear;
 
 import org.bukkit.Material;
 import org.uwu_snek.shadownight._generated._custom_item_id;
-import org.uwu_snek.shadownight._generated._custom_item_id;
 
 
 
