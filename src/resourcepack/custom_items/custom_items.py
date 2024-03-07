@@ -52,11 +52,11 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
     java_data.write(
         'package org.uwu_snek.shadownight._generated;\n'
         'import org.jetbrains.annotations.NotNull;\n'
-        'import org.uwu_snek.shadownight._generated._custom_item_id;\n'
         'import org.javatuples.Pair;\n'
         'import org.bukkit.Material;\n'
         'public final class _custom_item_data extends org.uwu_snek.shadownight.utils.UtilityClass {\n'
         '    public static Pair<Material, Integer> getMaterialAndModel(@NotNull final _custom_item_id id) {\n'
+        '        return switch(id) {\n'
     )
     java_id.write(
         'package org.uwu_snek.shadownight._generated;\n'
@@ -102,7 +102,7 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
 
             # Generate custom model data ID and add it to the java plugin hook
             custom_model_data = data_zero + i
-            java_data.write(f'        if(id == _custom_item_id.{ c["id"].upper() }) return Pair.with(Material.{ c["base"].upper() }, { custom_model_data });\n')
+            java_data.write(f'            case { c["id"].upper() } -> Pair.with(Material.{ c["base"].upper() }, { custom_model_data });\n')
             java_id.write(f'    { c["id"].upper() }(){ "," if k < len(bases) - 1 or i < len(b[1]) - 1 else ";" }\n')
 
 
@@ -139,7 +139,7 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
 
 
     java_data.write(
-        '        throw new RuntimeException("Invalid _custom_item_id \\"" + id + "\\"");\n'
+        '        };\n'
         '    }\n'
         '}'
     )
