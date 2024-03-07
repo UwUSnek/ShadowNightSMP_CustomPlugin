@@ -1,11 +1,9 @@
 package org.uwu_snek.shadownight.enchantments;
 
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
-import org.bukkit.inventory.ItemStack;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight._generated._enchantment_overrides;
@@ -26,31 +24,24 @@ public final class EnchantingTableOverride extends UtilityClass implements Rnd {
 
 
     /**
-     * Rolls a new enchantment. This can be a Vanilla enchant or one of the custom ones that can be obtained from the enchanting table.
-     * @param item The item to enchant. This is used to determine what enchants are allowed
-     * @return The new enchantment
+     * Detects Enchanting Table preparation events and replaces the client's offers with modified ones that
+     * display the overridden name for custom enchantments and don't include the blacklisted ones.
+     * This has the side effect of shuffling the enchanting table every time it is opened, differently from Vanilla where
+     * a list of offers for a specific item type is kept until one is chosen by the player.
+     * This method doesn't replace the enchants on the server. That's onEnchantItem()'s job.
+     * @param event The event
      */
-    public static Enchantment reroll(ItemStack item){
-        int chosen = rnd.nextInt(EnchantBlacklist.allowedEnchants.size() - 1);
-        if(item.getType() == Material.BOOK || (EnchantBlacklist.allowedEnchants.get(chosen).canEnchantItem(item))){
-            return EnchantBlacklist.allowedEnchants.get(chosen);
-        }
-        else return reroll(item);
-    }
-
-
-
-    public static void onPrepareItemEnchant(final @NotNull PrepareItemEnchantEvent e){
-        if(e.isCancelled()) return;
+    public static void onPrepareItemEnchant(final @NotNull PrepareItemEnchantEvent event){
+        if(event.isCancelled()) return;
 
         // For each offer
         HashMap<Integer, Pair<Enchantment, Integer>> _overrides = new HashMap<>();
-        for(EnchantmentOffer offer : e.getOffers()){
+        for(EnchantmentOffer offer : event.getOffers()){
             // Skip empty offers
             if(offer == null) continue;
 
             // Roll new enchantment
-            Enchantment newEnchant = reroll(e.getItem());
+            Enchantment newEnchant = EnchantBlacklist.rerollETable(event.getItem());
             int lvl = ((offer.getCost() / 30) * newEnchant.getMaxLevel());
 
             // Calculate level
@@ -64,11 +55,14 @@ public final class EnchantingTableOverride extends UtilityClass implements Rnd {
             ChatManager.broadcast("" + _enchantment_overrides.getOverride(newEnchant.translationKey()));
             offer.setEnchantmentLevel(lvl);
         }
-        overrides.put(e.getEnchanter().getUniqueId(), _overrides);
+        overrides.put(event.getEnchanter().getUniqueId(), _overrides);
     }
 
 
-
+    /**
+     * Detects players putting enchantments on items using an Enchanting Table and replaces them with the actual enchantments in the offer displayed to the client.
+     * @param event The event
+     */
     public static void onEnchantItem(final @NotNull EnchantItemEvent event) {
         // Get offer overrides
         HashMap<Integer, Pair<Enchantment, Integer>> override = overrides.remove(event.getEnchanter().getUniqueId());

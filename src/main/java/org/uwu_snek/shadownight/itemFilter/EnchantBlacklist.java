@@ -1,84 +1,104 @@
 package org.uwu_snek.shadownight.itemFilter;
 
-import org.bukkit.block.Block;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.BlockInventoryHolder;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.*;
+import java.util.logging.Level;
 
 
 
 
 public final class EnchantBlacklist extends UtilityClass implements Rnd {
-    public static final List<Enchantment> blockedEnchants = Arrays.asList(Enchantment.SWEEPING_EDGE);
-    public static final ArrayList<Enchantment> allowedEnchants = new ArrayList<>();
+    public static final List<Enchantment> blockedEnchants = Collections.singletonList(Enchantment.SWEEPING_EDGE);
+    public static final ArrayList<Enchantment> eTableWhitelist = new ArrayList<>();
+    public static final ArrayList<Enchantment> villagerWhitelist = new ArrayList<>();
 
     static {
         Arrays.stream(CustomEnchant_Spigot.values()).iterator().forEachRemaining(e -> {
-            if (!e.isTreasure() && !blockedEnchants.contains(e)) allowedEnchants.add(e);
+            if (!e.isTreasure() && !blockedEnchants.contains(e)) eTableWhitelist.add(e);
+            if (e.isTradeable() && !blockedEnchants.contains(e)) villagerWhitelist.add(e);
         });
     }
 
 
     /**
      * Removes any blacklisted enchantment from an item or enchanted book.
+     * If an enchanted book only contains blacklisted enchantments, the item is deleted.
      * @param item The item to check
-     * @return True if the item is an enchanted book and has 0 stored enchantments, false otherwise
+     * @return True if the item has been deleted, false otherwise
      */
-    private static boolean fixItemEnchants(final @NotNull ItemStack item) {
+    public static boolean fixItemEnchants(final @NotNull ItemStack item) {
 
         // Remove books that contain one or more of the blocked enchantments
         if (item.getItemMeta() instanceof EnchantmentStorageMeta m) {
             for (Enchantment e : blockedEnchants) m.removeStoredEnchant(e);
             item.setItemMeta(m);
-            return !m.hasStoredEnchants();
+            if(!m.hasStoredEnchants()) {
+                item.setAmount(0);
+                return true;
+            }
         }
 
         // Remove blocked enchants from normal items
         else {
             for (Enchantment e : blockedEnchants) item.removeEnchantment(e);
-            return false;
         }
+        return false;
     }
 
 
-    public static void onPlayerInteract(final @NotNull PlayerInteractEvent event) {
-        Block block = event.getClickedBlock();
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && block != null && block.getState() instanceof BlockInventoryHolder b) {
-            Inventory inv = b.getInventory();
-            for (ItemStack item : inv.getContents()) {
-                if (item != null) if(fixItemEnchants(item)) inv.remove(item);
-            }
+
+
+    /**
+     * Rolls a new enchantment. This can be a Vanilla enchant or one of the custom ones that can be obtained from the enchanting table.
+     * @param item The item to enchant. This is used to determine what enchants are allowed
+     * @return The new enchantment
+     */
+    public static Enchantment rerollETable(ItemStack item){
+        int chosen = rnd.nextInt(EnchantBlacklist.eTableWhitelist.size() - 1);
+        if(item.getType() == Material.BOOK || (EnchantBlacklist.eTableWhitelist.get(chosen).canEnchantItem(item))){
+            return EnchantBlacklist.eTableWhitelist.get(chosen);
         }
+        else return rerollETable(item);
     }
 
-    public static void onBlockBreak(final @NotNull BlockBreakEvent event) {
-        Block block = event.getBlock();
-        if (block.getState() instanceof BlockInventoryHolder b) {
-            Inventory inv = b.getInventory();
-            for (ItemStack item : inv.getContents()) {
-                if (item != null) if(fixItemEnchants(item)) inv.remove(item);
-            }
-        }
-    }
 
-    public static void onPlayerFish(final @NotNull PlayerFishEvent event) {
-        if (event.getCaught() instanceof Item e) {
-            ItemStack item = e.getItemStack();
-            fixItemEnchants(item);
-            e.setItemStack(item);
-        }
+    /**
+     * Rolls a new Librarian Villager book recipe which never contains one of the blacklisted enchantments.
+     * @param oldRecipe The old recipe. All the extra data is copied from this one.
+     * @return The new recipe containing the modified enchantment and level.
+     */
+    public static MerchantRecipe rerollVillager(final @NotNull MerchantRecipe oldRecipe){
+        // Create new result ItemStack
+        final ItemStack newResult = new ItemStack(Material.ENCHANTED_BOOK);
+        final EnchantmentStorageMeta meta = (EnchantmentStorageMeta)newResult.getItemMeta();
+
+        // Reroll enchantment and level
+        final Enchantment newEnchant = villagerWhitelist.get(rnd.nextInt(villagerWhitelist.size()));
+        meta.addStoredEnchant(newEnchant, rnd.nextInt(newEnchant.getMaxLevel()) + 1, true);
+        newResult.setItemMeta(meta);
+
+        // Return modified copy of the recipe
+        final MerchantRecipe newRecipe = new MerchantRecipe(
+            new ItemStack(newResult),
+            oldRecipe.getUses(),
+            oldRecipe.getMaxUses(),
+            oldRecipe.hasExperienceReward(),
+            oldRecipe.getVillagerExperience(),
+            oldRecipe.getPriceMultiplier(),
+            oldRecipe.shouldIgnoreDiscounts()
+        );
+        newRecipe.setIngredients(oldRecipe.getIngredients());
+        newRecipe.setSpecialPrice(oldRecipe.getSpecialPrice());
+        return newRecipe;
     }
 }

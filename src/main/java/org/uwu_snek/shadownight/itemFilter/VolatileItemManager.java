@@ -1,6 +1,7 @@
 package org.uwu_snek.shadownight.itemFilter;
 
 import org.bukkit.entity.Item;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
@@ -13,8 +14,9 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public final class VolatileItemManager extends UtilityClass {
-    public static void onItemDrop(final @NotNull Item item) {
-        if (ItemUtils.isVolatile(item.getItemStack())) item.remove();
+    public static void onItemSpawn(final @NotNull ItemSpawnEvent event) {
+        final Item itemEntity = event.getEntity();
+        if (ItemUtils.isVolatile(itemEntity.getItemStack())) itemEntity.remove();
     }
 
 
