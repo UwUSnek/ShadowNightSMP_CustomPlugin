@@ -15,18 +15,20 @@ public final class BlockProperty extends UtilityClass {
 
     /**
      * Identifies transparent-block plants.
+     * Sculk veins, Moss Carpets, Leaves, Mangrove roots and vegetation forms native to the Nether are considered plants.
      * @param material The material of the block
      * @return True if the block is a plant, false otherwise
      */
     public static boolean isVegetation(final @NotNull Material material) {
-        return material != Material.AIR &&
-            Tag.REPLACEABLE.isTagged(material) ||
+        return
             Tag.LEAVES     .isTagged(material) ||
             Tag.FLOWERS    .isTagged(material) ||
             Tag.SAPLINGS   .isTagged(material) ||
             Tag.CROPS      .isTagged(material) ||
 
             material == Material.SCULK_VEIN ||
+            material == Material.MOSS_CARPET ||
+            material == Material.MANGROVE_ROOTS ||
 
             material == Material.WEEPING_VINES ||
             material == Material.TWISTING_VINES ||
@@ -41,7 +43,21 @@ public final class BlockProperty extends UtilityClass {
             material == Material.SMALL_DRIPLEAF ||
             material == Material.BIG_DRIPLEAF ||
             material == Material.SWEET_BERRY_BUSH ||
-            material == Material.LILY_PAD
+            material == Material.LILY_PAD ||
+
+            material == Material.CRIMSON_ROOTS ||
+            material == Material.WARPED_ROOTS ||
+            material == Material.DEAD_BUSH ||
+            material == Material.FERN ||
+            material == Material.LARGE_FERN ||
+            material == Material.SHORT_GRASS ||
+            material == Material.TALL_GRASS ||
+            material == Material.GLOW_LICHEN ||
+            material == Material.HANGING_ROOTS ||
+            material == Material.NETHER_SPROUTS ||
+            material == Material.SEAGRASS ||
+            material == Material.TALL_SEAGRASS ||
+            material == Material.VINE
         ;
     }
 
