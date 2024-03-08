@@ -2,11 +2,17 @@ package org.uwu_snek.shadownight.enchantments.implementations;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import org.bukkit.Material;
+import org.bukkit.Tag;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
 import org.uwu_snek.shadownight.enchantments.CustomEnchant;
+import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
+import org.uwu_snek.shadownight.items.ItemManager;
+import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 
 
@@ -24,8 +30,19 @@ public final class Reeling extends CustomEnchant {
     }
 
     @Override
-    public boolean canEnchant(@Nullable ItemStack stack) {
-        return true;
+    public boolean canEnchant(@Nullable ItemStack item) {
+        if(item != null) {
+            final org.bukkit.inventory.ItemStack bukkitItem = item.asBukkitCopy();
+            final Long id = ItemUtils.getCustomItemId(bukkitItem);
+            if(id != null) {
+                return ItemManager.getValueFromId(id) instanceof IM_MeleeWeapon;
+            }
+            else {
+                final Material type = bukkitItem.getType();
+                return Tag.ITEMS_SWORDS.isTagged(type);
+            }
+        }
+        else return false;
     }
 
     @Override public boolean isTreasureOnly() { return false; }
