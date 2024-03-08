@@ -2,34 +2,28 @@ package org.uwu_snek.shadownight.itemFilter.decorators;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Warning;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.utils.UtilityClass;
-import org.uwu_snek.shadownight.utils.utils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 
 
 
 public final class WeaponDecorator extends UtilityClass {
-    private static final TextColor COLOR_purple = TextColor.color(0xAAAAFF);
+    private static final TextColor COLOR_violet = TextColor.color(0xAAAAFF);
+    private static final TextColor COLOR_purple = TextColor.color(0xFFAAFF);
     private static final TextColor COLOR_gray = TextColor.color(0xAAAAAA);
     private static final DecimalFormat valueFormat = new DecimalFormat("############.##");
 
@@ -42,7 +36,7 @@ public final class WeaponDecorator extends UtilityClass {
         // Name and activation mode
         r.add(
             Component.text("Ability: " + ability.getName())
-            .color(COLOR_purple)
+            .color(COLOR_violet)
             .decoration(TextDecoration.ITALIC, false)
             .append(
                 Component.text(" (" + activation + ")")
@@ -81,17 +75,20 @@ public final class WeaponDecorator extends UtilityClass {
 
     private static List<TextComponent> generateStatsLore(final @NotNull IM manager) {
         List<TextComponent> r = new ArrayList<>();
-        r.add(Component.text("DMG: ").color(COLOR_purple).append(Component.text(valueFormat.format(manager.getHitDamage()))            .color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
-        r.add(Component.text("ATS: ").color(COLOR_purple).append(Component.text(valueFormat.format(manager.getAttackSpeed()) + "s")    .color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
-        r.add(Component.text("KB: ") .color(COLOR_purple).append(Component.text(valueFormat.format(manager.getHitKbMultiplier()) + "x").color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
+        r.add(Component.text("DMG: ").color(COLOR_violet).append(Component.text(valueFormat.format(manager.getHitDamage()))            .color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
+        r.add(Component.text("ATS: ").color(COLOR_violet).append(Component.text(valueFormat.format(manager.getAttackSpeed()) + "s")    .color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
+        r.add(Component.text("KB: ") .color(COLOR_violet).append(Component.text(valueFormat.format(manager.getHitKbMultiplier()) + "x").color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
         return r;
     }
 
 
 
     private static List<TextComponent> generateEnchantsLore(final @NotNull ItemStack item) {
-        final List<TextComponent> r_list = new ArrayList<>(List.of(Component.empty()));
-        StringBuilder r = new StringBuilder();
+        final List<TextComponent> r_list = new ArrayList<>(List.of(
+            Component.empty(),
+            Component.text("Enchantments:").color(COLOR_purple).decoration(TextDecoration.ITALIC, false)
+        ));
+        StringBuilder r = new StringBuilder("  ");
         int n = 0;
 
         // For each enchant on the item
@@ -100,9 +97,9 @@ public final class WeaponDecorator extends UtilityClass {
                 r.append(", ");
 
                 // Caveman word wrapping technology
-                if((n + 1) % 4 == 0) {
+                if(n % 3 == 0) {
                     r_list.add(Component.text(r.toString()).color(COLOR_gray).decoration(TextDecoration.ITALIC, false));
-                    r = new StringBuilder();
+                    r = new StringBuilder("  ");
                 }
             }
 
