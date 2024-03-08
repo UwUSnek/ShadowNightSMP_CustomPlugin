@@ -35,13 +35,13 @@ public final class EnchantingTableOverride extends UtilityClass implements Rnd {
         if(event.isCancelled()) return;
 
         // For each offer
-        HashMap<Integer, Pair<Enchantment, Integer>> _overrides = new HashMap<>();
+        final HashMap<Integer, Pair<Enchantment, Integer>> _overrides = new HashMap<>();
         for(EnchantmentOffer offer : event.getOffers()){
             // Skip empty offers
             if(offer == null) continue;
 
             // Roll new enchantment
-            Enchantment newEnchant = EnchantBlacklist.rerollETable(event.getItem());
+            final Enchantment newEnchant = EnchantBlacklist.rerollETable(event.getItem());
             int lvl = ((offer.getCost() / 30) * newEnchant.getMaxLevel());
 
             // Calculate level
@@ -52,7 +52,6 @@ public final class EnchantingTableOverride extends UtilityClass implements Rnd {
             // Save data in the override map and change the offers on the client's screen (changing them doesn't do anything on the server)
             _overrides.put(offer.getCost(), Pair.with(newEnchant, lvl));
             offer.setEnchantment(_enchantment_overrides.getOverride(newEnchant.translationKey()));
-            ChatManager.broadcast("" + _enchantment_overrides.getOverride(newEnchant.translationKey()));
             offer.setEnchantmentLevel(lvl);
         }
         overrides.put(event.getEnchanter().getUniqueId(), _overrides);

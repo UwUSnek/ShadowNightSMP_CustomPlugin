@@ -6,15 +6,14 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 
 
 
-public final class ATK_ReachArea extends ATK {
+public final class ATK_SphereArea extends ATK {
     private final double dist;
 
-    public ATK_ReachArea(final double _dist) {
+    public ATK_SphereArea(final double _dist) {
         dist = _dist;
     }
 
@@ -23,7 +22,7 @@ public final class ATK_ReachArea extends ATK {
     @Override
     public void execute(final @NotNull LivingEntity damager, @Nullable final LivingEntity directTarget, final @NotNull Location origin, @Nullable final ItemStack item) {
         for(Entity entity : damager.getNearbyEntities(dist, dist, dist)){
-            if(entity instanceof LivingEntity e) {
+            if(entity instanceof LivingEntity e && e.getLocation().distance(origin) < dist) {
                 executeBasicAttack(damager, e, origin, false, item, 1, false, null);
             }
         }

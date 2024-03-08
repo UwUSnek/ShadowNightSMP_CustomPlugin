@@ -1,16 +1,13 @@
 package org.uwu_snek.shadownight.items.implementations.spear;
 
-import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight.attackOverride.attacks.ATK_CylinderArea;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_LineArea;
-import org.uwu_snek.shadownight.attackOverride.attacks.ATK_ReachArea;
+import org.uwu_snek.shadownight.attackOverride.attacks.ATK_SphereArea;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
-import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
@@ -18,7 +15,7 @@ import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 
 public abstract class IM_Spear extends IM_MeleeWeapon {
-    private static final ATK_ReachArea abilityAttack = new ATK_ReachArea(5);
+    private static final ATK_CylinderArea abilityAttack = new ATK_CylinderArea(5, 2);
 
     public IM_Spear(final @NotNull String _displayName, final @NotNull _custom_item_id _customItemId, final double _hitDamage, final double _atkSpeed) {
         super(

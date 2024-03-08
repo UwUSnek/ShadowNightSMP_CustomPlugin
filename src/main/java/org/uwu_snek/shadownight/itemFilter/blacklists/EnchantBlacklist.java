@@ -63,7 +63,7 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
      * @return The new enchantment
      */
     public static Enchantment rerollETable(ItemStack item){
-        int chosen = rnd.nextInt(EnchantBlacklist.eTableWhitelist.size() - 1);
+        final int chosen = rnd.nextInt(EnchantBlacklist.eTableWhitelist.size() - 1);
         if(item.getType() == Material.BOOK || (EnchantBlacklist.eTableWhitelist.get(chosen).canEnchantItem(item))){
             return EnchantBlacklist.eTableWhitelist.get(chosen);
         }
