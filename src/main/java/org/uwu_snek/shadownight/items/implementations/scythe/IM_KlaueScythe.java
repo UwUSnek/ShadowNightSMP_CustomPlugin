@@ -1,6 +1,7 @@
 package org.uwu_snek.shadownight.items.implementations.scythe;
 
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -25,9 +26,33 @@ public final class IM_KlaueScythe extends IM_Scythe_Craftable {
 
         setAbilities(
             null,
-            new Ability(true, 0d, (player, item) -> shadowFuryKnockoff(player)),
-            new Ability(true, 0.5d, ScytheThrowDisplay::new),
-            new Ability(true, 0d, (player, item) -> teleportPlayer(player))
+            new Ability(
+                "Shadow Fury knockoff",
+                new String[]{ "Not implemented yet. Sowwie :<" },
+                true,
+                0d,
+                (player, item) -> shadowFuryKnockoff(player)
+            ),
+            new Ability(
+                "Throw",
+                new String[]{
+                    "Throw your scythe damaging all enemies",
+                    "in its path for §a100%§7 base damage."
+                },
+                true,
+                0.5d,
+                ScytheThrowDisplay::new
+            ),
+            new Ability(
+                "Teleport",
+                new String[]{
+                    "Teleport on top of the block you are looking at.",
+                    "Maximum distance: §a200§7 blocks."
+                },
+                true,
+                0d,
+                (player, item) -> teleportPlayer(player)
+            )
         );
     }
 

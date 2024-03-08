@@ -61,10 +61,10 @@ public abstract class IM {
 
 
     // Item abilities
-    private Ability abilityL = null;
-    private Ability abilityLS = null;
-    private Ability abilityR = null;
-    private Ability abilityRS = null;
+    public Ability abilityL = null;
+    public Ability abilityLS = null;
+    public Ability abilityR = null;
+    public Ability abilityRS = null;
 
 
     /**

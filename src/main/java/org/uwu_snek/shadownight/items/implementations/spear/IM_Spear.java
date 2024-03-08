@@ -1,5 +1,6 @@
 package org.uwu_snek.shadownight.items.implementations.spear;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +31,16 @@ public abstract class IM_Spear extends IM_MeleeWeapon {
             true
         );
 
-        Ability abilityHit = new Ability(true, 2d, IM_Spear::hitAbility);
+        Ability abilityHit = new Ability(
+            "Slash",
+            new String[]{
+                "Hit all enemies near you, knocking them back",
+                "and damaging them for §a100%§7 base damage."
+            },
+            true,
+            2d,
+            IM_Spear::hitAbility
+        );
         setAbilities(
             null,
             null,

@@ -165,6 +165,7 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEnchantItem(final @NotNull EnchantItemEvent event){
         EnchantingTableOverride.onEnchantItem(event);
+        ItemFilter.onEnchantItem(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -176,12 +177,14 @@ public final class ShadowNight_listener implements Listener {
     public void onPrepareAnvil(final @NotNull PrepareAnvilEvent event){
         NoAnvilLimit.onPrepareAnvil(event);
         AnvilFilter.onPrepareAnvil(event);
+        ItemFilter.onPrepareAnvil(event);
         MvpAnvilFormatting.onPrepareAnvil(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPrepareGrindstone(final @NotNull PrepareGrindstoneEvent event){
         GrindstoneFilter.onPrepareGrindstone(event);
+        ItemFilter.onPrepareGrindstone(event);
     }
 
 
@@ -189,6 +192,7 @@ public final class ShadowNight_listener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPrepareSmithing(final @NotNull PrepareSmithingEvent event){
         CustomUpgradeSmithingRecipe.onPrepareSmithing(event);
+        ItemFilter.onPrepareSmithing(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

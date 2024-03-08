@@ -1,5 +1,6 @@
 package org.uwu_snek.shadownight.items.implementations.dagger;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_Standard;
@@ -25,7 +26,13 @@ public abstract class IM_Dagger extends IM_MeleeWeapon {
             false
         );
 
-        Ability abilitySpeed = new Ability(true, 0.6d, (player, item) -> speedAbility(player));
+        Ability abilitySpeed = new Ability(
+            "Speed Boost",
+            new String[]{ "Gain §a+100%§f walking speed for §a4s§7." },
+            true,
+            0.6d,
+            (player, item) -> speedAbility(player)
+        );
         setAbilities(
             null,
             null,

@@ -85,7 +85,7 @@ public final class EnchantBlacklist extends UtilityClass implements Rnd {
         final Enchantment newEnchant = villagerWhitelist.get(rnd.nextInt(villagerWhitelist.size()));
         meta.addStoredEnchant(newEnchant, rnd.nextInt(newEnchant.getMaxLevel()) + 1, true);
         newResult.setItemMeta(meta);
-        Decorator.decorate(newResult);
+        Decorator.decorate(newResult, false);
 
         // Return modified copy of the recipe
         final MerchantRecipe newRecipe = new MerchantRecipe(

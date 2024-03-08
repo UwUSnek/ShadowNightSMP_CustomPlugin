@@ -6,11 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -43,12 +42,12 @@ public final class ItemFilter extends UtilityClass {
 
         if (!ItemBlacklist.deleteIfBLacklisted(cursor, player))
             if (!EnchantBlacklist.fixItemEnchants(cursor))
-                Decorator.decorate(cursor);
+                Decorator.decorate(cursor, false);
 
         if (item != null) {
             if (!ItemBlacklist.deleteIfBLacklisted(item, player))
                 if (!EnchantBlacklist.fixItemEnchants(item))
-                    Decorator.decorate(item);
+                    Decorator.decorate(item, false);
         }
     }
 
@@ -64,7 +63,7 @@ public final class ItemFilter extends UtilityClass {
 
         if(ItemBlacklist.deleteIfBLacklisted(newItemStack, player)) itemEntity.remove();
         else {
-            Decorator.decorate(newItemStack);
+            Decorator.decorate(newItemStack, false);
             itemEntity.setItemStack(newItemStack);
         }
     }
@@ -79,7 +78,7 @@ public final class ItemFilter extends UtilityClass {
         final ItemStack newItemStack = itemEntity.getItemStack();
 
         if(ItemBlacklist.deleteIfBLacklisted(newItemStack, null)) itemEntity.remove();
-        else if(!ItemVolatileList.onItemSpawn(event)) Decorator.decorate(newItemStack);
+        else if(!ItemVolatileList.onItemSpawn(event)) Decorator.decorate(newItemStack, false);
     }
 
 
@@ -91,7 +90,7 @@ public final class ItemFilter extends UtilityClass {
         if (event.getCaught() instanceof Item e) {
             final ItemStack item = e.getItemStack();
             if(EnchantBlacklist.fixItemEnchants(item)) e.setItemStack(item);
-            else Decorator.decorate(item);
+            else Decorator.decorate(item, false);
         }
     }
 
@@ -107,7 +106,7 @@ public final class ItemFilter extends UtilityClass {
                 if (item != null) {
                     if(!ItemBlacklist.deleteIfBLacklisted(item, null))
                         if(!EnchantBlacklist.fixItemEnchants(item))
-                            Decorator.decorate(item);
+                            Decorator.decorate(item, false);
                 }
             }
         }
@@ -125,7 +124,7 @@ public final class ItemFilter extends UtilityClass {
                 if (item != null) {
                     if(!ItemBlacklist.deleteIfBLacklisted(item, null))
                         if(!EnchantBlacklist.fixItemEnchants(item))
-                            Decorator.decorate(item);
+                            Decorator.decorate(item, false);
                 }
             }
         }
@@ -143,7 +142,7 @@ public final class ItemFilter extends UtilityClass {
             }
             else {
                 final ItemStack item = recipe.getResult();
-                Decorator.decorate(item);
+                Decorator.decorate(item, false);
                 event.setRecipe(new MerchantRecipe(
                     item,
                     recipe.getUses(),
@@ -167,8 +166,53 @@ public final class ItemFilter extends UtilityClass {
         ItemStack result = inv.getResult();
         if (result != null) {
             if (!ItemBlacklist.deleteIfBLacklisted(result, null))
-                Decorator.decorate(result);
+                Decorator.decorate(result, true);
             inv.setResult(result);
         }
+    }
+
+    /**
+     * Detects anvil merges.
+     */
+    public static void onPrepareAnvil(final @NotNull PrepareAnvilEvent event) {
+        AnvilInventory inv = event.getInventory();
+        ItemStack result = inv.getResult();
+        if (result != null) {
+            Decorator.decorate(result, true);
+            inv.setResult(result);
+        }
+    }
+
+    /**
+     * Detects smithing table events.
+     */
+    public static void onPrepareSmithing(final @NotNull PrepareSmithingEvent event) {
+        SmithingInventory inv = event.getInventory();
+        ItemStack result = inv.getResult();
+        if (result != null) {
+            Decorator.decorate(result, true);
+            inv.setResult(result);
+        }
+    }
+
+    /**
+     * Detects grindstone events.
+     */
+    public static void onPrepareGrindstone(final @NotNull PrepareGrindstoneEvent event) {
+        GrindstoneInventory inv = event.getInventory();
+        ItemStack result = inv.getResult();
+        if (result != null) {
+            Decorator.decorate(result, true);
+            inv.setResult(result);
+        }
+    }
+
+    /**
+     * Detects anvil merges.
+     * Filters items
+     */
+    public static void onEnchantItem(final @NotNull EnchantItemEvent event) {
+        ItemStack item = event.getItem();
+        Decorator.decorate(item, true);
     }
 }

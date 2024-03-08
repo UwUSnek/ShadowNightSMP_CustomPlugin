@@ -1,12 +1,13 @@
 package org.uwu_snek.shadownight.items;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 
@@ -17,9 +18,20 @@ public class Ability {
     private final long cooldown;
     private final BiConsumer<Player, ItemStack> onActivate;
     private final HashMap<UUID, Long> last_times;
+    private final String name;
+    private final List<String> description;
+
+    public final String getName(){ return name; }
+    public final List<String> getDescription(){ return description; }
+    public final long getCooldown(){ return cooldown; }
 
 
-    public Ability(final boolean cancelOgEvent, final double cooldown, final @NotNull BiConsumer<Player, ItemStack> onActivate) {
+
+
+    public Ability(final @NotNull String name, final @NotNull String[] description, final boolean cancelOgEvent, final double cooldown, final @NotNull BiConsumer<Player, ItemStack> onActivate) {
+        this.name = name;
+        this.description = Arrays.asList(description);
+
         this.cancelOgEvent = cancelOgEvent;
         this.cooldown = (long)(cooldown * 1000);
         this.onActivate = onActivate;

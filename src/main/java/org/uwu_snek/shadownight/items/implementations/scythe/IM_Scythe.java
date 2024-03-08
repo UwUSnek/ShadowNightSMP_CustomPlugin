@@ -1,5 +1,6 @@
 package org.uwu_snek.shadownight.items.implementations.scythe;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -34,7 +35,13 @@ public abstract class IM_Scythe extends IM_MeleeWeapon {
             true
         );
 
-        Ability abilityBreak = new Ability(true, 1d, IM_Scythe::breakBlocks);
+        Ability abilityBreak = new Ability(
+            "Harvesting",
+            new String[]{ "Break crops and vegetation in a §a" + (int)breakWidth + "*" + (int)breakLen + "§7 area in front of you." },
+            true,
+            1d,
+            IM_Scythe::breakBlocks
+        );
         setAbilities(
             null,
             null,
