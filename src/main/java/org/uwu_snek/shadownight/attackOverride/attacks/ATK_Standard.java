@@ -11,6 +11,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.attackOverride.CustomDamage;
+import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.logging.Level;
@@ -30,8 +31,9 @@ public final class ATK_Standard extends ATK {
             double charge = getEntityCharge(damager);
             executeBasicAttack(damager, directTarget, origin, false, item, charge, true, null);
 
+
             // Sweeping attack (follow Vanilla's requirements and area, but use custom damage and effects)
-            if(item == null) return;
+            if(item == null) return; // Punches cant sweep
             Material type = item.getType();
             if(
                 damager instanceof Player player && (

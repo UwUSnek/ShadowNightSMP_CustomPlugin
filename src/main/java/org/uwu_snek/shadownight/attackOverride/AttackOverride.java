@@ -13,8 +13,10 @@ import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.*;
+import java.util.logging.Level;
 
 
 
@@ -80,10 +82,15 @@ public final class AttackOverride extends UtilityClass implements Rnd {
             // Use specified custom attacks if attacker is using custom item. If not, compute standard attack on the vanilla item
             if (customItemId != null) {
                 IM itemManager = ItemManager.getValueFromId(customItemId);
-                if(itemManager.checkCooldown(damager.getUniqueId(), customItemId)) itemManager.attack.execute(damager, target, damager.getLocation(), item);
-                else event.setCancelled(true);
+                if(itemManager.checkCooldown(damager.getUniqueId(), customItemId)) {
+                    itemManager.attack.execute(damager, target, damager.getLocation(), item);
+                    ItemUtils.damageItem(damager, item, 1);
+                }
             }
-            else vanillaAttack.execute(damager, target, damager.getLocation(), item);
+            else {
+                vanillaAttack.execute(damager, target, damager.getLocation(), item);
+                if(item != null) ItemUtils.damageItem(damager, item, 1);
+            }
         }
     }
 

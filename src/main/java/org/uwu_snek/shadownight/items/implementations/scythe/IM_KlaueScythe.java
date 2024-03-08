@@ -27,14 +27,14 @@ public final class IM_KlaueScythe extends IM_Scythe_Craftable {
         setAbilities(
             null,
             new Ability(
-                "Shadow Fury knockoff",
+                "Trickster's Dance",
                 new String[]{ "Not implemented yet. Sowwie :<" },
                 true,
                 0d,
                 (player, item) -> shadowFuryKnockoff(player)
             ),
             new Ability(
-                "Throw",
+                "Slice",
                 new String[]{
                     "Throw your scythe damaging all enemies",
                     "in its path for §a100%§7 base damage."

@@ -25,7 +25,6 @@ public final class ATK_ReachArea extends ATK {
         for(Entity entity : damager.getNearbyEntities(dist, dist, dist)){
             if(entity instanceof LivingEntity e) {
                 executeBasicAttack(damager, e, origin, false, item, 1, false, null);
-                ItemUtils.damageItem(damager, item, 1);
             }
         }
         simulateSweepingEffect(origin);

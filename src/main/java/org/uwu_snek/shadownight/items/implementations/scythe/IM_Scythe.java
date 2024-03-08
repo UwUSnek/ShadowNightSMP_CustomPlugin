@@ -7,6 +7,7 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.*;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_ConeArea;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
@@ -78,7 +79,9 @@ public abstract class IM_Scythe extends IM_MeleeWeapon {
                     }
                     if (blocksBroken) ItemUtils.damageItem(player, item, 1);
                 }
+                ItemUtils.damageItem(player, item, 1);
             }, (long)(l * 2));
         }
+        ATK.simulateSweepingEffect(player.getLocation());
     }
 }

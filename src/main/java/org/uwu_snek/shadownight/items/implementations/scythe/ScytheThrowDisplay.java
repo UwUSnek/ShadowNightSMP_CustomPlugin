@@ -78,6 +78,9 @@ public final class ScytheThrowDisplay {
                 }
             )
         );
+
+
+        ItemUtils.damageItem(player, item, 1);
     }
 
 

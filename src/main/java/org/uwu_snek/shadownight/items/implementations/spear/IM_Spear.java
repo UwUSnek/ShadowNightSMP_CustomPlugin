@@ -12,6 +12,7 @@ import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
+import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 
 
@@ -54,5 +55,6 @@ public abstract class IM_Spear extends IM_MeleeWeapon {
 
     static private void hitAbility(final @NotNull Player player, final @NotNull ItemStack item) {
         abilityAttack.execute(player, null, player.getLocation(), item);
+        ItemUtils.damageItem(player, item, 1);
     }
 }

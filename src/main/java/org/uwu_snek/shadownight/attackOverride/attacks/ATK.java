@@ -168,7 +168,6 @@ public abstract class ATK implements Rnd {
             System.currentTimeMillis()
         ));
 
-        if(item != null) ItemUtils.damageItem(damager, item, 1);
 
 
 
@@ -177,7 +176,7 @@ public abstract class ATK implements Rnd {
         velocity.add(CustomKnockback.getKnockback(damager, target, origin, useOriginDirection, item));  // Add attack knockback
 
 
-        //TODO review and simplify custom scythe attacks
+        // Calculate damage
         final double damage = damageOverride == null ? CustomDamage.getDamage(item, canCrit, damager, target, charge) : damageOverride;
         applyMobEffects(damager, target, item);         // Apply vanilla mob effects
         applyEnchantEffects(damager, target, item);     // Apply enchantment effects
@@ -193,7 +192,7 @@ public abstract class ATK implements Rnd {
      * Simulates the Vanilla sweeping attack effect and sound in front of the location <pos> based on the pitch and yaw specified in it.
      * @param pos The target location
      */
-    protected static void simulateSweepingEffect(final @NotNull Location pos) {
+    public static void simulateSweepingEffect(final @NotNull Location pos) {
         World world = pos.getWorld();
         if(world == null) throw new RuntimeException("Failed to simulate sweeping effect: World is null");
         pos.getWorld().playSound(pos, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1f);

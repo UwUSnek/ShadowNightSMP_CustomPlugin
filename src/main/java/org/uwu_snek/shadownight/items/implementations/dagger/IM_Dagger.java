@@ -30,7 +30,7 @@ public abstract class IM_Dagger extends IM_MeleeWeapon {
             "Speed Boost",
             new String[]{ "Gain §a+100%§f walking speed for §a4s§7." },
             true,
-            0.6d,
+            6d,
             (player, item) -> speedAbility(player)
         );
         setAbilities(

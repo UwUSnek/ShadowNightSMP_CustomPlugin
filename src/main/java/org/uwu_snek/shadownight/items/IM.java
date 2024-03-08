@@ -180,6 +180,7 @@ public abstract class IM {
                     if (manager.replaceVanillaLInteractions) {
                         event.setCancelled(true);
                         if (manager.checkCooldown(player.getUniqueId(), customItemId)) manager.attack.execute(player, null, player.getLocation(), item);
+                        ItemUtils.damageItem(player, item, 1);
                     }
                     Ability targetAbility = (player.isSneaking() ? manager.abilityLS : manager.abilityL);
                     if (targetAbility != null) targetAbility.activate(player, item, event);

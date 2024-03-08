@@ -124,6 +124,7 @@ public final class WeaponDecorator extends UtilityClass {
         if(enchantsLore != null) lore.addAll(enchantsLore);
 
         lore.addAll(generateAbilityLore(manager));
+        lore.add(Component.empty());
         meta.lore(lore);
         item.setItemMeta(meta);
     }
