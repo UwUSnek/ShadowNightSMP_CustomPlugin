@@ -9,6 +9,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 
 
@@ -46,7 +47,7 @@ public final class ClaimUtils extends UtilityClass {
      * @param block The block to check
      * @return True claim, or null if the block is not claimed
      */
-    public static Claim getClaimAt(final @NotNull Block block) {
+    public static @Nullable Claim getClaimAt(final @NotNull Block block) {
         return GriefPrevention.instance.dataStore.getClaimAt(block.getLocation(), false, null);
     }
 }

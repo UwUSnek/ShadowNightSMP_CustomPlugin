@@ -11,10 +11,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.attackOverride.CustomDamage;
-import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
-import org.uwu_snek.shadownight.utils.utils;
-
-import java.util.logging.Level;
 
 
 

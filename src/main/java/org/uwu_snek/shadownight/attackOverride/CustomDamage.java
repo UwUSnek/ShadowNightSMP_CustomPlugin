@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.items.ItemManager;
+import org.uwu_snek.shadownight.items.VanillaProvider;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
@@ -24,49 +25,6 @@ import java.util.Map;
 
 public final class CustomDamage extends UtilityClass {
     /**
-     * A map containing the Vanilla damage of each weapon and tool because apparently Bukkit doesn't have a way to retrieve that information.
-     */
-    private static final Map<Material, Double> vanillaDamage = Map.ofEntries(
-        new AbstractMap.SimpleEntry<>(Material.WOODEN_SWORD,      4d),
-        new AbstractMap.SimpleEntry<>(Material.GOLDEN_SWORD,      4d),
-        new AbstractMap.SimpleEntry<>(Material.STONE_SWORD,       5d),
-        new AbstractMap.SimpleEntry<>(Material.IRON_SWORD,        6d),
-        new AbstractMap.SimpleEntry<>(Material.DIAMOND_SWORD,     7d),
-        new AbstractMap.SimpleEntry<>(Material.NETHERITE_SWORD,   8d),
-
-        new AbstractMap.SimpleEntry<>(Material.WOODEN_AXE,        7d),
-        new AbstractMap.SimpleEntry<>(Material.GOLDEN_AXE,        7d),
-        new AbstractMap.SimpleEntry<>(Material.STONE_AXE,         9d),
-        new AbstractMap.SimpleEntry<>(Material.IRON_AXE,          9d),
-        new AbstractMap.SimpleEntry<>(Material.DIAMOND_AXE,       9d),
-        new AbstractMap.SimpleEntry<>(Material.NETHERITE_AXE,     10d),
-
-        new AbstractMap.SimpleEntry<>(Material.WOODEN_PICKAXE,    2d),
-        new AbstractMap.SimpleEntry<>(Material.GOLDEN_PICKAXE,    2d),
-        new AbstractMap.SimpleEntry<>(Material.STONE_PICKAXE,     3d),
-        new AbstractMap.SimpleEntry<>(Material.IRON_PICKAXE,      4d),
-        new AbstractMap.SimpleEntry<>(Material.DIAMOND_PICKAXE,   5d),
-        new AbstractMap.SimpleEntry<>(Material.NETHERITE_PICKAXE, 6d),
-
-        new AbstractMap.SimpleEntry<>(Material.WOODEN_SHOVEL,     2.5d),
-        new AbstractMap.SimpleEntry<>(Material.GOLDEN_SHOVEL,     2.5d),
-        new AbstractMap.SimpleEntry<>(Material.STONE_SHOVEL,      3.5d),
-        new AbstractMap.SimpleEntry<>(Material.IRON_SHOVEL,       4.5d),
-        new AbstractMap.SimpleEntry<>(Material.DIAMOND_SHOVEL,    5.5d),
-        new AbstractMap.SimpleEntry<>(Material.NETHERITE_SHOVEL,  6.5d),
-
-        new AbstractMap.SimpleEntry<>(Material.WOODEN_HOE,        1d),
-        new AbstractMap.SimpleEntry<>(Material.GOLDEN_HOE,        1d),
-        new AbstractMap.SimpleEntry<>(Material.STONE_HOE,         1d),
-        new AbstractMap.SimpleEntry<>(Material.IRON_HOE,          1d),
-        new AbstractMap.SimpleEntry<>(Material.DIAMOND_HOE,       1d),
-        new AbstractMap.SimpleEntry<>(Material.NETHERITE_HOE,     1d),
-
-        new AbstractMap.SimpleEntry<>(Material.TRIDENT,           9d)
-    );
-
-
-    /**
      * Calculates the base damage of an attack from <damager> using the item <item>.
      * This doesn't include Enchantments or Potion effects, but it does take into account the base attack damage of the entity and the attack damage of custom items.
      * @param item The item to use
@@ -74,16 +32,15 @@ public final class CustomDamage extends UtilityClass {
      * @return The base damage
      */
     private static double getBaseDamage(@Nullable final ItemStack item, final @NotNull LivingEntity damager) {
-        // Get item base attack damage
+        // If an item was used, return its base damage
         final Long itemId = ItemUtils.getCustomItemId(item);
-        if(itemId != null) return ItemManager.getValueFromId(itemId).getHitDamage();                    // If item is a custom item, get the base damage from its item manager
-        else if(item != null && item.getType() != Material.AIR) {                                       // If item is a vanilla item
-            final Double _vanillaDamage = vanillaDamage.get(item.getType());                                // If the item has a vanilla hard coded damage value, use that
-            return _vanillaDamage == null ? 1d : _vanillaDamage;                                            // If not, return the default 1 damage
-        }
-        else {                                                                                          // If no item was used (most mobs & players punching)
-            final AttributeInstance attribute = damager.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);      // If the entity can attack (has an attack damage attribute) use that
-            return attribute == null ? 0 : attribute.getBaseValue();                                        // If not, return the default 0 damage
+        if(itemId != null) return ItemManager.getValueFromId(itemId).getHitDamage();
+        else if(item != null && item.getType() != Material.AIR) return VanillaProvider.getDamage(item.getType());
+
+        // If no item was used (most mobs & players punching), return the entity's base damage if it can attack, or 0 if not.
+        else {
+            final AttributeInstance attribute = damager.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+            return attribute == null ? 0 : attribute.getBaseValue();
         }
     }
 

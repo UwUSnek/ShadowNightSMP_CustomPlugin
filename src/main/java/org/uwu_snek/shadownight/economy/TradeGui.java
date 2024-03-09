@@ -26,7 +26,6 @@ import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.spigot.PlayerUtils;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Vector;
 
 
@@ -111,34 +110,29 @@ public final class TradeGui implements Listener {
      * Updates the remaining time display.
      */
     public void updateConfirmationNameTimer() {
-        final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
-        if(meta != null) meta.displayName(Component.text("§7Click to accept the trade! (" + timer.getTimeLeft() + "s)"));
-        Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
+        final ItemStack button = inv.getItem(buttonPlayerAccept);
+        if(button != null) ItemUtils.setDisplayName(button, Component.text("§7Click to accept the trade! (" + timer.getTimeLeft() + "s)"));
     }
 
     /**
      * Updates the text that tells the player if they have confirmed or can do so.
      */
     public void updateConfirmationName() {
-        final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
-        if(meta != null) meta.displayName(Component.text(playerHasAccepted ? "§aYou accepted the trade. Click to cancel." : "§dClick to accept the trade!"));
-        Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
+        final ItemStack button = inv.getItem(buttonPlayerAccept);
+        if(button != null) ItemUtils.setDisplayName(button, Component.text(playerHasAccepted ? "§aYou accepted the trade. Click to cancel." : "§dClick to accept the trade!"));
     }
 
     /**
      * Updates the list of given and received items.
      */
     public void updateConfirmationLore() {
-        final ItemMeta meta = Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Item meta is null").getItemMeta();
-        if(meta != null) {
+        final ItemStack button = inv.getItem(buttonPlayerAccept);
+        if(button != null) {
             ArrayList<Component> lore = new ArrayList<>();
-
             for (ItemStack item : items) lore.add(Component.text("§c-" + item.getAmount() + "x§f " + ItemUtils.getPlainItemName(item)));
             lore.add(Component.empty());
             for (ItemStack item : linkedGui.items) lore.add(Component.text("§a+" + item.getAmount() + "x§f " + ItemUtils.getPlainItemName(item)));
-
-            meta.lore(lore);
-            Objects.requireNonNull(inv.getItem(buttonPlayerAccept), "Button item is null").setItemMeta(meta);
+            ItemUtils.setLore(button, lore);
         }
     }
 
@@ -197,8 +191,7 @@ public final class TradeGui implements Listener {
         final ItemStack item = items.get(i);
 
         // Give item back to the player
-        final PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
-        final Long n = container.get(coin_key, PersistentDataType.LONG);
+        final Long n = item.getItemMeta().getPersistentDataContainer().get(coin_key, PersistentDataType.LONG);
         if(n != null) {
             Economy.addToBalance(player, n);
         }
@@ -222,7 +215,7 @@ public final class TradeGui implements Listener {
         final Inventory playerInv = _player.getInventory();
         final World world = _player.getWorld();
         for(ItemStack item : _items){
-            PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
+            PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
             Long n = container.get(coin_key, PersistentDataType.LONG);
             if(n != null) {
                 Economy.addToBalance(_player, n);
@@ -326,7 +319,7 @@ public final class TradeGui implements Listener {
                     // Add item
                     ItemStack coinItem = ItemUtils.createItemStack(Material.GOLD_NUGGET, 1, "§6" + inputTmp + " Coins");
                     ItemMeta meta = coinItem.getItemMeta();
-                    Objects.requireNonNull(meta, "Item meta is null").getPersistentDataContainer().set(coin_key, PersistentDataType.LONG, inputTmp);
+                    meta.getPersistentDataContainer().set(coin_key, PersistentDataType.LONG, inputTmp);
                     coinItem.setItemMeta(meta);
 
                     // Remove coins from player

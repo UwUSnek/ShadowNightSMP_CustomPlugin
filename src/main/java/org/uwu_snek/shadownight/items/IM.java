@@ -13,7 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,6 @@ import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
 import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
-import java.util.Objects;
 import java.util.UUID;
 
 
@@ -45,6 +43,7 @@ public abstract class IM {
     // Generated data
     private final Material _generated_material;
     private final int _generated_customModelData;
+    public static final double playerDefaultAtkSpeed = 4;
 
 
     // Custom Item properties
@@ -126,12 +125,17 @@ public abstract class IM {
 
 
     private void initDefaultItemStack() {
-        final double playerDefaultAtkSpeed = 4;
-        final ItemMeta meta = defaultItem.getItemMeta();
-
-        Objects.requireNonNull(meta, "Object meta is null");
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", (1 / atkSpeed) - playerDefaultAtkSpeed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-        defaultItem.setItemMeta(meta);
+        ItemUtils.addAttributeModifier(
+            defaultItem,
+            Attribute.GENERIC_ATTACK_SPEED,
+            new AttributeModifier(
+                UUID.randomUUID(),
+                "generic.attackSpeed",
+                (1 / atkSpeed) - playerDefaultAtkSpeed,
+                AttributeModifier.Operation.ADD_NUMBER,
+                EquipmentSlot.HAND
+            )
+        );
     }
 
 

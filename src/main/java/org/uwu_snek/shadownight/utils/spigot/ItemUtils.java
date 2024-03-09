@@ -6,6 +6,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,9 +20,12 @@ import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
 
 import static org.uwu_snek.shadownight.items.IM.itemIdKey;
 
@@ -36,9 +41,9 @@ public final class ItemUtils extends UtilityClass {
      * @param lore The item lore
      * @return The created ItemStack
      */
-    public static ItemStack createItemStack(final @NotNull Material material, final int number, final @NotNull String name, final @NotNull Component... lore) {
+    public static @NotNull ItemStack createItemStack(final @NotNull Material material, final int number, final @NotNull String name, final @NotNull Component... lore) {
         final ItemStack item = new ItemStack(material, number);
-        final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
+        final ItemMeta meta = item.getItemMeta();
 
         meta.displayName(Component.text("§f" + name));
         if(lore.length > 0) meta.lore(Arrays.asList(lore));
@@ -46,6 +51,31 @@ public final class ItemUtils extends UtilityClass {
         item.setItemMeta(meta);
         return item;
     }
+
+
+    public static void setLore(final @NotNull ItemStack item, final List<? extends Component> lore) {
+        ItemMeta meta = item.getItemMeta();
+        meta.lore(lore);
+        item.setItemMeta(meta);
+    }
+
+
+    public static void setDisplayName(final @NotNull ItemStack item, final Component name) {
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(name);
+        item.setItemMeta(meta);
+    }
+
+    public static void addAttributeModifier(final @NotNull ItemStack item, final @NotNull Attribute attribute, final @NotNull AttributeModifier modifier) {
+        ItemMeta meta = item.getItemMeta();
+        meta.addAttributeModifier(attribute, modifier);
+        item.setItemMeta(meta);
+    }
+
+
+
+
+
 
 
 
@@ -92,7 +122,7 @@ public final class ItemUtils extends UtilityClass {
      * @param lore The item lore
      * @return The created ItemStack
      */
-    public static ItemStack createItemStackCustom(
+    public static @NotNull ItemStack createItemStackCustom(
         final @NotNull Material material,
         final int number,
         final @NotNull String name,
@@ -101,7 +131,7 @@ public final class ItemUtils extends UtilityClass {
         final @NotNull Component... lore
     ) {
         final ItemStack item = new ItemStack(material, number);
-        final ItemMeta meta = Objects.requireNonNull(item.getItemMeta(), "Object meta is null");
+        final ItemMeta meta = item.getItemMeta();
 
         meta.displayName(Component.text(name));
         if(lore.length > 0) meta.lore(Arrays.asList(lore));
@@ -144,7 +174,7 @@ public final class ItemUtils extends UtilityClass {
      * @param item The ItemStack to get the name of
      * @return The display name
      */
-    public static String getPlainItemName(final @NotNull ItemStack item){
+    public static @NotNull String getPlainItemName(final @NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {
             Component displayName = meta.displayName();
@@ -163,7 +193,7 @@ public final class ItemUtils extends UtilityClass {
      * @param item The ItemStack to get the name of
      * @return The display name
      */
-    public static Component getFancyItemName(final @NotNull ItemStack item){
+    public static @NotNull Component getFancyItemName(final @NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {
             Component displayName = meta.displayName();
@@ -189,9 +219,31 @@ public final class ItemUtils extends UtilityClass {
      * @param item The item stack
      * @return The custom ID. null if the item is null or air or has no custom id
      */
-    public static Long getCustomItemId(final @Nullable ItemStack item) {
+    public static @Nullable Long getCustomItemId(final @Nullable ItemStack item) {
         if(item == null || item.getType() == Material.AIR) return null;
-        PersistentDataContainer container = Objects.requireNonNull(item.getItemMeta(), "Item meta is null").getPersistentDataContainer();
-        return container.get(IM.itemIdKey, PersistentDataType.LONG);
+        return item.getItemMeta().getPersistentDataContainer().get(IM.itemIdKey, PersistentDataType.LONG);
+    }
+
+
+    /**
+     * Calculates the final value of an attribute based on the attribute modifiers.
+     * @param item The item
+     * @param attribute The attribute to calculate
+     * @return The final value of the attribute
+     */
+    public static double computeModifiers(final @NotNull ItemStack item, final @NotNull Attribute attribute) {
+        double base = 0;
+        double scalar = 1;
+        double mult = 1;
+        final Collection<AttributeModifier> modifiers = item.getItemMeta().getAttributeModifiers(attribute);
+        if(modifiers != null) for(AttributeModifier a : modifiers) {
+            final double amount = a.getAmount();
+            switch (a.getOperation()) {
+                case ADD_NUMBER -> base += amount;
+                case ADD_SCALAR -> scalar += amount;
+                case MULTIPLY_SCALAR_1 -> mult *= 1 + amount;
+            }
+        }
+        return base * scalar * mult;
     }
 }

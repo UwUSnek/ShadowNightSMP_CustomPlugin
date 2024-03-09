@@ -32,15 +32,9 @@ public final class Decorator extends UtilityClass {
                 item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
                 final IM manager = ItemManager.getValueFromId(customId);
 
-                // Custom melee weapons
-                if(manager instanceof IM_MeleeWeapon) {
-                    WeaponDecorator.decorateCustomMelee(item, manager);
-                }
-
-                // Vanilla ranged weapons
-                else if(manager instanceof IM_RangedWeapon) {
-                    WeaponDecorator.decorateCustomRanged(item, manager);
-                }
+                // Custom weapons
+                /**/ if(manager instanceof IM_MeleeWeapon)  WeaponDecorator.decorateCustomMelee(item,  manager);
+                else if(manager instanceof IM_RangedWeapon) WeaponDecorator.decorateCustomRanged(item, manager);
             }
             else {
                 final Material itemType = item.getType();

@@ -9,7 +9,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.utils.math.Func;
-import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 import java.util.Collection;
 

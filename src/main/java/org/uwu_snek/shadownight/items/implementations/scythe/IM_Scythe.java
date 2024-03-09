@@ -1,6 +1,5 @@
 package org.uwu_snek.shadownight.items.implementations.scythe;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -11,14 +10,10 @@ import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_ConeArea;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
-import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
-import org.uwu_snek.shadownight.utils.utils;
-
-import java.util.logging.Level;
 
 
 

@@ -1,7 +1,6 @@
 package org.uwu_snek.shadownight.items.implementations.scythe;
 
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

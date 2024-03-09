@@ -1,31 +1,8 @@
 package org.uwu_snek.shadownight.items;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.uwu_snek.shadownight.ShadowNight;
-import org.uwu_snek.shadownight._generated._custom_item_data;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
-import org.uwu_snek.shadownight.items.guiManagers.CustomUpgradeSmithingRecipe;
-import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
-
-import java.util.Objects;
-import java.util.UUID;
 
 
 

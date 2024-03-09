@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 
 
@@ -20,7 +22,11 @@ public final class utils extends UtilityClass {
         ShadowNight.plugin.getLogger().log(level, message);
     }
 
-
+    public static <E> void addAllIfNotNull(List<E> list, Collection<? extends E> c) {
+        if (c != null) {
+            list.addAll(c);
+        }
+    }
 
     public static byte[] imageToByteArray(final @NotNull BufferedImage image) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

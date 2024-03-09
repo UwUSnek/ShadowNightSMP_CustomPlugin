@@ -56,7 +56,7 @@ public final class ChatUtils extends UtilityClass {
      * @return A string containing the formatted duration
      */
     @SuppressWarnings("unused")
-    public static String sToDuration(final @NotNull Long s, final boolean useSpaces) {
+    public static @NotNull String sToDuration(final @NotNull Long s, final boolean useSpaces) {
         return sToDuration(s, useSpaces ? " " : "");
     }
 
@@ -67,11 +67,11 @@ public final class ChatUtils extends UtilityClass {
      * @return A string containing the formatted duration
      */
     @SuppressWarnings("unused")
-    public static String msToDuration(final @NotNull Long ms, final boolean useSpaces) {
+    public static @NotNull String msToDuration(final @NotNull Long ms, final boolean useSpaces) {
         return msToDuration(ms, useSpaces ? " " : "");
     }
 
-    private static String sToDuration(final @NotNull Long s, final @NotNull String c) {
+    private static @NotNull String sToDuration(final @NotNull Long s, final @NotNull String c) {
         return
             (s >= 86400 ? (s / 86400      + "d" + c) : "") +
             (s >= 3600  ? (s / 3600  % 24 + "h" + c) : "") +
@@ -80,7 +80,7 @@ public final class ChatUtils extends UtilityClass {
             ;
     }
 
-    private static String msToDuration(final @NotNull Long m, final @NotNull String c) {
+    private static @NotNull String msToDuration(final @NotNull Long m, final @NotNull String c) {
         return
             (m >= 60000 ? (m / 60000 % 60000 + "m" + c) : "") +
             (m >= 1000  ? (m / 1000  % 1000  + "s" + c) : "") +
@@ -97,7 +97,7 @@ public final class ChatUtils extends UtilityClass {
      * @return The stripped string
      */
     @SuppressWarnings("unused")
-    public static String stripPrivateCharacters(final @NotNull String s) {
+    public static @NotNull String stripPrivateCharacters(final @NotNull String s) {
         return s.replaceAll("[\uE000-\uF8FF]", "");
     }
 
@@ -107,7 +107,7 @@ public final class ChatUtils extends UtilityClass {
      * @return The stripped string
      */
     @SuppressWarnings("unused")
-    public static String stripColor(final @NotNull String s) {
+    public static @NotNull String stripColor(final @NotNull String s) {
         return s.replaceAll("[&§]([0-9a-fk-or])", "");
     }
 
@@ -117,7 +117,7 @@ public final class ChatUtils extends UtilityClass {
      * @return The translated string
      */
     @SuppressWarnings("unused")
-    public static String translateColor(final @NotNull String s) {
+    public static @NotNull String translateColor(final @NotNull String s) {
         return s.replaceAll("&([0-9a-fk-or])", "§$1");
     }
 
@@ -133,7 +133,7 @@ public final class ChatUtils extends UtilityClass {
      * @return The translated string as a TextComponent
      */
     @SuppressWarnings("unused")
-    public static TextComponent translateColorToComponent(final @NotNull String s) {
+    public static @NotNull TextComponent translateColorToComponent(final @NotNull String s) {
         TextComponent output = Component.text("").decoration(TextDecoration.ITALIC, false);
 
 

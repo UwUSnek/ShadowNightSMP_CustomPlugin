@@ -42,23 +42,36 @@ public final class PlayerUtils extends UtilityClass {
 
 
     //TODO actually check if this is called from a thread that isn't the main one
-    public static User getOfflineLpUser(final @NotNull UUID uniqueId) {
+    /**
+     * Retrieves the LuckPerms user of an offline player.
+     * @param uniqueId The UUID of the player. Must be a valid UUID
+     * @return The LuckPerms user
+     */
+    public static @NotNull User getOfflineLpUser(final @NotNull UUID uniqueId) {
         UserManager userManager = ShadowNight.lpApi.getUserManager();
         CompletableFuture<User> userFuture = userManager.loadUser(uniqueId);
 
         return userFuture.join(); // block until the User is loaded
     }
 
-    // Returns the formatted player name with the Server rank as prefix
-    public static String getFancyName(final @NotNull Player player) {
+    /**
+     * Returns the formatted name of a player with the Server rank as prefix
+     * @param player The player
+     * @return The formatted name
+     */
+    public static @NotNull String getFancyName(final @NotNull Player player) {
         User user = ShadowNight.lpApi.getPlayerAdapter(org.bukkit.entity.Player.class).getUser(player);
         return user.getCachedData().getMetaData().getPrefix() + " " + player.getName();
     }
 
-    // Returns the formatted player name with the Server rank as prefix.
-    // This works with offline players but is way more expensive.
-    // Only use it if you cannot be sure the players is online
-    public static String getFancyNameOffline(final @NotNull OfflinePlayer offlinePlayer) {
+    /**
+     * Returns the formatted name of an offline player with the Server rank as prefix.
+     * This works with offline players but is way more expensive.
+     * Only use it if you cannot be sure the players is online
+     * @param offlinePlayer The offline player
+     * @return The formatted name
+     */
+    public static @NotNull String getFancyNameOffline(final @NotNull OfflinePlayer offlinePlayer) {
         User user = getOfflineLpUser(offlinePlayer.getUniqueId());
         return user.getCachedData().getMetaData().getPrefix() + " " + offlinePlayer.getName();
     }
@@ -67,7 +80,7 @@ public final class PlayerUtils extends UtilityClass {
 
 
 
-    public static String getGroupDisplayName(final @NotNull org.bukkit.entity.Player player) {
+    public static @Nullable String getGroupDisplayName(final @NotNull org.bukkit.entity.Player player) {
         return Objects.requireNonNull(ShadowNight.lpApi.getGroupManager().getGroup(
             Objects.requireNonNull(ShadowNight.lpApi.getPlayerAdapter(org.bukkit.entity.Player.class)
                     .getUser(player)
@@ -79,7 +92,7 @@ public final class PlayerUtils extends UtilityClass {
     }
 
     // way slower //TODO documentation
-    public static String getGroupDisplayNameOffline(final @NotNull OfflinePlayer player) {
+    public static @Nullable String getGroupDisplayNameOffline(final @NotNull OfflinePlayer player) {
         final UserManager userManager = ShadowNight.lpApi.getUserManager();
         CompletableFuture<User> userFuture = userManager.loadUser(player.getUniqueId());
 

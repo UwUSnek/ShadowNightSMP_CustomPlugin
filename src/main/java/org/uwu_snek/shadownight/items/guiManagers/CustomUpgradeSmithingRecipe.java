@@ -62,8 +62,6 @@ public final class CustomUpgradeSmithingRecipe {
                 // Retrieve and validate item metas
                 ItemMeta b_meta = b.getItemMeta();
                 ItemMeta r_meta = recipe.result.getItemMeta();
-                if(b_meta == null) throw new RuntimeException("Base Custom item Meta is null");
-                if(r_meta == null) throw new RuntimeException("Result Custom item Meta is null");
 
 
                 // Keep display name if different from the default one. Use default name of the new CustomItem otherwise

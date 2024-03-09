@@ -5,13 +5,18 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.uwu_snek.shadownight.attackOverride.CustomDamage;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.items.VanillaProvider;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -31,7 +36,7 @@ public final class WeaponDecorator extends UtilityClass {
 
 
     private static List<TextComponent> generateAbilityDescription(final @NotNull Ability ability, final @NotNull String activation) {
-        List<TextComponent> r = new ArrayList<>();
+        final List<TextComponent> r = new ArrayList<>();
         r.add(Component.empty());
 
         // Name and activation mode
@@ -68,7 +73,7 @@ public final class WeaponDecorator extends UtilityClass {
 
 
     private static List<TextComponent> generateAbilityLore(final @NotNull IM manager) {
-        List<TextComponent> r = new ArrayList<>();
+        final List<TextComponent> r = new ArrayList<>();
         if(manager.abilityL != null) r.addAll(generateAbilityDescription(manager.abilityL, "lclick"));
         if(manager.abilityLS != null && (manager.abilityL == null || manager.abilityLS != manager.abilityL)) r.addAll(generateAbilityDescription(manager.abilityLS, "sneak + lclick"));
         if(manager.abilityR != null) r.addAll(generateAbilityDescription(manager.abilityR, "rclick"));
@@ -78,14 +83,28 @@ public final class WeaponDecorator extends UtilityClass {
 
 
 
+    private static TextComponent decorateStat(final @NotNull String name, final double value, final @Nullable String unit) {
+        return Component.empty().decoration(TextDecoration.ITALIC, false)
+            .append(Component.text(name + ": ")).color(COLOR_violet)
+            .append(Component.text(valueFormat.format(value) + (unit == null ? "" : unit)).color(COLOR_gray))
+        ;
+    }
 
     private static List<TextComponent> generateStatsLore(final @NotNull IM manager) {
-        List<TextComponent> r = new ArrayList<>();
-        r.add(Component.text("DMG: ").color(COLOR_violet).append(Component.text(valueFormat.format(manager.getHitDamage()))            .color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
-        r.add(Component.text("ATS: ").color(COLOR_violet).append(Component.text(valueFormat.format(manager.getAttackSpeed()) + "s")    .color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
-        r.add(Component.text("KB: ") .color(COLOR_violet).append(Component.text(valueFormat.format(manager.getHitKbMultiplier()) + "x").color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
+        final List<TextComponent> r = new ArrayList<>();
+        r.add(decorateStat("DMG", manager.getHitDamage(),      null));
+        r.add(decorateStat("ATS", manager.getAttackSpeed(),    "s"));
+        r.add(decorateStat("KB", manager.getHitKbMultiplier(), "x"));
         return r;
     }
+    private static List<TextComponent> generateStatsLore(final @NotNull ItemStack item) {
+        final List<TextComponent> r = new ArrayList<>();
+        r.add(decorateStat("DMG", VanillaProvider.getDamage(item.getType()), null));
+        r.add(decorateStat("ATS", VanillaProvider.getAts(item.getType()), "s"));
+        r.add(decorateStat("KB", 1d, "x"));
+        return r;
+    }
+
 
 
 
@@ -124,24 +143,19 @@ public final class WeaponDecorator extends UtilityClass {
 
 
     public static void decorateCustomMelee(final @NotNull ItemStack item, final @NotNull IM manager){
-        //TODO move lore set to ItemUtils
-        ItemMeta meta = item.getItemMeta();
         List<TextComponent> lore = new ArrayList<>(generateStatsLore(manager));
-
-        List<TextComponent> enchantsLore = generateEnchantsLore(item);
-        if(enchantsLore != null) lore.addAll(enchantsLore);
-
+        utils.addAllIfNotNull(lore, generateEnchantsLore(item));
         lore.addAll(generateAbilityLore(manager));
         lore.add(Component.empty());
-        meta.lore(lore);
-        item.setItemMeta(meta);
+        ItemUtils.setLore(item, lore);
     }
 
 
     public static void decorateVanillaMelee(final @NotNull ItemStack item){
-        //ItemMeta meta = item.getItemMeta();
-        //meta.displayName(Component.text("TEST WEAPON"));
-        //item.setItemMeta(meta);
+        List<TextComponent> lore = new ArrayList<>(generateStatsLore(item));
+        utils.addAllIfNotNull(lore, generateEnchantsLore(item));
+        lore.add(Component.empty());
+        ItemUtils.setLore(item, lore);
     }
 
 
