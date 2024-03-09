@@ -29,6 +29,7 @@ public final class WeaponDecorator extends UtilityClass {
 
 
 
+
     private static List<TextComponent> generateAbilityDescription(final @NotNull Ability ability, final @NotNull String activation) {
         List<TextComponent> r = new ArrayList<>();
         r.add(Component.empty());
@@ -46,11 +47,12 @@ public final class WeaponDecorator extends UtilityClass {
         );
 
         // Description
-        for(String l : ability.getDescription()) r.add(
+        for(String l : ability.getDescription()) r.add( // This prevents parts of the converted string from reverting to the default style
+            Component.empty().color(COLOR_gray).append(
             Component.text("  " + l)
             .color(COLOR_gray)
             .decoration(TextDecoration.ITALIC, false)
-        );
+        ));
 
         // Cooldown
         r.add(
@@ -61,6 +63,9 @@ public final class WeaponDecorator extends UtilityClass {
 
         return r;
     }
+
+
+
 
     private static List<TextComponent> generateAbilityLore(final @NotNull IM manager) {
         List<TextComponent> r = new ArrayList<>();
@@ -73,6 +78,7 @@ public final class WeaponDecorator extends UtilityClass {
 
 
 
+
     private static List<TextComponent> generateStatsLore(final @NotNull IM manager) {
         List<TextComponent> r = new ArrayList<>();
         r.add(Component.text("DMG: ").color(COLOR_violet).append(Component.text(valueFormat.format(manager.getHitDamage()))            .color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
@@ -80,6 +86,7 @@ public final class WeaponDecorator extends UtilityClass {
         r.add(Component.text("KB: ") .color(COLOR_violet).append(Component.text(valueFormat.format(manager.getHitKbMultiplier()) + "x").color(COLOR_gray)).decoration(TextDecoration.ITALIC, false));
         return r;
     }
+
 
 
 
@@ -112,6 +119,7 @@ public final class WeaponDecorator extends UtilityClass {
         // Return the lines or null if the item is not enchanted
         return n == 0 ? null : r_list;
     }
+
 
 
 

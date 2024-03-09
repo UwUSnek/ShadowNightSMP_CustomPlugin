@@ -38,5 +38,6 @@
     "enchantment.minecraft.smite": "Smite",
     "enchantment.minecraft.thorns": "Thorns",
     "enchantment.minecraft.unbreaking": "Unbreaking",
-    "container.repair.expensive": "\u00a7aEnchantment Cost: 40+"
+    "container.repair.expensive": "\u00a7aEnchantment Cost: 40+",
+    "container.crafting": ""
 }
