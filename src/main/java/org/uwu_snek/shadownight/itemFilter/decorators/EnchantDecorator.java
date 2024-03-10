@@ -57,7 +57,8 @@ public final class EnchantDecorator extends UtilityClass {
         ),
         new AbstractMap.SimpleEntry<NamespacedKey, Function<Integer, String>>(
             new NamespacedKey(NamespacedKey.MINECRAFT, "efficiency"),
-            (lvl) -> "Increases mining speed by " + Decorator.formatValue("//TODO" + "%") + "." //TODO
+            (lvl) -> "Increases a tool's mining speed by " + Decorator.formatValue(lvl * lvl + 1) + "."
+            //TODO https://minecraft.wiki/w/Breaking#Speed make this stat visible
         ),
         new AbstractMap.SimpleEntry<NamespacedKey, Function<Integer, String>>(
             new NamespacedKey(NamespacedKey.MINECRAFT, "feather_falling"),
@@ -159,7 +160,8 @@ public final class EnchantDecorator extends UtilityClass {
         ),
         new AbstractMap.SimpleEntry<NamespacedKey, Function<Integer, String>>(
             new NamespacedKey(NamespacedKey.MINECRAFT, "riptide"),
-            (lvl) -> ""
+            (lvl) -> "Allows you to launch yourself by throwing your trident.\n" +
+                     "Riptide tridents can only be thrown while standing in water or being exposed to rain."
         ),
         new AbstractMap.SimpleEntry<NamespacedKey, Function<Integer, String>>(
             new NamespacedKey(NamespacedKey.MINECRAFT, "sharpness"),
