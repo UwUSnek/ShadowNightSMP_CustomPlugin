@@ -106,11 +106,11 @@ commands:
         description: test command
         usage: /dungeontest
         permission: op
+    sngiveid:
+        description: admin command
+        usage: /sngiveid <id> <amount>
+        permission: op
     sngive:
         description: admin command
-        usage: /sngive <id> <amount>
-        permission: op
-    sngiveall:
-        description: admin command
-        usage: /sngiveall <regex pattern>
+        usage: /sngive <regex pattern>
         permission: op
