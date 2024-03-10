@@ -7,13 +7,20 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.map.MapFont;
 import org.bukkit.map.MinecraftFont;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight.ShadowNight;
+import org.uwu_snek.shadownight._generated._build_counter;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.items.IM_RangedWeapon;
@@ -21,10 +28,12 @@ import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 
 
@@ -69,7 +78,19 @@ public final class Decorator extends UtilityClass {
 
 
 
+    private static final NamespacedKey decorationVersionKey = new NamespacedKey(ShadowNight.plugin, "decoration_version");
     public static void decorate(final @NotNull ItemStack item, final boolean force){
+
+        // Check and update the version and return if the item is up-to-date
+        final ItemMeta meta = item.getItemMeta();
+        final PersistentDataContainer container = meta.getPersistentDataContainer();
+        final Integer version = container.get(decorationVersionKey, PersistentDataType.INTEGER);
+        if(version == null || version < _build_counter.getCurrentValue()) {
+            container.set(decorationVersionKey, PersistentDataType.INTEGER, _build_counter.getCurrentValue());
+            item.setItemMeta(meta);
+        }
+        else return;
+
 
         // Enchantment books
         if(item.getType() == Material.ENCHANTED_BOOK) {

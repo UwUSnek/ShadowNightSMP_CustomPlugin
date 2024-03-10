@@ -1,5 +1,6 @@
 package org.uwu_snek.shadownight.itemFilter;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -20,6 +21,9 @@ import org.uwu_snek.shadownight.itemFilter.blacklists.ItemBlacklist;
 import org.uwu_snek.shadownight.itemFilter.blacklists.ItemVolatileList;
 import org.uwu_snek.shadownight.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+import org.uwu_snek.shadownight.utils.utils;
+
+import java.util.logging.Level;
 
 
 
@@ -40,14 +44,20 @@ public final class ItemFilter extends UtilityClass {
         final ItemStack cursor = event.getCursor();
         final ItemStack item = event.getCurrentItem();
 
-        if (!ItemBlacklist.deleteIfBLacklisted(cursor, player))
-            if (!EnchantBlacklist.fixItemEnchants(cursor))
-                Decorator.decorate(cursor, false);
+        if(cursor.getType() != Material.AIR) {
+            if (!ItemBlacklist.deleteIfBLacklisted(cursor, player)) {
+                if (!EnchantBlacklist.fixItemEnchants(cursor)) {
+                    Decorator.decorate(cursor, false);
+                }
+            }
+        }
 
-        if (item != null) {
-            if (!ItemBlacklist.deleteIfBLacklisted(item, player))
-                if (!EnchantBlacklist.fixItemEnchants(item))
+        if (item != null && item.getType() != Material.AIR) {
+            if (!ItemBlacklist.deleteIfBLacklisted(item, player)) {
+                if (!EnchantBlacklist.fixItemEnchants(item)) {
                     Decorator.decorate(item, false);
+                }
+            }
         }
     }
 
@@ -103,7 +113,7 @@ public final class ItemFilter extends UtilityClass {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && block != null && block.getState() instanceof BlockInventoryHolder b) {
             Inventory inv = b.getInventory();
             for (ItemStack item : inv.getContents()) {
-                if (item != null) {
+                if (item != null && item.getType() != Material.AIR) {
                     if(!ItemBlacklist.deleteIfBLacklisted(item, null))
                         if(!EnchantBlacklist.fixItemEnchants(item))
                             Decorator.decorate(item, false);
@@ -121,7 +131,7 @@ public final class ItemFilter extends UtilityClass {
         if (block.getState() instanceof BlockInventoryHolder b) {
             Inventory inv = b.getInventory();
             for (ItemStack item : inv.getContents()) {
-                if (item != null) {
+                if (item != null && item.getType() != Material.AIR) {
                     if(!ItemBlacklist.deleteIfBLacklisted(item, null))
                         if(!EnchantBlacklist.fixItemEnchants(item))
                             Decorator.decorate(item, false);
@@ -164,7 +174,7 @@ public final class ItemFilter extends UtilityClass {
     public static void onPrepareItemCraft(final @NotNull PrepareItemCraftEvent event) {
         CraftingInventory inv = event.getInventory();
         ItemStack result = inv.getResult();
-        if (result != null) {
+        if (result != null && result.getType() != Material.AIR) {
             if (!ItemBlacklist.deleteIfBLacklisted(result, null))
                 Decorator.decorate(result, true);
             inv.setResult(result);
@@ -177,7 +187,7 @@ public final class ItemFilter extends UtilityClass {
     public static void onPrepareAnvil(final @NotNull PrepareAnvilEvent event) {
         AnvilInventory inv = event.getInventory();
         ItemStack result = inv.getResult();
-        if (result != null) {
+        if (result != null && result.getType() != Material.AIR) {
             Decorator.decorate(result, true);
             inv.setResult(result);
         }
@@ -189,7 +199,7 @@ public final class ItemFilter extends UtilityClass {
     public static void onPrepareSmithing(final @NotNull PrepareSmithingEvent event) {
         SmithingInventory inv = event.getInventory();
         ItemStack result = inv.getResult();
-        if (result != null) {
+        if (result != null && result.getType() != Material.AIR) {
             Decorator.decorate(result, true);
             inv.setResult(result);
         }
@@ -201,7 +211,7 @@ public final class ItemFilter extends UtilityClass {
     public static void onPrepareGrindstone(final @NotNull PrepareGrindstoneEvent event) {
         GrindstoneInventory inv = event.getInventory();
         ItemStack result = inv.getResult();
-        if (result != null) {
+        if (result != null && result.getType() != Material.AIR) {
             Decorator.decorate(result, true);
             inv.setResult(result);
         }

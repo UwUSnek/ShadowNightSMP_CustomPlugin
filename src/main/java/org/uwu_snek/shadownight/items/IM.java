@@ -30,7 +30,7 @@ import java.util.UUID;
 
 public abstract class IM {
     // Basic data
-    public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "customItemId");
+    public static final NamespacedKey itemIdKey = new NamespacedKey(ShadowNight.plugin, "custom_id");
     protected final ItemStack defaultItem;
 
     // Attack data and infrastructure

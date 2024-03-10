@@ -53,6 +53,45 @@ public final class ItemUtils extends UtilityClass {
     }
 
 
+
+
+    /**
+     * Creates an item with a custom name, model, id and lore.
+     * @param material The material of the item stack
+     * @param number The stack size
+     * @param name The display name
+     * @param customModelData The custom model data to use
+     * @param customItemId The custom ItemID
+     * @param lore The item lore
+     * @return The created ItemStack
+     */
+    public static @NotNull ItemStack createItemStackCustom(
+        final @NotNull Material material,
+        final int number,
+        final @NotNull String name,
+        final int customModelData,
+        final long customItemId,
+        final @NotNull Component... lore
+    ) {
+        final ItemStack item = new ItemStack(material, number);
+        final ItemMeta meta = item.getItemMeta();
+
+        meta.displayName(Component.text(name));
+        if(lore.length > 0) meta.lore(Arrays.asList(lore));
+        meta.setCustomModelData(customModelData);
+
+        final PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(itemIdKey, PersistentDataType.LONG, customItemId);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
+
+
+
+
+
     public static void setLore(final @NotNull ItemStack item, final @Nullable List<? extends Component> lore) {
         ItemMeta meta = item.getItemMeta();
         meta.lore(lore);
@@ -114,41 +153,6 @@ public final class ItemUtils extends UtilityClass {
             }
         }
         return false;
-    }
-
-
-
-
-    /**
-     * Creates an item with a custom name, model, id and lore.
-     * @param material The material of the item stack
-     * @param number The stack size
-     * @param name The display name
-     * @param customModelData The custom model data to use
-     * @param customItemId The custom ItemID
-     * @param lore The item lore
-     * @return The created ItemStack
-     */
-    public static @NotNull ItemStack createItemStackCustom(
-        final @NotNull Material material,
-        final int number,
-        final @NotNull String name,
-        final int customModelData,
-        final long customItemId,
-        final @NotNull Component... lore
-    ) {
-        final ItemStack item = new ItemStack(material, number);
-        final ItemMeta meta = item.getItemMeta();
-
-        meta.displayName(Component.text(name));
-        if(lore.length > 0) meta.lore(Arrays.asList(lore));
-        meta.setCustomModelData(customModelData);
-
-        final PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(itemIdKey, PersistentDataType.LONG, customItemId);
-
-        item.setItemMeta(meta);
-        return item;
     }
 
 
