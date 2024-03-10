@@ -3,6 +3,7 @@ package org.uwu_snek.shadownight.itemFilter.decorators;
 import kotlin.collections.ArrayDeque;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -201,8 +202,12 @@ public final class EnchantDecorator extends UtilityClass {
 
     private static @NotNull List<Component> generateEnchantLore(final @NotNull Enchantment enchant, final int lvl) {
         final List<Component> r = new ArrayDeque<>();
-        //FIXME use generated enchant name map from (overridden) translation key -> actual name
-        r.add(enchant.displayName(lvl).color(enchant.isCursed() ? Decorator.COLOR_red : Decorator.COLOR_purple).decoration(TextDecoration.ITALIC, false));
+        r.add(
+            //FIXME REPLACE SCUFFED TRANSLATION WITH REAL GENERATED MAP (serializing the name makes it use the local translation or something)
+            Component.text(PlainTextComponentSerializer.plainText().serialize(enchant.displayName(lvl)))
+            .color(enchant.isCursed() ? Decorator.COLOR_red : Decorator.COLOR_purple)
+            .decoration(TextDecoration.ITALIC, false)
+        );
         r.addAll(Decorator.formatParagraph(enchantmentDescriptions.get(enchant.getKey()).apply(lvl), 2, Decorator.COLOR_gray));
         return r;
     }

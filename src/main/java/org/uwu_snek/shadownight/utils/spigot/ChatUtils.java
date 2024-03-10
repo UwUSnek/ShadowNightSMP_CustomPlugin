@@ -6,16 +6,80 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
+import org.bukkit.map.MapFont;
+import org.bukkit.map.MinecraftFont;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.LinkedHashSet;
+import java.util.logging.Level;
 
 
 
 
 public final class ChatUtils extends UtilityClass {
     public static final String serverPrefix = "§d§l[§5§lSN§d§l] §r";
+
+
+    /**
+     * Calculates the width of a character.
+     * The width is based on the default Minecraft font.
+     * @param c The character to measure
+     * @param fallback The value to return if <c> doesn't have a specified width
+     * @return The width of the character expressed in pixels.
+     */
+    public static int getCharWidth(final char c, final int fallback) {
+        MapFont.CharacterSprite sprite = MinecraftFont.Font.getChar(c);
+        return sprite == null ? fallback : sprite.getWidth();
+    }
+
+    /**
+     * Splits the string into <maxLineLen> pixels long lines, taking into account the width of each character.
+     * The width is based on the default Minecraft font.
+     * @param s The string to split
+     * @param maxLineLen The maximum line length expressed in pixels
+     * @return The split string
+     */
+    public static @NotNull String wrap(final @NotNull String s, final int maxLineLen) {
+        final StringBuilder r = new StringBuilder();
+        int start = 0;
+        int end = 0;
+        int len = 0;
+
+        // For each character
+        for(int i = 0; i < s.length(); ++i) {
+
+            // If character is a newline, reset length
+            char _char = s.charAt(i);
+            if(_char == '\n') {
+                len = 0;
+                continue;
+            }
+            // If not, calculate its width and add it to the total line length
+            len += getCharWidth(_char, 5);
+
+
+            // If character is a space and the total length is greater than maxLineLen, split the line at the last word and reset the indices
+            if(_char == ' ') {
+                if(len > maxLineLen) {
+                    r.append(s, start, end);
+                    r.append("\n");
+                    start = end + 1; // +1 trims the trailing space that would otherwise end up in the new line
+                    len = 0;
+                }
+                end = i;
+            }
+        }
+
+        //  Add last part and return the merged string
+        r.append(s, start, s.length());
+        return r.toString();
+    }
+
+
+
+
 
 
     /**

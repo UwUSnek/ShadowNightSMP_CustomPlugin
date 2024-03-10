@@ -11,12 +11,15 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapFont;
+import org.bukkit.map.MinecraftFont;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.items.IM_RangedWeapon;
 import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 import java.text.DecimalFormat;
@@ -39,7 +42,7 @@ public final class Decorator extends UtilityClass {
     public static @NotNull String formatValue(final @NotNull Number value) { return formatValue(value.toString()); }
 
     // Wrapping
-    public static final int maxLineLen = 50;
+    public static final int maxLineLen = 150;
     /**
      * Splits a string into <Decorator.maxLineLen> characters long lines and converts each string into a TextComponent.
      * Lines are indented using <indentation> spaces, colored with the color <color> and their italic is set to false.
@@ -51,11 +54,12 @@ public final class Decorator extends UtilityClass {
     public static @NotNull List<@NotNull TextComponent> formatParagraph(final @NotNull String s, final int indentation, final @NotNull TextColor color) {
         final List<TextComponent> r = new ArrayList<>();
         final String prefix = StringUtils.repeat(" ", indentation);
-        for(String l : WordUtils.wrap(s, maxLineLen).split("\n")) r.add(
+        for(String l : ChatUtils.wrap(s, maxLineLen).split("\n")) r.add(
             Component.empty().color(color).append( // This prevents parts of the converted string from reverting to the default style
             Component.text(prefix + l, color)
             .decoration(TextDecoration.ITALIC, false)
         ));
+        ChatUtils.wrap(s, maxLineLen);
         return r;
     }
 

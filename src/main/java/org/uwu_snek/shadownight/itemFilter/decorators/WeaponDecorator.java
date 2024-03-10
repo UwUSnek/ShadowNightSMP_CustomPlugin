@@ -106,6 +106,7 @@ public final class WeaponDecorator extends UtilityClass {
         int n = 0;
         for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
             if(n > 0) list.append(", ");
+            //FIXME REPLACE SCUFFED TRANSLATION WITH REAL GENERATED MAP (serializing the name makes it use the local translation or something)
             list.append(PlainTextComponentSerializer.plainText().serialize(e.getKey().displayName(e.getValue())));
             ++n;
         }
