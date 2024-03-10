@@ -29,7 +29,7 @@ public abstract class IM_Dagger extends IM_MeleeWeapon {
 
         Ability abilitySpeed = new Ability(
             "Speed Boost",
-            "Gain §a+100%§f walking speed for " + Decorator.formatValue(speedDuration + "s") + ".",
+            "Gain " + Decorator.formatValue("+" + 100 + "%") + " walking speed for " + Decorator.formatValue(speedDuration + "s") + ".",
             true,
             6d,
             (player, item) -> speedAbility(player)
