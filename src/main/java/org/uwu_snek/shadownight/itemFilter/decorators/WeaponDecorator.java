@@ -2,15 +2,12 @@ package org.uwu_snek.shadownight.itemFilter.decorators;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.uwu_snek.shadownight.attackOverride.CustomDamage;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.VanillaProvider;
@@ -18,7 +15,6 @@ import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.utils;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +23,6 @@ import java.util.Map;
 
 
 public final class WeaponDecorator extends UtilityClass {
-    private static final TextColor COLOR_violet = TextColor.color(0xAAAAFF);
-    private static final TextColor COLOR_purple = TextColor.color(0xFFAAFF);
-    private static final TextColor COLOR_gray = TextColor.color(0xAAAAAA);
-    private static final DecimalFormat valueFormat = new DecimalFormat("############.##");
 
 
 
@@ -41,28 +33,20 @@ public final class WeaponDecorator extends UtilityClass {
 
         // Name and activation mode
         r.add(
-            Component.text("Ability: " + ability.getName())
-            .color(COLOR_violet)
+            Component.text("Ability: " + ability.getName(), Decorator.COLOR_violet)
             .decoration(TextDecoration.ITALIC, false)
             .append(
-                Component.text(" (" + activation + ")")
-                .color(COLOR_gray)
+                Component.text(" (" + activation + ")", Decorator.COLOR_gray)
                 .decoration(TextDecoration.ITALIC, false)
             )
         );
 
         // Description
-        for(String l : ability.getDescription()) r.add( // This prevents parts of the converted string from reverting to the default style
-            Component.empty().color(COLOR_gray).append(
-            Component.text("  " + l)
-            .color(COLOR_gray)
-            .decoration(TextDecoration.ITALIC, false)
-        ));
+        r.addAll(Decorator.formatParagraph(ability.getDescription(), 2, Decorator.COLOR_gray));
 
         // Cooldown
         r.add(
-            Component.text("  Cooldown: " + (ability.getCooldown() == 0 ? "none" : valueFormat.format((float)ability.getCooldown() / 1000) + "s"))
-            .color(COLOR_gray)
+            Component.text("  Cooldown: " + (ability.getCooldown() == 0 ? "none" : Decorator.valueFormat.format((float)ability.getCooldown() / 1000) + "s"), Decorator.COLOR_gray)
             .decoration(TextDecoration.ITALIC, false)
         );
 
@@ -85,23 +69,23 @@ public final class WeaponDecorator extends UtilityClass {
 
     private static TextComponent decorateStat(final @NotNull String name, final double value, final @Nullable String unit) {
         return Component.empty().decoration(TextDecoration.ITALIC, false)
-            .append(Component.text(name + ": ")).color(COLOR_violet)
-            .append(Component.text(valueFormat.format(value) + (unit == null ? "" : unit)).color(COLOR_gray))
+            .append(Component.text(name + ": ", Decorator.COLOR_violet))
+            .append(Component.text(Decorator.valueFormat.format(value) + (unit == null ? "" : unit), Decorator.COLOR_gray))
         ;
     }
 
     private static List<TextComponent> generateStatsLore(final @NotNull IM manager) {
         final List<TextComponent> r = new ArrayList<>();
-        r.add(decorateStat("DMG", manager.getHitDamage(),      null));
-        r.add(decorateStat("ATS", manager.getAttackSpeed(),    "s"));
-        r.add(decorateStat("KB", manager.getHitKbMultiplier(), "x"));
+        r.add(decorateStat("Damage", manager.getHitDamage(),      null));
+        r.add(decorateStat("Attack speed", manager.getAttackSpeed(),    "s"));
+        r.add(decorateStat("knockback", manager.getHitKbMultiplier(), "x"));
         return r;
     }
     private static List<TextComponent> generateStatsLore(final @NotNull ItemStack item) {
         final List<TextComponent> r = new ArrayList<>();
-        r.add(decorateStat("DMG", VanillaProvider.getDamage(item.getType()), null));
-        r.add(decorateStat("ATS", VanillaProvider.getAts(item.getType()), "s"));
-        r.add(decorateStat("KB", 1d, "x"));
+        r.add(decorateStat("Damage", VanillaProvider.getDamage(item.getType()), null));
+        r.add(decorateStat("Attack speed", VanillaProvider.getAts(item.getType()), "s"));
+        r.add(decorateStat("knockback", 1d, "x"));
         return r;
     }
 
@@ -110,33 +94,26 @@ public final class WeaponDecorator extends UtilityClass {
 
 
     private static List<TextComponent> generateEnchantsLore(final @NotNull ItemStack item) {
-        final List<TextComponent> r_list = new ArrayList<>(List.of(
+        // Title
+        final List<TextComponent> r = new ArrayList<>(List.of(
             Component.empty(),
-            Component.text("Enchantments:").color(COLOR_purple).decoration(TextDecoration.ITALIC, false)
+            Component.text("Enchantments:", Decorator.COLOR_purple).decoration(TextDecoration.ITALIC, false)
         ));
-        StringBuilder r = new StringBuilder("  ");
+
+
+        // Enchantment list
+        StringBuilder list = new StringBuilder();
         int n = 0;
-
-        // For each enchant on the item
-        for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()){
-            if(n > 0) {
-                r.append(", ");
-
-                // Caveman word wrapping technology
-                if(n % 3 == 0) {
-                    r_list.add(Component.text(r.toString()).color(COLOR_gray).decoration(TextDecoration.ITALIC, false));
-                    r = new StringBuilder("  ");
-                }
-            }
-
-            // Add its display name
-            r.append(PlainTextComponentSerializer.plainText().serialize(e.getKey().displayName(e.getValue())));
+        for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
+            if(n > 0) list.append(", ");
+            list.append(PlainTextComponentSerializer.plainText().serialize(e.getKey().displayName(e.getValue())));
             ++n;
         }
-        r_list.add(Component.text(r.toString()).color(COLOR_gray).decoration(TextDecoration.ITALIC, false));
+        r.addAll(Decorator.formatParagraph(list.toString(), 2, Decorator.COLOR_gray));
+
 
         // Return the lines or null if the item is not enchanted
-        return n == 0 ? null : r_list;
+        return n == 0 ? null : r;
     }
 
 

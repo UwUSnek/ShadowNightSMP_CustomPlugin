@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_CylinderArea;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_LineArea;
+import org.uwu_snek.shadownight.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
@@ -30,10 +31,7 @@ public abstract class IM_Spear extends IM_MeleeWeapon {
 
         Ability abilityHit = new Ability(
             "Slash",
-            new String[]{
-                "Hit all enemies near you, knocking them back",
-                "and damaging them for §a100%§7 base damage."
-            },
+            "Hit all enemies near you, knocking them back and damaging them for " + Decorator.formatValue("100%") + " base damage.",
             true,
             2d,
             IM_Spear::hitAbility

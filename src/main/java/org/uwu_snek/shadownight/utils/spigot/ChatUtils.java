@@ -144,7 +144,7 @@ public final class ChatUtils extends UtilityClass {
 
             // Handle first part (no formatting code) separately
             if(!part.matches("[&§][0-9a-fk-or].*")) {
-                output = output.append(Component.text(part).color(color));
+                output = output.append(Component.text(part, color));
                 continue;
             }
 

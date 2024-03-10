@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
@@ -15,6 +16,8 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public final class IM_KlaueScythe extends IM_Scythe_Craftable {
+    public static int tpDistance = 200;
+
     public IM_KlaueScythe(){
         super(
             "§6Edgy Scythe",
@@ -27,27 +30,21 @@ public final class IM_KlaueScythe extends IM_Scythe_Craftable {
             null,
             new Ability(
                 "Trickster's Dance",
-                new String[]{ "Not implemented yet. Sowwie :<" },
+                "Not implemented yet. Sowwie :<",
                 true,
                 0d,
                 (player, item) -> shadowFuryKnockoff(player)
             ),
             new Ability(
                 "Slice",
-                new String[]{
-                    "Throw your scythe damaging all enemies",
-                    "in its path for §a100%§7 base damage."
-                },
+                "Throw your scythe damaging all enemies in its path for " + Decorator.formatValue("100%") + " base damage.",
                 true,
                 0.5d,
                 ScytheThrowDisplay::new
             ),
             new Ability(
                 "Teleport",
-                new String[]{
-                    "Teleport on top of the block you are looking at.",
-                    "Maximum distance: §a200§7 blocks."
-                },
+                "Teleport on top of the block you are looking at.\nMaximum distance: " + Decorator.formatValue(tpDistance) + " blocks.",
                 true,
                 0d,
                 (player, item) -> teleportPlayer(player)
@@ -71,7 +68,7 @@ public final class IM_KlaueScythe extends IM_Scythe_Craftable {
     }
 
     private static void teleportPlayer(final @NotNull Player player) {
-        Block targetBlock = PlayerUtils.getTargetBlock(player.getEyeLocation(), BlockProperty::isWalkable, 200);
+        Block targetBlock = PlayerUtils.getTargetBlock(player.getEyeLocation(), BlockProperty::isWalkable, tpDistance);
         if(targetBlock != null) {
             Location targetBlockLocation = targetBlock.getLocation();
             Location playerLocation = player.getLocation();

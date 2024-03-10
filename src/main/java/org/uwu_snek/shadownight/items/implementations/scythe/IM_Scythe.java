@@ -8,6 +8,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_ConeArea;
+import org.uwu_snek.shadownight.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
@@ -33,7 +34,7 @@ public abstract class IM_Scythe extends IM_MeleeWeapon {
 
         Ability abilityBreak = new Ability(
             "Harvesting",
-            new String[]{ "Break crops and vegetation in a §a" + (int)breakWidth + "*" + (int)breakLen + "§7 area in front of you." },
+            "Break crops and vegetation in a " + Decorator.formatValue((int)breakWidth + "x" + (int)breakLen) + " area in front of you.",
             true,
             1d,
             IM_Scythe::breakBlocks

@@ -53,16 +53,23 @@ public final class ItemUtils extends UtilityClass {
     }
 
 
-    public static void setLore(final @NotNull ItemStack item, final List<? extends Component> lore) {
+    public static void setLore(final @NotNull ItemStack item, final @Nullable List<? extends Component> lore) {
         ItemMeta meta = item.getItemMeta();
         meta.lore(lore);
         item.setItemMeta(meta);
     }
 
 
-    public static void setDisplayName(final @NotNull ItemStack item, final Component name) {
+    public static void setDisplayName(final @NotNull ItemStack item, final @NotNull Component name) {
         ItemMeta meta = item.getItemMeta();
         meta.displayName(name);
+        item.setItemMeta(meta);
+    }
+
+    public static void setDisplayNameAndLore(final @NotNull ItemStack item, final @NotNull Component name, final @Nullable List<? extends Component> lore) {
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(name);
+        meta.lore(lore);
         item.setItemMeta(meta);
     }
 

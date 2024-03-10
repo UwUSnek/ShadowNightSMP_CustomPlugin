@@ -17,18 +17,18 @@ public class Ability {
     private final BiConsumer<Player, ItemStack> onActivate;
     private final HashMap<UUID, Long> last_times;
     private final String name;
-    private final List<String> description;
+    private final String description;
 
     public final String getName(){ return name; }
-    public final List<String> getDescription(){ return description; }
+    public final String getDescription(){ return description; }
     public final long getCooldown(){ return cooldown; }
 
 
 
 
-    public Ability(final @NotNull String name, final @NotNull String[] description, final boolean cancelOgEvent, final double cooldown, final @NotNull BiConsumer<Player, ItemStack> onActivate) {
+    public Ability(final @NotNull String name, final @NotNull String description, final boolean cancelOgEvent, final double cooldown, final @NotNull BiConsumer<Player, ItemStack> onActivate) {
         this.name = name;
-        this.description = Arrays.asList(description);
+        this.description = description;
 
         this.cancelOgEvent = cancelOgEvent;
         this.cooldown = (long)(cooldown * 1000);

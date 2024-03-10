@@ -3,6 +3,7 @@ package org.uwu_snek.shadownight.items.implementations.dagger;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_Standard;
+import org.uwu_snek.shadownight.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
@@ -12,6 +13,8 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public abstract class IM_Dagger extends IM_MeleeWeapon {
+    private static final int speedDuration = 4;
+
     public IM_Dagger(final @NotNull String _displayName, final @NotNull _custom_item_id _customItemId, final double _hitDamage, final double _atkSpeed) {
         super(
             _displayName,
@@ -26,7 +29,7 @@ public abstract class IM_Dagger extends IM_MeleeWeapon {
 
         Ability abilitySpeed = new Ability(
             "Speed Boost",
-            new String[]{ "Gain §a+100%§f walking speed for §a4s§7." },
+            "Gain §a+100%§f walking speed for " + Decorator.formatValue(speedDuration + "s") + ".",
             true,
             6d,
             (player, item) -> speedAbility(player)
@@ -44,6 +47,6 @@ public abstract class IM_Dagger extends IM_MeleeWeapon {
 
     static private void speedAbility(final @NotNull Player player) {
         player.setWalkSpeed(0.4f);
-        Scheduler.delay(() -> player.setWalkSpeed(0.2f), 20 * 4L);
+        Scheduler.delay(() -> player.setWalkSpeed(0.2f), 20L * speedDuration);
     }
 }
