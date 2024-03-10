@@ -8,6 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.uwu_snek.shadownight._generated._enchantment_overrides;
 import org.uwu_snek.shadownight.items.Ability;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.VanillaProvider;
@@ -106,8 +107,7 @@ public final class WeaponDecorator extends UtilityClass {
         int n = 0;
         for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
             if(n > 0) list.append(", ");
-            //FIXME REPLACE SCUFFED TRANSLATION WITH REAL GENERATED MAP (serializing the name makes it use the local translation or something)
-            list.append(PlainTextComponentSerializer.plainText().serialize(e.getKey().displayName(e.getValue())));
+            list.append(_enchantment_overrides.getRealName(e.getKey().translationKey()));
             ++n;
         }
         r.addAll(Decorator.formatParagraph(list.toString(), 2, Decorator.COLOR_gray));

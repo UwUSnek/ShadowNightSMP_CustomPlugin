@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight._generated._enchantment_overrides;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
@@ -205,8 +206,7 @@ public final class EnchantDecorator extends UtilityClass {
     private static @NotNull List<Component> generateEnchantLore(final @NotNull Enchantment enchant, final int lvl) {
         final List<Component> r = new ArrayDeque<>();
         r.add(
-            //FIXME REPLACE SCUFFED TRANSLATION WITH REAL GENERATED MAP (serializing the name makes it use the local translation or something)
-            Component.text(PlainTextComponentSerializer.plainText().serialize(enchant.displayName(lvl)))
+            Component.text(_enchantment_overrides.getRealName(enchant.translationKey()))
             .color(enchant.isCursed() ? Decorator.COLOR_red : Decorator.COLOR_purple)
             .decoration(TextDecoration.ITALIC, false)
         );

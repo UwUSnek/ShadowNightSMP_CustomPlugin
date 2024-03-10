@@ -3,13 +3,13 @@
 custom_color = "§3"
 
 overrides = [
-    { "key": "enchantment.minecraft.binding_curse",         "spigot_id": "BINDING_CURSE",   "key_override": "enchantment.minecraft.reeling", "name_override": "Reeling" },
-    { "key": "enchantment.minecraft.vanishing_curse",       "spigot_id": "VANISHING_CURSE", "key_override": "enchantment.minecraft.tmp1",     "name_override": "tmp1" },
-    { "key": "enchantment.minecraft.sweeping",              "spigot_id": "SWEEPING_EDGE",   "key_override": "enchantment.minecraft.tmp2",     "name_override": "tmp2" },
-    { "key": "enchantment.minecraft.frost_walker",          "spigot_id": "FROST_WALKER",    "key_override": "enchantment.minecraft.tmp3",     "name_override": "tmp3" },
-    { "key": "enchantment.minecraft.mending",               "spigot_id": "MENDING",         "key_override": "enchantment.minecraft.tmp4",     "name_override": "tmp4" },
-    { "key": "enchantment.minecraft.soul_speed",            "spigot_id": "SOUL_SPEED",      "key_override": "enchantment.minecraft.tmp5",     "name_override": "tmp5" },
-    { "key": "enchantment.minecraft.swift_sneak",           "spigot_id": "SWIFT_SNEAK",     "key_override": "enchantment.minecraft.tmp6",     "name_override": "tmp6" },
+    { "key": "enchantment.minecraft.binding_curse",         "spigot_id": "BINDING_CURSE",   "override_key": "enchantment.minecraft.reeling",   "name": "Curse of Binding",   "override_name": "Reeling" },
+    { "key": "enchantment.minecraft.vanishing_curse",       "spigot_id": "VANISHING_CURSE", "override_key": "enchantment.minecraft.unused1",   "name": "Curse of Vanishing", "override_name": "unused1" },
+    { "key": "enchantment.minecraft.sweeping",              "spigot_id": "SWEEPING_EDGE",   "override_key": "enchantment.minecraft.unused2",   "name": "Sweeping Edge",      "override_name": "unused2" },
+    { "key": "enchantment.minecraft.frost_walker",          "spigot_id": "FROST_WALKER",    "override_key": "enchantment.minecraft.unused3",   "name": "Frost Walker",       "override_name": "unused3" },
+    { "key": "enchantment.minecraft.mending",               "spigot_id": "MENDING",         "override_key": "enchantment.minecraft.unused4",   "name": "Mending",            "override_name": "unused4" },
+    { "key": "enchantment.minecraft.soul_speed",            "spigot_id": "SOUL_SPEED",      "override_key": "enchantment.minecraft.unused5",   "name": "Soul Speed",         "override_name": "unused5" },
+    { "key": "enchantment.minecraft.swift_sneak",           "spigot_id": "SWIFT_SNEAK",     "override_key": "enchantment.minecraft.unused6",   "name": "Swift Sneak",        "override_name": "unused6" },
 ]
 
 unchanged = [
@@ -59,28 +59,43 @@ with open("./build/language/enchantments.json", "w+") as json, open("../main/jav
         'import java.util.AbstractMap;\n'
         'import java.util.Map;\n'
         'public final class _enchantment_overrides extends org.uwu_snek.shadownight.utils.UtilityClass {\n'
-        '    private static final Map<String, Enchantment> overrides = Map.ofEntries(\n'
     )
 
 
+
+
+    # Create overrides
+    java.write('    private static final Map<String, Enchantment> overrides = Map.ofEntries(\n')
     for i, e in enumerate(overrides):
-        json.write(f'    "{ e["key"] }": "{ custom_color }{ e["name_override"] }",\n')
-        java.write(f'        new AbstractMap.SimpleEntry<>("{ e["key_override"] }", Enchantment.{ e["spigot_id"] }),\n')
-
-
+        json.write(f'    "{ e["key"] }": "{ custom_color }{ e["override_name"] }",\n')
+        java.write(f'        new AbstractMap.SimpleEntry<>("{ e["override_key"] }", Enchantment.{ e["spigot_id"] }),\n')
     json.write('\n')
     java.write('\n')
-
-
     for i, e in enumerate(unchanged):
         json.write(f'    "{ e["key"] }": "{ e["name"] }"{"," if i < len(unchanged) - 1 else "" }\n')
         java.write(f'        new AbstractMap.SimpleEntry<>("{ e["key"] }", Enchantment.{ e["spigot_id"] }){ "," if i < len(unchanged) - 1 else "" }\n')
+    java.write('    );\n\n')
+
+
+
+
+    # Create real name hooks
+    java.write('    private static final Map<String, String> realNames = Map.ofEntries(\n')
+    for i, e in enumerate(overrides):
+        java.write(f'        new AbstractMap.SimpleEntry<>("{ e["override_key"] }", "{ e["override_name"] }"),\n')
+        java.write(f'        new AbstractMap.SimpleEntry<>("{ e["key"] }", "{ e["name"] }"),\n')
+    java.write('\n')
+    for i, e in enumerate(unchanged):
+        java.write(f'        new AbstractMap.SimpleEntry<>("{ e["key"] }", "{ e["name"] }"){ "," if i < len(unchanged) - 1 else "" }\n')
+    java.write('    );\n\n')
+
+
 
 
     json.write('}')
     java.write(
-        '    );\n\n'
         '    public static Enchantment getOverride(final @NotNull String e){ return overrides.get(e); }\n'
+        '    public static String getRealName(final @NotNull String e){ return realNames.get(e); }\n'
         '}'
     )
 
