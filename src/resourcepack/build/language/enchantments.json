@@ -1,11 +1,11 @@
 {
     "enchantment.minecraft.binding_curse": "§3Reeling",
-    "enchantment.minecraft.vanishing_curse": "§3tmp1",
-    "enchantment.minecraft.sweeping": "§3tmp2",
-    "enchantment.minecraft.frost_walker": "§3tmp3",
-    "enchantment.minecraft.mending": "§3tmp4",
-    "enchantment.minecraft.soul_speed": "§3tmp5",
-    "enchantment.minecraft.swift_sneak": "§3tmp6",
+    "enchantment.minecraft.vanishing_curse": "§3unused1",
+    "enchantment.minecraft.sweeping": "§3unused2",
+    "enchantment.minecraft.frost_walker": "§3unused3",
+    "enchantment.minecraft.mending": "§3unused4",
+    "enchantment.minecraft.soul_speed": "§3unused5",
+    "enchantment.minecraft.swift_sneak": "§3unused6",
 
     "enchantment.minecraft.aqua_affinity": "Aqua Affinity",
     "enchantment.minecraft.bane_of_arthropods": "Bane of Arthropods",
