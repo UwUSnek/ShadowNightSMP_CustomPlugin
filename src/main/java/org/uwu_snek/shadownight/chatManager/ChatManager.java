@@ -169,8 +169,8 @@ public final class ChatManager extends UtilityClass {
             "§dWorld:§f " + ShadowNight.mvWorldManager.getMVWorld(player.getWorld()).getAlias() //TODO parse dungeon names (don't use multiverse alias as multiverse doesn't manage dungeon worlds)
         );
 
-        broadcast(playerNameComponent.hoverEvent(hoverComponent).append(msg));
-        BotManager.sendBridgeMessage(player, msg.content());
+        broadcast(Component.empty().append(playerNameComponent.hoverEvent(hoverComponent)).append(Component.text(playerMessageConnector)).append(msg));
+        BotManager.sendBridgeMessage(player,  PlainTextComponentSerializer.plainText().serialize(msg));
     }
 
 
@@ -188,7 +188,7 @@ public final class ChatManager extends UtilityClass {
         if (targetName == null) {
             final String strippedMsg = ChatUtils.stripPrivateCharacters(event.getPlayer().hasPermission("group.vip") ? ChatUtils.translateColor(msg) : ChatUtils.stripColor(msg));
             if (checkBlockedWords(player, strippedMsg)) {
-                sendPublicMessage(player, Component.text(playerMessageConnector + strippedMsg).hoverEvent(null));
+                sendPublicMessage(player, Component.text(strippedMsg));
             }
         }
         // Blocked words and null target are checked by sendDm
