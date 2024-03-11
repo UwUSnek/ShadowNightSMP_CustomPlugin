@@ -94,35 +94,9 @@ public final class WeaponDecorator extends UtilityClass {
 
 
 
-    private static List<TextComponent> generateEnchantsLore(final @NotNull ItemStack item) {
-        // Title
-        final List<TextComponent> r = new ArrayList<>(List.of(
-            Component.empty(),
-            Component.text("Enchantments:", Decorator.COLOR_purple).decoration(TextDecoration.ITALIC, false)
-        ));
-
-
-        // Enchantment list
-        StringBuilder list = new StringBuilder();
-        int n = 0;
-        for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
-            if(n > 0) list.append(", ");
-            list.append(_enchantment_overrides.getRealName(e.getKey().translationKey()));
-            ++n;
-        }
-        r.addAll(Decorator.formatParagraph(list.toString(), 2, Decorator.COLOR_gray));
-
-
-        // Return the lines or null if the item is not enchanted
-        return n == 0 ? null : r;
-    }
-
-
-
-
     public static void decorateCustomMelee(final @NotNull ItemStack item, final @NotNull IM manager){
-        List<TextComponent> lore = new ArrayList<>(generateStatsLore(manager));
-        utils.addAllIfNotNull(lore, generateEnchantsLore(item));
+        final List<TextComponent> lore = new ArrayList<>(generateStatsLore(manager));
+        utils.addAllIfNotNull(lore, Decorator.generateEnchantsLore(item));
         lore.addAll(generateAbilityLore(manager));
         lore.add(Component.empty());
         ItemUtils.setLore(item, lore);
@@ -130,8 +104,8 @@ public final class WeaponDecorator extends UtilityClass {
 
 
     public static void decorateVanillaMelee(final @NotNull ItemStack item){
-        List<TextComponent> lore = new ArrayList<>(generateStatsLore(item));
-        utils.addAllIfNotNull(lore, generateEnchantsLore(item));
+        final List<TextComponent> lore = new ArrayList<>(generateStatsLore(item));
+        utils.addAllIfNotNull(lore, Decorator.generateEnchantsLore(item));
         lore.add(Component.empty());
         ItemUtils.setLore(item, lore);
     }
@@ -142,15 +116,17 @@ public final class WeaponDecorator extends UtilityClass {
 
 
     public static void decorateCustomRanged(final @NotNull ItemStack item, final @NotNull IM manager){
-        //ItemMeta meta = item.getItemMeta();
-        //meta.displayName(Component.text("TEST WEAPON"));
-        //item.setItemMeta(meta);
+        final List<TextComponent> lore = new ArrayList<>();
+        utils.addAllIfNotNull(lore, Decorator.generateEnchantsLore(item));
+        lore.add(Component.empty());
+        ItemUtils.setLore(item, lore);
     }
 
 
     public static void decorateVanillaRanged(final @NotNull ItemStack item){
-        //ItemMeta meta = item.getItemMeta();
-        //meta.displayName(Component.text("TEST WEAPON"));
-        //item.setItemMeta(meta);
+        final List<TextComponent> lore = new ArrayList<>();
+        utils.addAllIfNotNull(lore, Decorator.generateEnchantsLore(item));
+        lore.add(Component.empty());
+        ItemUtils.setLore(item, lore);
     }
 }

@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.ShadowNight;
 import org.uwu_snek.shadownight._generated._build_counter;
+import org.uwu_snek.shadownight._generated._enchantment_overrides;
 import org.uwu_snek.shadownight.items.IM;
 import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.items.IM_RangedWeapon;
@@ -33,6 +35,7 @@ import org.uwu_snek.shadownight.utils.utils;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 
@@ -76,6 +79,32 @@ public final class Decorator extends UtilityClass {
 
 
 
+    public static List<TextComponent> generateEnchantsLore(final @NotNull ItemStack item) {
+        // Title
+        final List<TextComponent> r = new ArrayList<>(List.of(
+            Component.empty(),
+            Component.text("Enchantments:", Decorator.COLOR_purple).decoration(TextDecoration.ITALIC, false)
+        ));
+
+
+        // Enchantment list
+        StringBuilder list = new StringBuilder();
+        int n = 0;
+        for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
+            if(n > 0) list.append(", ");
+            list.append(_enchantment_overrides.getRealName(e.getKey().translationKey()));
+            ++n;
+        }
+        r.addAll(Decorator.formatParagraph(list.toString(), 2, Decorator.COLOR_gray));
+
+
+        // Return the lines or null if the item is not enchanted
+        return n == 0 ? null : r;
+    }
+
+
+
+
 
 
     private static final NamespacedKey decorationVersionKey = new NamespacedKey(ShadowNight.plugin, "decoration_version");
@@ -84,12 +113,14 @@ public final class Decorator extends UtilityClass {
         // Check and update the version and return if the item is up-to-date
         final ItemMeta meta = item.getItemMeta();
         final PersistentDataContainer container = meta.getPersistentDataContainer();
-        final Integer version = container.get(decorationVersionKey, PersistentDataType.INTEGER);
-        if(version == null || version < _build_counter.getCurrentValue()) {
-            container.set(decorationVersionKey, PersistentDataType.INTEGER, _build_counter.getCurrentValue());
-            item.setItemMeta(meta);
+        if(!force) {
+            final Integer version = container.get(decorationVersionKey, PersistentDataType.INTEGER);
+            if (version != null && version == _build_counter.getCurrentValue()) return;
         }
-        else return;
+        container.set(decorationVersionKey, PersistentDataType.INTEGER, _build_counter.getCurrentValue());
+        item.setItemMeta(meta);
+
+
 
 
         // Enchantment books
@@ -102,12 +133,19 @@ public final class Decorator extends UtilityClass {
         else {
             final Long customId = ItemUtils.getCustomItemId(item);
             if(customId != null) {
-                item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
                 final IM manager = ItemManager.getValueFromId(customId);
 
-                // Custom weapons
-                /**/ if(manager instanceof IM_MeleeWeapon)  WeaponDecorator.decorateCustomMelee(item,  manager);
-                else if(manager instanceof IM_RangedWeapon) WeaponDecorator.decorateCustomRanged(item, manager);
+                // Custom melee weapons
+                if(manager instanceof IM_MeleeWeapon)  {
+                    WeaponDecorator.decorateCustomMelee(item,  manager);
+                }
+
+                // Custom ranged weapons
+                else if(manager instanceof IM_RangedWeapon) {
+                    WeaponDecorator.decorateCustomRanged(item, manager);
+                }
+
+                //TODO check for custom armor and utility items here
             }
             else {
                 final Material itemType = item.getType();
@@ -122,7 +160,6 @@ public final class Decorator extends UtilityClass {
                     Tag.ITEMS_HOES.isTagged(itemType) ||
                     itemType == Material.TRIDENT
                 ) {
-                    item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
                     WeaponDecorator.decorateVanillaMelee(item);
                 }
 
@@ -132,9 +169,38 @@ public final class Decorator extends UtilityClass {
                     itemType == Material.BOW ||
                     itemType == Material.CROSSBOW
                 ) {
-                    item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
                     WeaponDecorator.decorateVanillaRanged(item);
                 }
+
+
+                // Vanilla armor
+                else if(
+                    Tag.ITEMS_TRIMMABLE_ARMOR.isTagged(itemType) ||
+                    itemType == Material.TURTLE_HELMET ||
+                    itemType == Material.ELYTRA
+                ) {
+                    //item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
+                    ArmorDecorator.decorateVanilla(item);
+                }
+
+
+                // Vanilla utility items
+                else if(
+                    itemType == Material.FISHING_ROD ||
+                    itemType == Material.SHEARS ||
+                    itemType == Material.FLINT_AND_STEEL ||
+                    itemType == Material.CARROT_ON_A_STICK ||
+                    itemType == Material.WARPED_FUNGUS_ON_A_STICK ||
+                    itemType == Material.SHIELD ||
+                    itemType == Material.BRUSH
+                ) {
+                    UtilityDecorator.decorateVanilla(item);
+                }
+
+
+                // Hide Vanilla info from decorated items
+                else return;
+                item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
             }
         }
     }
