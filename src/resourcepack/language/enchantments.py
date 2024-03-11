@@ -95,7 +95,9 @@ with open("./build/language/enchantments.json", "w+") as json, open("../main/jav
     json.write('}')
     java.write(
         '    public static Enchantment getOverride(final @NotNull String e){ return overrides.get(e); }\n'
-        '    public static String getRealName(final @NotNull String e){ return realNames.get(e); }\n'
+        '\n'
+        '    private static final String[] lvlDisplay = new String[]{ "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX" };\n'
+        '    public static String getRealDisplayName(final @NotNull String e, final int lvl){ return realNames.get(e) + " " + (lvl > 20 ? lvl : lvlDisplay[lvl]); }\n'
         '}'
     )
 

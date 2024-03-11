@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.itemFilter;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
@@ -23,6 +24,7 @@ import org.uwu_snek.shadownight.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.utils;
 
+import java.util.Map;
 import java.util.logging.Level;
 
 
@@ -213,7 +215,7 @@ public final class ItemFilter extends UtilityClass {
         ItemStack result = inv.getResult();
         if (result != null && result.getType() != Material.AIR) {
             Decorator.decorate(result, true);
-            inv.setResult(result);
+            event.setResult(result);
         }
     }
 

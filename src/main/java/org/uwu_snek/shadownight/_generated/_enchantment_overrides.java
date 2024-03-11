@@ -98,5 +98,7 @@ public final class _enchantment_overrides extends org.uwu_snek.shadownight.utils
     );
 
     public static Enchantment getOverride(final @NotNull String e){ return overrides.get(e); }
-    public static String getRealName(final @NotNull String e){ return realNames.get(e); }
+
+    private static final String[] lvlDisplay = new String[]{ "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX" };
+    public static String getRealDisplayName(final @NotNull String e, final int lvl){ return realNames.get(e) + " " + (lvl > 20 ? lvl : lvlDisplay[lvl]); }
 }

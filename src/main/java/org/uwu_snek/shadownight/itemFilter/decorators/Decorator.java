@@ -2,12 +2,9 @@ package org.uwu_snek.shadownight.itemFilter.decorators;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
@@ -15,8 +12,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.map.MapFont;
-import org.bukkit.map.MinecraftFont;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -30,13 +25,11 @@ import org.uwu_snek.shadownight.items.ItemManager;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 import org.uwu_snek.shadownight.utils.spigot.ChatUtils;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
-import org.uwu_snek.shadownight.utils.utils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 
 
@@ -92,7 +85,7 @@ public final class Decorator extends UtilityClass {
         int n = 0;
         for(Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
             if(n > 0) list.append(", ");
-            list.append(_enchantment_overrides.getRealName(e.getKey().translationKey()));
+            list.append(_enchantment_overrides.getRealDisplayName(e.getKey().translationKey(), e.getValue()));
             ++n;
         }
         r.addAll(Decorator.formatParagraph(list.toString(), 2, Decorator.COLOR_gray));
@@ -113,13 +106,14 @@ public final class Decorator extends UtilityClass {
         // Check and update the version and return if the item is up-to-date
         final ItemMeta meta = item.getItemMeta();
         final PersistentDataContainer container = meta.getPersistentDataContainer();
+        final Integer version = container.get(decorationVersionKey, PersistentDataType.INTEGER);
         if(!force) {
-            final Integer version = container.get(decorationVersionKey, PersistentDataType.INTEGER);
             if (version != null && version == _build_counter.getCurrentValue()) return;
         }
-        container.set(decorationVersionKey, PersistentDataType.INTEGER, _build_counter.getCurrentValue());
-        item.setItemMeta(meta);
-
+        if(version == null || version != _build_counter.getCurrentValue()) {
+            container.set(decorationVersionKey, PersistentDataType.INTEGER, _build_counter.getCurrentValue());
+            item.setItemMeta(meta);
+        }
 
 
 
@@ -146,6 +140,10 @@ public final class Decorator extends UtilityClass {
                 }
 
                 //TODO check for custom armor and utility items here
+
+                // Hide Vanilla info from decorated items
+                else return;
+                item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
             }
             else {
                 final Material itemType = item.getType();
