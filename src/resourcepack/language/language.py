@@ -15,7 +15,7 @@ languages = [
     "tr_tr", "tt_ru", "uk_ua",  "val_es", "vec_it", "vi_vn",  "yi_de",  "yo_ng",  "zh_cn", "zh_hk", "zh_tw",   "zlm_arab",
 ]
 
-target = "./build/base_pack/assets/minecraft/lang"
+target = "./build/output/assets/minecraft/lang"
 os.makedirs(target, exist_ok=True)
 
 source = "./build/language"

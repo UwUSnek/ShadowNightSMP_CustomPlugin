@@ -34,10 +34,10 @@ source_base     = "./custom_items/base"
 source_parents  = "./custom_items/parents"
 source_textures = "./custom_items/textures"
 
-target_base     = "./build/base_pack/assets/minecraft/models/item";      os.makedirs(target_base,     exist_ok=True)
-target_models   = "./build/base_pack/assets/shadow_night/models/item";   os.makedirs(target_models,   exist_ok=True)
-target_textures = "./build/base_pack/assets/shadow_night/textures/item"; os.makedirs(target_textures, exist_ok=True)
-target_java     = "../main/java/org/uwu_snek/shadownight/_generated";    os.makedirs(target_java,     exist_ok=True)
+target_base     = "./build/output/assets/minecraft/models/item";      os.makedirs(target_base,     exist_ok=True)
+target_models   = "./build/output/assets/shadow_night/models/item";   os.makedirs(target_models,   exist_ok=True)
+target_textures = "./build/output/assets/shadow_night/textures/item"; os.makedirs(target_textures, exist_ok=True)
+target_java     = "../main/java/org/uwu_snek/shadownight/_generated"; os.makedirs(target_java,     exist_ok=True)
 
 
 parents = []

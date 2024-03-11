@@ -25,7 +25,9 @@ public final class CMD_sngive implements CommandExecutor {
                     .matches(pattern.toLowerCase().strip().replaceAll("\\s+", " "))
                 ) {
                     ItemStack item = manager.getInstance().createDefaultItemStack();
-                    player.getInventory().setItem(player.getInventory().firstEmpty(), item);
+                    final int slot = player.getInventory().firstEmpty();
+                    if(slot == -1) player.getWorld().dropItem(player.getLocation(), item);
+                    else player.getInventory().setItem(slot, item);
                 }
             }
             return true;
