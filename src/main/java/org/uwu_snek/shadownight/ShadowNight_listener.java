@@ -45,6 +45,7 @@ public final class ShadowNight_listener implements Listener {
         StarterKit.onJoin(event.getPlayer());
         SurvivalFly.updateState(event.getPlayer());
         Economy.addPlayer(event.getPlayer());
+        ItemFilter.onPlayerJoin(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

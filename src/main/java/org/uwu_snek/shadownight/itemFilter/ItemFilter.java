@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.*;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.itemFilter.blacklists.EnchantBlacklist;
@@ -116,7 +117,7 @@ public final class ItemFilter extends UtilityClass {
             Inventory inv = b.getInventory();
             for (ItemStack item : inv.getContents()) {
                 if (item != null && item.getType() != Material.AIR) {
-                    if(!ItemBlacklist.deleteIfBLacklisted(item, null))
+                    if(!ItemBlacklist.deleteIfBLacklisted(item, null)) // Don't send message to player as it would also appear when opening freshly generated loot containers
                         if(!EnchantBlacklist.fixItemEnchants(item))
                             Decorator.decorate(item, false);
                 }
@@ -174,8 +175,8 @@ public final class ItemFilter extends UtilityClass {
      * Filters items
      */
     public static void onPrepareItemCraft(final @NotNull PrepareItemCraftEvent event) {
-        CraftingInventory inv = event.getInventory();
-        ItemStack result = inv.getResult();
+        final CraftingInventory inv = event.getInventory();
+        final ItemStack result = inv.getResult();
         if (result != null && result.getType() != Material.AIR) {
             if (!ItemBlacklist.deleteIfBLacklisted(result, null))
                 Decorator.decorate(result, true);
@@ -187,8 +188,8 @@ public final class ItemFilter extends UtilityClass {
      * Detects anvil merges.
      */
     public static void onPrepareAnvil(final @NotNull PrepareAnvilEvent event) {
-        AnvilInventory inv = event.getInventory();
-        ItemStack result = inv.getResult();
+        final AnvilInventory inv = event.getInventory();
+        final ItemStack result = inv.getResult();
         if (result != null && result.getType() != Material.AIR) {
             Decorator.decorate(result, true);
             inv.setResult(result);
@@ -199,8 +200,8 @@ public final class ItemFilter extends UtilityClass {
      * Detects smithing table events.
      */
     public static void onPrepareSmithing(final @NotNull PrepareSmithingEvent event) {
-        SmithingInventory inv = event.getInventory();
-        ItemStack result = inv.getResult();
+        final SmithingInventory inv = event.getInventory();
+        final ItemStack result = inv.getResult();
         if (result != null && result.getType() != Material.AIR) {
             Decorator.decorate(result, true);
             inv.setResult(result);
@@ -211,8 +212,8 @@ public final class ItemFilter extends UtilityClass {
      * Detects grindstone events.
      */
     public static void onPrepareGrindstone(final @NotNull PrepareGrindstoneEvent event) {
-        GrindstoneInventory inv = event.getInventory();
-        ItemStack result = inv.getResult();
+        final GrindstoneInventory inv = event.getInventory();
+        final ItemStack result = inv.getResult();
         if (result != null && result.getType() != Material.AIR) {
             Decorator.decorate(result, true);
             event.setResult(result);
@@ -221,10 +222,25 @@ public final class ItemFilter extends UtilityClass {
 
     /**
      * Detects anvil merges.
-     * Filters items
      */
     public static void onEnchantItem(final @NotNull EnchantItemEvent event) {
-        ItemStack item = event.getItem();
+        final ItemStack item = event.getItem();
         Decorator.decorate(item, true);
+    }
+
+    /**
+     * Detects player logins.
+     * Filters items and enchants
+     */
+    public static void onPlayerJoin(final @NotNull PlayerJoinEvent event) {
+        final PlayerInventory inv = event.getPlayer().getInventory();
+        for(int i = 0; i < inv.getSize(); ++i) {
+            final ItemStack item = inv.getItem(i);
+            if (item != null && item.getType() != Material.AIR) {
+                if(!ItemBlacklist.deleteIfBLacklisted(item, null))
+                    if(!EnchantBlacklist.fixItemEnchants(item))
+                        Decorator.decorate(item, false);
+            }
+        }
     }
 }
