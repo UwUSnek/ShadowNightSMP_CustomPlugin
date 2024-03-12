@@ -114,3 +114,7 @@ commands:
         description: admin command
         usage: /sngive <regex pattern>
         permission: op
+    summontest:
+        description: admin command
+        usage: /summontest
+        permission: op

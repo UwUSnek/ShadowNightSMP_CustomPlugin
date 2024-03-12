@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
 import org.uwu_snek.shadownight.enchantments.CustomEnchant;
-import org.uwu_snek.shadownight.items.IM_MeleeWeapon;
-import org.uwu_snek.shadownight.items.ItemManager;
+import org.uwu_snek.shadownight.customItems.IM_MeleeWeapon;
+import org.uwu_snek.shadownight.customItems.ItemManager;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 

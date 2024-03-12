@@ -7,7 +7,7 @@ import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight._generated._enchantment_overrides;
-import org.uwu_snek.shadownight.itemFilter.blacklists.EnchantBlacklist;
+import org.uwu_snek.shadownight.customItems.itemFilter.blacklists.EnchantBlacklist;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 

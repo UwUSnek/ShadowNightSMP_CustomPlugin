@@ -18,21 +18,36 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.ShadowNight;
-import org.uwu_snek.shadownight.items.IM;
+import org.uwu_snek.shadownight.customItems.IM;
 import org.uwu_snek.shadownight.utils.UtilityClass;
-import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 
-import static org.uwu_snek.shadownight.items.IM.itemIdKey;
+import static org.uwu_snek.shadownight.customItems.IM.itemIdKey;
 
 
 
 
 public final class ItemUtils extends UtilityClass {
+    /**
+     * Creates an item with a custom name and lore.
+     * @param material The material of the item stack
+     * @param customModelData The custom model data to use
+     * @return The created ItemStack
+     */
+    public static @NotNull ItemStack createItemStackDisplay(final @NotNull Material material, final int customModelData) {
+        final ItemStack item = new ItemStack(material, 1);
+        final ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(customModelData);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+
+
+
     /**
      * Creates an item with a custom name and lore.
      * @param material The material of the item stack

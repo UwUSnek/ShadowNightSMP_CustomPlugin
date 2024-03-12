@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.uwu_snek.shadownight.items.ItemManager;
+import org.uwu_snek.shadownight.customItems.ItemManager;
 
 
 
