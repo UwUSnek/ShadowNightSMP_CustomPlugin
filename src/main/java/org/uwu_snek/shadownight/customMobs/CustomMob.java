@@ -23,6 +23,7 @@ public class CustomMob {
     public CustomMob(final @Nullable EntityType baseEntityType, final boolean keepBaseEntityAi){
         this.baseEntityType = baseEntityType;
         this.keepBaseEntityAi = keepBaseEntityAi;
+        root = new Bone();
     }
 
     public void summon(final @NotNull Location spawnLocation) {

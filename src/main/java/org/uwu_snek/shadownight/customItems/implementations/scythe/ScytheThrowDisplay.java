@@ -93,11 +93,11 @@ public final class ScytheThrowDisplay {
         double step_parts = 1.99d;
         int step_duration = (int)Func.clampMin(20 / (rotations_s * (step_parts * 2)), 1);      // This is 1 / (rotations_s / 20) / 3
         display.setInterpolationDuration(step_duration);
-        display.setInterpolationDelay(0);
         Transformation transformation = display.getTransformation();
 
         transformation.getScale().set(2, 2, 1);
         display.setTransformation(transformation);
+        display.setInterpolationDelay(0);
 
         rotationTask = Scheduler.loop(() -> {
             Quaternionf diff = transformation.getLeftRotation();
