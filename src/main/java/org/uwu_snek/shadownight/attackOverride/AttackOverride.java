@@ -1,6 +1,8 @@
 package org.uwu_snek.shadownight.attackOverride;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
+import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -9,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.attackOverride.attacks.ATK_Standard;
 import org.uwu_snek.shadownight.customItems.IM;
+import org.uwu_snek.shadownight.customItems.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.customItems.ItemManager;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;
@@ -82,12 +85,30 @@ public final class AttackOverride extends UtilityClass implements Rnd {
                 IM itemManager = ItemManager.getValueFromId(customItemId);
                 if(itemManager.checkCooldown(damager.getUniqueId(), customItemId)) {
                     itemManager.attack.execute(damager, target, damager.getLocation(), item);
-                    ItemUtils.damageItem(damager, item, 1);
+                    if(itemManager instanceof IM_MeleeWeapon) {
+                        ItemUtils.damageItem(damager, item, 1);
+                    }
                 }
             }
             else {
                 vanillaAttack.execute(damager, target, damager.getLocation(), item);
-                if(item != null) ItemUtils.damageItem(damager, item, 1);
+                if(item != null) {
+                    final Material itemType = item.getType();
+                    if(
+                        Tag.ITEMS_SWORDS.isTagged(itemType) ||
+                        itemType == Material.TRIDENT
+                    ) {
+                        ItemUtils.damageItem(damager, item, 1);
+                    }
+                    else if(
+                        Tag.ITEMS_PICKAXES.isTagged(itemType) ||
+                        Tag.ITEMS_SHOVELS.isTagged(itemType) ||
+                        Tag.ITEMS_AXES.isTagged(itemType) ||
+                        Tag.ITEMS_HOES.isTagged(itemType)
+                    ) {
+                        ItemUtils.damageItem(damager, item, 2);
+                    }
+                }
             }
         }
     }
