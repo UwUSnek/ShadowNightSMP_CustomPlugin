@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.customMobs;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.util.Transformation;
@@ -28,8 +29,8 @@ public class Bone {
     public Bone(){ }
 
 
-    public void summon(final @NotNull Location location){
-        for(Bone b : children) b.summon(location);
+    public void summon(final @NotNull Location location, final @NotNull Entity baseEntity){
+        for(Bone b : children) b.summon(location, baseEntity);
     }
 
 

@@ -14,13 +14,24 @@ public class TestMob extends CustomMob {
     Bone top = new DisplayBone(1);
     Bone l =   new DisplayBone(1);
     Bone r =   new DisplayBone(1);
+    Bone lTop =   new DisplayBone(1);
+    Bone rTop =   new DisplayBone(1);
 
     public TestMob() {
-        super(EntityType.HUSK, true);
+        super(EntityType.HUSK);
         root.addChild(top);
-        top.addChild(r);
-        top.addChild(l);
 
-        Scheduler.delay(() -> { root.move(2, 0, 0); }, 40);
+        top.addChild(r);
+        r.addChild(rTop);
+
+        top.addChild(l);
+        l.addChild(lTop);
+
+
+        Scheduler.delay(() -> { root.move(0, 0, -2); }, 40);
+        Scheduler.delay(() -> { l.move(1, 1, 0); }, 42);
+        Scheduler.delay(() -> { r.move(-1, 1, 0); }, 42);
+        Scheduler.delay(() -> { lTop.move(0, 1, 0); }, 42);
+        Scheduler.delay(() -> { rTop.move(0, 1, 0); }, 42);
     }
 }

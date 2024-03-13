@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.customMobs;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.util.Transformation;
@@ -24,12 +25,13 @@ public final class DisplayBone extends Bone {
 
 
     @Override
-    public void summon(final @NotNull Location location){
-        super.summon(location);
+    public void summon(final @NotNull Location location, final @NotNull Entity baseEntity){
+        super.summon(location, baseEntity);
         displayEntity = (ItemDisplay)location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
         displayEntity.setInterpolationDuration(2); //TODO maybe make this dynamic
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
+        baseEntity.addPassenger(displayEntity);
     }
 
 
