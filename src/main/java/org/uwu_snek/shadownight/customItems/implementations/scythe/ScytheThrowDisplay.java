@@ -56,7 +56,7 @@ public final class ScytheThrowDisplay {
         ), EntityType.ITEM_DISPLAY);
         IM data = ItemManager.getValueFromId(_custom_item_id.KLAUE_SCYTHE);
         display.setItemStack(ItemUtils.createItemStackDisplay(data.getMaterial(), data.getCustomModelData()));
-        display.setTeleportDuration(stepDuration);
+        display.setTeleportDuration((int)(stepDuration * 1.5));
 
 
 
@@ -90,8 +90,9 @@ public final class ScytheThrowDisplay {
      * @param rotations_s The number of rotations per second
      */
     public void animateRotation(final double rotations_s) {
-        int third_duration = (int)Func.clampMin(20 / (rotations_s * 3), 1);      // This is 1 / (rotations_s / 20) / 3
-        display.setInterpolationDuration(third_duration);
+        double step_parts = 1.99d;
+        int step_duration = (int)Func.clampMin(20 / (rotations_s * (step_parts * 2)), 1);      // This is 1 / (rotations_s / 20) / 3
+        display.setInterpolationDuration(step_duration);
         display.setInterpolationDelay(0);
         Transformation transformation = display.getTransformation();
 
@@ -100,11 +101,11 @@ public final class ScytheThrowDisplay {
 
         rotationTask = Scheduler.loop(() -> {
             Quaternionf diff = transformation.getLeftRotation();
-            diff.rotateAxis((float) -Math.PI / 3 * 2, 0, 0, 1);
+            diff.rotateAxis((float)(-Math.PI * 2 / (step_parts * 2)), 0, 0, 1);
             transformation.getLeftRotation().set(diff);
             display.setTransformation(transformation);
             display.setInterpolationDelay(0);
-        }, 2L, third_duration);
+        }, 2L, step_duration);
     }
 
 

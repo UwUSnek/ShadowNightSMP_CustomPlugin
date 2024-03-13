@@ -48,7 +48,8 @@ public final class Bone {
     public void summon(final @NotNull Location location){
         displayEntity = (ItemDisplay)location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
         displayEntity.setInterpolationDelay(2); //TODO maybe make this dynamic
-        displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, 0)); //FIXME set custommodeldata
+        displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
+        displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         for(Bone b : children) b.summon(location);
     }
 

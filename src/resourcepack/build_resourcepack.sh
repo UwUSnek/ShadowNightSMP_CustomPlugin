@@ -21,6 +21,7 @@ python3 ./language/language.py
 
 # Generate models and textures
 python3 ./custom_items/custom_items.py
+python3 ./custom_mobs/custom_mobs.py
 
 
 
