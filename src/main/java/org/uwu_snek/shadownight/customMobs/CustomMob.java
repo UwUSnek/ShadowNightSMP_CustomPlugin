@@ -27,7 +27,7 @@ public class CustomMob {
 
     public void summon(final @NotNull Location spawnLocation) {
         // Reset rotation and center root bone to block center
-        final Location location = spawnLocation.clone().setDirection(new Vector(1, 0, 0)).add(0, 0.5, 0);
+        final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, -1)).add(0, 0.5, 0);
 
         // Spawn the base entity and the model skeleton into the world
         baseEntity = location.getWorld().spawnEntity(location, baseEntityType == null ? EntityType.INTERACTION : baseEntityType);

@@ -21,7 +21,7 @@ public final class Bone {
 
     //private Vector3f totalBoneTranslation;
     //private AxisAngle4f totalBoneRotation;
-    private Transformation boneTransform;
+    private Transformation boneTransform = new Transformation(new Vector3f(0, 0, 0), new AxisAngle4f(), new Vector3f(1, 1, 1), new AxisAngle4f(0, 0, 0, 0));
     private Bone parent = null;
     private final ArrayList<Bone> children = new ArrayList<>();
 
@@ -29,11 +29,11 @@ public final class Bone {
 
 
     public Bone(final int customModelData){
-        this(customModelData, new Vector3f(0, 0, 0), new AxisAngle4f(0, 0, 0, 1));
+        this(customModelData, new Vector3f(0, 0, 0), new AxisAngle4f(0, 0, 0, 0));
     }
 
     public Bone(final int customModelData, Vector3f boneTranslation){
-        this(customModelData, boneTranslation, new AxisAngle4f(0, 0, 0, 1));
+        this(customModelData, boneTranslation, new AxisAngle4f(0, 0, 0, 0));
     }
 
     public Bone(final int customModelData, AxisAngle4f boneRotation){
@@ -75,4 +75,7 @@ public final class Bone {
     //     = new Transformation();
     //    modelEntity.setTransformation(t);
     //}
+    public void move(final float x, final float y, final float z) {
+
+    }
 }
