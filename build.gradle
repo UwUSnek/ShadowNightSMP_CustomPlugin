@@ -42,7 +42,6 @@ dependencies {
 }
 
 
-
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     exclude("META-INF/*.RSA", "META-INF/*.DSA", "META-INF/*.SF")

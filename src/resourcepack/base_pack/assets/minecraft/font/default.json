@@ -1,5 +1,6 @@
 {
-    "providers":[
+	"providers":[
+
         {"type": "space","advances": {" ": 4,"\uF8FF": -1}},
 
 
@@ -31,5 +32,8 @@
         {"file":"shadow_night:icons/logo_tab_2.png",    "chars":["\uF007"], "height":32, "ascent":8, "type":"bitmap"},
         {"file":"shadow_night:icons/logo_tab_3.png",    "chars":["\uF008"], "height":32, "ascent":8, "type":"bitmap"},
         {"file":"shadow_night:icons/logo_tab_4.png",    "chars":["\uF009"], "height":32, "ascent":8, "type":"bitmap"}
-    ]
+
+
+
+	]
 }
