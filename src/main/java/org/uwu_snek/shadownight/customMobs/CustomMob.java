@@ -17,43 +17,23 @@ import javax.management.Attribute;
 
 //TODO add onSpawn and onDeath callbacks
 public class CustomMob {
-    private final EntityType baseEntityType;
     protected Bone root;
+    protected Interaction mount;
 
-    protected Interaction hitbox;
-    protected double hitboxWidth;
-    protected double hitboxHeight;
 
-    protected Entity baseEntity = null;
-
-    public CustomMob(final @Nullable EntityType baseEntityType){
-        this.baseEntityType = baseEntityType;
+    public CustomMob() {
         root = new Bone();
     }
 
     public void summon(final @NotNull Location spawnLocation) {
-        // Reset rotation and center root bone to block center
-        final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, -1)).add(0, 0.5, 0);
+        // Reset rotation
+        final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, -1));
 
-        // Spawn the base entity and the model skeleton into the world
-        baseEntity = location.getWorld().spawnEntity(location, baseEntityType == null ? EntityType.INTERACTION : baseEntityType, false);
-        if(baseEntity instanceof LivingEntity e) {
-            e.setAI(false); // Remove Vanilla AI
-            e.setSilent(true);
-            //TODO set max hp
-            //e.setHealth(9000);
-            e.setCanPickupItems(false);
-            e.setInvisible(true);
-            e.setMaximumAir(999999999);
-            e.setPersistent(true);
-            e.setPortalCooldown(999999999);
-        }
-        root.summon(location, baseEntity);                       // Summon bones
-        root.move(0, -(float)baseEntity.getHeight(), 0);      // Move root to floor height
-
-        hitbox = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
-        hitbox.setInteractionWidth(5);
-        hitbox.setInteractionHeight(10);
-        baseEntity.addPassenger(hitbox);
+        // Spawn the mount entity and the model skeleton into the world
+        mount = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
+        mount.setInteractionWidth(0);
+        mount.setInteractionHeight(0);
+        root.summon(location, mount);                       // Summon bones
+        //root.move(0, -(float)baseEntity.getHeight(), 0);      // Move root to floor height
     }
 }

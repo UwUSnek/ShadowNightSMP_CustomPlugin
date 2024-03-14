@@ -11,14 +11,14 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public class TestMob extends CustomMob {
-    Bone top = new DisplayBone(1);
-    Bone l =   new DisplayBone(1);
-    Bone r =   new DisplayBone(1);
-    Bone lTop =   new DisplayBone(1);
-    Bone rTop =   new DisplayBone(1);
+    Bone top = new DisplayBone(1, 1, 1);
+    Bone l =   new DisplayBone(1, 1, 1);
+    Bone r =   new DisplayBone(1, 1, 1);
+    Bone lTop =   new DisplayBone(1, 1, 1);
+    Bone rTop =   new DisplayBone(1, 1, 1);
 
     public TestMob() {
-        super(EntityType.HUSK);
+        super();
         root.addChild(top);
 
         top.addChild(r);
@@ -30,8 +30,8 @@ public class TestMob extends CustomMob {
 
         Scheduler.delay(() -> { root.move(0, 0, -2); }, 40);
         Scheduler.delay(() -> { l.move(1, 1, 0); }, 42);
-        Scheduler.delay(() -> { r.move(-1, 1, 0); }, 42);
-        Scheduler.delay(() -> { lTop.move(0, 1, 0); }, 42);
-        Scheduler.delay(() -> { rTop.move(0, 1, 0); }, 42);
+        Scheduler.delay(() -> { r.move(-1, 1, 0); }, 44);
+        Scheduler.delay(() -> { lTop.move(0, 1, 0); }, 46);
+        Scheduler.delay(() -> { rTop.move(0, 1, 0); }, 48);
     }
 }
