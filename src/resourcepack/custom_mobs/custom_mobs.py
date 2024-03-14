@@ -31,7 +31,7 @@ model_files = [{ "path": model_source + "/" + f, "base_name": f } for f in os.li
 
 
 base["overrides"] = []
-java_class_name = "_custom_mobs"
+java_class_name = "_mob_part_type"
 with open(target_java + "/" + java_class_name + ".java", "w+") as java:
     java.write(
         f'package org.uwu_snek.shadownight._generated;\n'
@@ -45,6 +45,7 @@ with open(target_java + "/" + java_class_name + ".java", "w+") as java:
 
         # Invert XZ Plane
         for element in model["elements"]:
+            #! Shift XZ by +16. The model's origin is at (-8, -8) which becomes (+8, +8) after inverting the plane
             element["from"][0] = -element["from"][0] + 16
             element["from"][2] = -element["from"][2] + 16
             element["to"  ][0] = -element["to"  ][0] + 16

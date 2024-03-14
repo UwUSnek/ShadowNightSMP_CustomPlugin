@@ -26,14 +26,13 @@ public class CustomMob {
     }
 
     public void summon(final @NotNull Location spawnLocation) {
-        // Make spawn location face North and reset pitch
+        // Make the spawn location face North and reset pitch
         final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, 1));
 
         // Spawn the mount entity and the model skeleton into the world
         mount = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
         mount.setInteractionWidth(0);
         mount.setInteractionHeight(0);
-        root.summon(location, mount);                       // Summon bones
-        //root.move(0, -(float)baseEntity.getHeight(), 0);      // Move root to floor height
+        root.summon(mount); // Summon bones
     }
 }
