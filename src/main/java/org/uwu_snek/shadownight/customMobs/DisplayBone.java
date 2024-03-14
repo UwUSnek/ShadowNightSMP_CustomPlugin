@@ -14,6 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
+import org.uwu_snek.shadownight.utils.utils;
+
+import java.util.logging.Level;
 
 
 
@@ -21,14 +24,14 @@ import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity;
     private final int customModelData;
-    private Transformation transform = new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(1), new AxisAngle4f());
+    //private Transformation transform = new Transformation(new Vector3f(), new AxisAngle4f(), new Vector3f(1), new AxisAngle4f());
 
     //TODO replace these with a list of hitboxes that can be used to approximate the area when rotating the bone
     private Interaction hitbox = null;
-    private final double hitboxWidth;
-    private final double hitboxHeight;
+    private final float hitboxWidth;
+    private final float hitboxHeight;
 
-    public DisplayBone(final int customModelData, final double hitboxWidth, final int hitboxHeight) {
+    public DisplayBone(final int customModelData, final float hitboxWidth, final float hitboxHeight) {
         this.customModelData = customModelData;
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
@@ -39,7 +42,9 @@ public final class DisplayBone extends Bone {
     public void summon(final @NotNull Location location, final @NotNull Entity mount){
         super.summon(location, mount);
 
-        // Initialize display entity
+        // Initialize display entity (Make each of them face North to align the model)
+        // Make display face South to negate the inverted XZ Plane caused by the mount facing North
+        //displayEntity = (ItemDisplay)location.getWorld().spawnEntity(location.clone().setDirection(new Vector(0, 0, 1)), EntityType.ITEM_DISPLAY);
         displayEntity = (ItemDisplay)location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
         displayEntity.setInterpolationDuration(2); //TODO maybe make this dynamic
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
@@ -48,6 +53,8 @@ public final class DisplayBone extends Bone {
 
         // Initialize hitboxes
         hitbox = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
+        hitbox.setInteractionWidth(hitboxWidth);
+        hitbox.setInteractionHeight(hitboxHeight);
         displayEntity.addPassenger(hitbox);
     }
 
@@ -81,13 +88,17 @@ public final class DisplayBone extends Bone {
 
     private void updateDisplayTransform(){
         Transformation t = new Transformation(
+            //new Vector3f(absPos).add(0, 0.5f, 0).mul(-1, 1, -1), // Display render has inverted XZ Plane
             new Vector3f(absPos).add(0, 0.5f, 0),
-            transform.getLeftRotation(),
-            transform.getScale(),
-            transform.getRightRotation()
+            //new AxisAngle4f((float)Math.PI, 0, 1, 0),
+            new AxisAngle4f(0, 0, 1, 0),
+            new Vector3f(1, 1, 1),
+            new AxisAngle4f(0, 0, 0, 0)
         );
         displayEntity.setTransformation(t);
         displayEntity.setInterpolationDelay(0);
+
+        utils.log(Level.WARNING, absPos.toString());
     }
 
 

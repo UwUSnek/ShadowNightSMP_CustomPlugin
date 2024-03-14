@@ -26,8 +26,8 @@ public class CustomMob {
     }
 
     public void summon(final @NotNull Location spawnLocation) {
-        // Reset rotation
-        final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, -1));
+        // Make spawn location face North and reset pitch
+        final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, 1));
 
         // Spawn the mount entity and the model skeleton into the world
         mount = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
