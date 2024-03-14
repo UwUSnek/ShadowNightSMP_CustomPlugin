@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
+import org.uwu_snek.shadownight._generated._custom_mobs;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.utils;
 
@@ -31,8 +32,8 @@ public final class DisplayBone extends Bone {
     private final float hitboxWidth;
     private final float hitboxHeight;
 
-    public DisplayBone(final int customModelData, final float hitboxWidth, final float hitboxHeight) {
-        this.customModelData = customModelData;
+    public DisplayBone(final _custom_mobs partId, final float hitboxWidth, final float hitboxHeight) {
+        this.customModelData = partId.getCustomModelData();
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
     }
