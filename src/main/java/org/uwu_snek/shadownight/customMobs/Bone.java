@@ -60,11 +60,15 @@ public class Bone {
     }
 
 
+
 //TODO make display updates manual
     public final void rotate(final int duration, final float angle, final float x, final float y, final float z){
         rotate(duration, new AxisAngle4f(angle, x, y, z));
     }
-    public void rotate(final int duration, final @NotNull AxisAngle4f r) {
+    public final void rotate(final int duration, final @NotNull AxisAngle4f r) {
+        rotateUnsafe(duration, r.normalize());
+    }
+    public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
         //locPos.rotateAxis(r.angle, r.x, r.y, r.z); //TODO maybe do offset calculation here. remove, rotate, add.
         //for(Bone c : children) c.rotate(duration, r);
         for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);

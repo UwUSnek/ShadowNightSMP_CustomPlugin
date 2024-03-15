@@ -37,14 +37,26 @@ public class TestMob extends CustomMob {
         Scheduler.delay(() -> { r4.move(4, 1, 0, 0); }, 30);
 
 
-        Scheduler.delay(() -> { r2.rotate(10,  -(float)Math.PI * 0.25f, 0, 1, 0); }, 50);
-        Scheduler.delay(() -> { r2.rotate(10,  (float)Math.PI * 0.25f, 0, 1, 0); }, 60);
+        //Scheduler.delay(() -> { r2.rotate(10,  -(float)Math.PI * 0.25f, 0, 1, 0); }, 50);
+        //Scheduler.delay(() -> { r2.rotate(10,  (float)Math.PI * 0.25f, 0, 0, 1); }, 50);
 
-        Scheduler.delay(() -> { center.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
-        Scheduler.delay(() -> { r0.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
-        Scheduler.delay(() -> { r1.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
-        Scheduler.delay(() -> { r2.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
-        Scheduler.delay(() -> { r3.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
-        Scheduler.delay(() -> { r4.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
+        //Scheduler.delay(() -> { center.rotate(10,  (float)Math.PI * 0.25f, 0, 1, 1); }, 50);
+
+
+        Scheduler.delay(() -> { center.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 1); }, 80);
+        Scheduler.delay(() -> {     r0.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 1); }, 80);
+        Scheduler.delay(() -> {     r1.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 1); }, 80);
+        Scheduler.delay(() -> {     r2.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 1); }, 80);
+        Scheduler.delay(() -> {     r3.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 1); }, 80);
+        Scheduler.delay(() -> {     r4.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 1); }, 80);
+
+        //Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.4f, 0, 1, 0); }, 100);
+
+        Scheduler.delay(() -> { center.rotate(10,  (float)Math.PI * -0.1f, 0, 1, 1); }, 120);
+        Scheduler.delay(() -> {     r0.rotate(10,  (float)Math.PI * -0.1f, 0, 1, 1); }, 120);
+        Scheduler.delay(() -> {     r1.rotate(10,  (float)Math.PI * -0.1f, 0, 1, 1); }, 120);
+        Scheduler.delay(() -> {     r2.rotate(10,  (float)Math.PI * -0.1f, 0, 1, 1); }, 120);
+        Scheduler.delay(() -> {     r3.rotate(10,  (float)Math.PI * -0.1f, 0, 1, 1); }, 120);
+        Scheduler.delay(() -> {     r4.rotate(10,  (float)Math.PI * -0.1f, 0, 1, 1); }, 120);
     }
 }
