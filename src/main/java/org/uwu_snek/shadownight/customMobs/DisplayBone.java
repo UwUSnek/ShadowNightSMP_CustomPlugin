@@ -84,7 +84,7 @@ public final class DisplayBone extends Bone {
     @Override
     public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(duration, r);
-        displayRotation.rotateAxis(r.angle, r.x, r.y, r.z);
+        displayRotation.rotateAxis(r.angle, r.x, -r.y, r.z); // Invert XZ Plane (-y)
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
         //updateHitbox();
@@ -92,7 +92,7 @@ public final class DisplayBone extends Bone {
     @Override
     public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         super.rotateUpdateOrigin(duration, o, r);
-        displayRotation.rotateAxis(r.angle, r.x, r.y, r.z);
+        displayRotation.rotateAxis(r.angle, r.x, -r.y, r.z); // Invert XZ Plane (-y)
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
         updateHitbox();
@@ -106,7 +106,7 @@ public final class DisplayBone extends Bone {
     }
     private void updateDisplayTransform(final @NotNull AxisAngle4f r){
         Transformation t = new Transformation(
-            new Vector3f(getAbsPos()).add(0, 0.5f, 0),
+            new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
             new AxisAngle4f(displayRotation),
             new Vector3f(1, 1, 1),
             new AxisAngle4f(0, 0, 0, 0)
