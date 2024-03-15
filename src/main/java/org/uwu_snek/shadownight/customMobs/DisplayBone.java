@@ -25,6 +25,7 @@ public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity;
     private final int customModelData;
     private final Quaternionf displayRotation = new Quaternionf(0, 0, -1, 0);
+    private Vector3f displayShift = new Vector3f();
 
 
 
@@ -83,15 +84,18 @@ public final class DisplayBone extends Bone {
 
     @Override
     public void rotate(final int duration, final @NotNull AxisAngle4f r) {
+        displayShift = origin;
         super.rotate(duration, r);
-        displayRotation.rotateAxis(r.angle, r.x, r.y, r.z);
+        displayRotation.rotateAxis(-r.angle, r.x, r.y, r.z);
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
-        updateHitbox();
+        //updateHitbox();
     }
     @Override
-    public void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
-        super.rotateUpdateOrigin(o, r);
+    public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+        super.rotateUpdateOrigin(duration, o, r);
+        displayRotation.rotateAxis(-r.angle, r.x, r.y, r.z);
+        displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
         updateHitbox();
     }

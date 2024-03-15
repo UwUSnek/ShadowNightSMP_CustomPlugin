@@ -65,12 +65,13 @@ public class Bone {
         rotate(duration, new AxisAngle4f(angle, x, y, z));
     }
     public void rotate(final int duration, final @NotNull AxisAngle4f r) {
-        locPos.rotateAxis(r.angle, r.x, r.y, r.z);
-        for(Bone c : children) c.rotate(duration, r);
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
+        //locPos.rotateAxis(r.angle, r.x, r.y, r.z); //TODO maybe do offset calculation here. remove, rotate, add.
+        //for(Bone c : children) c.rotate(duration, r);
+        for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
     }
-    protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+    protected void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+        locPos.rotateAxis(r.angle, r.x, r.y, r.z); //TODO maybe do offset calculation here. remove, rotate, add.
         origin = o;
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
+        for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
     }
 }

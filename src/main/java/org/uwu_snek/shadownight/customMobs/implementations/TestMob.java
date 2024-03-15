@@ -12,44 +12,39 @@ import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
 public class TestMob extends CustomMob {
-    Bone top =  new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
-    Bone l =    new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
-    Bone r =    new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
-    Bone lTop = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
-    Bone rTop = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
+    Bone center = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
+    Bone r0     = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
+    Bone r1     = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
+    Bone r2     = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
+    Bone r3     = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
+    Bone r4     = new DisplayBone(_mob_part_type.TEST_PART, 1.1f, 1.1f);
 
     public TestMob() {
         super();
-        root.addChild(top);
+        root.addChild(center);
+        center.addChild(r0);
+        r0.addChild(r1);
+        r1.addChild(r2);
+        r2.addChild(r3);
+        r3.addChild(r4);
 
-        top.addChild(r);
-        r.addChild(rTop);
 
-        top.addChild(l);
-        l.addChild(lTop);
+        Scheduler.delay(() -> { root.move(4, 1, 0, -1); }, 20);
+        Scheduler.delay(() -> { r0.move(4, 1, 0, 0); }, 30);
+        Scheduler.delay(() -> { r1.move(4, 1, 0, 0); }, 30);
+        Scheduler.delay(() -> { r2.move(4, 1, 0, 0); }, 30);
+        Scheduler.delay(() -> { r3.move(4, 1, 0, 0); }, 30);
+        Scheduler.delay(() -> { r4.move(4, 1, 0, 0); }, 30);
 
 
-        Scheduler.delay(() -> { root.move(4, 2, 0, -2); }, 20);
-        Scheduler.delay(() -> {    l.move(4, -1, 1, 0); }, 28);
-        Scheduler.delay(() -> {    r.move(4, 1, 1, 0); }, 36);
-        Scheduler.delay(() -> { lTop.move(4, -1, 1, 0); }, 44);
-        Scheduler.delay(() -> { rTop.move(4, 1, 1, 0); }, 52);
+        Scheduler.delay(() -> { r2.rotate(10,  -(float)Math.PI * 0.25f, 0, 1, 0); }, 50);
+        Scheduler.delay(() -> { r2.rotate(10,  (float)Math.PI * 0.25f, 0, 1, 0); }, 60);
 
-        Scheduler.delay(() -> { root.rotate(20, -(float)Math.PI / 2, 0, 1, 0); }, 60);
-
-        Scheduler.delay(() -> { l.rotate(10,   (float)Math.PI * 0.25f, 0, 1, 0); }, 90);
-        Scheduler.delay(() -> { r.rotate(10,  -(float)Math.PI * 0.25f, 0, 1, 0); }, 90);
-
-        Scheduler.delay(() -> { l.rotate(10,   -(float)Math.PI * 0.25f, 0, 1, 0); }, 110);
-        Scheduler.delay(() -> { r.rotate(10,  (float)Math.PI * 0.25f, 0, 1, 0); }, 110);
-
-        Scheduler.delay(() -> { l.rotate(10,   (float)Math.PI * 0.25f, 0, 1, 0); }, 130);
-        Scheduler.delay(() -> { r.rotate(10,  -(float)Math.PI * 0.25f, 0, 1, 0); }, 130);
-
-        Scheduler.delay(() -> { l.rotate(10,   -(float)Math.PI * 0.25f, 0, 1, 0); }, 150);
-        Scheduler.delay(() -> { r.rotate(10,  (float)Math.PI * 0.25f, 0, 1, 0); }, 150);
-
-        //Scheduler.delay(() -> { r.rotate(10,  (float)Math.PI * 0.25f, 0, 1, 0); }, 80);
-        //Scheduler.delay(() -> { r.rotate(10,  (float)Math.PI * 0.25f, 0, 1, 0); }, 90);
+        Scheduler.delay(() -> { center.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
+        Scheduler.delay(() -> { r0.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
+        Scheduler.delay(() -> { r1.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
+        Scheduler.delay(() -> { r2.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
+        Scheduler.delay(() -> { r3.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
+        Scheduler.delay(() -> { r4.rotate(10,  (float)Math.PI * 0.1f, 0, 1, 0); }, 80);
     }
 }
