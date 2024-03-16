@@ -53,7 +53,7 @@ public final class SkinRenderer extends UtilityClass {
             case PROPIC -> "full?cameraPosition={\"x\":\"20\",\"y\":\"25\",\"z\":\"-35\"}&cameraFocalPoint={\"x\":\"0\",\"y\":\"46\",\"z\":\"0\"}";
             case FULL   -> "full";
         };
-        return "https://starlightskins.lunareclipse.studio/skin-render/ultimate/" + uuid + "/" + type;
+        return "https://starlightskins.lunareclipse.studio/render/ultimate/" + uuid + "/" + type;
     }
 
 

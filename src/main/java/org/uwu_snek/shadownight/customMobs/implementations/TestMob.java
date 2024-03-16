@@ -8,14 +8,17 @@ import org.uwu_snek.shadownight.customMobs.CustomMob;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
+import java.util.HashMap;
+
 
 
 
 public class TestMob extends CustomMob {
+    public HashMap<String, DisplayBone> bones_test = new HashMap<>();
     public static TestMob testMob;
-    public void rotate(float a, float x, float y, float z) {
-        r0.rotate(20, a, x, y, z);
-        l0.rotate(20, a, x, y, z);
+    public void rotate( float x, float y, float z) {
+        r0.rotate(20, x, y, z);
+        l0.rotate(20, x, y, z);
     }
     //public void move(float x, float y, float z) { r0.move(20, x, y, z); }
 
@@ -33,6 +36,19 @@ public class TestMob extends CustomMob {
 
     public TestMob() {
         super();
+
+        bones_test.put("center", (DisplayBone)center);
+        bones_test.put("r0",     (DisplayBone)r0);
+        bones_test.put("r1",     (DisplayBone)r1);
+        bones_test.put("r2",     (DisplayBone)r2);
+        bones_test.put("r3",     (DisplayBone)r3);
+        bones_test.put("r4",     (DisplayBone)r4);
+        bones_test.put("l0",     (DisplayBone)l0);
+        bones_test.put("l1",     (DisplayBone)l1);
+        bones_test.put("l2",     (DisplayBone)l2);
+        bones_test.put("l3",     (DisplayBone)l3);
+        bones_test.put("l4",     (DisplayBone)l4);
+
         testMob = this;
         root.addChild(center);
         center.addChild(r0);
@@ -68,7 +84,7 @@ public class TestMob extends CustomMob {
         //Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 1, 0, 0); }, 70);
 
 
-
+/*
         Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.1f, 0, 1, 1); }, 40);
         Scheduler.delay(() -> {     r0.rotate(20,  (float)Math.PI * 0.1f, 0, 1, 1); }, 40);
         Scheduler.delay(() -> {     r1.rotate(20,  (float)Math.PI * 0.1f, 0, 1, 1); }, 40);
@@ -90,7 +106,7 @@ public class TestMob extends CustomMob {
         Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 0, 0, 1); }, 90);
         Scheduler.delay(() -> { r2.rotate(20,  (float)Math.PI * 0.25f, 0, 0, 1); }, 110);
         Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 0, 0, 1); }, 130);
-
+*/
         //Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 1, 0, 0); }, 150);
 
     }
