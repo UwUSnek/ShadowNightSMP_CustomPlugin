@@ -118,3 +118,7 @@ commands:
         description: admin command
         usage: /summontest
         permission: op
+    testrotation:
+        description: admin command
+        usage: /testrotation
+        permission: op

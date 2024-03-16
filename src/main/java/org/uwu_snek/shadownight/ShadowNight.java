@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.uwu_snek.shadownight.adminCommands.CMD_sngive;
 import org.uwu_snek.shadownight.adminCommands.CMD_summontest;
+import org.uwu_snek.shadownight.adminCommands.CMD_testrotation;
 import org.uwu_snek.shadownight.chatManager.discord.BotManager;
 import org.uwu_snek.shadownight.dungeons.CMD_dungeontest;
 import org.uwu_snek.shadownight.dungeons.CMD_recreatedungeon;
@@ -123,6 +124,7 @@ public final class ShadowNight extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("sngiveid"),          "getCommand returned null").setExecutor(new CMD_sngiveid());
         Objects.requireNonNull(this.getCommand("sngive"),          "getCommand returned null").setExecutor(new CMD_sngive());
         Objects.requireNonNull(this.getCommand("summontest"),          "getCommand returned null").setExecutor(new CMD_summontest());
+        Objects.requireNonNull(this.getCommand("testrotation"),          "getCommand returned null").setExecutor(new CMD_testrotation());
 
 
 

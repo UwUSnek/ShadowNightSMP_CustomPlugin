@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 
 public class Bone {
-    //TODO remove locPos if not needed
     protected Vector3f locPos = new Vector3f(0, 0, 0); // The location of this bone's location relative to its origin
     protected Vector3f origin = new Vector3f(0, 0, 0); // The location of this bone's origin relative to the root bone
 
@@ -74,7 +73,7 @@ public class Bone {
         for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
     }
     protected void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
-        locPos.rotateAxis(r.angle, r.x, r.y, r.z); //TODO maybe do offset calculation here. remove, rotate, add.
+        locPos.rotateAxis(r.angle, r.x, r.y, r.z);
         origin = o;
         for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
     }
