@@ -14,15 +14,11 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
-import org.uwu_snek.shadownight.utils.utils;
-
-import java.util.logging.Level;
 
 
 
 
 public final class DisplayBone extends Bone {
-    public String DEBUG_NAME;
     private ItemDisplay displayEntity;
     private final int customModelData;
     private final Quaternionf displayRotation0 = new Quaternionf(0, 0, 1, 0);
@@ -35,8 +31,7 @@ public final class DisplayBone extends Bone {
     private final float hitboxWidth;
     private final float hitboxHeight;
 
-    public DisplayBone(final _mob_part_type partId, final float hitboxWidth, final float hitboxHeight, final String DEBUG_NAME) {
-        this.DEBUG_NAME = DEBUG_NAME;
+    public DisplayBone(final _mob_part_type partId, final float hitboxWidth, final float hitboxHeight) {
         this.customModelData = partId.getCustomModelData();
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
@@ -44,9 +39,9 @@ public final class DisplayBone extends Bone {
 
 
     @Override
-    public void summon(final @NotNull Entity mount){
+    public void spawn(final @NotNull Entity mount){
         final Location location = mount.getLocation();
-        super.summon(mount);
+        super.spawn(mount);
 
         // Initialize display entity
         displayEntity = (ItemDisplay)location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
@@ -85,16 +80,16 @@ public final class DisplayBone extends Bone {
     @Override
     public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(duration, r);
-        displayRotation0.set(new Quaternionf(r).mul(displayRotation0));
+        displayRotation0.premul(new Quaternionf(r));
         displayEntity.setInterpolationDuration(duration);
-        updateDisplayTransform(r);
+        updateDisplayTransform();
     }
     @Override
     public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         super.rotateUpdateOrigin(duration, o, r);
-        displayRotation0.set(new Quaternionf(r).mul(displayRotation0));
+        displayRotation0.premul(new Quaternionf(r));
         displayEntity.setInterpolationDuration(duration);
-        updateDisplayTransform(r);
+        updateDisplayTransform();
         updateHitbox();
     }
 
@@ -102,9 +97,6 @@ public final class DisplayBone extends Bone {
 
 
     private void updateDisplayTransform(){
-        updateDisplayTransform(new AxisAngle4f(0, 0, 1, 0));
-    }
-    private void updateDisplayTransform(AxisAngle4f r){
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
             new AxisAngle4f(displayRotation0),

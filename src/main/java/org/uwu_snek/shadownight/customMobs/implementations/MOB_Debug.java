@@ -2,7 +2,7 @@ package org.uwu_snek.shadownight.customMobs.implementations;
 
 import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight.customMobs.Bone;
-import org.uwu_snek.shadownight.customMobs.CustomMob;
+import org.uwu_snek.shadownight.customMobs.MOB;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
@@ -11,28 +11,23 @@ import java.util.HashMap;
 
 
 
-public class CM_Debug extends CustomMob {
+public class MOB_Debug extends MOB {
     public HashMap<String, DisplayBone> bones_test = new HashMap<>();
-    public static CM_Debug testMob;
-    public void rotate(float a, float x, float y, float z) {
-        r0.rotate(20, a, x, y, z);
-        l0.rotate(20, a, x, y, z);
-    }
-    //public void move(float x, float y, float z) { r0.move(20, x, y, z); }
+    public static MOB_Debug testMob;
 
-    Bone center = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "center");
-    Bone r0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r0");
-    Bone r1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r1");
-    Bone r2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r2");
-    Bone r3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r3");
-    Bone r4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r4");
-    Bone l0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l0");
-    Bone l1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l1");
-    Bone l2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l2");
-    Bone l3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l3");
-    Bone l4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l4");
+    Bone center = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone r0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone r1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone r2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone r3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone r4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone l0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone l1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone l2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone l3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone l4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
 
-    public CM_Debug() {
+    public MOB_Debug() {
         super();
 
         bones_test.put("center", (DisplayBone)center);
@@ -82,7 +77,7 @@ public class CM_Debug extends CustomMob {
         //Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 1, 0, 0); }, 70);
 
 
-/*
+
         Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.1f, 0, 1, 1); }, 40);
         Scheduler.delay(() -> {     r0.rotate(20,  (float)Math.PI * 0.1f, 0, 1, 1); }, 40);
         Scheduler.delay(() -> {     r1.rotate(20,  (float)Math.PI * 0.1f, 0, 1, 1); }, 40);
@@ -104,7 +99,7 @@ public class CM_Debug extends CustomMob {
         Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 0, 0, 1); }, 90);
         Scheduler.delay(() -> { r2.rotate(20,  (float)Math.PI * 0.25f, 0, 0, 1); }, 110);
         Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 0, 0, 1); }, 130);
-*/
+
         //Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 1, 0, 0); }, 150);
 
     }

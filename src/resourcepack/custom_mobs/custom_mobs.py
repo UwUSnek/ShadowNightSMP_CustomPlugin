@@ -2,6 +2,7 @@ import os
 import json
 import pathlib
 import shutil
+import re
 
 
 
@@ -25,9 +26,25 @@ texture_target = output_sn_namespace + "/textures/item/mob"; os.makedirs(texture
 
 
 
-base = json.load(open(source_base + "/" + "bone.json", "r"))
-model_files = [{ "path": model_source + "/" + f, "base_name": f } for f in os.listdir(model_source) if os.path.isfile(os.path.join(model_source, f))]
 
+
+def list_files_recursive(start, search_path=""):
+    r = []
+    if len(search_path) == 0:
+        search_path = start
+
+    for entry in os.listdir(search_path):
+        entry_path = os.path.join(search_path, entry)
+        if os.path.isdir(entry_path):
+            r += list_files_recursive(start, entry_path)
+        else:
+            r += [{ "path": entry_path, "rel_path": os.path.relpath(entry_path, start) }]
+
+    return r
+
+
+base = json.load(open(source_base + "/" + "bone.json", "r"))
+model_files = list_files_recursive(model_source)
 
 
 
@@ -65,11 +82,13 @@ with open(target_java + "/" + java_class_name + ".java", "w+") as java:
 
         # Set credit and paste part model
         model["credit"] = credit
-        json.dump(model, open(model_target + "/" + model_file["base_name"], "w+"), indent=4)
+        output_model_file = model_target + "/" + model_file["rel_path"]
+        os.makedirs(pathlib.Path(output_model_file).parent, exist_ok=True)
+        json.dump(model, open(output_model_file, "w+"), indent=4)
 
 
         # Generate mob part name
-        part_name = "".join(model_file["base_name"].split(".")[:-1])
+        part_name = "".join(model_file["rel_path"].split(".")[:-1])
 
         # Add model as Bone variant
         base["overrides"] += [{
@@ -80,7 +99,7 @@ with open(target_java + "/" + java_class_name + ".java", "w+") as java:
         }]
 
         # Set java hook
-        java.write(f'    { part_name.upper() }({ data_zero + i }){ "," if i < len(model_files) - 1 else ";" }\n')
+        java.write(f'    { re.sub(r"[/-]", "_", part_name).upper() }({ data_zero + i }){ "," if i < len(model_files) - 1 else ";" }\n')
 
 
 

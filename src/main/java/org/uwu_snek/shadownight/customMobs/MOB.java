@@ -1,32 +1,25 @@
 package org.uwu_snek.shadownight.customMobs;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.management.Attribute;
-import java.util.HashMap;
 
 
 
 
 //TODO add onSpawn and onDeath callbacks
-public class CustomMob {
+public class MOB {
     protected Bone root;
     protected Interaction mount;
 
 
-    public CustomMob() {
+    public MOB() {
         root = new Bone();
     }
 
-    public void summon(final @NotNull Location spawnLocation) {
+    public void spawn(final @NotNull Location spawnLocation) {
         // Make the spawn location face North and reset pitch
         final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, 1));
 
@@ -34,6 +27,6 @@ public class CustomMob {
         mount = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
         mount.setInteractionWidth(0);
         mount.setInteractionHeight(0);
-        root.summon(mount); // Summon bones
+        root.spawn(mount); // Spawn bones
     }
 }

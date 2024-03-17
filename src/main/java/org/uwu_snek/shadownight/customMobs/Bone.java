@@ -22,8 +22,8 @@ public class Bone {
      * Spawns any tangible and/or visible bone in this bone's hierarchy in the world
      * @param mount The mount entity used to support the bones
      */
-    public void summon(final @NotNull Entity mount){
-        for(Bone b : children) b.summon(mount);
+    public void spawn(final @NotNull Entity mount){
+        for(Bone b : children) b.spawn(mount);
     }
 
     /**
