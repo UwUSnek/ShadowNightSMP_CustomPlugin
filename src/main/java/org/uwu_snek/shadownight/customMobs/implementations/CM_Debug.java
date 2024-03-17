@@ -1,7 +1,5 @@
 package org.uwu_snek.shadownight.customMobs.implementations;
 
-import org.bukkit.entity.EntityType;
-import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.CustomMob;
@@ -13,28 +11,28 @@ import java.util.HashMap;
 
 
 
-public class TestMob extends CustomMob {
+public class CM_Debug extends CustomMob {
     public HashMap<String, DisplayBone> bones_test = new HashMap<>();
-    public static TestMob testMob;
+    public static CM_Debug testMob;
     public void rotate(float a, float x, float y, float z) {
         r0.rotate(20, a, x, y, z);
         l0.rotate(20, a, x, y, z);
     }
     //public void move(float x, float y, float z) { r0.move(20, x, y, z); }
 
-    Bone center = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "center");
-    Bone r0     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "r0");
-    Bone r1     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "r1");
-    Bone r2     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "r2");
-    Bone r3     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "r3");
-    Bone r4     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "r4");
-    Bone l0     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "l0");
-    Bone l1     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "l1");
-    Bone l2     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "l2");
-    Bone l3     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "l3");
-    Bone l4     = new DisplayBone(_mob_part_type.TEST_PART, 1.02f, 1.02f, "l4");
+    Bone center = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "center");
+    Bone r0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r0");
+    Bone r1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r1");
+    Bone r2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r2");
+    Bone r3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r3");
+    Bone r4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "r4");
+    Bone l0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l0");
+    Bone l1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l1");
+    Bone l2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l2");
+    Bone l3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l3");
+    Bone l4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f, "l4");
 
-    public TestMob() {
+    public CM_Debug() {
         super();
 
         bones_test.put("center", (DisplayBone)center);

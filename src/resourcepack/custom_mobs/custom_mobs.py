@@ -1,5 +1,6 @@
 import os
 import json
+import pathlib
 import shutil
 
 
@@ -56,7 +57,10 @@ with open(target_java + "/" + java_class_name + ".java", "w+") as java:
         for key, texture in model["textures"].items():
             rel_texture_path = texture.split(":")[-1]  # The path of the texture starting from the textures/item directory without the extension
             model["textures"][key] = "shadow_night:item/mob/" + rel_texture_path
-            shutil.copyfile(texture_source + "/" + rel_texture_path + ".png", texture_target + "/" + rel_texture_path + ".png")
+
+            output_texture_file = texture_target + "/" + rel_texture_path + ".png"
+            os.makedirs(pathlib.Path(output_texture_file).parent, exist_ok=True)
+            shutil.copyfile(texture_source + "/" + rel_texture_path + ".png", output_texture_file)
 
 
         # Set credit and paste part model

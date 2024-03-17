@@ -25,9 +25,9 @@ public final class DisplayBone extends Bone {
     public String DEBUG_NAME;
     private ItemDisplay displayEntity;
     private final int customModelData;
-    //private final Quaternionf displayRotation = new Quaternionf(0, 0, 1, 0);
+    private final Quaternionf displayRotation0 = new Quaternionf(0, 0, 1, 0);
+    //private final AxisAngle4f displayRotation0 = new AxisAngle4f(0, 0, 1, 0);
     //private final Vector3f displayRotation0 = new Vector3f(0, 0, -1);
-    private final AxisAngle4f displayRotation0 = new AxisAngle4f(0, 0, 1, 0);
 
 
 
@@ -101,8 +101,8 @@ public final class DisplayBone extends Bone {
         //displayRotation.rotationTo(new Vector3f(0, 0, -1), displayRotation0.rotate(new Quaternionf(r)));
         //displayRotation.rotateXYZ(qr.x(), qr.y(), qr.z());
         utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "before : " + displayRotation0 + "    adding " + r); //TODO REMOVE
-        //displayRotation0.rotateAxis(r.angle, r.x, r.y, r.z).normalize();
-        displayRotation0.set(r);
+        displayRotation0.rotateAxis(r.angle, r.x, r.y, r.z).normalize();
+        //displayRotation0.set(r);
         utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "after:   " + displayRotation0); //TODO REMOVE
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
@@ -115,8 +115,8 @@ public final class DisplayBone extends Bone {
         //displayRotation.rotationTo(new Vector3f(0, 0, -1), displayRotation0.rotate(new Quaternionf(r)));
         //displayRotation.rotateXYZ(qr.x(), qr.y(), qr.z());
         utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "before : " + displayRotation0 + "    adding " + r); //TODO REMOVE
-        //displayRotation0.rotateAxis(r.angle, r.x, r.y, r.z).normalize();
-        displayRotation0.set(r);
+        displayRotation0.rotateAxis(r.angle, r.x, r.y, r.z).normalize();
+        //displayRotation0.set(r);
         utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "after:   " + displayRotation0); //TODO REMOVE
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
@@ -134,7 +134,7 @@ public final class DisplayBone extends Bone {
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
           //  new AxisAngle4f(TMP),
-            displayRotation0,
+            new AxisAngle4f(displayRotation0),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
