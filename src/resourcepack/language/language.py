@@ -1,6 +1,7 @@
 import glob
 import json
 import os
+from resourcepack import utils
 
 languages = [
     "af_za", "ar_sa", "ast_es", "az_az",  "ba_ru",  "bar",    "be_by",  "bg_bg",  "br_fr", "brb",   "bs_ba",   "ca_es",    "cs_cz",
@@ -15,7 +16,7 @@ languages = [
     "tr_tr", "tt_ru", "uk_ua",  "val_es", "vec_it", "vi_vn",  "yi_de",  "yo_ng",  "zh_cn", "zh_hk", "zh_tw",   "zlm_arab",
 ]
 
-target = "./build/output/assets/minecraft/lang"
+target = utils.output_mc_namespace + "/lang"
 os.makedirs(target, exist_ok=True)
 
 source = "./build/language"

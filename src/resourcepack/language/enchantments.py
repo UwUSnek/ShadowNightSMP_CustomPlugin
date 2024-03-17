@@ -1,3 +1,6 @@
+from resourcepack import utils
+
+
 
 
 custom_color = "§3"
@@ -50,9 +53,10 @@ unchanged = [
 
 
 
-with open("./build/language/enchantments.json", "w+") as json, open("../main/java/org/uwu_snek/shadownight/_generated/_enchantment_overrides.java", "w+") as java:
+with open("./build/language/enchantments.json", "w+") as json, open(utils.target_java + "/_enchantment_overrides.java", "w+") as java:
     json.write("{\n")
     java.write(
+        '// ' + utils.credit + '\n\n\n\n'
         'package org.uwu_snek.shadownight._generated;\n'
         'import org.bukkit.enchantments.Enchantment;\n'
         'import org.jetbrains.annotations.NotNull;\n'

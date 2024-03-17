@@ -35,10 +35,9 @@ source_base     = "./custom_items/base"
 source_parents  = "./custom_items/parents"
 source_textures = "./custom_items/textures"
 
-target_base     = utils.mkdirs("./build/output/assets/minecraft/models/item")
-target_models   = utils.mkdirs("./build/output/assets/shadow_night/models/item")
-target_textures = utils.mkdirs("./build/output/assets/shadow_night/textures/item")
-target_java     = utils.mkdirs("../main/java/org/uwu_snek/shadownight/_generated")
+target_base     = utils.mkdirs(utils.output_mc_namespace + "/models/item")
+target_models   = utils.mkdirs(utils.output_sn_namespace + "/models/item")
+target_textures = utils.mkdirs(utils.output_sn_namespace + "/textures/item")
 
 
 parents = []
@@ -48,9 +47,10 @@ data_zero = 10_000
 
 
 
-with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open(target_java + "/" + "_custom_item_id.java", "w+") as java_id:
+with open(utils.target_java + "/" + "_custom_item_data.java", "w+") as java_data, open(utils.target_java + "/" + "_custom_item_id.java", "w+") as java_id:
     # Generate java getter
     java_data.write(
+        '// ' + utils.credit + '\n\n\n\n'
         'package org.uwu_snek.shadownight._generated;\n'
         'import org.jetbrains.annotations.NotNull;\n'
         'import org.javatuples.Pair;\n'
@@ -60,6 +60,7 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
         '        return switch(id) {\n'
     )
     java_id.write(
+        '// ' + utils.credit + '\n\n\n\n'
         'package org.uwu_snek.shadownight._generated;\n'
         'import org.uwu_snek.shadownight.utils.utils;\n'
         'import java.nio.charset.StandardCharsets;\n'
@@ -114,6 +115,7 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
                 # Generate the model
                 json.dump(
                     {
+                        "credit": utils.credit,
                         "parent": "shadow_night:item/" + c["parent"],
                         "textures": {
                             "layer0": "shadow_night:item/" + c["parent"] + "/" + c["id"]
