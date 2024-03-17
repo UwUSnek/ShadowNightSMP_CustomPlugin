@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+str=$(realpath "..")
+export PYTHONPATH="${PYTHONPATH}:${str}"
 
 
 # Create build directory

@@ -2,6 +2,7 @@ import copy
 import os
 import json
 from shutil import copyfile
+from resourcepack import utils
 
 
 #! IMPORTANT: Don't change the order of children of a base item. It will break old ItemStacks
@@ -34,10 +35,10 @@ source_base     = "./custom_items/base"
 source_parents  = "./custom_items/parents"
 source_textures = "./custom_items/textures"
 
-target_base     = "./build/output/assets/minecraft/models/item";      os.makedirs(target_base,     exist_ok=True)
-target_models   = "./build/output/assets/shadow_night/models/item";   os.makedirs(target_models,   exist_ok=True)
-target_textures = "./build/output/assets/shadow_night/textures/item"; os.makedirs(target_textures, exist_ok=True)
-target_java     = "../main/java/org/uwu_snek/shadownight/_generated"; os.makedirs(target_java,     exist_ok=True)
+target_base     = utils.mkdirs("./build/output/assets/minecraft/models/item")
+target_models   = utils.mkdirs("./build/output/assets/shadow_night/models/item")
+target_textures = utils.mkdirs("./build/output/assets/shadow_night/textures/item")
+target_java     = utils.mkdirs("../main/java/org/uwu_snek/shadownight/_generated")
 
 
 parents = []
@@ -130,8 +131,7 @@ with open(target_java + "/" + "_custom_item_data.java", "w+") as java_data, open
                 }]
 
                 # Paste its hard coded texture
-                os.makedirs(target_textures + "/" + c["parent"], exist_ok=True)
-                copyfile(source_textures + "/" + c["parent"] + "/" + model_name + ".png", target_textures + "/" + c["parent"] + "/" + model_name + ".png")
+                copyfile(source_textures + "/" + c["parent"] + "/" + model_name + ".png", utils.mkdirs(target_textures + "/" + c["parent"] + "/" + model_name + ".png"))
 
 
         # Print new vanilla model
