@@ -16,9 +16,9 @@ import java.util.HashMap;
 public class TestMob extends CustomMob {
     public HashMap<String, DisplayBone> bones_test = new HashMap<>();
     public static TestMob testMob;
-    public void rotate( float x, float y, float z) {
-        r0.rotate(20, x, y, z);
-        l0.rotate(20, x, y, z);
+    public void rotate(float a, float x, float y, float z) {
+        r0.rotate(20, a, x, y, z);
+        l0.rotate(20, a, x, y, z);
     }
     //public void move(float x, float y, float z) { r0.move(20, x, y, z); }
 
