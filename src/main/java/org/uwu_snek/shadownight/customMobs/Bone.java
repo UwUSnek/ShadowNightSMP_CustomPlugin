@@ -68,8 +68,6 @@ public class Bone {
         rotateUnsafe(duration, r.normalize());
     }
     public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
-        //locPos.rotateAxis(r.angle, r.x, r.y, r.z); //TODO maybe do offset calculation here. remove, rotate, add.
-        //for(Bone c : children) c.rotate(duration, r);
         for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
     }
     protected void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){

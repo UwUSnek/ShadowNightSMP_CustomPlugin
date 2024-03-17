@@ -26,8 +26,6 @@ public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity;
     private final int customModelData;
     private final Quaternionf displayRotation0 = new Quaternionf(0, 0, 1, 0);
-    //private final AxisAngle4f displayRotation0 = new AxisAngle4f(0, 0, 1, 0);
-    //private final Vector3f displayRotation0 = new Vector3f(0, 0, -1);
 
 
 
@@ -84,40 +82,17 @@ public final class DisplayBone extends Bone {
 
 
 
-    public String DEBUG_printAngle(Quaternionf a ) {
-        //AxisAngle4f g = new AxisAngle4f(a);
-        AxisAngle4f g = new AxisAngle4f(a);
-        return "(angle: " + g.angle + ", xyz: (" + g.x + ", " + g.y + ", " + g.z + "))";
-    }
-
-    public String DEBUG_printAngle(AxisAngle4f g ) {
-        return "(angle: " + g.angle + ", xyz: (" + g.x + ", " + g.y + ", " + g.z + "))";
-    }
-
     @Override
     public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(duration, r);
-        //displayRotation.rotateAxis(r.angle, -r.x, -r.y, r.z); // Invert XZ Plane (-y) //! OLD
-        //displayRotation.rotationTo(new Vector3f(0, 0, -1), displayRotation0.rotate(new Quaternionf(r)));
-        //displayRotation.rotateXYZ(qr.x(), qr.y(), qr.z());
-        utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "before : " + displayRotation0 + "    adding " + r); //TODO REMOVE
-        displayRotation0.rotateAxis(r.angle, r.x, r.y, r.z).normalize();
-        //displayRotation0.set(r);
-        utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "after:   " + displayRotation0); //TODO REMOVE
+        displayRotation0.set(new Quaternionf(r).mul(displayRotation0));
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
-        //updateHitbox();
     }
     @Override
     public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         super.rotateUpdateOrigin(duration, o, r);
-        //displayRotation.rotateAxis(r.angle, -r.x, -r.y, r.z); // Invert XZ Plane (-y) //! OLD
-        //displayRotation.rotationTo(new Vector3f(0, 0, -1), displayRotation0.rotate(new Quaternionf(r)));
-        //displayRotation.rotateXYZ(qr.x(), qr.y(), qr.z());
-        utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "before : " + displayRotation0 + "    adding " + r); //TODO REMOVE
-        displayRotation0.rotateAxis(r.angle, r.x, r.y, r.z).normalize();
-        //displayRotation0.set(r);
-        utils.log(Level.WARNING, "[" + DEBUG_NAME + "] " + "after:   " + displayRotation0); //TODO REMOVE
+        displayRotation0.set(new Quaternionf(r).mul(displayRotation0));
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform(r);
         updateHitbox();
@@ -130,15 +105,12 @@ public final class DisplayBone extends Bone {
         updateDisplayTransform(new AxisAngle4f(0, 0, 1, 0));
     }
     private void updateDisplayTransform(AxisAngle4f r){
-        //Quaternionf TMP = new Quaternionf().rotationTo(new Vector3f(0, 0, -1), displayRotation0);  //TODO REMOVE
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
-          //  new AxisAngle4f(TMP),
             new AxisAngle4f(displayRotation0),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
-        //hitbox.teleport(hitbox.getLocation().clone().setDirection(new Vector(new AxisAngle4f(displayRotation).x, new AxisAngle4f(displayRotation).y, new AxisAngle4f(displayRotation).z)));
         displayEntity.setTransformation(t);
         displayEntity.setInterpolationDelay(0);
     }
@@ -146,9 +118,6 @@ public final class DisplayBone extends Bone {
 
     private void updateHitbox(){
         final Vector3f absPos = getAbsPos();
-        //hitbox.teleport(displayEntity.getLocation().add(new Vector(absPos.x, absPos.y, absPos.z)));
-        //TODO remove
-        //hitbox.teleport(displayEntity.getLocation().add(new Vector(absPos.x, absPos.y, absPos.z)).setDirection(new Vector(new AxisAngle4f(displayRotation).x, new AxisAngle4f(displayRotation).y, new AxisAngle4f(displayRotation).z)));
-        hitbox.teleport(displayEntity.getLocation().add(new Vector(absPos.x, absPos.y, absPos.z)).setDirection(new Vector(displayRotation0.x, displayRotation0.y, displayRotation0.z)));
+        hitbox.teleport(displayEntity.getLocation().add(new Vector(absPos.x, absPos.y, absPos.z)));
     }
 }
