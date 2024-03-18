@@ -66,7 +66,6 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
         #"texture_size": full_model, #TODO check if this is needed
         "textures": full_model["textures"],
         "elements": [],
-        "groups": []
     }
 
 
@@ -97,7 +96,6 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
     # Add part elements and shift them to center their origin to [8, 8, 8]. Ignore 0-Size elements
     for group_child in part["children"]:
         part_model["elements"] += [ e for e in get_all_group_elements(full_model, group_child) if e["from"] != e["to"] ]
-        part_model["groups"] += [group_child]
     for element in part_model["elements"]:
         element["from"] = center_vector(element["from"], origin_data["pos"])
         element["to"  ] = center_vector(element["to"], origin_data["pos"])
@@ -134,7 +132,12 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
     # Create java preset data
     java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 1.02f, 1.02f);\n' #TODO fix hitboxes
     java_preset_data["connections"] += f'        { origin_data["parent"] }.addChild({ part["name"] });\n'
-    java_preset_data["adjustments"] += f'        { part["name"] }.move(20, { origin_data["pos"][0] - 8 }f, { origin_data["pos"][1] - 8 }f, { origin_data["pos"][2] - 8 }f);\n' #TODO fix duration
+    java_preset_data["adjustments"] += (
+        f'        { part["name"] }.moveSelf(20, '
+        f'{ (origin_data["pos"][0] - 8) / 16 }f, '  #! Divide by 16 as ItemDisplay translations use block-sized units.
+        f'{ (origin_data["pos"][1] - 8) / 16 }f, '  #! Minecraft model units are 16 times smaller
+        f'{ (origin_data["pos"][2] - 8) / 16 }f);\n'
+    )  #TODO fix duration
 
 
 
@@ -191,22 +194,16 @@ def generate_mob(i: int, model_file, java_parts):
             f'// ' + utils.credit + '\n\n\n\n'
             f'package org.uwu_snek.shadownight._generated._mob_presets;\n'
             f'import org.uwu_snek.shadownight.customMobs.MOB;\n'
-            f'import org.bukkit.Location;\n'
             f'import org.uwu_snek.shadownight._generated._mob_part_type;\n'
             f'import org.uwu_snek.shadownight.customMobs.Bone;\n'
             f'import org.uwu_snek.shadownight.customMobs.DisplayBone;\n'
-            f'import org.jetbrains.annotations.NotNull;\n'
             f'public abstract class { java_class_name } extends MOB {{\n'
             f'{ java_preset_data["members"] }\n'
             f'    public { java_class_name }() {{\n'
             f'        super();\n'
             f'{ java_preset_data["connections"] }'
-            f'{ java_preset_data["adjustments"] }'
+            #f'{ java_preset_data["adjustments"] }' #TODO
             f'    }}\n'
-            #f'    @Override\n'
-            #f'    public void spawn(final @NotNull Location spawnLocation) {{\n'
-            #f'        super.spawn(spawnLocation);\n'
-            #f'    }}\n'
             f'}}\n'
         )
 

@@ -74,12 +74,14 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
+        updateDisplayTransform();
 
         // Initialize hitboxes
         hitbox = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
         hitbox.setInteractionWidth(hitboxWidth);
         hitbox.setInteractionHeight(hitboxHeight);
         displayEntity.addPassenger(hitbox);
+        updateHitbox();
     }
 
 
@@ -90,8 +92,8 @@ public final class DisplayBone extends Bone {
 
 
     @Override
-    public void move(final int duration, final @NotNull Vector3f v){
-        super.move(duration, v);
+    public void moveSelf(final int duration, final @NotNull Vector3f v){
+        super.moveSelf(duration, v);
         updateDisplayTransform();
         updateHitbox();
     }
