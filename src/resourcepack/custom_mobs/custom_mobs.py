@@ -171,7 +171,7 @@ def generate_mob(i: int, model_file, java_parts):
 
 
 
-        # Separate parts and generate relative models and hooks
+        # Separate parts and generate respective models and hooks
         java_preset_data = { "members": "", "connections": "" }
         model_path = model_source + "/" + model_file["rel_path"]
         assert "groups" in model and len(model["groups"]) > 0, "Model " + model_path + " has no groups"

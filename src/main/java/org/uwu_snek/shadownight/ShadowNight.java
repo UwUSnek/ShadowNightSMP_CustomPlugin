@@ -7,9 +7,7 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.uwu_snek.shadownight.adminCommands.CMD_sngive;
-import org.uwu_snek.shadownight.adminCommands.CMD_summontest;
-import org.uwu_snek.shadownight.adminCommands.CMD_testrotation;
+import org.uwu_snek.shadownight.adminCommands.*;
 import org.uwu_snek.shadownight.chatManager.discord.BotManager;
 import org.uwu_snek.shadownight.dungeons.CMD_dungeontest;
 import org.uwu_snek.shadownight.dungeons.CMD_recreatedungeon;
@@ -17,7 +15,6 @@ import org.uwu_snek.shadownight.dungeons.Dungeon;
 import org.uwu_snek.shadownight.economy.CMD_trade;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.enchantments.CustomEnchantManager;
-import org.uwu_snek.shadownight.adminCommands.CMD_sngiveid;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.customItems.ItemManager;
 import org.uwu_snek.shadownight.qol.CMD_flyspeed;
@@ -124,6 +121,7 @@ public final class ShadowNight extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("sngiveid"),          "getCommand returned null").setExecutor(new CMD_sngiveid());
         Objects.requireNonNull(this.getCommand("sngive"),          "getCommand returned null").setExecutor(new CMD_sngive());
         Objects.requireNonNull(this.getCommand("summontest"),          "getCommand returned null").setExecutor(new CMD_summontest());
+        Objects.requireNonNull(this.getCommand("summontest2"),          "getCommand returned null").setExecutor(new CMD_summontest2());
         Objects.requireNonNull(this.getCommand("testrotation"),          "getCommand returned null").setExecutor(new CMD_testrotation());
 
 

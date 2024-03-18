@@ -9,6 +9,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -19,9 +20,9 @@ import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 
 
 public final class DisplayBone extends Bone {
-    private ItemDisplay displayEntity;
+    private ItemDisplay displayEntity = null;
     private final int customModelData;
-    private final Quaternionf displayRotation0 = new Quaternionf(0, 0, 1, 0);
+    private final Quaternionf displayRotation = new Quaternionf(0, 0, 1, 0);
 
 
 
@@ -31,11 +32,35 @@ public final class DisplayBone extends Bone {
     private final float hitboxWidth;
     private final float hitboxHeight;
 
-    public DisplayBone(final _mob_part_type partId, final float hitboxWidth, final float hitboxHeight) {
-        this.customModelData = partId.getCustomModelData();
+    public DisplayBone(final int partCustomModelData, final float hitboxWidth, final float hitboxHeight) {
+        this.customModelData = partCustomModelData;
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
     }
+
+    public DisplayBone(final _mob_part_type partId, final float hitboxWidth, final float hitboxHeight) {
+        this(partId.getCustomModelData(), hitboxWidth, hitboxHeight);
+    }
+
+    /**
+     * Lightweight constructor for custom copy operations
+     */
+    private DisplayBone(final int partCustomModelData, final float hitboxWidth, final float hitboxHeight, final @Nullable Object dummy) {
+        this.hitboxWidth = hitboxWidth;
+        this.hitboxHeight = hitboxHeight;
+        this.customModelData = partCustomModelData;
+    }
+
+    @Override
+    public Bone createShallowCopy(){
+        final DisplayBone b = new DisplayBone(customModelData, hitboxWidth, hitboxHeight, null);
+        b.locPos = locPos;
+        b.origin = origin;
+        b.displayRotation.set(displayRotation);
+        return b;
+    }
+
+
 
 
     @Override
@@ -61,6 +86,9 @@ public final class DisplayBone extends Bone {
 
 
 
+
+
+
     @Override
     public void move(final int duration, final @NotNull Vector3f v){
         super.move(duration, v);
@@ -77,17 +105,18 @@ public final class DisplayBone extends Bone {
 
 
 
+
     @Override
     public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(duration, r);
-        displayRotation0.premul(new Quaternionf(r));
+        displayRotation.premul(new Quaternionf(r));
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform();
     }
     @Override
     public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         super.rotateUpdateOrigin(duration, o, r);
-        displayRotation0.premul(new Quaternionf(r));
+        displayRotation.premul(new Quaternionf(r));
         displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform();
         updateHitbox();
@@ -99,7 +128,7 @@ public final class DisplayBone extends Bone {
     private void updateDisplayTransform(){
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
-            new AxisAngle4f(displayRotation0),
+            new AxisAngle4f(displayRotation),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
