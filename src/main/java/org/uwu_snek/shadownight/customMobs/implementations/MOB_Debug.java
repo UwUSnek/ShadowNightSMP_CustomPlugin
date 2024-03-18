@@ -55,7 +55,7 @@ public class MOB_Debug extends MOB {
         l2.addChild(l3);
         l3.addChild(l4);
 
-
+/*
         Scheduler.delay(() -> { root.move(4, 1, 0, -1); }, 20);
 
         Scheduler.delay(() -> { r0.move(4, 1, 0, 2); }, 30);
@@ -101,6 +101,6 @@ public class MOB_Debug extends MOB {
         Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 0, 0, 1); }, 130);
 
         //Scheduler.delay(() -> { center.rotate(20,  (float)Math.PI * 0.25f, 1, 0, 0); }, 150);
-
+*/
     }
 }

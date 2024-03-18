@@ -43,11 +43,18 @@ def center_vector(v, origin):
         v[2] - (origin[2] - 8)
     ]
 
+#def rotate_vector_180(v):
+#    return [
+#        v[0]
+#        v[1]
+#        v[2]
+#    ]
+
 def check_element_coordinate_pos(v):
     return (
-        -16 < v[0] <= 32 and
-        -16 < v[1] <= 32 and
-        -16 < v[2] <= 32
+        -16 <= v[0] <= 32 and
+        -16 <= v[1] <= 32 and
+        -16 <= v[2] <= 32
     )
 
 
@@ -143,7 +150,7 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
     # Create java preset data
-    java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 1.02f, 1.02f);\n'  #TODO fix hitboxes
+    java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 0.5f, 0.5f);\n'  #TODO fix hitboxes
     java_preset_data["connections"] += f'        { origin_data["parent"] }.addChild({ part["name"] });\n'
     java_preset_data["adjustments"] += (
         f'        { part["name"] }.moveSelf(20, '   #TODO fix duration
@@ -169,26 +176,6 @@ def generate_mob(model_file, java_parts):
     java_class_name = "_mob_preset_" + sanitized_model_name
     with open(utils.mkdirs(utils.target_java + "/_mob_presets/" + java_class_name + ".java"), "w+") as java_preset:
 
-        # Flip element coords and its rotation pivot on all axes
-        for element in model["elements"]:
-
-            #! Swapping "from" and "to" allows to flip an element without inverting it
-            from_0 = element["from"][0]
-            from_1 = element["from"][1]
-            from_2 = element["from"][2]
-            element["from"][0] = -element["to"][0] + 16
-            element["from"][1] = -element["to"][1] + 16
-            element["from"][2] = -element["to"][2] + 16
-            element["to"  ][0] = -from_0 + 16
-            element["to"  ][1] = -from_1 + 16
-            element["to"  ][2] = -from_2 + 16
-
-            #! Rotation pivot doesn't have this problem and can be inverted freely
-            if "rotation" in element:
-                element["rotation"]["origin"][0] = -element["rotation"]["origin"][0] + 16
-                element["rotation"]["origin"][1] = -element["rotation"]["origin"][1] + 16
-                element["rotation"]["origin"][2] = -element["rotation"]["origin"][2] + 16
-
 
         # Copy textures and fix their path
         for key, texture in model["textures"].items():
@@ -196,8 +183,6 @@ def generate_mob(model_file, java_parts):
             model["textures"][key] = "shadow_night:item/mob/" + rel_texture_path
 
             shutil.copyfile(texture_source + "/" + rel_texture_path + ".png", utils.mkdirs(texture_target + "/" + rel_texture_path + ".png"))
-
-
 
 
         # Separate parts and generate respective models and hooks

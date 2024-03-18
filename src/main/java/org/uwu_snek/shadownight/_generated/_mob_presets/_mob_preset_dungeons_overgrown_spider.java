@@ -8,10 +8,10 @@ import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
 public abstract class _mob_preset_dungeons_overgrown_spider extends MOB {
-    protected Bone head = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_HEAD, 1.02f, 1.02f);
-    protected Bone leg_fl0 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_FL0, 1.02f, 1.02f);
-    protected Bone leg_fl1 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_FL1, 1.02f, 1.02f);
-    protected Bone leg_fl2 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_FL2, 1.02f, 1.02f);
+    protected Bone head = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_HEAD, 0.5f, 0.5f);
+    protected Bone leg_fl0 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_FL0, 0.5f, 0.5f);
+    protected Bone leg_fl1 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_FL1, 0.5f, 0.5f);
+    protected Bone leg_fl2 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_FL2, 0.5f, 0.5f);
 
     public _mob_preset_dungeons_overgrown_spider() {
         super();
@@ -20,8 +20,8 @@ public abstract class _mob_preset_dungeons_overgrown_spider extends MOB {
         leg_fl0.addChild(leg_fl1);
         leg_fl1.addChild(leg_fl2);
         head.moveSelf(20, 0.0f, 0.0f, 0.0f);
-        leg_fl0.moveSelf(20, 0.40625f, -0.34375f, 0.25f);
-        leg_fl1.moveSelf(20, 0.8125f, 0.40625f, 0.25f);
-        leg_fl2.moveSelf(20, 1.015625f, -0.09375f, 0.25f);
+        leg_fl0.moveSelf(20, -0.40625f, 0.34375f, 0.0f);
+        leg_fl1.moveSelf(20, -0.8125f, -0.40625f, 0.0f);
+        leg_fl2.moveSelf(20, -1.015625f, 0.09375f, 0.0f);
     }
 }

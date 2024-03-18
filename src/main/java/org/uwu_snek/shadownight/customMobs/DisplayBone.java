@@ -22,7 +22,7 @@ import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity = null;
     private final int customModelData;
-    private final Quaternionf displayRotation = new Quaternionf(0, 0, 1, 0);
+    private final Quaternionf displayRotation = new Quaternionf(0, 0, 0, 1);
 
 
 
@@ -36,6 +36,7 @@ public final class DisplayBone extends Bone {
         this.customModelData = partCustomModelData;
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
+        displayRotation.rotateLocalY((float)Math.PI); //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
     }
 
     public DisplayBone(final _mob_part_type partId, final float hitboxWidth, final float hitboxHeight) {
@@ -129,6 +130,7 @@ public final class DisplayBone extends Bone {
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
             new AxisAngle4f(displayRotation),
+            //new AxisAngle4f(new Quaternionf(0, 0, 0, 1)),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
