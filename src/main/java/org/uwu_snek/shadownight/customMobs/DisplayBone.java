@@ -92,7 +92,6 @@ public final class DisplayBone extends Bone {
     @Override
     public void move(final int duration, final @NotNull Vector3f v){
         super.move(duration, v);
-        displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform();
         updateHitbox();
     }
@@ -110,14 +109,12 @@ public final class DisplayBone extends Bone {
     public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(duration, r);
         displayRotation.premul(new Quaternionf(r));
-        displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform();
     }
     @Override
     public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         super.rotateUpdateOrigin(duration, o, r);
         displayRotation.premul(new Quaternionf(r));
-        displayEntity.setInterpolationDuration(duration);
         updateDisplayTransform();
         updateHitbox();
     }
@@ -126,18 +123,21 @@ public final class DisplayBone extends Bone {
 
 
     private void updateDisplayTransform(){
+        if(!spawned) return;
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
             new AxisAngle4f(displayRotation),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
+        displayEntity.setInterpolationDuration(20); //TODO automate and add real interpolation
         displayEntity.setTransformation(t);
         displayEntity.setInterpolationDelay(0);
     }
 
 
     private void updateHitbox(){
+        if(!spawned) return;
         final Vector3f absPos = getAbsPos();
         hitbox.teleport(displayEntity.getLocation().add(new Vector(absPos.x, absPos.y, absPos.z)));
     }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Bone {
     protected Vector3f locPos = new Vector3f(0, 0, 0); // The location of this bone's location relative to its origin
     protected Vector3f origin = new Vector3f(0, 0, 0); // The location of this bone's origin relative to the root bone
+    protected boolean spawned = false;
 
 
     private final ArrayList<Bone> children = new ArrayList<>();
@@ -52,6 +53,7 @@ public class Bone {
      * @param mount The mount entity used to support the bones
      */
     public void spawn(final @NotNull Entity mount){
+        spawned = true;
         for(Bone b : children) b.spawn(mount);
     }
 

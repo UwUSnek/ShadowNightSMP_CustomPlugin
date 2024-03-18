@@ -4,9 +4,11 @@
 
 package org.uwu_snek.shadownight._generated._mob_presets;
 import org.uwu_snek.shadownight.customMobs.MOB;
+import org.bukkit.Location;
 import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
+import org.jetbrains.annotations.NotNull;
 public abstract class _mob_preset_dungeons_overgrown_spider extends MOB {
     protected Bone head = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_HEAD, 1.02f, 1.02f);
     protected Bone leg_fl0 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_FL0, 1.02f, 1.02f);
@@ -19,5 +21,9 @@ public abstract class _mob_preset_dungeons_overgrown_spider extends MOB {
         head.addChild(leg_fl0);
         leg_fl0.addChild(leg_fl1);
         leg_fl1.addChild(leg_fl2);
+        head.move(20, 6.5f, -9.5f, 4f);
+        leg_fl0.move(20, 6.5f, -9.5f, 4f);
+        leg_fl1.move(20, 13f, 2.5f, 4f);
+        leg_fl2.move(20, 16.25f, -5.5f, 4f);
     }
 }

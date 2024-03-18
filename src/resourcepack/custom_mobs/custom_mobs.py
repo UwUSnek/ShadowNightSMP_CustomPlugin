@@ -132,8 +132,9 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
     # Create java preset data
-    java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 1.02f, 1.02f);\n' #TODO
+    java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 1.02f, 1.02f);\n' #TODO fix hitboxes
     java_preset_data["connections"] += f'        { origin_data["parent"] }.addChild({ part["name"] });\n'
+    java_preset_data["adjustments"] += f'        { part["name"] }.move(20, { origin_data["pos"][0] - 8 }f, { origin_data["pos"][1] - 8 }f, { origin_data["pos"][2] - 8 }f);\n' #TODO fix duration
 
 
 
@@ -159,6 +160,9 @@ def generate_mob(i: int, model_file, java_parts):
             element["from"][2] = -element["from"][2] + 16
             element["to"  ][0] = -element["to"  ][0] + 16
             element["to"  ][2] = -element["to"  ][2] + 16
+            if "rotation" in element:
+                element["rotation"]["origin"][0] = -element["rotation"]["origin"][0] + 16
+                element["rotation"]["origin"][2] = -element["rotation"]["origin"][2] + 16
 
 
         # Copy textures and fix their path
@@ -172,7 +176,7 @@ def generate_mob(i: int, model_file, java_parts):
 
 
         # Separate parts and generate respective models and hooks
-        java_preset_data = { "members": "", "connections": "" }
+        java_preset_data = { "members": "", "connections": "", "adjustments": "" }
         model_path = model_source + "/" + model_file["rel_path"]
         assert "groups" in model and len(model["groups"]) > 0, "Model " + model_path + " has no groups"
         for j, part in enumerate(model["groups"]):
@@ -187,15 +191,22 @@ def generate_mob(i: int, model_file, java_parts):
             f'// ' + utils.credit + '\n\n\n\n'
             f'package org.uwu_snek.shadownight._generated._mob_presets;\n'
             f'import org.uwu_snek.shadownight.customMobs.MOB;\n'
+            f'import org.bukkit.Location;\n'
             f'import org.uwu_snek.shadownight._generated._mob_part_type;\n'
             f'import org.uwu_snek.shadownight.customMobs.Bone;\n'
             f'import org.uwu_snek.shadownight.customMobs.DisplayBone;\n'
+            f'import org.jetbrains.annotations.NotNull;\n'
             f'public abstract class { java_class_name } extends MOB {{\n'
             f'{ java_preset_data["members"] }\n'
             f'    public { java_class_name }() {{\n'
             f'        super();\n'
             f'{ java_preset_data["connections"] }'
+            f'{ java_preset_data["adjustments"] }'
             f'    }}\n'
+            #f'    @Override\n'
+            #f'    public void spawn(final @NotNull Location spawnLocation) {{\n'
+            #f'        super.spawn(spawnLocation);\n'
+            #f'    }}\n'
             f'}}\n'
         )
 
