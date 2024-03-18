@@ -35,13 +35,20 @@ model_files = utils.list_files_recursive(model_source)
 
 
 
-
+# Translates a vector <v> by the amount that would bring <origin> to the coordinates [8, 8, 8]
 def center_vector(v, origin):
     return [
         v[0] - (origin[0] - 8),
         v[1] - (origin[1] - 8),
         v[2] - (origin[2] - 8)
     ]
+
+def check_element_coordinate_pos(v):
+    return (
+        -16 < v[0] <= 32 and
+        -16 < v[1] <= 32 and
+        -16 < v[2] <= 32
+    )
 
 
 
@@ -96,11 +103,17 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
     # Add part elements and shift them to center their origin to [8, 8, 8]. Ignore 0-Size elements
     for group_child in part["children"]:
         part_model["elements"] += [ e for e in get_all_group_elements(full_model, group_child) if e["from"] != e["to"] ]
-    for element in part_model["elements"]:
+
+    for i, element in enumerate(part_model["elements"]):
         element["from"] = center_vector(element["from"], origin_data["pos"])
         element["to"  ] = center_vector(element["to"], origin_data["pos"])
         if "rotation" in element:
             element["rotation"]["origin"] = center_vector(element["rotation"]["origin"], origin_data["pos"])
+
+        assert\
+            check_element_coordinate_pos(element["from"]) and check_element_coordinate_pos(element["to"]), \
+            f'Repositioning element n.{ i } "{ element["name"] if "name" in element else "*unnamed*" }" would cause it to be outside of the allowed area.'\
+            f'\n{ DEBUG_pos.capitalize() }\n    New "from": { element["from"] }\n    New "to":   { element["to"] }'
 
 
 
@@ -130,14 +143,14 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
     # Create java preset data
-    java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 1.02f, 1.02f);\n' #TODO fix hitboxes
+    java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 1.02f, 1.02f);\n'  #TODO fix hitboxes
     java_preset_data["connections"] += f'        { origin_data["parent"] }.addChild({ part["name"] });\n'
     java_preset_data["adjustments"] += (
-        f'        { part["name"] }.moveSelf(20, '
-        f'{ (origin_data["pos"][0] - 8) / 16 }f, '  #! Divide by 16 as ItemDisplay translations use block-sized units.
-        f'{ (origin_data["pos"][1] - 8) / 16 }f, '  #! Minecraft model units are 16 times smaller
-        f'{ (origin_data["pos"][2] - 8) / 16 }f);\n'
-    )  #TODO fix duration
+        f'        { part["name"] }.moveSelf(20, '   #TODO fix duration
+        f'{  (origin_data["pos"][0] - 8) / 16 }f, '  #! Divide by 16 as ItemDisplay translations use block-sized units. Minecraft JSON Model units are 16 times smaller
+        f'{ -(origin_data["pos"][1] - 8) / 16 }f, '  #! Invert Y-Axis translations because reasons
+        f'{  (origin_data["pos"][2] - 8) / 16 }f);\n'
+    )
 
 
 
@@ -149,22 +162,31 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
 
-def generate_mob(i: int, model_file, java_parts):
+def generate_mob(model_file, java_parts):
     model = json.load(open(model_file["path"], "r"))
 
     sanitized_model_name = re.sub(r"[/-]", "_", "".join(model_file["rel_path"].split(".")[:-1]))
     java_class_name = "_mob_preset_" + sanitized_model_name
     with open(utils.mkdirs(utils.target_java + "/_mob_presets/" + java_class_name + ".java"), "w+") as java_preset:
 
-        # Invert XZ Plane of each model
+        # Flip element coords and its rotation pivot on all axes
         for element in model["elements"]:
-            #! Shift XZ by +16. The model's origin is at (-8, -8) which becomes (+8, +8) after inverting the plane
-            element["from"][0] = -element["from"][0] + 16
-            element["from"][2] = -element["from"][2] + 16
-            element["to"  ][0] = -element["to"  ][0] + 16
-            element["to"  ][2] = -element["to"  ][2] + 16
+
+            #! Swapping "from" and "to" allows to flip an element without inverting it
+            from_0 = element["from"][0]
+            from_1 = element["from"][1]
+            from_2 = element["from"][2]
+            element["from"][0] = -element["to"][0] + 16
+            element["from"][1] = -element["to"][1] + 16
+            element["from"][2] = -element["to"][2] + 16
+            element["to"  ][0] = -from_0 + 16
+            element["to"  ][1] = -from_1 + 16
+            element["to"  ][2] = -from_2 + 16
+
+            #! Rotation pivot doesn't have this problem and can be inverted freely
             if "rotation" in element:
                 element["rotation"]["origin"][0] = -element["rotation"]["origin"][0] + 16
+                element["rotation"]["origin"][1] = -element["rotation"]["origin"][1] + 16
                 element["rotation"]["origin"][2] = -element["rotation"]["origin"][2] + 16
 
 
@@ -202,7 +224,7 @@ def generate_mob(i: int, model_file, java_parts):
             f'    public { java_class_name }() {{\n'
             f'        super();\n'
             f'{ java_preset_data["connections"] }'
-            #f'{ java_preset_data["adjustments"] }' #TODO
+            f'{ java_preset_data["adjustments"] }'
             f'    }}\n'
             f'}}\n'
         )
@@ -228,7 +250,7 @@ def main():
 
 
         for i, model_file in enumerate(model_files):
-            generate_mob(i, model_file, java_parts)
+            generate_mob(model_file, java_parts)
 
 
         java_parts.write(
