@@ -4,8 +4,12 @@
 
 package org.uwu_snek.shadownight._generated;
 public enum _mob_part_type {
-    DEBUG_MOB_PART(20000),
-    OVERGROWN_SPIDER_LEG_0(20001);
+    DUNGEONS_OVERGROWN_SPIDER_HEAD(20000),
+    DUNGEONS_OVERGROWN_SPIDER_LEG_FL0(20001),
+    DUNGEONS_OVERGROWN_SPIDER_LEG_FL1(20002),
+    DUNGEONS_OVERGROWN_SPIDER_LEG_FL2(20003),
+    DEBUG_MOB_MAIN(20004),
+    ;
     private final int modelData;
     _mob_part_type(final int _modelData) {
         this.modelData = _modelData;

@@ -15,17 +15,17 @@ public class MOB_Debug extends MOB {
     public HashMap<String, DisplayBone> bones_test = new HashMap<>();
     public static MOB_Debug testMob;
 
-    Bone center = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone r0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone r1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone r2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone r3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone r4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone l0     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone l1     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone l2     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone l3     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
-    Bone l4     = new DisplayBone(_mob_part_type.DEBUG_MOB_PART, 1.02f, 1.02f);
+    Bone center = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone r0     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone r1     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone r2     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone r3     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone r4     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone l0     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone l1     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone l2     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone l3     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
+    Bone l4     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
 
     public MOB_Debug() {
         super();
