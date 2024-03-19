@@ -20,8 +20,8 @@ public abstract class _mob_preset_dungeons_overgrown_spider extends MOB {
         leg_fl0.addChild(leg_fl1);
         leg_fl1.addChild(leg_fl2);
         head.moveSelf(20, 0.0f, 0.0f, 0.0f);
-        leg_fl0.moveSelf(20, -0.40625f, 0.34375f, 0.0f);
-        leg_fl1.moveSelf(20, -0.8125f, -0.40625f, 0.0f);
-        leg_fl2.moveSelf(20, -1.015625f, 0.09375f, 0.0f);
+        leg_fl0.moveSelf(20, -0.40625f, -0.34375f, 0.0f);
+        leg_fl1.moveSelf(20, -0.8125f, 0.40625f, 0.0f);
+        leg_fl2.moveSelf(20, -1.015625f, -0.09375f, 0.0f);
     }
 }

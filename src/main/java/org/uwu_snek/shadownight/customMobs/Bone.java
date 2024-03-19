@@ -79,12 +79,11 @@ public class Bone {
 
 
 
-
     public final void move(final int duration, final float x, final float y, final float z) {
         move(duration, new Vector3f(x, y, z));
     }
     public void move(final int duration, final @NotNull Vector3f v) {
-        moveSelf(duration, v);
+        locPos.add(v);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
     }
 
@@ -93,6 +92,7 @@ public class Bone {
     }
     public void moveSelf(final int duration, final @NotNull Vector3f v) {
         locPos.add(v);
+        for(Bone c : children) c.locPos.sub(v);
     }
 
     protected void moveUpdateOrigin(final @NotNull Vector3f o) {
