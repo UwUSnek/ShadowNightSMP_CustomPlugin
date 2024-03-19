@@ -27,29 +27,47 @@
             "predicate": {
                 "custom_model_data": 20000
             },
-            "model": "shadow_night:item/mob/dungeons/overgrown/spider/head"
+            "model": "shadow_night:item/mob/dungeons/overgrown/spider/core"
         },
         {
             "predicate": {
                 "custom_model_data": 20001
             },
-            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_00"
+            "model": "shadow_night:item/mob/dungeons/overgrown/spider/head"
         },
         {
             "predicate": {
                 "custom_model_data": 20002
             },
-            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_01"
+            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_0b"
         },
         {
             "predicate": {
                 "custom_model_data": 20003
             },
-            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_02"
+            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_00"
         },
         {
             "predicate": {
                 "custom_model_data": 20004
+            },
+            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_01"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 20005
+            },
+            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_02"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 20006
+            },
+            "model": "shadow_night:item/mob/dungeons/overgrown/spider/leg_0a"
+        },
+        {
+            "predicate": {
+                "custom_model_data": 20007
             },
             "model": "shadow_night:item/mob/debug_mob/main"
         }

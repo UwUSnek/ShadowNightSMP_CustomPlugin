@@ -55,8 +55,8 @@ public final class DisplayBone extends Bone {
     @Override
     public Bone createShallowCopy(){
         final DisplayBone b = new DisplayBone(customModelData, hitboxWidth, hitboxHeight, null);
-        b.locPos = locPos;
-        b.origin = origin;
+        b.locPos.set(locPos);
+        b.origin.set(origin);
         b.displayRotation.set(displayRotation);
         return b;
     }
@@ -75,14 +75,14 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
-        updateDisplayTransform();
+        updateDisplayTransform(); //TODO make updates manual
 
         // Initialize hitboxes
         hitbox = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
         hitbox.setInteractionWidth(hitboxWidth);
         hitbox.setInteractionHeight(hitboxHeight);
         displayEntity.addPassenger(hitbox);
-        updateHitbox();
+        updateHitbox(); //TODO make updates manual
     }
 
 
@@ -95,14 +95,14 @@ public final class DisplayBone extends Bone {
     @Override
     public void moveSelf(final int duration, final @NotNull Vector3f v){
         super.moveSelf(duration, v);
-        updateDisplayTransform();
-        updateHitbox();
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
     }
     @Override
     public void moveUpdateOrigin(final @NotNull Vector3f o){
         super.moveUpdateOrigin(o);
-        updateDisplayTransform();
-        updateHitbox();
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
     }
 
 
@@ -112,15 +112,40 @@ public final class DisplayBone extends Bone {
     public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(duration, r);
         displayRotation.premul(new Quaternionf(r));
-        updateDisplayTransform();
+        updateDisplayTransform(); //TODO make updates manual
     }
     @Override
     public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         super.rotateUpdateOrigin(duration, o, r);
         displayRotation.premul(new Quaternionf(r));
-        updateDisplayTransform();
-        updateHitbox();
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
     }
+
+
+
+
+
+    @Override
+    public void mirrorPosX() {
+        super.mirrorPosX();
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
+    }
+    @Override
+    public void mirrorPosY() {
+        super.mirrorPosY();
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
+    }
+    @Override
+    public void mirrorPosZ() {
+        super.mirrorPosZ();
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
+    }
+
+
 
 
 
@@ -130,7 +155,6 @@ public final class DisplayBone extends Bone {
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
             new AxisAngle4f(displayRotation),
-            //new AxisAngle4f(new Quaternionf(0, 0, 0, 1)),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
@@ -142,7 +166,6 @@ public final class DisplayBone extends Bone {
 
     private void updateHitbox(){
         if(!spawned) return;
-        final Vector3f absPos = getAbsPos();
-        hitbox.teleport(displayEntity.getLocation().add(new Vector(absPos.x, absPos.y, absPos.z)));
+        hitbox.teleport(displayEntity.getLocation().add(Vector.fromJOML(getAbsPos())));
     }
 }

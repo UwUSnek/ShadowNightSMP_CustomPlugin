@@ -28,9 +28,7 @@ public class Bone {
      */
     public Bone createDeepCopy(){
         Bone b = createShallowCopy();
-        for(Bone c : children) {
-            b.addChild(c.createDeepCopy());
-        }
+        for(Bone c : children) b.addChild(c.createDeepCopy());
         return b;
     }
 
@@ -41,8 +39,8 @@ public class Bone {
      */
     public Bone createShallowCopy(){
         final Bone b = new Bone();
-        b.locPos = locPos;
-        b.origin = origin;
+        b.locPos.set(locPos);
+        b.origin.set(origin);
         return b;
     }
 
@@ -80,6 +78,7 @@ public class Bone {
 
 
 
+
     public final void move(final int duration, final float x, final float y, final float z) {
         move(duration, new Vector3f(x, y, z));
     }
@@ -97,7 +96,7 @@ public class Bone {
     }
 
     protected void moveUpdateOrigin(final @NotNull Vector3f o) {
-        origin = o;
+        origin.set(o);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
     }
 
@@ -116,7 +115,23 @@ public class Bone {
     }
     protected void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         locPos.rotateAxis(r.angle, r.x, r.y, r.z);
-        origin = o;
+        origin.set(o);
         for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
+    }
+
+
+
+
+    public void mirrorPosX() {
+        locPos.x = -locPos.x + 1; //! Add 16 model units (1 block) to account for the model center being at [8,8,8]
+        for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
+    }
+    public void mirrorPosY() {
+        locPos.x = -locPos.x + 1; //! Add 16 model units (1 block) to account for the model center being at [8,8,8]
+        for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
+    }
+    public void mirrorPosZ() {
+        locPos.x = -locPos.x + 1; //! Add 16 model units (1 block) to account for the model center being at [8,8,8]
+        for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
     }
 }
