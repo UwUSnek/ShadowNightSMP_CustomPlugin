@@ -17,6 +17,7 @@ public class Bone {
 
 
     private final ArrayList<Bone> children = new ArrayList<>();
+    public ArrayList<Bone> getChildren(){ return children; }
     public Bone(){ }
 
 
