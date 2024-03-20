@@ -3,6 +3,7 @@ package org.uwu_snek.shadownight.customMobs.implementations;
 import org.uwu_snek.shadownight._generated._mob_presets._mob_preset_dungeons_overgrown_spider;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
+import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 import java.util.HashMap;
 
@@ -41,8 +42,8 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
         // Create leg copies
         core.addChild(leg_1b = leg_0b.createDeepCopy());
-        leg_0b.move(20, 0, 0, -0.1f);
-        leg_1b.move(20, 0, 0, +0.1f);
+        leg_0b.move(0, 0, -0.1f);
+        leg_1b.move(0, 0, +0.1f);
         core.addChild(leg_2b = leg_1b.createDeepCopy());
         core.addChild(leg_3b = leg_0b.createDeepCopy());
 
@@ -55,15 +56,15 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_3a = leg_30.getChildren().get(1); //FIXME make index deterministic or use a different search method
 
         // Set leg direction
-        leg_0b.rotate(20, -0.5f, 0, 1, 0);
-        leg_1b.rotate(20, +0.5f, 0, 1, 0);
-        leg_2b.rotate(20, -0.5f, 0, 1, 0);
-        leg_3b.rotate(20, +0.5f, 0, 1, 0);
+        leg_0b.rotate(-0.5f, 0, 1, 0);
+        leg_1b.rotate(+0.5f, 0, 1, 0);
+        leg_2b.rotate(-0.5f, 0, 1, 0);
+        leg_3b.rotate(+0.5f, 0, 1, 0);
 
         // Move right legs to the correct side
-        leg_2b.rotate(20, (float)Math.PI, 0, 1, 0);
+        leg_2b.rotate((float)Math.PI, 0, 1, 0);
         leg_2b.mirrorPosX();
-        leg_3b.rotate(20, (float)Math.PI, 0, 1, 0);
+        leg_3b.rotate((float)Math.PI, 0, 1, 0);
         leg_3b.mirrorPosX();
 
 
@@ -71,23 +72,44 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         bones_test.put("core", (DisplayBone)core);
 
         bones_test.put("leg_0b", (DisplayBone)leg_0b);
+        bones_test.put("leg_0a", (DisplayBone)leg_0a);
         bones_test.put("leg_00", (DisplayBone)leg_00);
         bones_test.put("leg_01", (DisplayBone)leg_01);
         bones_test.put("leg_02", (DisplayBone)leg_02);
 
         bones_test.put("leg_1b", (DisplayBone)leg_1b);
+        bones_test.put("leg_1a", (DisplayBone)leg_1a);
         bones_test.put("leg_10", (DisplayBone)leg_10);
         bones_test.put("leg_11", (DisplayBone)leg_11);
         bones_test.put("leg_12", (DisplayBone)leg_12);
 
         bones_test.put("leg_2b", (DisplayBone)leg_2b);
+        bones_test.put("leg_2a", (DisplayBone)leg_2a);
         bones_test.put("leg_20", (DisplayBone)leg_20);
         bones_test.put("leg_21", (DisplayBone)leg_21);
         bones_test.put("leg_22", (DisplayBone)leg_22);
 
         bones_test.put("leg_3b", (DisplayBone)leg_3b);
+        bones_test.put("leg_3a", (DisplayBone)leg_3a);
         bones_test.put("leg_30", (DisplayBone)leg_30);
         bones_test.put("leg_31", (DisplayBone)leg_31);
         bones_test.put("leg_32", (DisplayBone)leg_32);
+
+        //Scheduler.delay(() -> Animate.step(), 20L);
+        Scheduler.delay(Animate::stand, 20L);
     }
+
+
+
+
+    private class Animate_CLASS {
+        private void step(){
+            core.moveSelf(0, 0, 0);
+        }
+
+        private void stand() {
+            core.move(0, 0, 0);
+        }
+    }
+    private final Animate_CLASS Animate = new Animate_CLASS();
 }

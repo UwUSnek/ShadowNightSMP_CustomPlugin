@@ -153,7 +153,7 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
     java_preset_data["members"    ] += f'    protected Bone { part["name"] } = new DisplayBone(_mob_part_type.{ sanitized_full_part_name.upper() }, 0.5f, 0.5f);\n'  #TODO fix hitboxes
     java_preset_data["connections"] += f'        { origin_data["parent"] }.addChild({ part["name"] });\n'
     java_preset_data["adjustments"] += (
-        f'        { part["name"] }.moveSelf(20, '   #TODO fix duration
+        f'        { part["name"] }.moveSelf('
         f'{ (origin_data["pos"][0] - 8) / 16 }f, '  #! Divide by 16 as ItemDisplay translations use block-sized units. Minecraft JSON Model units are 16 times smaller
         f'{ (origin_data["pos"][1] - 8) / 16 }f, '  
         f'{ (origin_data["pos"][2] - 8) / 16 }f);\n'

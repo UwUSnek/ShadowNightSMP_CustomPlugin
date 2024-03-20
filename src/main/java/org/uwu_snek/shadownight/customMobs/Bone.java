@@ -78,20 +78,23 @@ public class Bone {
 
 
 
-    public final void move(final int duration, final float x, final float y, final float z) {
-        move(duration, new Vector3f(x, y, z));
+    public final void move(final float x, final float y, final float z) {
+        move(new Vector3f(x, y, z));
     }
-    public void move(final int duration, final @NotNull Vector3f v) {
+    public void move(final @NotNull Vector3f v) {
         locPos.add(v);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
     }
 
-    public final void moveSelf(final int duration, final float x, final float y, final float z) {
-        moveSelf(duration, new Vector3f(x, y, z));
+    public final void moveSelf(final float x, final float y, final float z) {
+        moveSelf(new Vector3f(x, y, z));
     }
-    public void moveSelf(final int duration, final @NotNull Vector3f v) {
+    public void moveSelf(final @NotNull Vector3f v) {
         locPos.add(v);
-        for(Bone c : children) c.locPos.sub(v);
+        for(Bone c : children) {
+            c.locPos.sub(v);
+            c.origin = getAbsPos();
+        }
     }
 
     protected void moveUpdateOrigin(final @NotNull Vector3f o) {
@@ -103,19 +106,19 @@ public class Bone {
 
 
 //TODO make display updates manual
-    public final void rotate(final int duration, final float angle, final float x, final float y, final float z){
-        rotate(duration, new AxisAngle4f(angle, x, y, z));
+    public final void rotate(final float angle, final float x, final float y, final float z){
+        rotate(new AxisAngle4f(angle, x, y, z));
     }
-    public final void rotate(final int duration, final @NotNull AxisAngle4f r) {
-        rotateUnsafe(duration, r.normalize());
+    public final void rotate(final @NotNull AxisAngle4f r) {
+        rotateUnsafe(r.normalize());
     }
-    public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
-        for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
+    public void rotateUnsafe(final @NotNull AxisAngle4f r) {
+        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
     }
-    protected void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+    protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         locPos.rotateAxis(r.angle, r.x, r.y, r.z);
         origin.set(o);
-        for(Bone c : children) c.rotateUpdateOrigin(duration, getAbsPos(), r);
+        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
     }
 
 

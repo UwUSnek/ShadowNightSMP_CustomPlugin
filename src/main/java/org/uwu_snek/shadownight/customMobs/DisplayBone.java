@@ -71,7 +71,6 @@ public final class DisplayBone extends Bone {
 
         // Initialize display entity
         displayEntity = (ItemDisplay)location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
-        //displayEntity.setInterpolationDuration(4); //TODO maybe make this dynamic
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
@@ -93,8 +92,8 @@ public final class DisplayBone extends Bone {
 
 
     @Override
-    public void moveSelf(final int duration, final @NotNull Vector3f v){
-        super.moveSelf(duration, v);
+    public void moveSelf(final @NotNull Vector3f v){
+        super.moveSelf(v);
         updateDisplayTransform(); //TODO make updates manual
         updateHitbox(); //TODO make updates manual
     }
@@ -109,14 +108,14 @@ public final class DisplayBone extends Bone {
 
 
     @Override
-    public void rotateUnsafe(final int duration, final @NotNull AxisAngle4f r) {
-        super.rotateUnsafe(duration, r);
+    public void rotateUnsafe(final @NotNull AxisAngle4f r) {
+        super.rotateUnsafe(r);
         displayRotation.premul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
     }
     @Override
-    public void rotateUpdateOrigin(final int duration, final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
-        super.rotateUpdateOrigin(duration, o, r);
+    public void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+        super.rotateUpdateOrigin(o, r);
         displayRotation.premul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
         updateHitbox(); //TODO make updates manual
@@ -158,7 +157,7 @@ public final class DisplayBone extends Bone {
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
-        displayEntity.setInterpolationDuration(0); //TODO automate and add real interpolation
+        displayEntity.setInterpolationDuration(10); //TODO automate and add real interpolation
         displayEntity.setTransformation(t);
         displayEntity.setInterpolationDelay(0);
     }
