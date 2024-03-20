@@ -16,16 +16,19 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
     private final Bone leg_10;
     private final Bone leg_11;
     private final Bone leg_12;
+    private final Bone leg_1a;
 
     private final Bone leg_2b;
     private final Bone leg_20;
     private final Bone leg_21;
     private final Bone leg_22;
+    private final Bone leg_2a;
 
     private final Bone leg_3b;
     private final Bone leg_30;
     private final Bone leg_31;
     private final Bone leg_32;
+    private final Bone leg_3a;
 
 
     public MOB_OvergrownSpider() {
@@ -38,8 +41,8 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
         // Create leg copies
         core.addChild(leg_1b = leg_0b.createDeepCopy());
-        leg_0b.move(20, 0, 0, -0.3f);
-        leg_1b.move(20, 0, 0, +0.3f);
+        leg_0b.move(20, 0, 0, -0.1f);
+        leg_1b.move(20, 0, 0, +0.1f);
         core.addChild(leg_2b = leg_1b.createDeepCopy());
         core.addChild(leg_3b = leg_0b.createDeepCopy());
 
@@ -47,12 +50,15 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_12 = (leg_11 = (leg_10 = leg_1b.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
         leg_22 = (leg_21 = (leg_20 = leg_2b.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
         leg_32 = (leg_31 = (leg_30 = leg_3b.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+        leg_1a = leg_10.getChildren().get(1); //FIXME make index deterministic or use a different search method
+        leg_2a = leg_20.getChildren().get(1); //FIXME make index deterministic or use a different search method
+        leg_3a = leg_30.getChildren().get(1); //FIXME make index deterministic or use a different search method
 
         // Set leg direction
-        leg_0b.rotate(20, -0.8f, 0, 1, 0);
-        leg_1b.rotate(20, +0.8f, 0, 1, 0);
-        leg_2b.rotate(20, -0.8f, 0, 1, 0);
-        leg_3b.rotate(20, +0.8f, 0, 1, 0);
+        leg_0b.rotate(20, -0.5f, 0, 1, 0);
+        leg_1b.rotate(20, +0.5f, 0, 1, 0);
+        leg_2b.rotate(20, -0.5f, 0, 1, 0);
+        leg_3b.rotate(20, +0.5f, 0, 1, 0);
 
         // Move right legs to the correct side
         leg_2b.rotate(20, (float)Math.PI, 0, 1, 0);

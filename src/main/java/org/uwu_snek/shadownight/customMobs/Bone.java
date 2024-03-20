@@ -62,7 +62,6 @@ public class Bone {
      */
     public void addChild(@NotNull Bone bone) {
         children.add(bone);
-        //bone.parent = this;
     }
 
 
@@ -123,15 +122,15 @@ public class Bone {
 
 
     public void mirrorPosX() {
-        locPos.x = -locPos.x + 1; //! Add 16 model units (1 block) to account for the model center being at [8,8,8]
+        locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
     }
     public void mirrorPosY() {
-        locPos.x = -locPos.x + 1; //! Add 16 model units (1 block) to account for the model center being at [8,8,8]
+        locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
     }
     public void mirrorPosZ() {
-        locPos.x = -locPos.x + 1; //! Add 16 model units (1 block) to account for the model center being at [8,8,8]
+        locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
     }
 }

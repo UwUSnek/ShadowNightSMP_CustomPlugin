@@ -158,7 +158,7 @@ public final class DisplayBone extends Bone {
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
-        displayEntity.setInterpolationDuration(20); //TODO automate and add real interpolation
+        displayEntity.setInterpolationDuration(0); //TODO automate and add real interpolation
         displayEntity.setTransformation(t);
         displayEntity.setInterpolationDelay(0);
     }
