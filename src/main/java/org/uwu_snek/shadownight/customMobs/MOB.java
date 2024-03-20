@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 //TODO add onSpawn and onDeath callbacks
 public class MOB {
+    protected final static float PI = (float)Math.PI;
+
     protected Bone root;
     protected Interaction mount;
 

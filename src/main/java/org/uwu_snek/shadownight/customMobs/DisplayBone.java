@@ -22,7 +22,6 @@ import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity = null;
     private final int customModelData;
-    private final Quaternionf displayRotation = new Quaternionf(0, 0, 0, 1);
 
 
 
@@ -36,7 +35,7 @@ public final class DisplayBone extends Bone {
         this.customModelData = partCustomModelData;
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
-        displayRotation.rotateLocalY((float)Math.PI); //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
+        rotation.rotateLocalY((float)Math.PI); //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
     }
 
     public DisplayBone(final _mob_part_type partId, final float hitboxWidth, final float hitboxHeight) {
@@ -57,7 +56,7 @@ public final class DisplayBone extends Bone {
         final DisplayBone b = new DisplayBone(customModelData, hitboxWidth, hitboxHeight, null);
         b.locPos.set(locPos);
         b.origin.set(origin);
-        b.displayRotation.set(displayRotation);
+        b.rotation.set(rotation);
         return b;
     }
 
@@ -90,7 +89,12 @@ public final class DisplayBone extends Bone {
 
 
 
-
+    @Override
+    public void move(final @NotNull Vector3f v) {
+        super.move(v);
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
+    }
     @Override
     public void moveSelf(final @NotNull Vector3f v){
         super.moveSelf(v);
@@ -110,13 +114,27 @@ public final class DisplayBone extends Bone {
     @Override
     public void rotateUnsafe(final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(r);
-        displayRotation.premul(new Quaternionf(r));
+        //rotation.premul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
     }
     @Override
     public void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         super.rotateUpdateOrigin(o, r);
-        displayRotation.premul(new Quaternionf(r));
+        //rotation.premul(new Quaternionf(r));
+        updateDisplayTransform(); //TODO make updates manual
+        updateHitbox(); //TODO make updates manual
+    }
+
+    @Override
+    public void rotateLocalUnsafe(final @NotNull AxisAngle4f r) {
+        super.rotateLocalUnsafe(r);
+        //rotation.mul(new Quaternionf(r));
+        updateDisplayTransform(); //TODO make updates manual
+    }
+    @Override
+    public void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+        super.rotateLocalUpdateOrigin(o, r);
+        //rotation.mul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
         updateHitbox(); //TODO make updates manual
     }
@@ -153,7 +171,7 @@ public final class DisplayBone extends Bone {
         if(!spawned) return;
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
-            new AxisAngle4f(displayRotation),
+            new AxisAngle4f(rotation),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );

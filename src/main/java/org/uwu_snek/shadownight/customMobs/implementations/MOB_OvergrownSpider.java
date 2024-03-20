@@ -62,9 +62,9 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_3b.rotate(+0.5f, 0, 1, 0);
 
         // Move right legs to the correct side
-        leg_2b.rotate((float)Math.PI, 0, 1, 0);
+        leg_2b.rotate(PI, 0, 1, 0);
         leg_2b.mirrorPosX();
-        leg_3b.rotate((float)Math.PI, 0, 1, 0);
+        leg_3b.rotate(PI, 0, 1, 0);
         leg_3b.mirrorPosX();
 
 
@@ -103,12 +103,22 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
     private class Animate_CLASS {
+        final static float raiseHeight = 0.5f;
+
         private void step(){
             core.moveSelf(0, 0, 0);
         }
 
         private void stand() {
-            core.move(0, 0, 0);
+            core.move(0, raiseHeight, 0);
+            leg_00.rotateLocal(-PI / 4, 0, 0, 1);
+            leg_10.rotateLocal(-PI / 4, 0, 0, 1);
+            leg_20.rotateLocal(-PI / 4, 0, 0, 1);
+            leg_30.rotateLocal(-PI / 4, 0, 0, 1);
+            leg_01.rotateLocal(+PI / 4, 0, 0, 1);
+            leg_11.rotateLocal(+PI / 4, 0, 0, 1);
+            leg_21.rotateLocal(+PI / 4, 0, 0, 1);
+            leg_31.rotateLocal(+PI / 4, 0, 0, 1);
         }
     }
     private final Animate_CLASS Animate = new Animate_CLASS();
