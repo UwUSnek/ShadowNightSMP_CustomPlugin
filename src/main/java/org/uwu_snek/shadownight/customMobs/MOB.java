@@ -18,7 +18,7 @@ public class MOB {
 
 
     public MOB() {
-        root = new Bone();
+        root = new RootBone();
     }
 
     public void spawn(final @NotNull Location spawnLocation) {

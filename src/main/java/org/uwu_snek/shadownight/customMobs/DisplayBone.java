@@ -35,7 +35,7 @@ public final class DisplayBone extends Bone {
         this.customModelData = partCustomModelData;
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
-        rotation.rotateLocalY((float)Math.PI); //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
+        //rotation.rotateLocalY((float)Math.PI); //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
     }
 
     public DisplayBone(final _mob_part_type partId, final float hitboxWidth, final float hitboxHeight) {
@@ -170,8 +170,8 @@ public final class DisplayBone extends Bone {
     private void updateDisplayTransform(){
         if(!spawned) return;
         Transformation t = new Transformation(
-            new Vector3f(getAbsPos()).add(0, 0.5f, 0), // Center to in-game block. XZ is inverted by the resource pack generator script
-            new AxisAngle4f(rotation),
+            new Vector3f(getAbsPos()).add(0, 0.5f, 0),                 //! Center to in-game block
+            new AxisAngle4f(new Quaternionf(rotation).rotateY(PI)), //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );

@@ -56,16 +56,16 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_3a = leg_30.getChildren().get(1); //FIXME make index deterministic or use a different search method
 
         // Set leg direction
-        leg_0b.rotate(-0.5f, 0, 1, 0);
-        leg_1b.rotate(+0.5f, 0, 1, 0);
-        leg_2b.rotate(-0.5f, 0, 1, 0);
-        leg_3b.rotate(+0.5f, 0, 1, 0);
+        leg_0b.rotate(+0.5f, 0, 1, 0);
+        leg_1b.rotate(-0.5f, 0, 1, 0);
+        leg_2b.rotate(+0.5f, 0, 1, 0);
+        leg_3b.rotate(-0.5f, 0, 1, 0);
 
         // Move right legs to the correct side
-        leg_2b.rotate(PI, 0, 1, 0);
-        leg_2b.mirrorPosX();
-        leg_3b.rotate(PI, 0, 1, 0);
-        leg_3b.mirrorPosX();
+        leg_0b.rotate(PI, 0, 1, 0);
+        leg_0b.mirrorPosX();
+        leg_1b.rotate(PI, 0, 1, 0);
+        leg_1b.mirrorPosX();
 
 
         bones_test.put("head", (DisplayBone)head);
@@ -103,7 +103,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
     private class Animate_CLASS {
-        final static float raiseHeight = 0.5f;
+        final static float raiseHeight = 0.3125f;
 
         private void step(){
             core.moveSelf(0, 0, 0);
@@ -111,14 +111,24 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
         private void stand() {
             core.move(0, raiseHeight, 0);
-            leg_00.rotateLocal(-PI / 4, 0, 0, 1);
-            leg_10.rotateLocal(-PI / 4, 0, 0, 1);
-            leg_20.rotateLocal(-PI / 4, 0, 0, 1);
-            leg_30.rotateLocal(-PI / 4, 0, 0, 1);
-            leg_01.rotateLocal(+PI / 4, 0, 0, 1);
-            leg_11.rotateLocal(+PI / 4, 0, 0, 1);
-            leg_21.rotateLocal(+PI / 4, 0, 0, 1);
-            leg_31.rotateLocal(+PI / 4, 0, 0, 1);
+
+            // Segment 0
+            leg_00.rotateLocal(+PI / 6, 0, 0, 1);
+            leg_10.rotateLocal(+PI / 6, 0, 0, 1);
+            leg_20.rotateLocal(+PI / 6, 0, 0, 1);
+            leg_30.rotateLocal(+PI / 6, 0, 0, 1);
+
+            // Segment 1 inverse
+            leg_01.rotateLocal(-PI / 6, 0, 0, 1);
+            leg_11.rotateLocal(-PI / 6, 0, 0, 1);
+            leg_21.rotateLocal(-PI / 6, 0, 0, 1);
+            leg_31.rotateLocal(-PI / 6, 0, 0, 1);
+
+            // Armor inverse
+            leg_0a.rotateLocal(-PI / 12, 0, 0, 1);
+            leg_1a.rotateLocal(-PI / 12, 0, 0, 1);
+            leg_2a.rotateLocal(-PI / 12, 0, 0, 1);
+            leg_3a.rotateLocal(-PI / 12, 0, 0, 1);
         }
     }
     private final Animate_CLASS Animate = new Animate_CLASS();

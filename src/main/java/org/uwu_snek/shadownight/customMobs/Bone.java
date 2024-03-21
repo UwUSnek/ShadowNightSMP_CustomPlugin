@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.customMobs;
 
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -12,13 +13,16 @@ import java.util.ArrayList;
 
 
 public class Bone {
+    protected final static float PI = (float)Math.PI;
+
     protected final Vector3f locPos = new Vector3f(0, 0, 0); // The location of this bone's location relative to its origin
     protected final Vector3f origin = new Vector3f(0, 0, 0); // The location of this bone's origin relative to the root bone
     protected final Quaternionf rotation = new Quaternionf(0, 0, 0, 1);
     protected boolean spawned = false;
 
 
-    private final ArrayList<Bone> children = new ArrayList<>();
+    protected Bone parent = null;
+    protected final ArrayList<Bone> children = new ArrayList<>();
     public ArrayList<Bone> getChildren(){ return children; }
     public Bone(){ }
 
@@ -64,6 +68,7 @@ public class Bone {
      */
     public void addChild(@NotNull Bone bone) {
         children.add(bone);
+        bone.parent = this;
     }
 
 
@@ -73,8 +78,9 @@ public class Bone {
      * Calculates the absolute position of this bone (This is relative to the mount's location)
      * @return A copy of the vector representing the absolute position
      */
-    protected Vector3f getAbsPos(){
-        return new Vector3f(origin).add(locPos);
+    protected Vector3f getAbsPos(){ //FIXME cache abs pos to not recalculate it every single time
+        //!LAST return new Vector3f(origin).add(locPos);
+        return new Vector3f(origin).add(new Vector3f(locPos).rotate(parent.rotation));
     }
 
 
@@ -130,7 +136,7 @@ public class Bone {
     }
     protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
         rotation.premul(new Quaternionf(r));
-        locPos.rotateAxis(r.angle, r.x, r.y, r.z);
+        //!LAST locPos.rotateAxis(r.angle, r.x, r.y, r.z);
         origin.set(o);
         for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
     }
@@ -141,11 +147,20 @@ public class Bone {
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), r);
     }
     protected void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
-        //locPos.rotateAxis(r.angle, r.x, r.y, r.z); //FIXME use local rotation. This one is world coordinates
+        rotation.mul(new Quaternionf(r));
+        //!LAST locPos.rotateAxis(r.angle, r.x, r.y, r.z); //FIXME use local rotation. This one is world coordinates
+
+        //rotation.mul(new Quaternionf(r));
+        //final AxisAngle4f localR = new AxisAngle4f();
+        //locPos.rotateAxis(localR.angle, localR.x, localR.y, localR.z); //FIXME use local rotation. This one is world coordinates
+
+        /*
         final Quaternionf oldRotation = new Quaternionf(rotation);
         rotation.mul(new Quaternionf(r));
-        final AxisAngle4f rotationDiff = new AxisAngle4f(new Quaternionf(oldRotation).mul(new Quaternionf(r).invert()));
+        final AxisAngle4f rotationDiff = new AxisAngle4f(oldRotation.mul(new Quaternionf(r).invert()));
         locPos.rotateAxis(rotationDiff.angle, rotationDiff.x, rotationDiff.y, rotationDiff.z); //FIXME use local rotation. This one is world coordinates
+         */
+
         origin.set(o);
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), r);
     }
