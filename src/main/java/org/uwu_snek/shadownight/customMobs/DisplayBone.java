@@ -73,6 +73,7 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
+        displayEntity.setTeleportDuration(MOB.stepDuration);
         updateDisplayTransform(); //TODO make updates manual
 
         // Initialize hitboxes

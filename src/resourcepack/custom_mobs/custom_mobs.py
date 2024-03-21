@@ -73,11 +73,13 @@ def get_all_group_elements(full_model, child):
 
 
 data_i = 0
+children_count = {}
 def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, java_preset_data: dict):
     global data_i
     part_model = {
         "credit": utils.credit,
         #"texture_size": full_model, #TODO check if this is needed
+        "gui_light": "side",
         "textures": full_model["textures"],
         "elements": [],
     }
@@ -85,7 +87,7 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
 
-    # Find origin and extrapolate data
+    # Find origin
     DEBUG_pos = f'part "{ part["name"] }" of model { full_model_rel_path }'
     origin_i = -1
     for group_child in part["children"]:
@@ -98,16 +100,24 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
     assert origin_i > -1, f'Missing origin in { DEBUG_pos }'
     origin = full_model["elements"][origin_i]
 
+    # Extrapolate origin data
     assert origin["from"] == origin["to"], f'Origin "{ origin["name"] }" of { DEBUG_pos } is not of size 0'
     origin_data = {
-        "parent": origin["name"][1:],
+        "parent": origin["name"][1:],  #! [1:] trims the trailing @
         "pos": origin["from"]
     }
 
+    # Update children count
+    if origin_data["parent"] in children_count:
+        children_count[origin_data["parent"]] += 1
+    else:
+        children_count[origin_data["parent"]] = 0
 
 
 
-    # Add part elements and shift them to center their origin to [8, 8, 8]. Ignore 0-Size elements
+
+
+    # Add part elements and shift them to center their origin to [8, 8, 8]. Ignore 0-Dimensional elements
     for group_child in part["children"]:
         part_model["elements"] += [ e for e in get_all_group_elements(full_model, group_child) if e["from"] != e["to"] ]
 
@@ -143,9 +153,9 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
 
-    # Set java hook
+    # Set java hooks
     sanitized_full_part_name = re.sub(r"[/-]", "_", full_part_name)
-    java_parts.write(f'    { sanitized_full_part_name.upper() }({ data_zero + data_i }),\n')
+    java_parts.write(f'    { sanitized_full_part_name.upper() }({ data_zero + data_i }, { children_count[origin_data["parent"]] }),\n')
     data_i += 1
 
 
@@ -206,8 +216,8 @@ def generate_mob(model_file, java_parts):
             f'import org.uwu_snek.shadownight.customMobs.DisplayBone;\n'
             f'public abstract class { java_class_name } extends MOB {{\n'
             f'{ java_preset_data["members"] }\n'
-            f'    public { java_class_name }() {{\n'
-            f'        super();\n'
+            f'    public { java_class_name }(final double movementSpeed) {{\n'
+            f'        super(movementSpeed);\n'
             f'{ java_preset_data["connections"] }'
             f'{ java_preset_data["adjustments"] }'
             f'    }}\n'
@@ -241,11 +251,16 @@ def main():
         java_parts.write(
             f'    ;\n'
             f'    private final int modelData;\n'
-            f'    { java_class_name }(final int _modelData) {{\n'
+            f'    private final int childIndex;\n\n'
+            f'    { java_class_name }(final int _modelData, final int _childIndex) {{\n'
             f'        this.modelData = _modelData;\n'
+            f'        this.childIndex = _childIndex;\n'
             f'    }}\n'
             f'    public int getCustomModelData() {{\n'
             f'        return modelData;\n'
+            f'    }}\n'
+            f'    public int getChildIndex() {{\n'
+            f'        return childIndex;\n'
             f'    }}\n'
             f'}}'
         )

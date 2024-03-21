@@ -28,7 +28,7 @@ public class MOB_Debug extends MOB {
     Bone l4     = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 1.02f, 1.02f);
 
     public MOB_Debug() {
-        super();
+        super(0);
 
         bones_test.put("center", (DisplayBone)center);
         bones_test.put("r0",     (DisplayBone)r0);

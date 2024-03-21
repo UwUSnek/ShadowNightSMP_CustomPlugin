@@ -10,8 +10,8 @@ import org.uwu_snek.shadownight.customMobs.DisplayBone;
 public abstract class _mob_preset_debug_mob extends MOB {
     protected Bone main = new DisplayBone(_mob_part_type.DEBUG_MOB_MAIN, 0.5f, 0.5f);
 
-    public _mob_preset_debug_mob() {
-        super();
+    public _mob_preset_debug_mob(final double movementSpeed) {
+        super(movementSpeed);
         root.addChild(main);
         main.moveSelf(0.0f, 0.0f, 0.0f);
     }

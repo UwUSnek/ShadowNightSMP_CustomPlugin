@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.uwu_snek.shadownight._generated._mob_part_type;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,28 @@ public class Bone {
 
     protected Bone parent = null;
     protected final ArrayList<Bone> children = new ArrayList<>();
-    public ArrayList<Bone> getChildren(){ return children; }
+
+    /**
+     * Returns the children of this bone.
+     * @return The children as a list of bones
+     */
+    public @NotNull ArrayList<@NotNull Bone> getChildren(){
+        return children;
+    }
+
+    /**
+     * Returns the child that uses the part type <type>. This function is always O(1).
+     * If multiple children have this type, one of them will be returned, but it is not known which one.
+     * If no child has this type, the function call will have undefined behaviour.
+     * @param type The type of part to get
+     * @return The child bone that uses that part
+     */
+    public @NotNull Bone getChild(final @NotNull _mob_part_type type){
+        return children.get(type.getChildIndex());
+    }
+
+
+
     public Bone(){ }
 
 

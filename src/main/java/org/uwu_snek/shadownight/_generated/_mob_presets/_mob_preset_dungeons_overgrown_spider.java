@@ -16,8 +16,8 @@ public abstract class _mob_preset_dungeons_overgrown_spider extends MOB {
     protected Bone leg_02 = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_02, 0.5f, 0.5f);
     protected Bone leg_0a = new DisplayBone(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_0A, 0.5f, 0.5f);
 
-    public _mob_preset_dungeons_overgrown_spider() {
-        super();
+    public _mob_preset_dungeons_overgrown_spider(final double movementSpeed) {
+        super(movementSpeed);
         root.addChild(core);
         core.addChild(head);
         core.addChild(leg_0b);

@@ -1,5 +1,8 @@
 package org.uwu_snek.shadownight.customMobs.implementations;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight._generated._mob_presets._mob_preset_dungeons_overgrown_spider;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
@@ -33,7 +36,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
     public MOB_OvergrownSpider() {
-        super();
+        super(2);
         testMob = this;
 
         //! Leg name numbers start from the right-left one and continue clockwise
@@ -48,12 +51,21 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         core.addChild(leg_3b = leg_0b.createDeepCopy());
 
         // Setup handler members
-        leg_12 = (leg_11 = (leg_10 = leg_1b.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
-        leg_22 = (leg_21 = (leg_20 = leg_2b.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
-        leg_32 = (leg_31 = (leg_30 = leg_3b.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
-        leg_1a = leg_10.getChildren().get(1); //FIXME make index deterministic or use a different search method
-        leg_2a = leg_20.getChildren().get(1); //FIXME make index deterministic or use a different search method
-        leg_3a = leg_30.getChildren().get(1); //FIXME make index deterministic or use a different search method
+        leg_10 = leg_1b.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_00);
+        leg_20 = leg_2b.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_00);
+        leg_30 = leg_3b.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_00);
+
+        leg_11 = leg_10.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_01);
+        leg_21 = leg_20.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_01);
+        leg_31 = leg_30.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_01);
+
+        leg_12 = leg_11.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_02);
+        leg_22 = leg_21.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_02);
+        leg_32 = leg_31.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_02);
+
+        leg_1a = leg_10.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_0A);
+        leg_2a = leg_20.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_0A);
+        leg_3a = leg_30.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_0A);
 
         // Set leg direction
         leg_0b.rotate(+0.5f, 0, 1, 0);
@@ -101,9 +113,18 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
 
+    public void target(Player player){
+        final Location targetPos = player.getLocation();
 
+    }
+
+
+
+
+    private final Animate_CLASS Animate = new Animate_CLASS();
     private class Animate_CLASS {
         final static float raiseHeight = 0.3125f;
+        final static float raiseAngle = PI / 6;
 
         private void step(){
             core.moveSelf(0, 0, 0);
@@ -113,23 +134,22 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
             core.move(0, raiseHeight, 0);
 
             // Segment 0
-            leg_00.rotateLocal(+PI / 6, 0, 0, 1);
-            leg_10.rotateLocal(+PI / 6, 0, 0, 1);
-            leg_20.rotateLocal(+PI / 6, 0, 0, 1);
-            leg_30.rotateLocal(+PI / 6, 0, 0, 1);
+            leg_00.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_10.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_20.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_30.rotateLocal(+raiseAngle, 0, 0, 1);
 
             // Segment 1 inverse
-            leg_01.rotateLocal(-PI / 6, 0, 0, 1);
-            leg_11.rotateLocal(-PI / 6, 0, 0, 1);
-            leg_21.rotateLocal(-PI / 6, 0, 0, 1);
-            leg_31.rotateLocal(-PI / 6, 0, 0, 1);
+            leg_01.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_11.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_21.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_31.rotateLocal(-raiseAngle, 0, 0, 1);
 
             // Armor inverse
-            leg_0a.rotateLocal(-PI / 12, 0, 0, 1);
-            leg_1a.rotateLocal(-PI / 12, 0, 0, 1);
-            leg_2a.rotateLocal(-PI / 12, 0, 0, 1);
-            leg_3a.rotateLocal(-PI / 12, 0, 0, 1);
+            leg_0a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
+            leg_1a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
+            leg_2a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
+            leg_3a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
         }
     }
-    private final Animate_CLASS Animate = new Animate_CLASS();
 }
