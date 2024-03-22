@@ -22,11 +22,15 @@ public class Bone {
 
     // Entity status and update requests
     protected boolean spawned = false;
-    protected boolean needsDisplayUpdate = false; public void requestDisplayUpdate() { needsDisplayUpdate = true; } protected void updateDisplay() { }
-    protected boolean needsHitboxUpdate = false;  public void requestHitboxUpdate()  { needsHitboxUpdate  = true; } protected void updateHitbox()  { }
-    public void flushUpdates(){
+    protected boolean needsDisplayUpdate = false; public final void requestDisplayUpdate() { needsDisplayUpdate = true; } protected void updateDisplay() { }
+    protected boolean needsHitboxUpdate = false;  public final void requestHitboxUpdate()  { needsHitboxUpdate  = true; } protected void updateHitbox()  { }
+
+    public void flushUpdatesSelf(){
         if(needsDisplayUpdate) { updateDisplay(); needsDisplayUpdate = false; }
         if(needsHitboxUpdate)  { updateHitbox();  needsHitboxUpdate  = false; }
+    }
+    public void flushUpdates(){
+        flushUpdatesSelf();
         for(Bone c : children) c.flushUpdates();
     }
 

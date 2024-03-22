@@ -85,6 +85,16 @@ public final class Func extends UtilityClass {
      * @return The clamped value
      */
     @SuppressWarnings("unused")
+    public static float clampMin(final float n, final float min) {
+        return Math.max(min, n);
+    }
+    /**
+     * Equivalent to Math.max(n, min)
+     * @param n The value to clamp
+     * @param min The minimum value that can be returned
+     * @return The clamped value
+     */
+    @SuppressWarnings("unused")
     public static int clampMin(final int n, final int min) {
         return Math.max(min, n);
     }
@@ -99,6 +109,16 @@ public final class Func extends UtilityClass {
      */
     @SuppressWarnings("unused")
     public static double clampMax(final double n, final double max) {
+        return Math.min(n, max);
+    }
+    /**
+     * Equivalent to Math.min(n, max)
+     * @param n The value to clamp
+     * @param max The maximum value that can be returned
+     * @return The clamped value
+     */
+    @SuppressWarnings("unused")
+    public static float clampMax(final float n, final float max) {
         return Math.min(n, max);
     }
     /**
@@ -123,6 +143,17 @@ public final class Func extends UtilityClass {
      */
     @SuppressWarnings("unused")
     public static double clamp(final double n, final double min, final double max) {
+        return Math.max(min, Math.min(n, max));
+    }
+    /**
+     * Clamps a value between <min> and <max>
+     * @param n The value to clamp
+     * @param min The minimum value that can be returned
+     * @param max The maximum value that can be returned
+     * @return The clamped value
+     */
+    @SuppressWarnings("unused")
+    public static float clamp(final float n, final float min, final float max) {
         return Math.max(min, Math.min(n, max));
     }
     /**

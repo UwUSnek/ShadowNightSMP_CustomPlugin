@@ -15,6 +15,7 @@ public class MOB {
 
     protected Bone root;
     protected Interaction mount;
+    protected float yaw = 0;
 
     public final static int walkCycleDuration = 10; // The duration of a walk cycle in ticks
     protected double walkingSpeed;                  // The walking speed of the mob in blocks/s
@@ -44,14 +45,17 @@ public class MOB {
 
 
     /**
-     * Calculates the angle on the XZ-Plane of the location <target> from the location <source>,
-     * With 0 being North and increasing as the target moves clockwise around the source location.
+     * Calculates the angle of the location <target> around the Y-Axis centered at the location <source>,
+     * With 0 being North and increasing as the target moves clockwise (looking up) around the axis location.
      * @param source The location to calculate the target's angle from
      * @param target The target location
      * @return The angle expressed in radians
      */
     protected static float getTargetYaw(final @NotNull Location source, final @NotNull Location target){
         final Vector targetDirection = target.clone().subtract(source).toVector();
-        return (float)-Math.atan2(targetDirection.getZ(), targetDirection.getX()) - PI / 2;
+        return (float)-(Math.atan2(targetDirection.getZ(), targetDirection.getX()) - PI / 2);
+        //! Subtract 90° to account Minecraft's rotation 0 being at [0, 1] instead of the standard [1, 0]
+        //! Invert angle. Math.atan2 calculates it counter-clockwise, Minecraft's is clockwise
+        //! Convert to float. java.lang.Math doesn't have a float version of atan2
     }
 }

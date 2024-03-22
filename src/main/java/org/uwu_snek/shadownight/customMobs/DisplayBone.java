@@ -75,14 +75,16 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
         displayEntity.setTeleportDuration(stepDuration);
+        requestDisplayUpdate();
 
         // Initialize hitboxes
         hitbox = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
         hitbox.setInteractionWidth(hitboxWidth);
         hitbox.setInteractionHeight(hitboxHeight);
         displayEntity.addPassenger(hitbox);
+        requestHitboxUpdate();
 
-        flushUpdates();
+        flushUpdatesSelf();
     }
 
 
@@ -94,7 +96,8 @@ public final class DisplayBone extends Bone {
         if(!spawned) return;
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0),                 //! Center to in-game block
-            new AxisAngle4f(new Quaternionf(rotation).rotateY(PI)), //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
+            //new AxisAngle4f(new Quaternionf(rotation).rotateY(PI)), //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
+            new AxisAngle4f(rotation),
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );

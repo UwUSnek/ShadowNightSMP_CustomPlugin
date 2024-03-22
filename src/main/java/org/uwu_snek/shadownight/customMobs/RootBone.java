@@ -28,8 +28,6 @@ public final class RootBone extends Bone {
         return new Vector3f(origin).add(locPos);
     }
 
-    @Override public void requestDisplayUpdate() { }
-    @Override public void requestHitboxUpdate()  { }
 
     @Override
     public void flushUpdates(){
