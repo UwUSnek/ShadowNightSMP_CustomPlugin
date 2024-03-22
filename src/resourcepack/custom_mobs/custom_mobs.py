@@ -2,6 +2,7 @@ import json
 import numbers
 import shutil
 import re
+import math
 from resourcepack import utils
 
 
@@ -43,12 +44,12 @@ def center_vector(v, origin):
         v[2] - (origin[2] - 8)
     ]
 
-#def rotate_vector_180(v):
-#    return [
-#        v[0]
-#        v[1]
-#        v[2]
-#    ]
+def rotate_vector_180(v):
+    return [
+        -v[0] + 16,  #! +16 to account for the center of the model being at [8, 8, 8]
+        +v[1],
+        -v[2] + 16,
+    ]
 
 def check_element_coordinate_pos(v):
     return (
@@ -193,6 +194,14 @@ def generate_mob(model_file, java_parts):
             model["textures"][key] = "shadow_night:item/mob/" + rel_texture_path
 
             shutil.copyfile(texture_source + "/" + rel_texture_path + ".png", utils.mkdirs(texture_target + "/" + rel_texture_path + ".png"))
+
+
+        # Adjust the entire model's rotation. Minecraft's in-game display models are rotated 180° around the Y-Axis for no apparent reason. Mojang, please...
+        for element in model["elements"]:
+            element["from"] = rotate_vector_180(element["from"])
+            element["to"  ] = rotate_vector_180(element["to"])
+            if "rotation" in element:
+                element["rotation"]["origin"] = rotate_vector_180(element["rotation"]["origin"])
 
 
         # Separate parts and generate respective models and hooks
