@@ -23,6 +23,7 @@ public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity = null;
     private final int customModelData;
 
+    public final static int stepDuration = 5;
 
 
 
@@ -73,7 +74,7 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
-        displayEntity.setTeleportDuration(MOB.stepDuration);
+        displayEntity.setTeleportDuration(stepDuration);
         updateDisplayTransform(); //TODO make updates manual
 
         // Initialize hitboxes
@@ -115,13 +116,11 @@ public final class DisplayBone extends Bone {
     @Override
     public void rotateUnsafe(final @NotNull AxisAngle4f r) {
         super.rotateUnsafe(r);
-        //rotation.premul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
     }
     @Override
-    public void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+    public void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
         super.rotateUpdateOrigin(o, r);
-        //rotation.premul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
         updateHitbox(); //TODO make updates manual
     }
@@ -129,15 +128,19 @@ public final class DisplayBone extends Bone {
     @Override
     public void rotateLocalUnsafe(final @NotNull AxisAngle4f r) {
         super.rotateLocalUnsafe(r);
-        //rotation.mul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
     }
     @Override
-    public void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
+    public void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
         super.rotateLocalUpdateOrigin(o, r);
-        //rotation.mul(new Quaternionf(r));
         updateDisplayTransform(); //TODO make updates manual
         updateHitbox(); //TODO make updates manual
+    }
+
+    @Override
+    public void setRotationUnsafe(final @NotNull AxisAngle4f r) {
+        super.setRotationUnsafe(r);
+        updateDisplayTransform(); //TODO make updates manual
     }
 
 
@@ -176,7 +179,7 @@ public final class DisplayBone extends Bone {
             new Vector3f(1),
             new AxisAngle4f(0, 0, 1, 0)
         );
-        displayEntity.setInterpolationDuration(10); //TODO automate and add real interpolation
+        displayEntity.setInterpolationDuration(stepDuration); //TODO automate and add real interpolation
         displayEntity.setTransformation(t);
         displayEntity.setInterpolationDelay(0);
     }

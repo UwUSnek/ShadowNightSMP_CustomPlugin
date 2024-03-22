@@ -12,21 +12,21 @@ import org.jetbrains.annotations.NotNull;
 //TODO add onSpawn and onDeath callbacks
 public class MOB {
     protected final static float PI = (float)Math.PI;
-    public final static int stepDuration = 5;
 
     protected Bone root;
     protected Interaction mount;
 
-    protected double movementSpeed;
-    protected double movementAmountStep;
+    public final static int walkCycleDuration = 10; // The duration of a walk cycle in ticks
+    protected double walkingSpeed;                  // The walking speed of the mob in blocks/s
+    protected double walkCycleMoveAmount;           // The number of blocks the mob should move each walk cycle
 
     /**
      * Creates a new custom mob (without spawning it)
      * @param movementSpeed The movement speed of the mob expressed in blocks/s
      */
     public MOB(final double movementSpeed) {
-        this.movementSpeed = movementSpeed;
-        this.movementAmountStep = movementSpeed / (20d / stepDuration);
+        this.walkingSpeed = movementSpeed;
+        this.walkCycleMoveAmount = movementSpeed / (20d / walkCycleDuration);
         root = new RootBone();
     }
 

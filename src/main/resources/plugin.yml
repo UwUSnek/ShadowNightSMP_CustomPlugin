@@ -126,3 +126,7 @@ commands:
         description: admin command
         usage: /testrotation
         permission: op
+    testtarget:
+        description: admin command
+        usage: /testtarget
+        permission: op

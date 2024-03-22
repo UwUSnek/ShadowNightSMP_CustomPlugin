@@ -3,6 +3,8 @@ package org.uwu_snek.shadownight.utils.math;
 
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 
 
@@ -186,5 +188,27 @@ public final class Func extends UtilityClass {
             return modulus(bv);         // Use distance to end of the segment instead.
 
         return modulus(ab.getCrossProduct(av)) / modulus(ab);
+    }
+
+
+
+
+
+
+
+    public static Quaternionf rotationDiff(final @NotNull Quaternionf from, final @NotNull AxisAngle4f to) {
+        return rotationDiff_internal(new Quaternionf(from), new Quaternionf(to));
+    }
+    public static Quaternionf rotationDiff(final @NotNull AxisAngle4f from, final @NotNull Quaternionf to) {
+        return rotationDiff_internal(new Quaternionf(from), new Quaternionf(to));
+    }
+    public static Quaternionf rotationDiff(final @NotNull Quaternionf from, final @NotNull Quaternionf to) {
+        return rotationDiff_internal(new Quaternionf(from), new Quaternionf(to));
+    }
+    public static Quaternionf rotationDiff(final @NotNull AxisAngle4f from, final @NotNull AxisAngle4f to) {
+        return rotationDiff_internal(new Quaternionf(from), new Quaternionf(to));
+    }
+    public static Quaternionf rotationDiff_internal(final @NotNull Quaternionf from, final @NotNull Quaternionf to) {
+        return to.mul(from.invert());
     }
 }

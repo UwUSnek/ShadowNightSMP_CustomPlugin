@@ -135,12 +135,23 @@ public class Bone {
 
 
 
-//TODO make display updates manual
+    //TODO make display updates manual
+
+
     public final void rotate(final float angle, final float x, final float y, final float z){
         rotate(new AxisAngle4f(angle, x, y, z));
     }
     public final void rotate(final @NotNull AxisAngle4f r) {
         rotateUnsafe(r.normalize());
+    }
+    public void rotateUnsafe(final @NotNull AxisAngle4f r) {
+        rotation.premul(new Quaternionf(r));
+        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), new Quaternionf(r));
+    }
+    protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
+        rotation.premul(r);
+        origin.set(o);
+        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
     }
 
 
@@ -150,42 +161,30 @@ public class Bone {
     public final void rotateLocal(final @NotNull AxisAngle4f r) {
         rotateLocalUnsafe(r.normalize());
     }
-
-
-    public void rotateUnsafe(final @NotNull AxisAngle4f r) {
-        rotation.premul(new Quaternionf(r));
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
-    }
-    protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
-        rotation.premul(new Quaternionf(r));
-        //!LAST locPos.rotateAxis(r.angle, r.x, r.y, r.z);
-        origin.set(o);
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
-    }
-
-
     public void rotateLocalUnsafe(final @NotNull AxisAngle4f r) {
         rotation.mul(new Quaternionf(r));
-        for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), r);
+        for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), new Quaternionf(r));
     }
-    protected void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull AxisAngle4f r){
-        rotation.mul(new Quaternionf(r));
-        //!LAST locPos.rotateAxis(r.angle, r.x, r.y, r.z); //FIXME use local rotation. This one is world coordinates
-
-        //rotation.mul(new Quaternionf(r));
-        //final AxisAngle4f localR = new AxisAngle4f();
-        //locPos.rotateAxis(localR.angle, localR.x, localR.y, localR.z); //FIXME use local rotation. This one is world coordinates
-
-        /*
-        final Quaternionf oldRotation = new Quaternionf(rotation);
-        rotation.mul(new Quaternionf(r));
-        final AxisAngle4f rotationDiff = new AxisAngle4f(oldRotation.mul(new Quaternionf(r).invert()));
-        locPos.rotateAxis(rotationDiff.angle, rotationDiff.x, rotationDiff.y, rotationDiff.z); //FIXME use local rotation. This one is world coordinates
-         */
-
+    protected void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
+        rotation.mul(r);
         origin.set(o);
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), r);
     }
+
+
+    public final void setRotation(final float angle, final float x, final float y, final float z){
+        setRotation(new AxisAngle4f(angle, x, y, z));
+    }
+    public final void setRotation(final @NotNull AxisAngle4f r) {
+        setRotationUnsafe(r.normalize());
+    }
+    public void setRotationUnsafe(final @NotNull AxisAngle4f r) {
+        final Quaternionf rDiff = new Quaternionf(r).mul(new Quaternionf(rotation).invert());
+        rotation.set(r);
+        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), rDiff);
+    }
+
+
 
 
 

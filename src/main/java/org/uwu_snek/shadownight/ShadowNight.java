@@ -123,6 +123,7 @@ public final class ShadowNight extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("summontest"),          "getCommand returned null").setExecutor(new CMD_summontest());
         Objects.requireNonNull(this.getCommand("summontest2"),          "getCommand returned null").setExecutor(new CMD_summontest2());
         Objects.requireNonNull(this.getCommand("testrotation"),          "getCommand returned null").setExecutor(new CMD_testrotation());
+        Objects.requireNonNull(this.getCommand("testtarget"),          "getCommand returned null").setExecutor(new CMD_testtarget());
 
 
 

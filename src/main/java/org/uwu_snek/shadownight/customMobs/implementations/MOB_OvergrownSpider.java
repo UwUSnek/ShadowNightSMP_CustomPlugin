@@ -2,13 +2,17 @@ package org.uwu_snek.shadownight.customMobs.implementations;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+import org.joml.Vector2f;
 import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight._generated._mob_presets._mob_preset_dungeons_overgrown_spider;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 
 
@@ -114,8 +118,19 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
     public void target(Player player){
-        final Location targetPos = player.getLocation();
+        // Animation loop //TODO make this external
+        Scheduler.loop(() -> {
+            final Location targetPos = player.getLocation();
+            final Vector targetDirection = targetPos.clone().subtract(mount.getLocation()).toVector();
 
+            core.setRotation((float)-Math.atan2(targetDirection.getZ(), targetDirection.getX()) - PI / 2, 0, 1, 0);
+        }, 0, DisplayBone.stepDuration);
+
+        // Walking cycle
+        Scheduler.loop(() -> {
+            //TODO rotate head by x
+            //TODO rotate leg pair by 2x
+        }, 0, walkCycleDuration);
     }
 
 
