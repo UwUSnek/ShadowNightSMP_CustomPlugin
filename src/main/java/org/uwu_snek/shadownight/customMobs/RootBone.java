@@ -27,4 +27,12 @@ public final class RootBone extends Bone {
     protected Vector3f getAbsPos(){ //FIXME cache abs pos to not recalculate it every single time
         return new Vector3f(origin).add(locPos);
     }
+
+    @Override public void requestDisplayUpdate() { }
+    @Override public void requestHitboxUpdate()  { }
+
+    @Override
+    public void flushUpdates(){
+        for(Bone c : children) c.flushUpdates();
+    }
 }

@@ -75,72 +75,14 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
         displayEntity.setTeleportDuration(stepDuration);
-        updateDisplayTransform(); //TODO make updates manual
 
         // Initialize hitboxes
         hitbox = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
         hitbox.setInteractionWidth(hitboxWidth);
         hitbox.setInteractionHeight(hitboxHeight);
         displayEntity.addPassenger(hitbox);
-        updateHitbox(); //TODO make updates manual
-    }
 
-
-
-
-
-
-
-    @Override
-    public void move(final @NotNull Vector3f v) {
-        super.move(v);
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-    @Override
-    public void moveSelf(final @NotNull Vector3f v){
-        super.moveSelf(v);
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-    @Override
-    public void moveUpdateOrigin(final @NotNull Vector3f o){
-        super.moveUpdateOrigin(o);
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-
-
-
-
-    @Override
-    public void rotateUnsafe(final @NotNull AxisAngle4f r) {
-        super.rotateUnsafe(r);
-        updateDisplayTransform(); //TODO make updates manual
-    }
-    @Override
-    public void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
-        super.rotateUpdateOrigin(o, r);
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-
-    @Override
-    public void rotateLocalUnsafe(final @NotNull AxisAngle4f r) {
-        super.rotateLocalUnsafe(r);
-        updateDisplayTransform(); //TODO make updates manual
-    }
-    @Override
-    public void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
-        super.rotateLocalUpdateOrigin(o, r);
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-
-    @Override
-    public void setRotationUnsafe(final @NotNull AxisAngle4f r) {
-        super.setRotationUnsafe(r);
-        updateDisplayTransform(); //TODO make updates manual
+        flushUpdates();
     }
 
 
@@ -148,30 +90,7 @@ public final class DisplayBone extends Bone {
 
 
     @Override
-    public void mirrorPosX() {
-        super.mirrorPosX();
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-    @Override
-    public void mirrorPosY() {
-        super.mirrorPosY();
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-    @Override
-    public void mirrorPosZ() {
-        super.mirrorPosZ();
-        updateDisplayTransform(); //TODO make updates manual
-        updateHitbox(); //TODO make updates manual
-    }
-
-
-
-
-
-
-    private void updateDisplayTransform(){
+    protected void updateDisplay(){
         if(!spawned) return;
         Transformation t = new Transformation(
             new Vector3f(getAbsPos()).add(0, 0.5f, 0),                 //! Center to in-game block
@@ -185,7 +104,8 @@ public final class DisplayBone extends Bone {
     }
 
 
-    private void updateHitbox(){
+    @Override
+    protected void updateHitbox(){
         if(!spawned) return;
         hitbox.teleport(displayEntity.getLocation().add(Vector.fromJOML(getAbsPos())));
     }

@@ -2,7 +2,6 @@ package org.uwu_snek.shadownight.customMobs;
 
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -16,12 +15,22 @@ import java.util.ArrayList;
 public class Bone {
     protected final static float PI = (float)Math.PI;
 
+    // Bone position and rotation
     protected final Vector3f locPos = new Vector3f(0, 0, 0); // The location of this bone's location relative to its origin
     protected final Vector3f origin = new Vector3f(0, 0, 0); // The location of this bone's origin relative to the root bone
     protected final Quaternionf rotation = new Quaternionf(0, 0, 0, 1);
+
+    // Entity status and update requests
     protected boolean spawned = false;
+    protected boolean needsDisplayUpdate = false; public void requestDisplayUpdate() { needsDisplayUpdate = true; } protected void updateDisplay() { }
+    protected boolean needsHitboxUpdate = false;  public void requestHitboxUpdate()  { needsHitboxUpdate  = true; } protected void updateHitbox()  { }
+    public void flushUpdates(){
+        if(needsDisplayUpdate) { updateDisplay(); needsDisplayUpdate = false; }
+        if(needsHitboxUpdate)  { updateHitbox();  needsHitboxUpdate  = false; }
+        for(Bone c : children) c.flushUpdates();
+    }
 
-
+    // Parent and children bones
     protected Bone parent = null;
     protected final ArrayList<Bone> children = new ArrayList<>();
 
@@ -101,7 +110,6 @@ public class Bone {
      * @return A copy of the vector representing the absolute position
      */
     protected Vector3f getAbsPos(){ //FIXME cache abs pos to not recalculate it every single time
-        //!LAST return new Vector3f(origin).add(locPos);
         return new Vector3f(origin).add(new Vector3f(locPos).rotate(parent.rotation));
     }
 
@@ -114,6 +122,8 @@ public class Bone {
     public void move(final @NotNull Vector3f v) {
         locPos.add(v);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
+        requestDisplayUpdate();
+        requestHitboxUpdate();
     }
 
     public final void moveSelf(final float x, final float y, final float z) {
@@ -125,11 +135,15 @@ public class Bone {
             c.locPos.sub(v);
             c.origin.set(getAbsPos());
         }
+        requestDisplayUpdate();
+        requestHitboxUpdate();
     }
 
     protected void moveUpdateOrigin(final @NotNull Vector3f o) {
         origin.set(o);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
+        requestDisplayUpdate();
+        requestHitboxUpdate();
     }
 
 
@@ -147,11 +161,14 @@ public class Bone {
     public void rotateUnsafe(final @NotNull AxisAngle4f r) {
         rotation.premul(new Quaternionf(r));
         for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), new Quaternionf(r));
+        requestDisplayUpdate();
     }
     protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
         rotation.premul(r);
         origin.set(o);
         for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
+        requestDisplayUpdate();
+        requestHitboxUpdate();
     }
 
 
@@ -164,11 +181,14 @@ public class Bone {
     public void rotateLocalUnsafe(final @NotNull AxisAngle4f r) {
         rotation.mul(new Quaternionf(r));
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), new Quaternionf(r));
+        requestDisplayUpdate();
     }
     protected void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
         rotation.mul(r);
         origin.set(o);
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), r);
+        requestDisplayUpdate();
+        requestHitboxUpdate();
     }
 
 
@@ -182,6 +202,7 @@ public class Bone {
         final Quaternionf rDiff = new Quaternionf(r).mul(new Quaternionf(rotation).invert());
         rotation.set(r);
         for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), rDiff);
+        requestDisplayUpdate();
     }
 
 
@@ -192,13 +213,19 @@ public class Bone {
     public void mirrorPosX() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
+        requestHitboxUpdate();
+        requestDisplayUpdate();
     }
     public void mirrorPosY() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
+        requestHitboxUpdate();
+        requestDisplayUpdate();
     }
     public void mirrorPosZ() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
+        requestHitboxUpdate();
+        requestDisplayUpdate();
     }
 }

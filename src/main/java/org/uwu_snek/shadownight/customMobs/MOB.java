@@ -41,4 +41,17 @@ public class MOB {
         mount.setInteractionHeight(0);
         root.spawn(mount); // Spawn bones
     }
+
+
+    /**
+     * Calculates the angle on the XZ-Plane of the location <target> from the location <source>,
+     * With 0 being North and increasing as the target moves clockwise around the source location.
+     * @param source The location to calculate the target's angle from
+     * @param target The target location
+     * @return The angle expressed in radians
+     */
+    protected static float getTargetYaw(final @NotNull Location source, final @NotNull Location target){
+        final Vector targetDirection = target.clone().subtract(source).toVector();
+        return (float)-Math.atan2(targetDirection.getZ(), targetDirection.getX()) - PI / 2;
+    }
 }

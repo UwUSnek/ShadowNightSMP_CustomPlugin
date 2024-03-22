@@ -112,7 +112,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         bones_test.put("leg_32", (DisplayBone)leg_32);
 
         //Scheduler.delay(() -> Animate.step(), 20L);
-        Scheduler.delay(Animate::stand, 20L);
+        Scheduler.delay(() -> { Animate.stand(); core.flushUpdates(); }, 20L);
     }
 
 
@@ -120,16 +120,22 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
     public void target(Player player){
         // Animation loop //TODO make this external
         Scheduler.loop(() -> {
+            /*
             final Location targetPos = player.getLocation();
-            final Vector targetDirection = targetPos.clone().subtract(mount.getLocation()).toVector();
+            float targetYaw = getTargetYaw(mount.getLocation(), targetPos);
 
-            core.setRotation((float)-Math.atan2(targetDirection.getZ(), targetDirection.getX()) - PI / 2, 0, 1, 0);
+            core.setRotation(targetYaw, 0, 1, 0);
+            */
         }, 0, DisplayBone.stepDuration);
 
         // Walking cycle
         Scheduler.loop(() -> {
-            //TODO rotate head by x
-            //TODO rotate leg pair by 2x
+            final Location targetPos = player.getLocation();
+            float targetYaw = getTargetYaw(mount.getLocation(), targetPos);
+
+            core.setRotation(targetYaw, 0, 1, 0);
+            core.flushUpdates();
+
         }, 0, walkCycleDuration);
     }
 
