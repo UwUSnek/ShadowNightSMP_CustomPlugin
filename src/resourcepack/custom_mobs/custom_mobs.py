@@ -2,7 +2,6 @@ import json
 import numbers
 import shutil
 import re
-import math
 from resourcepack import utils
 
 
@@ -118,10 +117,11 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
 
-    # Add part elements and shift them to center their origin to [8, 8, 8]. Ignore 0-Dimensional elements
+    # Add part elements
     for group_child in part["children"]:
         part_model["elements"] += [ e for e in get_all_group_elements(full_model, group_child) if e["from"] != e["to"] ]
 
+    # Shift them to center their origin to [8, 8, 8]. Ignore 0-Dimensional elements
     for i, element in enumerate(part_model["elements"]):
         element["from"] = center_vector(element["from"], origin_data["pos"])
         element["to"  ] = center_vector(element["to"], origin_data["pos"])
@@ -165,9 +165,9 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
     java_preset_data["connections"] += f'        { origin_data["parent"] }.addChild({ part["name"] });\n'
     java_preset_data["adjustments"] += (
         f'        { part["name"] }.moveSelf('
-        f'{ -(origin_data["pos"][0] - 8) / 16 }f, '  #! Divide by 16 as ItemDisplay translations use block-sized units. Minecraft JSON Model units are 16 times smaller
-        f'{ +(origin_data["pos"][1] - 8) / 16 }f, '  #! Invert translation on the X and Z Axes to account for in-game display models being rotated by 180° around the Y-Axis
-        f'{ -(origin_data["pos"][2] - 8) / 16 }f);\n'
+        f'{ -(origin_data["pos"][0] - 8) / 16 }f, '    #! Divide by 16 as ItemDisplay translations use block-sized units. Minecraft JSON Model units are 16 times smaller
+        f'{ +(origin_data["pos"][1] - 8) / 16 }f, '    #! Rotating the whole model by 180° aligns it with the in-game orientation, but also inverts the needed X and Z adjustments.
+        f'{ -(origin_data["pos"][2] - 8) / 16 }f);\n'  #!     Using negative values for XZ adjustments brings them back to normal.
     )
 
 
@@ -196,12 +196,14 @@ def generate_mob(model_file, java_parts):
             shutil.copyfile(texture_source + "/" + rel_texture_path + ".png", utils.mkdirs(texture_target + "/" + rel_texture_path + ".png"))
 
 
-        # Adjust the entire model's rotation. Minecraft's in-game display models are rotated 180° around the Y-Axis for no apparent reason. Mojang, please...
+        # Adjust the entire model's rotation. Minecraft's in-game display models are rotated by 180° around the Y-Axis for no apparent reason. Mojang, please...
         for element in model["elements"]:
             element["from"] = rotate_vector_180(element["from"])
             element["to"  ] = rotate_vector_180(element["to"])
             if "rotation" in element:
                 element["rotation"]["origin"] = rotate_vector_180(element["rotation"]["origin"])
+                if element["rotation"]["axis"] != "y":
+                    element["rotation"]["angle" ] = -element["rotation"]["angle"]
 
 
         # Separate parts and generate respective models and hooks
