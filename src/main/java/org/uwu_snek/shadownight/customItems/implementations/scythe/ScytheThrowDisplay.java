@@ -15,6 +15,7 @@ import org.uwu_snek.shadownight.customItems.IM;
 import org.uwu_snek.shadownight.customItems.ItemManager;
 import org.uwu_snek.shadownight.utils.math.Easing;
 import org.uwu_snek.shadownight.utils.math.Func;
+import org.uwu_snek.shadownight.utils.math.K;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
@@ -101,7 +102,7 @@ public final class ScytheThrowDisplay {
 
         rotationTask = Scheduler.loop(() -> {
             Quaternionf diff = transformation.getLeftRotation();
-            diff.rotateAxis((float)(-Math.PI * 2 / (step_parts * 2)), 0, 0, 1);
+            diff.rotateAxis((float)(-K.PI * 2 / (step_parts * 2)), 0, 0, 1);
             transformation.getLeftRotation().set(diff);
             display.setTransformation(transformation);
             display.setInterpolationDelay(0);

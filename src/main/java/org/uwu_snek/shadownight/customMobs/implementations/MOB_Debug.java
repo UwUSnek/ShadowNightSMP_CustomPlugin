@@ -57,6 +57,7 @@ public class MOB_Debug extends MOB {
 
 
         Scheduler.delay(() -> { root.move(1, 0, -1); }, 20);
+        Scheduler.delay(() -> root.flushUpdates(), 20);
 
         Scheduler.delay(() -> { r0.move(1, 0, 2); }, 30);
         Scheduler.delay(() -> { r1.move(1, 0, 0); }, 30);
@@ -69,6 +70,29 @@ public class MOB_Debug extends MOB {
         Scheduler.delay(() -> { l2.move(-1, 0, 0); }, 30);
         Scheduler.delay(() -> { l3.move(-1, 0, 0); }, 30);
         Scheduler.delay(() -> { l4.move(-1, 0, 0); }, 30);
+
+        Scheduler.delay(() -> r0.flushUpdates(), 30);
+        Scheduler.delay(() -> l0.flushUpdates(), 30);
+
+
+        Scheduler.delay(() -> {
+            r0.rotateRelative(-0.5f, 0, 1, 0);
+            l0.rotateLocal(-0.5f, 0, 1, 0);
+            Scheduler.delay(() -> { r0.flushUpdates(); }, 1L);
+            Scheduler.delay(() -> { l0.flushUpdates(); }, 1L);
+        }, 50);
+        Scheduler.delay(() -> {
+            r1.rotateRelative(-0.5f, 1, 0, 0);
+            l1.rotateLocal(-0.5f, 1, 0, 0);
+            Scheduler.delay(() -> { r1.flushUpdates(); }, 1L);
+            Scheduler.delay(() -> { l1.flushUpdates(); }, 1L);
+        }, 70);
+        Scheduler.delay(() -> {
+            r2.rotateRelative(-0.5f, 0, 0, 1);
+            l2.rotateLocal(-0.5f, 0, 0, 1);
+            Scheduler.delay(() -> { r2.flushUpdates(); }, 1L);
+            Scheduler.delay(() -> { l2.flushUpdates(); }, 1L);
+        }, 90);
 
 /*
         Scheduler.delay(() -> { center.rotate((float)Math.PI * 0.1f, 0, 1, 1); }, 40);

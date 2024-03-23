@@ -4,6 +4,8 @@
     <content url="file:///usr/lib/python3.11/site-packages" />
     <content url="file:///usr/lib64/python3.11">
       <sourceFolder url="file:///usr/lib64/python3.11" isTestSource="false" />
+      <sourceFolder url="file:///usr/lib64/python3.11/lib-dynload" isTestSource="false" />
+      <sourceFolder url="file:///usr/lib64/python3.11/site-packages" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../.." dumb="true">
       <excludeFolder url="file://$MODULE_DIR$/../../src/resourcepack/build" />

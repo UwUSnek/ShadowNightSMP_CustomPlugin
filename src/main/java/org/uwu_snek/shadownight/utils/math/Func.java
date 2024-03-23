@@ -242,4 +242,15 @@ public final class Func extends UtilityClass {
     public static Quaternionf rotationDiff_internal(final @NotNull Quaternionf from, final @NotNull Quaternionf to) {
         return to.mul(from.invert());
     }
+
+
+
+    public static double getAngleDifference(double from, double to) {
+        final double diff = ( to - from + K.PI ) % K.TAU - K.PI;
+        return diff < -K.PI ? diff + 2 * K.PI : diff;
+    }
+    public static float getAngleDifference(float from, float to) {
+        final float diff = ( to - from + K.PIf ) % K.TAUf - K.PIf;
+        return diff < -K.PIf ? diff + 2 * K.PIf : diff;
+    }
 }

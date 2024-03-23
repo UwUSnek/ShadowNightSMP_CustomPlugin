@@ -13,6 +13,7 @@ import org.uwu_snek.shadownight.customItems.Ability;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.customItems.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
+import org.uwu_snek.shadownight.utils.math.K;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
@@ -63,7 +64,7 @@ public abstract class IM_Scythe extends IM_MeleeWeapon {
                     boolean blocksBroken = false;
                     for (double w = -breakWidth; w < breakWidth; w += 0.5) {
                         final Block target = eyePos.clone()
-                            .add(new Vector(dir.getX(), 0, dir.getZ()).rotateAroundY(Math.PI / 2).multiply(w))
+                            .add(new Vector(dir.getX(), 0, dir.getZ()).rotateAroundY(K.PI / 2).multiply(w))
                             .add(dir.clone().multiply(lFinal)
                             .add(new Vector(0, h, 0))
                         ).getBlock();

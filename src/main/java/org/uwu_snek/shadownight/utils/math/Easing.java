@@ -10,9 +10,9 @@ public final class Easing extends UtilityClass {
     @SuppressWarnings("unused") public static double linear (final double x) { return x; }
 
 
-    @SuppressWarnings("unused") public static double sineIn    (final double x) { return 1 - Math.cos((x * Math.PI) / 2); }
-    @SuppressWarnings("unused") public static double sineOut   (final double x) { return     Math.sin((x * Math.PI) / 2); }
-    @SuppressWarnings("unused") public static double sineInOut (final double x) { return   -(Math.cos( x * Math.PI) - 1) / 2; }
+    @SuppressWarnings("unused") public static double sineIn    (final double x) { return 1 - Math.cos((x * K.PI) / 2); }
+    @SuppressWarnings("unused") public static double sineOut   (final double x) { return     Math.sin((x * K.PI) / 2); }
+    @SuppressWarnings("unused") public static double sineInOut (final double x) { return   -(Math.cos( x * K.PI) - 1) / 2; }
 
 
     @SuppressWarnings("unused") public static double cubicIn    (final double x) { return     Math.pow(    x, 3); }
@@ -37,13 +37,13 @@ public final class Easing extends UtilityClass {
 
 
     @SuppressWarnings("unused") public static double elasticIn   (final double x) {
-        return Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * Math.PI) / 3)));
+        return Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 : -Math.pow(2,  10 * x - 10) * Math.sin((x * 10 - 10.75) * ((2 * K.PI) / 3)));
     }
     @SuppressWarnings("unused") public static double elasticOut  (final double x) {
-        return Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * Math.PI) / 3)) + 1);
+        return Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 :  Math.pow(2, -10 * x     ) * Math.sin((x * 10 -  0.75) * ((2 * K.PI) / 3)) + 1);
     }
     @SuppressWarnings("unused") public static double elasticInOut(final double x) {
-        final double c = Math.sin(20 * x - 11.125) * (2 * Math.PI) / 4.5;
+        final double c = Math.sin(20 * x - 11.125) * (2 * K.PI) / 4.5;
         return Func.doubleEquals(x, 0, 0.001) ? 0 : (Func.doubleEquals(x, 1, 0.001) ? 1 : (
             x < 0.5 ?
                 -(Math.pow(2,  20 * x - 10) * c) / 2 :

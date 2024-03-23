@@ -7,16 +7,18 @@ import org.uwu_snek.shadownight._generated._mob_presets._mob_preset_dungeons_ove
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
 import org.uwu_snek.shadownight.utils.math.Func;
+import org.uwu_snek.shadownight.utils.math.K;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
-import org.uwu_snek.shadownight.utils.utils;
 
-import java.util.logging.Level;
+import java.util.HashMap;
 
 
 
 
 public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
+    public HashMap<String, DisplayBone> bones_test = new HashMap<>();
     public static MOB_OvergrownSpider testMob;
+
     private final Bone leg_1b;
     private final Bone leg_10;
     private final Bone leg_11;
@@ -75,14 +77,52 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_3b.rotate(+0.5f, 0, 1, 0);
 
         // Move right legs to the correct side
-        leg_0b.rotate(PI, 0, 1, 0);
+        leg_0b.rotate(K.PIf, 0, 1, 0);
         leg_0b.mirrorPosX();
-        leg_1b.rotate(PI, 0, 1, 0);
+        leg_1b.rotate(K.PIf, 0, 1, 0);
         leg_1b.mirrorPosX();
 
+        {
+            Animate.sit_first();
+            core.flushUpdates();
+        }
 
-        Scheduler.delay(() -> { Animate.stand(); core.flushUpdates(); }, 20L);
+        Scheduler.delay(() -> {
+            Animate.stand();
+            core.flushUpdates();
+        }, 20L);
+
+
+
+
+        bones_test.put("core",   (DisplayBone)core);
+        bones_test.put("head",   (DisplayBone)head);
+
+        bones_test.put("leg_0b", (DisplayBone)leg_1b);
+        bones_test.put("leg_00", (DisplayBone)leg_10);
+        bones_test.put("leg_01", (DisplayBone)leg_11);
+        bones_test.put("leg_02", (DisplayBone)leg_12);
+        bones_test.put("leg_0a", (DisplayBone)leg_1a);
+
+        bones_test.put("leg_1b", (DisplayBone)leg_1b);
+        bones_test.put("leg_10", (DisplayBone)leg_10);
+        bones_test.put("leg_11", (DisplayBone)leg_11);
+        bones_test.put("leg_12", (DisplayBone)leg_12);
+        bones_test.put("leg_1a", (DisplayBone)leg_1a);
+
+        bones_test.put("leg_2b", (DisplayBone)leg_2b);
+        bones_test.put("leg_20", (DisplayBone)leg_20);
+        bones_test.put("leg_21", (DisplayBone)leg_21);
+        bones_test.put("leg_22", (DisplayBone)leg_22);
+        bones_test.put("leg_2a", (DisplayBone)leg_2a);
+
+        bones_test.put("leg_3b", (DisplayBone)leg_3b);
+        bones_test.put("leg_30", (DisplayBone)leg_30);
+        bones_test.put("leg_31", (DisplayBone)leg_31);
+        bones_test.put("leg_32", (DisplayBone)leg_32);
+        bones_test.put("leg_3a", (DisplayBone)leg_3a);
     }
+
 
 
 
@@ -102,7 +142,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
             final Location targetPos = player.getLocation();
             float targetYaw = getTargetYaw(mount.getLocation(), targetPos);
 
-            Animate.turn(targetYaw);
+            Animate.turnTowards(targetYaw);
 
 
         }, 0, walkCycleDuration);
@@ -117,10 +157,12 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
     private final Animate_CLASS Animate = new Animate_CLASS();
     private class Animate_CLASS {
-        final static float raiseHeight = 0.3125f;
-        final static float raiseAngle = PI / 6;
+        final static float raiseHeight_first = 0.15625f;
+        final static float raiseHeight       = 0.3125f + raiseHeight_first;
+        final static float raiseAngle_first  = K.PIf / 12;
+        final static float raiseAngle        = K.PIf / 6 + raiseAngle_first;
 
-        final static float maxYawChange = PI / 4;
+        final static float maxYawChange = K.PIf / 4;
 
 
 
@@ -131,13 +173,29 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         }
 
 
+        /**
+         * Makes the spider turn towards a given yaw value, handling all the animations and updates.
+         * This will make it turn at most Animation.maxYawChange radians
+         * @param targetYaw The target yaw value
+         */
+        private void turnTowards(final float targetYaw){
+            final float yawDiff = Func.getAngleDifference(yaw, targetYaw);
+            final float maxTargetYaw = Func.clamp(yawDiff, -maxYawChange, maxYawChange);
 
+            //TODO start from right or left leg depending on angle
+            yaw += maxTargetYaw;
 
-        private void turn(final float targetYaw){
-            final float yRot = Func.clampMax(targetYaw, maxYawChange);
-            core.setRotation(targetYaw, 0, 1, 0);
+            {
+                leg_3b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_3b.flushUpdates();
+                leg_1b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_1b.flushUpdates();
+                head.rotateRelative(maxTargetYaw / 2, 0, 1, 0); head.flushUpdates();
+            }
 
-            core.flushUpdates();
+            Scheduler.delay(() -> {
+                leg_2b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_2b.flushUpdates();
+                leg_0b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_0b.flushUpdates();
+                head.rotateRelative(maxTargetYaw / 2, 0, 1, 0); head.flushUpdates();
+            }, walkCycleDuration / 2);
         }
 
 
@@ -151,20 +209,77 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
             leg_10.rotateLocal(-raiseAngle, 0, 0, 1);
             leg_20.rotateLocal(-raiseAngle, 0, 0, 1);
             leg_30.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_00.flushUpdates();
 
             // Segment 1 inverse
             leg_01.rotateLocal(+raiseAngle, 0, 0, 1);
             leg_11.rotateLocal(+raiseAngle, 0, 0, 1);
             leg_21.rotateLocal(+raiseAngle, 0, 0, 1);
             leg_31.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_01.flushUpdates();
 
             // Armor inverse
             leg_0a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
             leg_1a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
             leg_2a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
             leg_3a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
+            leg_0a.flushUpdates();
+        }
 
-            core.flushUpdates();
+
+
+
+        private void sit() {
+            core.move(0, -raiseHeight, 0);
+
+            // Segment 0
+            leg_00.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_10.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_20.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_30.rotateLocal(+raiseAngle, 0, 0, 1);
+            leg_00.flushUpdates();
+
+            // Segment 1 inverse
+            leg_01.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_11.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_21.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_31.rotateLocal(-raiseAngle, 0, 0, 1);
+            leg_01.flushUpdates();
+
+            // Armor inverse
+            leg_0a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
+            leg_1a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
+            leg_2a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
+            leg_3a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
+            leg_0a.flushUpdates();
+        }
+
+
+
+
+        private void sit_first() {
+            core.move(0, -raiseHeight_first, 0); //TODO idk if this needs to have a "first" version
+
+            // Segment 0
+            leg_00.rotateLocal(+raiseAngle_first, 0, 0, 1);
+            leg_10.rotateLocal(+raiseAngle_first, 0, 0, 1);
+            leg_20.rotateLocal(+raiseAngle_first, 0, 0, 1);
+            leg_30.rotateLocal(+raiseAngle_first, 0, 0, 1);
+            leg_00.flushUpdates();
+
+            // Segment 1 inverse
+            leg_01.rotateLocal(-raiseAngle_first, 0, 0, 1);
+            leg_11.rotateLocal(-raiseAngle_first, 0, 0, 1);
+            leg_21.rotateLocal(-raiseAngle_first, 0, 0, 1);
+            leg_31.rotateLocal(-raiseAngle_first, 0, 0, 1);
+            leg_01.flushUpdates();
+
+            // Armor inverse
+            leg_0a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
+            leg_1a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
+            leg_2a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
+            leg_3a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
+            leg_0a.flushUpdates();
         }
     }
 }

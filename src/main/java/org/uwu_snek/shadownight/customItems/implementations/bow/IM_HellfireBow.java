@@ -15,6 +15,7 @@ import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.utils.blockdata.BlockProperty;
 import org.uwu_snek.shadownight.utils.math.Easing;
 import org.uwu_snek.shadownight.utils.math.Func;
+import org.uwu_snek.shadownight.utils.math.K;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 
@@ -62,15 +63,15 @@ public final class IM_HellfireBow extends IM_Bow {
         // Calculate velocity and direction
         final Arrow e = (Arrow)event.getEntity();
         final Vector dir = e.getVelocity().multiply(new Vector(1, 0, 1)).normalize();
-        final Vector side = dir.clone().rotateAroundY(Math.PI / 2);
+        final Vector side = dir.clone().rotateAroundY(K.PI / 2);
         final int width = (int)Func.clamp(e.getVelocity().length(), 1,        maxSpeed) - 1;  // Min 0 (1 wide), Max 2 (2+1+2 wide)
         final double  length = Func.clamp(e.getVelocity().length(), minSpeed, maxSpeed) * 10; // Min 4, Max 30
 
         // Start animation
         final int maxWidth = 8; // 7 max width + 1 for safety
         loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir, side);
-        loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(Math.PI /  8), side.clone().rotateAroundY(Math.PI /  8));
-        loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(Math.PI / -8), side.clone().rotateAroundY(Math.PI / -8));
+        loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(K.PI / 8), side.clone().rotateAroundY(K.PI / 8));
+        loop(0, 0.05, initialPos, new int[maxWidth], new boolean[maxWidth], length, width, dir.clone().rotateAroundY(K.PI / -8), side.clone().rotateAroundY(K.PI / -8));
         initialPos.getWorld().playSound(initialPos, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 0.5f, 1);
     }
 

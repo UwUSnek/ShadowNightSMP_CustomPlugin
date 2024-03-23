@@ -5,19 +5,22 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.uwu_snek.shadownight.utils.math.Func;
+import org.uwu_snek.shadownight.utils.math.K;
+import org.uwu_snek.shadownight.utils.utils;
+
+import java.util.logging.Level;
 
 
 
 
 //TODO add onSpawn and onDeath callbacks
 public class MOB {
-    protected final static float PI = (float)Math.PI;
-
     protected Bone root;
     protected Interaction mount;
     protected float yaw = 0;
 
-    public final static int walkCycleDuration = 10; // The duration of a walk cycle in ticks
+    public final static int walkCycleDuration = 8; // The duration of a walk cycle in ticks //! Must be even and >= 2 //TODO make this per-mod
     protected double walkingSpeed;                  // The walking speed of the mob in blocks/s
     protected double walkCycleMoveAmount;           // The number of blocks the mob should move each walk cycle
 
@@ -46,15 +49,15 @@ public class MOB {
 
     /**
      * Calculates the angle of the location <target> around the Y-Axis centered at the location <source>,
-     * With 0 being North and increasing as the target moves clockwise (looking up) around the axis location.
+     * The angle goes from -PI to +PI, with 0 representing South.
      * @param source The location to calculate the target's angle from
      * @param target The target location
      * @return The angle expressed in radians
      */
     protected static float getTargetYaw(final @NotNull Location source, final @NotNull Location target){
         final Vector targetDirection = target.clone().subtract(source).toVector();
-        return (float)-(Math.atan2(targetDirection.getZ(), targetDirection.getX()) - PI / 2);
-        //! Subtract 90° to account Minecraft's rotation 0 being at [0, 1] instead of the standard [1, 0]
+        return -((float)Math.atan2(targetDirection.getZ(), targetDirection.getX()) - K.PIf / 2);
+        //! Subtract 90° to account for Minecraft's yaw 0 being at [0, 1] instead of the standard [1, 0]
         //! Invert angle. Math.atan2 calculates it counter-clockwise, Minecraft's is clockwise
         //! Convert to float. java.lang.Math doesn't have a float version of atan2
     }

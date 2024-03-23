@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 
 public class Bone {
-    protected final static float PI = (float)Math.PI;
-
     // Bone position and rotation
     protected final Vector3f locPos = new Vector3f(0, 0, 0); // The location of this bone's location relative to its origin
     protected final Vector3f origin = new Vector3f(0, 0, 0); // The location of this bone's origin relative to the root bone
@@ -22,17 +20,35 @@ public class Bone {
 
     // Entity status and update requests
     protected boolean spawned = false;
-    protected boolean needsDisplayUpdate = false; public final void requestDisplayUpdate() { needsDisplayUpdate = true; } protected void updateDisplay() { }
-    protected boolean needsHitboxUpdate = false;  public final void requestHitboxUpdate()  { needsHitboxUpdate  = true; } protected void updateHitbox()  { }
+    protected boolean needsDisplayUpdate = false; protected void updateDisplay() { }
+    protected boolean needsHitboxUpdate = false;  protected void updateHitbox()  { }
 
+
+    public final void requestDisplayUpdateSelf() {
+        needsDisplayUpdate = true;
+    }
+    public final void requestHitboxUpdateSelf()  {
+        needsHitboxUpdate  = true;
+    }
     public void flushUpdatesSelf(){
         if(needsDisplayUpdate) { updateDisplay(); needsDisplayUpdate = false; }
         if(needsHitboxUpdate)  { updateHitbox();  needsHitboxUpdate  = false; }
+    }
+
+
+    public final void requestDisplayUpdate() {
+        requestDisplayUpdateSelf();
+        for(Bone c : children) c.requestDisplayUpdateSelf();
+    }
+    public final void requestHitboxUpdate()  {
+        requestHitboxUpdateSelf();
+        for(Bone c : children) c.requestHitboxUpdateSelf();
     }
     public void flushUpdates(){
         flushUpdatesSelf();
         for(Bone c : children) c.flushUpdates();
     }
+
 
     // Parent and children bones
     protected Bone parent = null;
@@ -120,6 +136,16 @@ public class Bone {
 
 
 
+
+
+
+
+    /**
+     * Moves the bone and its hierarchy by the given amount using the parent's coordinate system.
+     * @param x The amount of movement on the X-Axis
+     * @param y The amount of movement on the Y-Axis
+     * @param z The amount of movement on the Z-Axis
+     */
     public final void move(final float x, final float y, final float z) {
         move(new Vector3f(x, y, z));
     }
@@ -129,20 +155,6 @@ public class Bone {
         requestDisplayUpdate();
         requestHitboxUpdate();
     }
-
-    public final void moveSelf(final float x, final float y, final float z) {
-        moveSelf(new Vector3f(x, y, z));
-    }
-    public void moveSelf(final @NotNull Vector3f v) {
-        locPos.add(v);
-        for(Bone c : children) {
-            c.locPos.sub(v);
-            c.origin.set(getAbsPos());
-        }
-        requestDisplayUpdate();
-        requestHitboxUpdate();
-    }
-
     protected void moveUpdateOrigin(final @NotNull Vector3f o) {
         origin.set(o);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
@@ -153,9 +165,40 @@ public class Bone {
 
 
 
-    //TODO make display updates manual
+    /**
+     * Moves the bone by the given amount using the parent's coordinate system, without moving any of its children.
+     * @param x The amount of movement on the X-Axis
+     * @param y The amount of movement on the Y-Axis
+     * @param z The amount of movement on the Z-Axis
+     */
+    public final void moveSelf(final float x, final float y, final float z) {
+        moveSelf(new Vector3f(x, y, z));
+    }
+    public void moveSelf(final @NotNull Vector3f v) {
+        locPos.add(v);
+        for(Bone c : children) {
+            c.locPos.sub(v);
+            c.origin.set(getAbsPos());
+        }
+        requestDisplayUpdateSelf();
+        requestHitboxUpdateSelf();
+    }
 
 
+
+
+
+
+
+
+    /**
+     * Rotates the bone and its hierarchy on the given axis using the world's coordinate system.
+     * The axis vector is automatically normalized.
+     * @param angle The angle
+     * @param x The x value of the axis vector
+     * @param y The y value of the axis vector
+     * @param z The z value of the axis vector
+     */
     public final void rotate(final float angle, final float x, final float y, final float z){
         rotate(new AxisAngle4f(angle, x, y, z));
     }
@@ -163,8 +206,9 @@ public class Bone {
         rotateUnsafe(r.normalize());
     }
     public void rotateUnsafe(final @NotNull AxisAngle4f r) {
-        rotation.premul(new Quaternionf(r));
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), new Quaternionf(r));
+        final Quaternionf qr = new Quaternionf(r);
+        rotation.premul(qr);
+        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), qr);
         requestDisplayUpdate();
     }
     protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
@@ -176,6 +220,41 @@ public class Bone {
     }
 
 
+
+    /**
+     * Rotates the bone and its hierarchy on the given axis using the parent's local coordinate system.
+     * The axis vector is automatically normalized.
+     * @param angle The angle
+     * @param x The x value of the axis vector
+     * @param y The y value of the axis vector
+     * @param z The z value of the axis vector
+     */
+    public final void rotateRelative(final float angle, final float x, final float y, final float z){
+        rotateRelative(new AxisAngle4f(angle, x, y, z));
+    }
+    public final void rotateRelative(final @NotNull AxisAngle4f r) {
+        rotateRelativeUnsafe(r.normalize());
+    }
+    public void rotateRelativeUnsafe(final @NotNull AxisAngle4f r) { //FIXME override in root
+        final Quaternionf qr = new Quaternionf(r);
+        locPos.rotate(qr);
+        rotation.mul(qr);
+        for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), qr);
+        requestDisplayUpdate();
+        requestHitboxUpdate();
+    }
+
+
+
+
+    /**
+     * Rotates the bone and its hierarchy on the given axis using its own local coordinate system.
+     * The axis vector is automatically normalized.
+     * @param angle The angle
+     * @param x The x value of the axis vector
+     * @param y The y value of the axis vector
+     * @param z The z value of the axis vector
+     */
     public final void rotateLocal(final float angle, final float x, final float y, final float z){
         rotateLocal(new AxisAngle4f(angle, x, y, z));
     }
@@ -183,8 +262,9 @@ public class Bone {
         rotateLocalUnsafe(r.normalize());
     }
     public void rotateLocalUnsafe(final @NotNull AxisAngle4f r) {
-        rotation.mul(new Quaternionf(r));
-        for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), new Quaternionf(r));
+        final Quaternionf qr = new Quaternionf(r);
+        rotation.mul(qr);
+        for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), qr);
         requestDisplayUpdate();
     }
     protected void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
@@ -196,6 +276,16 @@ public class Bone {
     }
 
 
+
+
+    /**
+     * Sets the rotation of the bone and its hierarchy to the given angle and axis using its own local coordinate system.
+     * The axis vector is automatically normalized.
+     * @param angle The angle
+     * @param x The x value of the axis vector
+     * @param y The y value of the axis vector
+     * @param z The z value of the axis vector
+     */
     public final void setRotation(final float angle, final float x, final float y, final float z){
         setRotation(new AxisAngle4f(angle, x, y, z));
     }
@@ -214,18 +304,37 @@ public class Bone {
 
 
 
+
+
+    /**
+     * Mirrors the X position of the bone using the parent's local coordinate system and the bone's origin as center.
+     * This method only affects the position. No bones are ever rotated or truly mirrored.
+     * Child bones are moved, but their position relative to the parent stays unchanged.
+     */
     public void mirrorPosX() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
         requestHitboxUpdate();
         requestDisplayUpdate();
     }
+
+    /**
+     * Mirrors the Y position of the bone using the parent's local coordinate system and the bone's origin as center.
+     * This method only affects the position. No bones are ever rotated or truly mirrored.
+     * Child bones are moved, but their position relative to the parent stays unchanged.
+     */
     public void mirrorPosY() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
         requestHitboxUpdate();
         requestDisplayUpdate();
     }
+
+    /**
+     * Mirrors the Z position of the bone using the parent's local coordinate system and the bone's origin as center.
+     * This method only affects the position. No bones are ever rotated or truly mirrored.
+     * Child bones are moved, but their position relative to the parent stays unchanged.
+     */
     public void mirrorPosZ() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());

@@ -23,7 +23,7 @@ public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity = null;
     private final int customModelData;
 
-    public final static int stepDuration = 5;
+    public final static int stepDuration = 2;
 
 
 
