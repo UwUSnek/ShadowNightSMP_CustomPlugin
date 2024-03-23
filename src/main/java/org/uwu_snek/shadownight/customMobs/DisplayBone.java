@@ -75,14 +75,14 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
         displayEntity.setTeleportDuration(stepDuration);
-        requestDisplayUpdate();
+        requestDisplayUpdateSelf();
 
         // Initialize hitboxes
         hitbox = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
         hitbox.setInteractionWidth(hitboxWidth);
         hitbox.setInteractionHeight(hitboxHeight);
         displayEntity.addPassenger(hitbox);
-        requestHitboxUpdate();
+        requestHitboxUpdateSelf();
 
         flushUpdatesSelf();
     }

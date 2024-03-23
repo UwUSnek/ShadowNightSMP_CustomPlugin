@@ -38,11 +38,11 @@ public class Bone {
 
     public final void requestDisplayUpdate() {
         requestDisplayUpdateSelf();
-        for(Bone c : children) c.requestDisplayUpdateSelf();
+        for(Bone c : children) c.requestDisplayUpdate();
     }
     public final void requestHitboxUpdate()  {
         requestHitboxUpdateSelf();
-        for(Bone c : children) c.requestHitboxUpdateSelf();
+        for(Bone c : children) c.requestHitboxUpdate();
     }
     public void flushUpdates(){
         flushUpdatesSelf();
@@ -152,14 +152,14 @@ public class Bone {
     public void move(final @NotNull Vector3f v) {
         locPos.add(v);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
-        requestDisplayUpdate();
-        requestHitboxUpdate();
+        requestDisplayUpdateSelf();
+        requestHitboxUpdateSelf();
     }
     protected void moveUpdateOrigin(final @NotNull Vector3f o) {
         origin.set(o);
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
-        requestDisplayUpdate();
-        requestHitboxUpdate();
+        requestDisplayUpdateSelf();
+        requestHitboxUpdateSelf();
     }
 
 
@@ -209,14 +209,14 @@ public class Bone {
         final Quaternionf qr = new Quaternionf(r);
         rotation.premul(qr);
         for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), qr);
-        requestDisplayUpdate();
+        requestDisplayUpdateSelf();
     }
     protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
         rotation.premul(r);
         origin.set(o);
         for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
-        requestDisplayUpdate();
-        requestHitboxUpdate();
+        requestDisplayUpdateSelf();
+        requestHitboxUpdateSelf();
     }
 
 
@@ -235,13 +235,13 @@ public class Bone {
     public final void rotateRelative(final @NotNull AxisAngle4f r) {
         rotateRelativeUnsafe(r.normalize());
     }
-    public void rotateRelativeUnsafe(final @NotNull AxisAngle4f r) { //FIXME override in root
+    public void rotateRelativeUnsafe(final @NotNull AxisAngle4f r) { //FIXME override in root if this accesses the parent bone
         final Quaternionf qr = new Quaternionf(r);
         locPos.rotate(qr);
         rotation.mul(qr);
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), qr);
-        requestDisplayUpdate();
-        requestHitboxUpdate();
+        requestDisplayUpdateSelf();
+        requestHitboxUpdateSelf();
     }
 
 
@@ -265,14 +265,14 @@ public class Bone {
         final Quaternionf qr = new Quaternionf(r);
         rotation.mul(qr);
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), qr);
-        requestDisplayUpdate();
+        requestDisplayUpdateSelf();
     }
     protected void rotateLocalUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
         rotation.mul(r);
         origin.set(o);
         for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), r);
-        requestDisplayUpdate();
-        requestHitboxUpdate();
+        requestDisplayUpdateSelf();
+        requestHitboxUpdateSelf();
     }
 
 
@@ -296,7 +296,7 @@ public class Bone {
         final Quaternionf rDiff = new Quaternionf(r).mul(new Quaternionf(rotation).invert());
         rotation.set(r);
         for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), rDiff);
-        requestDisplayUpdate();
+        requestDisplayUpdateSelf();
     }
 
 
@@ -314,8 +314,8 @@ public class Bone {
     public void mirrorPosX() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
-        requestHitboxUpdate();
-        requestDisplayUpdate();
+        requestHitboxUpdateSelf();
+        requestDisplayUpdateSelf();
     }
 
     /**
@@ -326,8 +326,8 @@ public class Bone {
     public void mirrorPosY() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
-        requestHitboxUpdate();
-        requestDisplayUpdate();
+        requestHitboxUpdateSelf();
+        requestDisplayUpdateSelf();
     }
 
     /**
@@ -338,7 +338,7 @@ public class Bone {
     public void mirrorPosZ() {
         locPos.x = -locPos.x;
         for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
-        requestHitboxUpdate();
-        requestDisplayUpdate();
+        requestHitboxUpdateSelf();
+        requestDisplayUpdateSelf();
     }
 }

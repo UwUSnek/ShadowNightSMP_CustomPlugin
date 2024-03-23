@@ -16,8 +16,8 @@ public final class CMD_testrotation implements CommandExecutor {
     public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String @NotNull [] args) {
         //MOB_Debug.testMob.bones_test.get(args[0]).rotate(new AxisAngle4f(Float.parseFloat(args[4]), Float.parseFloat(args[1]), Float.parseFloat(args[2]), Float.parseFloat(args[3])));
 
-        //MOB_OvergrownSpider.testMob.bones_test.get(args[0]).rotateRelative(new AxisAngle4f(Float.parseFloat(args[4]), Float.parseFloat(args[1]), Float.parseFloat(args[2]), Float.parseFloat(args[3])));
-        MOB_OvergrownSpider.testMob.bones_test.get(args[0]).rotate(new AxisAngle4f(Float.parseFloat(args[4]), Float.parseFloat(args[1]), Float.parseFloat(args[2]), Float.parseFloat(args[3])));
+        MOB_OvergrownSpider.testMob.bones_test.get(args[0]).rotateRelative(new AxisAngle4f(Float.parseFloat(args[4]), Float.parseFloat(args[1]), Float.parseFloat(args[2]), Float.parseFloat(args[3])));
+        //MOB_OvergrownSpider.testMob.bones_test.get(args[0]).rotate(new AxisAngle4f(Float.parseFloat(args[4]), Float.parseFloat(args[1]), Float.parseFloat(args[2]), Float.parseFloat(args[3])));
         MOB_OvergrownSpider.testMob.bones_test.get(args[0]).flushUpdates();
         return true;
     }
