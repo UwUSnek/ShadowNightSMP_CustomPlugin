@@ -6,6 +6,7 @@ import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.uwu_snek.shadownight._generated._mob_part_type;
+import org.uwu_snek.shadownight.utils.math.Func;
 
 import java.util.ArrayList;
 
@@ -199,22 +200,22 @@ public class Bone {
      * @param y The y value of the axis vector
      * @param z The z value of the axis vector
      */
-    public final void rotate(final float angle, final float x, final float y, final float z){
-        rotate(new AxisAngle4f(angle, x, y, z));
+    public final void rotateAbsolute(final float angle, final float x, final float y, final float z){
+        rotateAbsolute(new AxisAngle4f(angle, x, y, z));
     }
-    public final void rotate(final @NotNull AxisAngle4f r) {
-        rotateUnsafe(r.normalize());
+    public final void rotateAbsolute(final @NotNull AxisAngle4f r) {
+        rotateAbsoluteUnsafe(r.normalize());
     }
-    public void rotateUnsafe(final @NotNull AxisAngle4f r) {
+    public void rotateAbsoluteUnsafe(final @NotNull AxisAngle4f r) {
         final Quaternionf qr = new Quaternionf(r);
         rotation.premul(qr);
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), qr);
+        for(Bone c : children) c.rotateAbsoluteUpdateOrigin(getAbsPos(), qr);
         requestDisplayUpdateSelf();
     }
-    protected void rotateUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
+    protected void rotateAbsoluteUpdateOrigin(final @NotNull Vector3f o, final @NotNull Quaternionf r){
         rotation.premul(r);
         origin.set(o);
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), r);
+        for(Bone c : children) c.rotateAbsoluteUpdateOrigin(getAbsPos(), r);
         requestDisplayUpdateSelf();
         requestHitboxUpdateSelf();
     }
@@ -238,8 +239,8 @@ public class Bone {
     public void rotateRelativeUnsafe(final @NotNull AxisAngle4f r) { //FIXME override in root if this accesses the parent bone
         final Quaternionf qr = new Quaternionf(r);
         locPos.rotate(qr);
-        rotation.mul(qr);
-        for(Bone c : children) c.rotateLocalUpdateOrigin(getAbsPos(), qr);
+        rotation.premul(qr);
+        for(Bone c : children) c.rotateAbsoluteUpdateOrigin(getAbsPos(), qr);
         requestDisplayUpdateSelf();
         requestHitboxUpdateSelf();
     }
@@ -295,7 +296,7 @@ public class Bone {
     public void setRotationUnsafe(final @NotNull AxisAngle4f r) {
         final Quaternionf rDiff = new Quaternionf(r).mul(new Quaternionf(rotation).invert());
         rotation.set(r);
-        for(Bone c : children) c.rotateUpdateOrigin(getAbsPos(), rDiff);
+        for(Bone c : children) c.rotateAbsoluteUpdateOrigin(getAbsPos(), rDiff);
         requestDisplayUpdateSelf();
     }
 

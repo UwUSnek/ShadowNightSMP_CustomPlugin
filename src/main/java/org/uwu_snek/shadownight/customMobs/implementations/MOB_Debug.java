@@ -74,7 +74,7 @@ public class MOB_Debug extends MOB {
         Scheduler.delay(() -> r0.flushUpdates(), 30);
         Scheduler.delay(() -> l0.flushUpdates(), 30);
 
-
+/*
         Scheduler.delay(() -> {
             r0.rotateRelative(-0.5f, 0, 1, 0);
             l0.rotateLocal(-0.5f, 0, 1, 0);
@@ -93,7 +93,7 @@ public class MOB_Debug extends MOB {
             Scheduler.delay(() -> { r2.flushUpdates(); }, 1L);
             Scheduler.delay(() -> { l2.flushUpdates(); }, 1L);
         }, 90);
-
+*/
 /*
         Scheduler.delay(() -> { center.rotate((float)Math.PI * 0.1f, 0, 1, 1); }, 40);
         Scheduler.delay(() -> {     r0.rotate((float)Math.PI * 0.1f, 0, 1, 1); }, 40);

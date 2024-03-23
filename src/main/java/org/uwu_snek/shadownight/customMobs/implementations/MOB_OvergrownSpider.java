@@ -71,15 +71,15 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_3a = leg_30.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_0A);
 
         // Set leg direction
-        leg_0b.rotate(-0.5f, 0, 1, 0);
-        leg_1b.rotate(+0.5f, 0, 1, 0);
-        leg_2b.rotate(-0.5f, 0, 1, 0);
-        leg_3b.rotate(+0.5f, 0, 1, 0);
+        leg_0b.rotateAbsolute(-0.5f, 0, 1, 0);
+        leg_1b.rotateAbsolute(+0.5f, 0, 1, 0);
+        leg_2b.rotateAbsolute(-0.5f, 0, 1, 0);
+        leg_3b.rotateAbsolute(+0.5f, 0, 1, 0);
 
         // Move right legs to the correct side
-        leg_0b.rotate(K.PIf, 0, 1, 0);
+        leg_0b.rotateAbsolute(K.PIf, 0, 1, 0);
         leg_0b.mirrorPosX();
-        leg_1b.rotate(K.PIf, 0, 1, 0);
+        leg_1b.rotateAbsolute(K.PIf, 0, 1, 0);
         leg_1b.mirrorPosX();
 
         {
@@ -184,16 +184,32 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
             //TODO start from right or left leg depending on angle
             yaw += maxTargetYaw;
+            Bone[][] _pair0 = {
+                { leg_3b, leg_30, leg_31, leg_32, leg_3a },
+                { leg_1b, leg_10, leg_11, leg_12, leg_1a },
+            };
+            Bone[][] _pair1 = {
+                { leg_2b, leg_20, leg_21, leg_22, leg_2a },
+                { leg_0b, leg_00, leg_01, leg_02, leg_0a },
+            };
+            if(maxTargetYaw <= 0) {
+                final var tmp = _pair0;
+                _pair0 = _pair1;
+                _pair1 = tmp;
+            }
+            final Bone[][] pair0 = _pair0;
+            final Bone[][] pair1 = _pair1;
+
 
             {
-                leg_3b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_3b.flushUpdates();
-                leg_1b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_1b.flushUpdates();
-                head.rotateRelative(maxTargetYaw / 2, 0, 1, 0); head.flushUpdates();
+                pair0[0][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair0[0][0].flushUpdates();
+                pair0[1][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair0[1][0].flushUpdates();
+                head.rotateRelative(maxTargetYaw / 2, 0, 1, 0);      head.flushUpdates();
             }
 
             Scheduler.delay(() -> {
-                leg_2b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_2b.flushUpdates();
-                leg_0b.rotateRelative(maxTargetYaw, 0, 1, 0);   leg_0b.flushUpdates();
+                pair1[0][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair1[0][0].flushUpdates();
+                pair1[1][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair1[1][0].flushUpdates();
                 head.rotateRelative(maxTargetYaw / 2, 0, 1, 0); head.flushUpdates();
             }, walkCycleDuration / 2);
         }
