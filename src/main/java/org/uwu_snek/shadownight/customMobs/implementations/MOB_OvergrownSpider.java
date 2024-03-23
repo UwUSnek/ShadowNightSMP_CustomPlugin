@@ -2,6 +2,7 @@ package org.uwu_snek.shadownight.customMobs.implementations;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight._generated._mob_presets._mob_preset_dungeons_overgrown_spider;
 import org.uwu_snek.shadownight.customMobs.Bone;
@@ -163,6 +164,8 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         final static float raiseAngle        = K.PIf / 6 + raiseAngle_first;
 
         final static float maxYawChange = K.PIf / 4;
+        final static float walkLegRaiseAngle = 0.2f;
+
 
 
 
@@ -181,6 +184,8 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         private void turnTowards(final float targetYaw){
             final float yawDiff = Func.getAngleDifference(yaw, targetYaw);
             final float maxTargetYaw = Func.clamp(yawDiff, -maxYawChange, maxYawChange);
+
+            final float adjustedWalkLegRaiseAngle = walkLegRaiseAngle * (maxTargetYaw / maxYawChange);
 
             //TODO start from right or left leg depending on angle
             yaw += maxTargetYaw;
@@ -201,17 +206,37 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
             final Bone[][] pair1 = _pair1;
 
 
+
+            // First pair
             {
+                pair0[0][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[0][1].flushUpdates();
+                pair0[1][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[1][1].flushUpdates();
+            }
+            Scheduler.delay(() -> {
                 pair0[0][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair0[0][0].flushUpdates();
                 pair0[1][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair0[1][0].flushUpdates();
                 head.rotateRelative(maxTargetYaw / 2, 0, 1, 0);      head.flushUpdates();
-            }
+            }, 1L);
+            Scheduler.delay(() -> {
+                pair0[0][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[0][1].flushUpdates();
+                pair0[1][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[1][1].flushUpdates();
+            }, walkCycleDuration / 2 + 1);
 
+
+            // Second pair
+            Scheduler.delay(() -> {
+                    pair1[0][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[0][1].flushUpdates();
+                    pair1[1][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[1][1].flushUpdates();
+            }, walkCycleDuration / 2);
             Scheduler.delay(() -> {
                 pair1[0][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair1[0][0].flushUpdates();
                 pair1[1][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair1[1][0].flushUpdates();
                 head.rotateRelative(maxTargetYaw / 2, 0, 1, 0); head.flushUpdates();
-            }, walkCycleDuration / 2);
+            }, walkCycleDuration / 2 + 1);
+            Scheduler.delay(() -> {
+                pair1[0][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[0][1].flushUpdates();
+                pair1[1][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[1][1].flushUpdates();
+            }, walkCycleDuration);
         }
 
 
