@@ -183,6 +183,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
          */
         private void turnTowards(final float targetYaw){
             final float yawDiff = Func.getAngleDifference(yaw, targetYaw);
+            if(Math.abs(yawDiff) < 0.001) return; // Save CPU and prevent graphical problems
             final float maxTargetYaw = Func.clamp(yawDiff, -maxYawChange, maxYawChange);
 
             final float adjustedWalkLegRaiseAngle = walkLegRaiseAngle * (maxTargetYaw / maxYawChange);
