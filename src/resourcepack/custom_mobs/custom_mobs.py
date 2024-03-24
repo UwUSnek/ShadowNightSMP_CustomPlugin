@@ -179,7 +179,6 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
 
-
 def generate_mob(model_file, java_parts):
     model = json.load(open(model_file["path"], "r"))
 
@@ -198,12 +197,14 @@ def generate_mob(model_file, java_parts):
 
         # Adjust the entire model's rotation. Minecraft's in-game display models are rotated by 180° around the Y-Axis for no apparent reason. Mojang, please...
         for element in model["elements"]:
-            element["from"] = rotate_vector_180(element["from"])
-            element["to"  ] = rotate_vector_180(element["to"])
+            element["from"]    = rotate_vector_180(element["from"])
+            element["to"]      = rotate_vector_180(element["to"])
+
             if "rotation" in element:
-                element["rotation"]["origin"] = rotate_vector_180(element["rotation"]["origin"])
-                if element["rotation"]["axis"] != "y":
-                    element["rotation"]["angle" ] = -element["rotation"]["angle"]
+                _rot  = element["rotation"]
+                _rot["origin"] = rotate_vector_180(_rot["origin"])
+                if _rot["axis"] != "y":
+                    _rot["angle" ] = -_rot["angle"]
 
 
         # Separate parts and generate respective models and hooks

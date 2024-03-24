@@ -1,8 +1,12 @@
 package org.uwu_snek.shadownight.customMobs;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
+import org.bukkit.entity.Mob;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.utils.math.Func;
@@ -17,7 +21,7 @@ import java.util.logging.Level;
 //TODO add onSpawn and onDeath callbacks
 public class MOB {
     protected Bone root;
-    protected Interaction mount;
+    protected Mob mount;
     protected float yaw = 0;
 
     public final static int walkCycleDuration = 8; // The duration of a walk cycle in ticks //! Must be even and >= 2 //TODO make this per-mod
@@ -39,10 +43,19 @@ public class MOB {
         // Make the spawn location face North and reset pitch
         final Location location = spawnLocation.clone().setDirection(new Vector(0, 0, 1));
 
-        // Spawn the mount entity and the model skeleton into the world
-        mount = (Interaction)location.getWorld().spawnEntity(location, EntityType.INTERACTION);
-        mount.setInteractionWidth(0);
-        mount.setInteractionHeight(0);
+        // Spawn the mount entity //! Baby turtle has the smallest hitbox
+        mount = (Mob)location.getWorld().spawnEntity(location, EntityType.TURTLE, false);
+        mount.setInvisible(true);
+        mount.setSilent(true);
+        mount.setAware(false);
+        mount.setPersistent(true);
+        mount.setCanPickupItems(false);
+        mount.setPortalCooldown(Integer.MAX_VALUE);
+        ((Ageable)mount).setAge(Integer.MIN_VALUE);
+        mount.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 254, false, false));
+
+        // Spawn skeleton
+        root.move(0, -(float)mount.getHeight(), 0);
         root.spawn(mount); // Spawn bones
     }
 
