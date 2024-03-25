@@ -28,7 +28,7 @@ texture_target  = utils.mkdirs(utils.output_sn_namespace + "/textures/item/mob")
 
 
 base = json.load(open(source_base + "/" + "bone.json", "r"))
-model_files = utils.list_files_recursive(model_source)
+model_files = [f for f in utils.list_files_recursive(model_source) if f["path"].endswith(".json")]
 
 
 
@@ -167,7 +167,7 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
         f'        { part["name"] }.moveSelf('
         f'{ -(origin_data["pos"][0] - 8) / 16 }f, '    #! Divide by 16 as ItemDisplay translations use block-sized units. Minecraft JSON Model units are 16 times smaller
         f'{ +(origin_data["pos"][1] - 8) / 16 }f, '    #! Rotating the whole model by 180° aligns it with the in-game orientation, but also inverts the needed X and Z adjustments.
-        f'{ -(origin_data["pos"][2] - 8) / 16 }f);\n'  #!     Using negative values for XZ adjustments brings them back to normal.
+        f'{ -(origin_data["pos"][2] - 8) / 16 }f);\n'  #!     Using negative values for XZ adjustments brings them back to normal
     )
 
 
