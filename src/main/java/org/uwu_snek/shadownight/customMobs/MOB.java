@@ -13,6 +13,7 @@ import org.uwu_snek.shadownight.utils.math.Func;
 import org.uwu_snek.shadownight.utils.math.K;
 import org.uwu_snek.shadownight.utils.utils;
 
+import java.util.LinkedList;
 import java.util.logging.Level;
 
 
@@ -20,11 +21,13 @@ import java.util.logging.Level;
 
 //TODO add onSpawn and onDeath callbacks
 public class MOB {
+    public static LinkedList<MOB> aliveCustomMobs = new LinkedList<>();
+
     protected Bone root;
     protected Mob mount;
     protected float yaw = 0;
 
-    public final static int walkCycleDuration = 8; // The duration of a walk cycle in ticks //! Must be even and >= 2 //TODO make this per-mod
+    public final static int walkCycleDuration = 8; // The duration of a walk cycle in ticks //! Must be even and >= 2 //TODO make this per-mob
     protected double walkingSpeed;                  // The walking speed of the mob in blocks/s
     protected double walkCycleMoveAmount;           // The number of blocks the mob should move each walk cycle
 
@@ -36,6 +39,7 @@ public class MOB {
         this.walkingSpeed = movementSpeed;
         this.walkCycleMoveAmount = movementSpeed / (20d / walkCycleDuration);
         root = new RootBone();
+        aliveCustomMobs.add(this);
     }
 
 
@@ -55,13 +59,20 @@ public class MOB {
         mount.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 254, false, false));
 
         // Spawn skeleton
-        root.move(0, -(float)mount.getHeight(), 0);
+        root.instantMoveAll(0, -(float)mount.getHeight(), 0);
         root.spawn(mount); // Spawn bones
     }
 
 
+    public void tick(){
+        root.tick();
+    }
+
+
+
+
     /**
-     * Calculates the angle of the location <target> around the Y-Axis centered at the location <source>,
+     * Calculates the angle of the location <target> around the Y-Axis centered at the location <source>.
      * The angle goes from -PI to +PI, with 0 representing South.
      * @param source The location to calculate the target's angle from
      * @param target The target location

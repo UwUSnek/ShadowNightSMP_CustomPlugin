@@ -7,6 +7,8 @@ import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight._generated._mob_presets._mob_preset_dungeons_overgrown_spider;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
+import org.uwu_snek.shadownight.customMobs.StackableTransforms.*;
+import org.uwu_snek.shadownight.utils.math.Easing;
 import org.uwu_snek.shadownight.utils.math.Func;
 import org.uwu_snek.shadownight.utils.math.K;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
@@ -49,8 +51,8 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
         // Create leg copies
         core.addChild(leg_1b = leg_0b.createDeepCopy());
-        leg_0b.move(0, 0, -0.1f);
-        leg_1b.move(0, 0, +0.1f);
+        leg_0b.addTransform(new ST_MoveAll(5, Easing::linear, 0, 0, -0.1f));
+        leg_1b.addTransform(new ST_MoveAll(5, Easing::linear, 0, 0, +0.1f));
         core.addChild(leg_2b = leg_1b.createDeepCopy());
         core.addChild(leg_3b = leg_0b.createDeepCopy());
 
@@ -72,15 +74,15 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_3a = leg_30.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_0A);
 
         // Set leg direction
-        leg_0b.rotateAbsolute(-0.5f, 0, 1, 0);
-        leg_1b.rotateAbsolute(+0.5f, 0, 1, 0);
-        leg_2b.rotateAbsolute(-0.5f, 0, 1, 0);
-        leg_3b.rotateAbsolute(+0.5f, 0, 1, 0);
+        leg_0b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, -0.5f));
+        leg_1b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, +0.5f));
+        leg_2b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, -0.5f));
+        leg_3b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, +0.5f));
 
         // Move right legs to the correct side
-        leg_0b.rotateAbsolute(K.PIf, 0, 1, 0);
+        leg_0b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, K.PIf));
         leg_0b.mirrorPosX();
-        leg_1b.rotateAbsolute(K.PIf, 0, 1, 0);
+        leg_1b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, K.PIf));
         leg_1b.mirrorPosX();
 
         {
@@ -210,33 +212,33 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
             // First pair
             {
-                pair0[0][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[0][1].flushUpdates();
-                pair0[1][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[1][1].flushUpdates();
+                pair0[0][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, adjustedWalkLegRaiseAngle));
+                pair0[1][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, adjustedWalkLegRaiseAngle));
             }
             Scheduler.delay(() -> {
-                pair0[0][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair0[0][0].flushUpdates();
-                pair0[1][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair0[1][0].flushUpdates();
-                head.rotateRelative(maxTargetYaw / 2, 0, 1, 0);      head.flushUpdates();
+                pair0[0][0].addTransform(new ST_RotateRelAll(5, Easing::linear, 0, 1, 0, maxTargetYaw));
+                pair0[1][0].addTransform(new ST_RotateRelAll(5, Easing::linear, 0, 1, 0, maxTargetYaw));
+                head.addTransform(new ST_RotateRelAll(5, Easing::linear, 0, 1, 0, maxTargetYaw / 2));
             }, 1L);
             Scheduler.delay(() -> {
-                pair0[0][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[0][1].flushUpdates();
-                pair0[1][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair0[1][1].flushUpdates();
+                pair0[0][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -adjustedWalkLegRaiseAngle));
+                pair0[1][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -adjustedWalkLegRaiseAngle));
             }, walkCycleDuration / 2 + 1);
 
 
             // Second pair
             Scheduler.delay(() -> {
-                    pair1[0][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[0][1].flushUpdates();
-                    pair1[1][1].rotateLocal(adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[1][1].flushUpdates();
+                    pair1[0][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, adjustedWalkLegRaiseAngle));
+                    pair1[1][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, adjustedWalkLegRaiseAngle));
             }, walkCycleDuration / 2);
             Scheduler.delay(() -> {
-                pair1[0][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair1[0][0].flushUpdates();
-                pair1[1][0].rotateRelative(maxTargetYaw, 0, 1, 0);   pair1[1][0].flushUpdates();
-                head.rotateRelative(maxTargetYaw / 2, 0, 1, 0); head.flushUpdates();
+                pair1[0][0].addTransform(new ST_RotateRelAll(5, Easing::linear, 0, 1, 0, maxTargetYaw));
+                pair1[1][0].addTransform(new ST_RotateRelAll(5, Easing::linear, 0, 1, 0, maxTargetYaw));
+                head.addTransform(new ST_RotateRelAll(5, Easing::linear, 0, 1, 0, maxTargetYaw / 2));
             }, walkCycleDuration / 2 + 1);
             Scheduler.delay(() -> {
-                pair1[0][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[0][1].flushUpdates();
-                pair1[1][1].rotateLocal(-adjustedWalkLegRaiseAngle, 0, 0, 1); pair1[1][1].flushUpdates();
+                pair1[0][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -adjustedWalkLegRaiseAngle));
+                pair1[1][1].addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -adjustedWalkLegRaiseAngle));
             }, walkCycleDuration);
         }
 
@@ -244,84 +246,75 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
         private void stand() {
-            core.move(0, raiseHeight, 0);
+            core.addTransform(new ST_MoveSelf(5, Easing::linear, 0, raiseHeight, 0));
 
             // Segment 0
-            leg_00.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_10.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_20.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_30.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_00.flushUpdates();
+            leg_00.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
+            leg_10.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
+            leg_20.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
+            leg_30.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
 
             // Segment 1 inverse
-            leg_01.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_11.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_21.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_31.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_01.flushUpdates();
+            leg_01.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
+            leg_11.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
+            leg_21.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
+            leg_31.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
 
             // Armor inverse
-            leg_0a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
-            leg_1a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
-            leg_2a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
-            leg_3a.rotateLocal(+raiseAngle / 2, 0, 0, 1);
-            leg_0a.flushUpdates();
+            leg_0a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle / 2));
+            leg_1a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle / 2));
+            leg_2a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle / 2));
+            leg_3a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle / 2));
         }
 
 
 
 
         private void sit() {
-            core.move(0, -raiseHeight, 0);
+            core.addTransform(new ST_MoveSelf(5, Easing::linear, 0, -raiseHeight, 0));
 
             // Segment 0
-            leg_00.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_10.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_20.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_30.rotateLocal(+raiseAngle, 0, 0, 1);
-            leg_00.flushUpdates();
+            leg_00.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
+            leg_10.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
+            leg_20.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
+            leg_30.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
 
             // Segment 1 inverse
-            leg_01.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_11.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_21.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_31.rotateLocal(-raiseAngle, 0, 0, 1);
-            leg_01.flushUpdates();
+            leg_01.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
+            leg_11.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
+            leg_21.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
+            leg_31.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
 
             // Armor inverse
-            leg_0a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
-            leg_1a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
-            leg_2a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
-            leg_3a.rotateLocal(-raiseAngle / 2, 0, 0, 1);
-            leg_0a.flushUpdates();
+            leg_0a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle / 2));
+            leg_1a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle / 2));
+            leg_2a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle / 2));
+            leg_3a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle / 2));
         }
 
 
 
 
         private void sit_first() {
-            core.move(0, -raiseHeight_first, 0); //TODO idk if this needs to have a "first" version
+            core.addTransform(new ST_MoveSelf(5, Easing::linear, 0, -raiseHeight_first, 0)); //TODO idk if this needs to have a "first" version
 
             // Segment 0
-            leg_00.rotateLocal(+raiseAngle_first, 0, 0, 1);
-            leg_10.rotateLocal(+raiseAngle_first, 0, 0, 1);
-            leg_20.rotateLocal(+raiseAngle_first, 0, 0, 1);
-            leg_30.rotateLocal(+raiseAngle_first, 0, 0, 1);
-            leg_00.flushUpdates();
+            leg_00.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle_first));
+            leg_10.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle_first));
+            leg_20.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle_first));
+            leg_30.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle_first));
 
             // Segment 1 inverse
-            leg_01.rotateLocal(-raiseAngle_first, 0, 0, 1);
-            leg_11.rotateLocal(-raiseAngle_first, 0, 0, 1);
-            leg_21.rotateLocal(-raiseAngle_first, 0, 0, 1);
-            leg_31.rotateLocal(-raiseAngle_first, 0, 0, 1);
-            leg_01.flushUpdates();
+            leg_01.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first));
+            leg_11.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first));
+            leg_21.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first));
+            leg_31.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first));
 
             // Armor inverse
-            leg_0a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
-            leg_1a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
-            leg_2a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
-            leg_3a.rotateLocal(-raiseAngle_first / 2, 0, 0, 1);
-            leg_0a.flushUpdates();
+            leg_0a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first / 2));
+            leg_1a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first / 2));
+            leg_2a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first / 2));
+            leg_3a.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle_first / 2));
         }
     }
 }

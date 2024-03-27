@@ -13,6 +13,6 @@ public abstract class _mob_preset_debug_mob extends MOB {
     public _mob_preset_debug_mob(final double movementSpeed) {
         super(movementSpeed);
         root.addChild(main);
-        main.moveSelf(0.0f, 0.0f, 0.0f);
+        main.instantMoveSelf(0.0f, 0.0f, 0.0f);
     }
 }

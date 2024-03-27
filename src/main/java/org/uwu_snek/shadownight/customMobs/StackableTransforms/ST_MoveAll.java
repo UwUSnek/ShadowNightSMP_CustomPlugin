@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 
 
-public class ST_MoveAll extends ST {
+public final class ST_MoveAll extends ST {
     private final Vector3f v;
 
     /**
@@ -23,8 +23,7 @@ public class ST_MoveAll extends ST {
      */
     @SuppressWarnings("unused")
     public ST_MoveAll(int duration, @NotNull Function<Double, Double> easing, final float x, final float y, final float z) {
-        super(duration, easing);
-        v = new Vector3f(x, y, z);
+        this(duration, easing, new Vector3f(x, y, z));
     }
 
     /**
@@ -49,15 +48,15 @@ public class ST_MoveAll extends ST {
     }
 
 
-    private void updateInitial(final @NotNull Bone b, final @NotNull Vector3f u){
-        b.locPos.add(u);
-        for(Bone c : b.getChildren()) updateChild( c, b.getAbsPos());
+    public static void updateInitial(final @NotNull Bone b, final @NotNull Vector3f _v){
+        b.locPos.add(_v);
+        for(Bone c : b.children) updateChild( c, b.getAbsPos());
         b.requestDisplayUpdateSelf();
         b.requestHitboxUpdateSelf();
     }
-    private void updateChild(final @NotNull Bone b, final @NotNull Vector3f o) {
+    public static void updateChild(final @NotNull Bone b, final @NotNull Vector3f o) {
         b.origin.set(o);
-        for(Bone c : b.getChildren()) updateChild(c, b.getAbsPos());
+        for(Bone c : b.children) updateChild(c, b.getAbsPos());
         b.requestDisplayUpdateSelf();
         b.requestHitboxUpdateSelf();
     }

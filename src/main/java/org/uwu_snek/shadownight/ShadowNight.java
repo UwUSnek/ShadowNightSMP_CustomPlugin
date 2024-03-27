@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.uwu_snek.shadownight.adminCommands.*;
 import org.uwu_snek.shadownight.chatManager.discord.BotManager;
+import org.uwu_snek.shadownight.customMobs.MOB;
 import org.uwu_snek.shadownight.dungeons.CMD_dungeontest;
 import org.uwu_snek.shadownight.dungeons.CMD_recreatedungeon;
 import org.uwu_snek.shadownight.dungeons.Dungeon;
@@ -28,6 +29,7 @@ import org.uwu_snek.shadownight.qol.tpa.CMD_tpaccept;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.uwu_snek.shadownight.utils.SignInput;
 import org.uwu_snek.shadownight.utils.SkinRenderer;
+import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.Objects;
@@ -140,6 +142,10 @@ public final class ShadowNight extends JavaPlugin {
 
         // Initialize Dungeons
         Dungeon.deleteOldDungeons();
+
+
+        // Start tick loop
+        Scheduler.loop(this::onTick, 0, 1);
     }
 
 
@@ -150,5 +156,13 @@ public final class ShadowNight extends JavaPlugin {
     public void onDisable() {
         Economy.saveDatabase();
         BotManager.sendBridgeMessage("🔴 Server is offline");
+    }
+
+
+
+    public void onTick(){
+        for(MOB m : MOB.aliveCustomMobs) {
+            m.tick();
+        }
     }
 }

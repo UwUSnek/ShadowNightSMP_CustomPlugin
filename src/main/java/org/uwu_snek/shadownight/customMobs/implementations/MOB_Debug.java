@@ -1,9 +1,12 @@
 package org.uwu_snek.shadownight.customMobs.implementations;
 
+import org.bukkit.util.Transformation;
 import org.uwu_snek.shadownight._generated._mob_part_type;
 import org.uwu_snek.shadownight.customMobs.Bone;
 import org.uwu_snek.shadownight.customMobs.MOB;
 import org.uwu_snek.shadownight.customMobs.DisplayBone;
+import org.uwu_snek.shadownight.customMobs.StackableTransforms.ST_MoveAll;
+import org.uwu_snek.shadownight.utils.math.Easing;
 import org.uwu_snek.shadownight.utils.spigot.Scheduler;
 
 import java.util.HashMap;
@@ -56,42 +59,33 @@ public class MOB_Debug extends MOB {
         l3.addChild(l4);
 
 
-        Scheduler.delay(() -> { root.move(1, 0, -1); }, 20);
-        Scheduler.delay(() -> root.flushUpdates(), 20);
+        Scheduler.delay(() -> { root.addTransform(new ST_MoveAll(5, Easing::sineIn, 1, 0, -1)); }, 20);
 
-        Scheduler.delay(() -> { r0.move(1, 0, 2); }, 30);
-        Scheduler.delay(() -> { r1.move(1, 0, 0); }, 30);
-        Scheduler.delay(() -> { r2.move(1, 0, 0); }, 30);
-        Scheduler.delay(() -> { r3.move(1, 0, 0); }, 30);
-        Scheduler.delay(() -> { r4.move(1, 0, 0); }, 30);
+        Scheduler.delay(() -> { r0.addTransform(new ST_MoveAll(5, Easing::sineIn, 1, 0, 2)); }, 30);
+        Scheduler.delay(() -> { r1.addTransform(new ST_MoveAll(5, Easing::sineIn, 1, 0, 0)); }, 30);
+        Scheduler.delay(() -> { r2.addTransform(new ST_MoveAll(5, Easing::sineIn, 1, 0, 0)); }, 30);
+        Scheduler.delay(() -> { r3.addTransform(new ST_MoveAll(5, Easing::sineIn, 1, 0, 0)); }, 30);
+        Scheduler.delay(() -> { r4.addTransform(new ST_MoveAll(5, Easing::sineIn, 1, 0, 0)); }, 30);
 
-        Scheduler.delay(() -> { l0.move(-1, 0, -2); }, 30);
-        Scheduler.delay(() -> { l1.move(-1, 0, 0); }, 30);
-        Scheduler.delay(() -> { l2.move(-1, 0, 0); }, 30);
-        Scheduler.delay(() -> { l3.move(-1, 0, 0); }, 30);
-        Scheduler.delay(() -> { l4.move(-1, 0, 0); }, 30);
+        Scheduler.delay(() -> { l0.addTransform(new ST_MoveAll(5, Easing::sineIn, -1, 0, -2)); }, 30);
+        Scheduler.delay(() -> { l1.addTransform(new ST_MoveAll(5, Easing::sineIn, -1, 0, 0)); }, 30);
+        Scheduler.delay(() -> { l2.addTransform(new ST_MoveAll(5, Easing::sineIn, -1, 0, 0)); }, 30);
+        Scheduler.delay(() -> { l3.addTransform(new ST_MoveAll(5, Easing::sineIn, -1, 0, 0)); }, 30);
+        Scheduler.delay(() -> { l4.addTransform(new ST_MoveAll(5, Easing::sineIn, -1, 0, 0)); }, 30);
 
-        Scheduler.delay(() -> r0.flushUpdates(), 30);
-        Scheduler.delay(() -> l0.flushUpdates(), 30);
 
 /*
         Scheduler.delay(() -> {
             r0.rotateRelative(-0.5f, 0, 1, 0);
             l0.rotateLocal(-0.5f, 0, 1, 0);
-            Scheduler.delay(() -> { r0.flushUpdates(); }, 1L);
-            Scheduler.delay(() -> { l0.flushUpdates(); }, 1L);
         }, 50);
         Scheduler.delay(() -> {
             r1.rotateRelative(-0.5f, 1, 0, 0);
             l1.rotateLocal(-0.5f, 1, 0, 0);
-            Scheduler.delay(() -> { r1.flushUpdates(); }, 1L);
-            Scheduler.delay(() -> { l1.flushUpdates(); }, 1L);
         }, 70);
         Scheduler.delay(() -> {
             r2.rotateRelative(-0.5f, 0, 0, 1);
             l2.rotateLocal(-0.5f, 0, 0, 1);
-            Scheduler.delay(() -> { r2.flushUpdates(); }, 1L);
-            Scheduler.delay(() -> { l2.flushUpdates(); }, 1L);
         }, 90);
 */
 /*

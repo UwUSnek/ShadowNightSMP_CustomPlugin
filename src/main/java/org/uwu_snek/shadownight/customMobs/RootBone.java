@@ -30,7 +30,5 @@ public final class RootBone extends Bone {
 
 
     @Override
-    public void flushUpdates(){
-        for(Bone c : children) c.flushUpdates();
-    }
+    public void flushUpdatesSelf(){ }
 }
