@@ -14,7 +14,7 @@ import org.uwu_snek.shadownight.dungeons.CMD_recreatedungeon;
 import org.uwu_snek.shadownight.dungeons.Dungeon;
 import org.uwu_snek.shadownight.economy.CMD_trade;
 import org.uwu_snek.shadownight.economy.Economy;
-import org.uwu_snek.shadownight.enchantments.CustomEnchantManager;
+import org.uwu_snek.shadownight.custom_enchants.CustomEnchantManager;
 import org.uwu_snek.shadownight._generated._custom_item_id;
 import org.uwu_snek.shadownight.customItems.ItemManager;
 import org.uwu_snek.shadownight.qol.CMD_flyspeed;

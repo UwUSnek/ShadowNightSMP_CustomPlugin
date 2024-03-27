@@ -1,4 +1,4 @@
-package org.uwu_snek.shadownight.enchantments.implementations;
+package org.uwu_snek.shadownight.custom_enchants.implementations;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.uwu_snek.shadownight.attackOverride.CustomKnockback;
-import org.uwu_snek.shadownight.enchantments.CustomEnchant;
+import org.uwu_snek.shadownight.custom_enchants.CustomEnchant;
 import org.uwu_snek.shadownight.customItems.IM_MeleeWeapon;
 import org.uwu_snek.shadownight.customItems.ItemManager;
 import org.uwu_snek.shadownight.utils.spigot.ItemUtils;

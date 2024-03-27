@@ -1,8 +1,8 @@
-package org.uwu_snek.shadownight.enchantments;
+package org.uwu_snek.shadownight.custom_enchants;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import org.uwu_snek.shadownight.enchantments.implementations.Reeling;
+import org.uwu_snek.shadownight.custom_enchants.implementations.Reeling;
 import org.uwu_snek.shadownight.utils.UtilityClass;
 
 import java.lang.reflect.Field;

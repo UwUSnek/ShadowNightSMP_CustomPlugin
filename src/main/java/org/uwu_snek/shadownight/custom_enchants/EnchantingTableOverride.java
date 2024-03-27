@@ -1,4 +1,4 @@
-package org.uwu_snek.shadownight.enchantments;
+package org.uwu_snek.shadownight.custom_enchants;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;

@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
-import org.uwu_snek.shadownight.enchantments.CustomEnchant_Spigot;
+import org.uwu_snek.shadownight.custom_enchants.CustomEnchant_Spigot;
 import org.uwu_snek.shadownight.customItems.itemFilter.decorators.Decorator;
 import org.uwu_snek.shadownight.utils.Rnd;
 import org.uwu_snek.shadownight.utils.UtilityClass;

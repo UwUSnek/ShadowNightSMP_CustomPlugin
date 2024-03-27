@@ -1,4 +1,4 @@
-package org.uwu_snek.shadownight.enchantments;
+package org.uwu_snek.shadownight.custom_enchants;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;

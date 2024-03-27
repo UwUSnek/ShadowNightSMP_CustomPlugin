@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class Bone {
     // Bone position and rotation
-    protected final Vector3f locPos = new Vector3f(0, 0, 0); // The location of this bone's location relative to its origin
-    protected final Vector3f origin = new Vector3f(0, 0, 0); // The location of this bone's origin relative to the root bone
+    public final Vector3f locPos = new Vector3f(0, 0, 0); // The location of this bone's location relative to its origin
+    public final Vector3f origin = new Vector3f(0, 0, 0); // The location of this bone's origin relative to the root bone
     protected final Quaternionf rotation = new Quaternionf(0, 0, 0, 1);
 
     // Entity status and update requests
@@ -130,7 +130,7 @@ public class Bone {
      * Calculates the absolute position of this bone (This is relative to the mount's location)
      * @return A copy of the vector representing the absolute position
      */
-    protected Vector3f getAbsPos(){ //FIXME cache abs pos to not recalculate it every single time
+    public Vector3f getAbsPos(){ //FIXME cache abs pos to not recalculate it every single time
         return new Vector3f(origin).add(new Vector3f(locPos).rotate(parent.rotation));
     }
 
@@ -138,30 +138,6 @@ public class Bone {
 
 
 
-
-
-
-    /**
-     * Moves the bone and its hierarchy by the given amount using the parent's coordinate system.
-     * @param x The amount of movement on the X-Axis
-     * @param y The amount of movement on the Y-Axis
-     * @param z The amount of movement on the Z-Axis
-     */
-    public final void move(final float x, final float y, final float z) {
-        move(new Vector3f(x, y, z));
-    }
-    public void move(final @NotNull Vector3f v) {
-        locPos.add(v);
-        for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
-        requestDisplayUpdateSelf();
-        requestHitboxUpdateSelf();
-    }
-    protected void moveUpdateOrigin(final @NotNull Vector3f o) {
-        origin.set(o);
-        for(Bone c : children) c.moveUpdateOrigin(getAbsPos());
-        requestDisplayUpdateSelf();
-        requestHitboxUpdateSelf();
-    }
 
 
 

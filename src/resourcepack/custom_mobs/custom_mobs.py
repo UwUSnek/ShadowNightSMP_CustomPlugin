@@ -116,10 +116,13 @@ def generate_part_model(full_model, full_model_rel_path: str, part, java_parts, 
 
 
 
-
-    # Add part elements
+    # Add part elements (skip 0-Dimensional elements and "comments")
     for group_child in part["children"]:
-        part_model["elements"] += [ e for e in get_all_group_elements(full_model, group_child) if e["from"] != e["to"] ]
+        part_model["elements"] += [
+            e for e in get_all_group_elements(full_model, group_child)
+            if e["from"] != e["to"]
+            and not ("name" in e and e["name"].startswith("//"))
+        ]
 
     # Shift them to center their origin to [8, 8, 8]. Ignore 0-Dimensional elements
     for i, element in enumerate(part_model["elements"]):
@@ -195,7 +198,7 @@ def generate_mob(model_file, java_parts):
             shutil.copyfile(texture_source + "/" + rel_texture_path + ".png", utils.mkdirs(texture_target + "/" + rel_texture_path + ".png"))
 
 
-        # Adjust the entire model's rotation. Minecraft's in-game display models are rotated by 180° around the Y-Axis for no apparent reason. Mojang, please...
+        # Adjust the entire model's rotation. Minecraft's in-game display models are rotated by 180° around the Y-Axis for no apparent reason
         for element in model["elements"]:
             element["from"]    = rotate_vector_180(element["from"])
             element["to"]      = rotate_vector_180(element["to"])
@@ -212,10 +215,11 @@ def generate_mob(model_file, java_parts):
         model_path = model_source + "/" + model_file["rel_path"]
         assert "groups" in model and len(model["groups"]) > 0, "Model " + model_path + " has no groups"
         for j, part in enumerate(model["groups"]):
-            assert not isinstance(part, numbers.Number), f'Element n.{ str(j) } of model { model_path } is not grouped'
-            assert "name" in part, f'Group n.{ str(j) } of model { model_path } has no name.'
-            assert re.match(r'[a-zA-Z0-9_]*', part["name"]), f'Group name "{ part["name"] }" is not valid.'
-            generate_part_model(model, model_file["rel_path"], part, java_parts, java_preset_data)
+            if not (isinstance(part, numbers.Number) and "name" in model["elements"][part] and model["elements"][part]["name"].startswith("//")):  #! Skip this check on comments
+                assert not isinstance(part, numbers.Number), f'Element n.{ str(j) } of model { model_path } is not grouped'  # Check that all elements are inside a mob part
+                assert "name" in part, f'Group n.{ str(j) } of model { model_path } has no name.'                            # Part must be named
+                assert re.match(r'[a-zA-Z0-9_]*', part["name"]), f'Group name "{ part["name"] }" is not valid.'              # Name must be a valid Java identifier (to minimize conflicts)
+                generate_part_model(model, model_file["rel_path"], part, java_parts, java_preset_data)                       # Proceed with part generation
 
 
         # Create java preset

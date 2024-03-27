@@ -22,7 +22,7 @@ import org.uwu_snek.shadownight.chatManager.discord.InGameBanner;
 import org.uwu_snek.shadownight.chatManager.JoinLeaveMessages;
 import org.uwu_snek.shadownight.economy.Economy;
 import org.uwu_snek.shadownight.attackOverride.AttackOverride;
-import org.uwu_snek.shadownight.enchantments.EnchantingTableOverride;
+import org.uwu_snek.shadownight.custom_enchants.EnchantingTableOverride;
 import org.uwu_snek.shadownight.customItems.itemFilter.ItemFilter;
 import org.uwu_snek.shadownight.customItems.guiManagers.AnvilFilter;
 import org.uwu_snek.shadownight.customItems.guiManagers.GrindstoneFilter;
