@@ -51,8 +51,8 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
         // Create leg copies
         core.addChild(leg_1b = leg_0b.createDeepCopy());
-        leg_0b.addTransform(new ST_MoveAll(5, Easing::linear, 0, 0, -0.1f));
-        leg_1b.addTransform(new ST_MoveAll(5, Easing::linear, 0, 0, +0.1f));
+        leg_0b.instantMoveAll(0, 0, -0.1f);
+        leg_1b.instantMoveAll(0, 0, +0.1f);
         core.addChild(leg_2b = leg_1b.createDeepCopy());
         core.addChild(leg_3b = leg_0b.createDeepCopy());
 
@@ -74,15 +74,15 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
         leg_3a = leg_30.getChild(_mob_part_type.DUNGEONS_OVERGROWN_SPIDER_LEG_0A);
 
         // Set leg direction
-        leg_0b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, -0.5f));
-        leg_1b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, +0.5f));
-        leg_2b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, -0.5f));
-        leg_3b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, +0.5f));
+        leg_0b.instantRotateAbsAll(0, 1, 0, -0.5f);
+        leg_1b.instantRotateAbsAll(0, 1, 0, +0.5f);
+        leg_2b.instantRotateAbsAll(0, 1, 0, -0.5f);
+        leg_3b.instantRotateAbsAll(0, 1, 0, +0.5f);
 
         // Move right legs to the correct side
-        leg_0b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, K.PIf));
+        leg_0b.instantRotateAbsAll(0, 1, 0, K.PIf);
         leg_0b.mirrorPosX();
-        leg_1b.addTransform(new ST_RotateAbsAll(5, Easing::linear, 0, 1, 0, K.PIf));
+        leg_1b.instantRotateAbsAll(0, 1, 0, K.PIf);
         leg_1b.mirrorPosX();
 
         {
@@ -138,7 +138,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
             core.setRotation(targetYaw, 0, 1, 0);
             */
-        }, 0, DisplayBone.stepDuration);
+        }, 0, 1);
 
         // Walking cycle
         Scheduler.loop(() -> {
@@ -246,7 +246,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
         private void stand() {
-            core.addTransform(new ST_MoveSelf(5, Easing::linear, 0, raiseHeight, 0));
+            core.addTransform(new ST_MoveAll(5, Easing::linear, 0, raiseHeight, 0));
 
             // Segment 0
             leg_00.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, -raiseAngle));
@@ -271,7 +271,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
         private void sit() {
-            core.addTransform(new ST_MoveSelf(5, Easing::linear, 0, -raiseHeight, 0));
+            core.addTransform(new ST_MoveAll(5, Easing::linear, 0, -raiseHeight, 0));
 
             // Segment 0
             leg_00.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle));
@@ -296,7 +296,7 @@ public class MOB_OvergrownSpider extends _mob_preset_dungeons_overgrown_spider {
 
 
         private void sit_first() {
-            core.addTransform(new ST_MoveSelf(5, Easing::linear, 0, -raiseHeight_first, 0)); //TODO idk if this needs to have a "first" version
+            core.addTransform(new ST_MoveAll(5, Easing::linear, 0, -raiseHeight_first, 0)); //TODO idk if this needs to have a "first" version
 
             // Segment 0
             leg_00.addTransform(new ST_RotateLocAll(5, Easing::linear, 0, 0, 1, +raiseAngle_first));

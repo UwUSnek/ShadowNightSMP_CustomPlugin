@@ -2,8 +2,10 @@ package org.uwu_snek.shadownight.customMobs.StackableTransforms;
 
 import org.jetbrains.annotations.NotNull;
 import org.uwu_snek.shadownight.customMobs.Bone;
+import org.uwu_snek.shadownight.utils.utils;
 
 import java.util.function.Function;
+import java.util.logging.Level;
 
 
 
@@ -14,15 +16,30 @@ public abstract class ST {
     protected double tickAmount;
     protected double lastFraction = 0;
 
+    public double getProgress(){
+        return progress;
+    }
+
     /**
      * Creates a new stackable transformation.
      * @param duration   The duration of this transformation expressed in ticks
      * @param easing     The type of easing to use
      */
     public ST(final int duration, final @NotNull Function<Double, Double> easing) {
-        this.tickAmount = 20d / duration;
+        this.tickAmount = 1d / duration;
         this.easing = easing;
     }
+
+    /**
+     * Sets the time before this transformation can start to get ticked.
+     * @param delay The delay expressed in ticks
+     * @return this
+     */
+    public ST setDelay(final int delay) {
+        return this;
+    }
+
+
 
     /**
      * Advances this transformation by 1 tick and updates the values of the Bone <b> and its children.

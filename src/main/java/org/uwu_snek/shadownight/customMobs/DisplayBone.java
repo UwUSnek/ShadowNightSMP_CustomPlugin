@@ -23,9 +23,6 @@ public final class DisplayBone extends Bone {
     private ItemDisplay displayEntity = null;
     private final int customModelData;
 
-    public final static int stepDuration = 2;
-
-
 
     //TODO replace these with a list of hitboxes that can be used to approximate the area when rotating the bone
     private Interaction hitbox = null;
@@ -74,7 +71,7 @@ public final class DisplayBone extends Bone {
         displayEntity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
         displayEntity.setItemStack(ItemUtils.createItemStackDisplay(Material.BONE, customModelData));
         mount.addPassenger(displayEntity);
-        displayEntity.setTeleportDuration(stepDuration);
+        displayEntity.setTeleportDuration(1);
         requestDisplayUpdateSelf();
 
         // Initialize hitboxes
@@ -95,13 +92,13 @@ public final class DisplayBone extends Bone {
     protected void updateDisplay(){
         if(!spawned) return;
         Transformation t = new Transformation(
+            //TODO move adjustment to spawn function
             new Vector3f(getAbsPos()).add(0, 0.5f, 0),                 //! Center to in-game block
-            //new AxisAngle4f(new Quaternionf(rotation).rotateY(PI)), //! For some reason, Display models are rotated by 180° on the Y-Axis. This resets that
-            new AxisAngle4f(rotation),
-            new Vector3f(1),
+            new AxisAngle4f(new Quaternionf(rotation).normalize()),
+            new Vector3f(1), //TODO 1 is too steppy, 2 is too blended
             new AxisAngle4f(0, 0, 1, 0)
         );
-        displayEntity.setInterpolationDuration(stepDuration); //TODO automate and add real interpolation
+        displayEntity.setInterpolationDuration(1);
         displayEntity.setTransformation(t);
         displayEntity.setInterpolationDelay(0);
     }

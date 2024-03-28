@@ -11,6 +11,7 @@ import org.uwu_snek.shadownight.utils.math.Func;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 
 
@@ -132,19 +133,31 @@ public class Bone {
      * Stacked transforms are also ticked.
      */
     public final void tick() {
-        for(ST   t : activeTransforms) t.tick(this);
+        for(ST t : activeTransforms) t.tick(this);
+        activeTransforms.removeIf((t) -> t.getProgress() >= 1);
+
         flushUpdatesSelf();
-        for(Bone b : children)         b.tick();
+        for(Bone b : children) b.tick();
     }
 
 
 
 
-    public final void instantMoveAll (final float x, final float y, final float z) { ST_MoveAll.updateInitial (this, new Vector3f(x, y, z)); }
-    public final void instantMoveSelf(final float x, final float y, final float z) { ST_MoveSelf.updateInitial(this, new Vector3f(x, y, z)); }
-    public final void instantRotateAbsAll(final float x, final float y, final float z, final float angle) { ST_RotateAbsAll.updateInitial(this, new Quaternionf().fromAxisAngleDeg(x, y, z, angle)); };
-    public final void instantRotateLocAll(final float x, final float y, final float z, final float angle) { ST_RotateLocAll.updateInitial(this, new Quaternionf().fromAxisAngleDeg(x, y, z, angle)); };
-    public final void instantRotateRelAll(final float x, final float y, final float z, final float angle) { ST_RotateRelAll.updateInitial(this, new Quaternionf().fromAxisAngleDeg(x, y, z, angle)); };
+    @SuppressWarnings("unused") public final void instantMoveAll (final float x, final float y, final float z) {
+        ST_MoveAll.updateInitial(this, new Vector3f(x, y, z));
+    }
+    @SuppressWarnings("unused") public final void instantMoveSelf(final float x, final float y, final float z) {
+        ST_MoveSelf.updateInitial(this, new Vector3f(x, y, z));
+    }
+    @SuppressWarnings("unused") public final void instantRotateAbsAll(final float x, final float y, final float z, final float angle) {
+        ST_RotateAbsAll.updateInitial(this, new Quaternionf().fromAxisAngleRad(x, y, z, angle));
+    }
+    @SuppressWarnings("unused") public final void instantRotateLocAll(final float x, final float y, final float z, final float angle) {
+        ST_RotateLocAll.updateInitial(this, new Quaternionf().fromAxisAngleRad(x, y, z, angle));
+    }
+    @SuppressWarnings("unused") public final void instantRotateRelAll(final float x, final float y, final float z, final float angle) {
+        ST_RotateRelAll.updateInitial(this, new Quaternionf().fromAxisAngleRad(x, y, z, angle));
+    }
 
 
 
@@ -178,6 +191,7 @@ public class Bone {
      * This method only affects the position. No bones are ever rotated or truly mirrored.
      * Child bones are moved, but their position relative to the parent stays unchanged.
      */
+    @SuppressWarnings("unused")
     public void mirrorPosX() {
         locPos.x = -locPos.x;
         for(Bone c : children) ST_MoveAll.updateChild(c, getAbsPos());
@@ -190,6 +204,7 @@ public class Bone {
      * This method only affects the position. No bones are ever rotated or truly mirrored.
      * Child bones are moved, but their position relative to the parent stays unchanged.
      */
+    @SuppressWarnings("unused")
     public void mirrorPosY() {
         locPos.x = -locPos.x;
         for(Bone c : children) ST_MoveAll.updateChild(c, getAbsPos());
@@ -202,6 +217,7 @@ public class Bone {
      * This method only affects the position. No bones are ever rotated or truly mirrored.
      * Child bones are moved, but their position relative to the parent stays unchanged.
      */
+    @SuppressWarnings("unused")
     public void mirrorPosZ() {
         locPos.x = -locPos.x;
         for(Bone c : children) ST_MoveAll.updateChild(c, getAbsPos());

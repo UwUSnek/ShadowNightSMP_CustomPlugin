@@ -4,8 +4,10 @@ package org.uwu_snek.shadownight.utils.math;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.joml.AxisAngle4f;
+import org.joml.Math;
 import org.joml.Quaternionf;
 import org.uwu_snek.shadownight.utils.UtilityClass;
+
 
 
 
@@ -246,11 +248,22 @@ public final class Func extends UtilityClass {
 
 
     public static double getAngleDifference(double from, double to) {
-        final double diff = ( to - from + K.PI ) % K.TAU - K.PI;
+        final double diff = (to - from + K.PI) % K.TAU - K.PI;
         return diff < -K.PI ? diff + 2 * K.PI : diff;
     }
     public static float getAngleDifference(float from, float to) {
-        final float diff = ( to - from + K.PIf ) % K.TAUf - K.PIf;
+        final float diff = (to - from + K.PIf) % K.TAUf - K.PIf;
         return diff < -K.PIf ? diff + 2 * K.PIf : diff;
+    }
+
+
+    /**
+     * Creates a new Quaternion that represents the same rotation as <q> but with angle multiplied by <n>.
+     * @param q The starting Quaternion value
+     * @param n The angle multiplier
+     * @return The new Quaternion
+     */
+    public static Quaternionf quaternionAngleMul(final @NotNull Quaternionf q, float n) {
+        return new Quaternionf().fromAxisAngleRad(q.x, q.y, q.z, 2f * Math.safeAcos(q.w) * n);
     }
 }

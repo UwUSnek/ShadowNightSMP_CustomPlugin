@@ -3,8 +3,8 @@ package org.uwu_snek.shadownight.customMobs.StackableTransforms;
 import org.jetbrains.annotations.NotNull;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import org.uwu_snek.shadownight.customMobs.Bone;
+import org.uwu_snek.shadownight.utils.math.Func;
 
 import java.util.function.Function;
 
@@ -26,7 +26,7 @@ public final class ST_RotateRelAll extends ST {
      */
     @SuppressWarnings("unused")
     public ST_RotateRelAll(int duration, @NotNull Function<Double, Double> easing, final float x, final float y, final float z, final float angle){
-        this(duration, easing, new Quaternionf().fromAxisAngleDeg(x, y, z, angle));
+        this(duration, easing, new Quaternionf().fromAxisAngleRad(x, y, z, angle));
     }
 
     /**
@@ -37,7 +37,7 @@ public final class ST_RotateRelAll extends ST {
      */
     @SuppressWarnings("unused")
     public ST_RotateRelAll(int duration, @NotNull Function<Double, Double> easing, final @NotNull AxisAngle4f r) {
-        this(duration, easing, new Quaternionf());
+        this(duration, easing, new Quaternionf(r));
     }
 
     /**
@@ -58,7 +58,7 @@ public final class ST_RotateRelAll extends ST {
     @Override
     protected void updateBoneValues(final @NotNull Bone b) {
         final float stepLen = computeStepLen();
-        updateInitial(b, new Quaternionf(r).mul(stepLen));
+        updateInitial(b, Func.quaternionAngleMul(r, stepLen));
     }
 
 
